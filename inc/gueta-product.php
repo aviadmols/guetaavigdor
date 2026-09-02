@@ -376,9 +376,10 @@ add_action( 'wp', 'gueta_swap_product_tabs' );
 /**
  * Render the accordion.
  *
+ * @param bool $open_first Whether the first panel starts expanded.
  * @return void
  */
-function gueta_render_product_accordion() {
+function gueta_render_product_accordion( $open_first = true ) {
 	global $product;
 
 	if ( ! $product instanceof WC_Product ) {
@@ -393,7 +394,7 @@ function gueta_render_product_accordion() {
 	?>
 	<div class="gueta-accordion" data-accordion-group>
 		<?php foreach ( $panels as $index => $panel ) : ?>
-			<details class="gueta-accordion__item"<?php echo 0 === $index ? ' open' : ''; ?>>
+			<details class="gueta-accordion__item"<?php echo ( $open_first && 0 === $index ) ? ' open' : ''; ?>>
 				<summary class="gueta-accordion__summary">
 					<span class="gueta-accordion__title"><?php echo esc_html( $panel['title'] ); ?></span>
 					<span class="gueta-accordion__sign" aria-hidden="true"></span>

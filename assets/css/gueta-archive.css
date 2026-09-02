@@ -459,28 +459,33 @@
  * Card
  * ---------------------------------------------------------------------- */
 
+/* Measured against the shop's own product card, so the two match. */
 .gueta-card {
+	background: var(--gueta-paper);
 	display: flex;
 	flex-direction: column;
+	overflow: hidden;
+	position: relative;
 }
 
 .gueta-card__media {
-	background: var(--gueta-sand);
-	border-radius: 6px;
+	aspect-ratio: 1;
 	overflow: hidden;
+	padding: 15px;
 	position: relative;
 }
 
 .gueta-card__link {
 	display: block;
+	height: 100%;
 }
 
 .gueta-card__image,
 .gueta-card__media img {
-	aspect-ratio: 1;
 	display: block;
-	height: auto;
-	object-fit: cover;
+	height: 100%;
+	/* Contain, not cover: these are cut out product shots. */
+	object-fit: contain;
 	transition: transform .6s ease;
 	width: 100%;
 }
@@ -489,54 +494,76 @@
 	transform: scale(1.04);
 }
 
+.gueta-card__badges {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	inset-block-start: 12px;
+	inset-inline-start: 12px;
+	position: absolute;
+	z-index: 2;
+}
+
 .gueta-card__badge {
 	background: var(--gueta-ink);
 	border-radius: 999px;
 	color: var(--gueta-paper);
 	font-size: 12px;
 	font-weight: 700;
-	inset-block-start: 12px;
-	inset-inline-start: 12px;
 	padding: 5px 12px;
-	position: absolute;
-	z-index: 2;
+	width: fit-content;
 }
 
-.gueta-card__badge--muted {
-	background: rgb(22 22 22 / 55%);
-	inset-block-start: auto;
-	inset-block-end: 12px;
+.gueta-card__badge--out {
+	background: var(--gueta-muted);
 }
 
-/* The call to action keeps the shop's own orange and chevron. */
+/* An out of stock product reads as unavailable at a glance. */
+.gueta-card:has(.gueta-card__badge--out) .gueta-card__image {
+	opacity: .55;
+}
+
+/*
+ * The shop's own bar: full width orange, revealed on hover. It stays in the
+ * flow and only fades, so the card always reserves its height and the grid
+ * never reflows.
+ */
 .gueta-card__cta {
 	align-items: center;
-	background: none;
+	background: var(--gueta-accent-warm, #f0591d);
 	border: 0;
-	color: var(--gueta-accent-warm, #f0591d);
+	color: #fff;
 	cursor: pointer;
-	display: inline-flex;
+	display: flex;
 	font-family: inherit;
-	font-size: 15px;
-	font-weight: 700;
-	gap: 6px;
-	justify-self: start;
-	padding: 4px 0;
-	transition: gap .2s ease;
+	font-size: 18px;
+	font-weight: 600;
+	justify-content: space-between;
+	margin-top: auto;
+	opacity: 0;
+	padding: 12px 15px;
+	transition: opacity .3s ease, transform .3s ease, visibility .3s;
+	transform: translateY(10px);
+	visibility: hidden;
+	width: 100%;
 }
 
-.gueta-card__cta:hover {
-	gap: 11px;
+.gueta-card:hover .gueta-card__cta,
+.gueta-card:focus-within .gueta-card__cta {
+	opacity: 1;
+	transform: none;
+	visibility: visible;
 }
 
 .gueta-card__cta svg {
 	fill: none;
-	height: 15px;
+	flex: none;
+	height: 22px;
 	stroke: currentColor;
 	stroke-linecap: round;
 	stroke-linejoin: round;
-	stroke-width: 2.2;
-	width: 15px;
+	stroke-width: 1.7;
+	width: 22px;
 }
 
 [dir="ltr"] .gueta-card__cta svg {
@@ -565,16 +592,16 @@
 }
 
 .gueta-card__info {
-	display: grid;
-	gap: 6px;
-	padding: 14px 2px 0;
+	flex: 1 1 auto;
+	padding: 15px 10px 20px;
+	text-align: center;
 }
 
 .gueta-card__title {
-	font-size: 15px;
-	font-weight: 400;
-	line-height: 1.45;
-	margin: 0;
+	font-size: 18px;
+	font-weight: 600;
+	line-height: 1.25;
+	margin: 0 0 10px;
 }
 
 .gueta-card__title a {
@@ -588,8 +615,8 @@
 }
 
 .gueta-card__price {
-	font-size: 15px;
-	font-weight: 700;
+	font-size: 19px;
+	font-weight: 400;
 }
 
 .gueta-card__price del {
@@ -674,8 +701,9 @@
 
 .gueta-quickview {
 	display: grid;
-	gap: 28px;
-	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	gap: 32px;
+	/* Media a little wider than the column of copy, as on the product page. */
+	grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
 	padding: 28px;
 }
 
@@ -692,15 +720,16 @@
 }
 
 .gueta-quickview__info {
-	display: grid;
 	align-content: start;
-	gap: 14px;
+	display: grid;
+	gap: 16px;
 }
 
+/* Sizes are pinned: the page's own heading scale is far larger than a modal. */
 .gueta-quickview__title {
-	font-size: clamp(19px, 2vw, 24px);
+	font-size: 24px !important;
 	font-weight: 700;
-	line-height: 1.3;
+	line-height: 1.35;
 	margin: 0;
 }
 
@@ -720,10 +749,23 @@
 	text-decoration: none;
 }
 
-.gueta-quickview__excerpt {
-	color: var(--gueta-muted);
+.gueta-quickview__price .woocommerce-Price-amount {
+	font-size: inherit;
+}
+
+/* The accordion sits directly under the cart, with no extra rule above it. */
+.gueta-quickview .gueta-accordion {
+	margin-top: 4px;
+}
+
+.gueta-quickview .gueta-accordion__title {
+	font-size: 16px;
+}
+
+.gueta-quickview .gueta-accordion__content {
 	font-size: 14px;
-	line-height: 1.7;
+	max-height: 300px;
+	overflow-y: auto;
 }
 
 .gueta-quickview__full {
@@ -734,27 +776,48 @@
 	text-underline-offset: 3px;
 }
 
+.gueta-quickview__cart form.cart {
+	align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin: 0;
+}
+
 .gueta-quickview__cart .quantity input {
-	border: 1px solid var(--gueta-rule);
+	border: 1px solid var(--gueta-rule) !important;
 	border-radius: 8px;
-	min-height: 46px;
+	min-height: 48px;
 	padding: 0 10px;
 	text-align: center;
 	width: 72px;
 }
 
+/*
+ * The theme paints WooCommerce buttons in its own colour, so the call to
+ * action is pinned to the orange the product page uses.
+ */
 .gueta-quickview__cart .button,
-.gueta-quickview__cart button[type="submit"] {
-	background: var(--gueta-ink);
-	border: 0;
-	border-radius: 8px;
-	color: var(--gueta-paper);
+.gueta-quickview__cart button[type="submit"],
+.gueta-quickview__cart .single_add_to_cart_button {
+	background: var(--gueta-accent-warm, #f0591d) !important;
+	border: 0 !important;
+	border-radius: 8px !important;
+	color: #fff !important;
 	cursor: pointer;
+	flex: 1;
 	font-family: inherit;
-	font-size: 15px;
-	font-weight: 600;
-	min-height: 46px;
-	padding: 0 28px;
+	font-size: 16px !important;
+	font-weight: 700;
+	min-height: 48px;
+	min-width: 180px;
+	padding: 0 28px !important;
+	transition: filter .2s ease;
+}
+
+.gueta-quickview__cart .button:hover,
+.gueta-quickview__cart .single_add_to_cart_button:hover {
+	filter: brightness(.93);
 }
 
 .gueta-quickview__loading {
@@ -874,8 +937,21 @@
 		flex-basis: 108px;
 	}
 
+	/* Touch has no hover, so the bar is simply always shown. */
 	.gueta-card__cta {
-		font-size: 14px;
+		font-size: 15px;
+		opacity: 1;
+		padding: 11px 14px;
+		transform: none;
+		visibility: visible;
+	}
+
+	.gueta-card__title {
+		font-size: 15px;
+	}
+
+	.gueta-card__price {
+		font-size: 16px;
 	}
 }
 

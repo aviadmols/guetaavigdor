@@ -798,12 +798,15 @@ function gueta_render_archive_card( $product ) {
 				?>
 			</a>
 
-			<?php if ( $on_sale ) : ?>
-				<span class="gueta-card__badge"><?php echo esc_html( gueta_card_discount_label( $product ) ); ?></span>
-			<?php endif; ?>
-
-			<?php if ( ! $product->is_in_stock() ) : ?>
-				<span class="gueta-card__badge gueta-card__badge--muted">אזל מהמלאי</span>
+			<?php if ( $on_sale || ! $product->is_in_stock() ) : ?>
+				<div class="gueta-card__badges">
+					<?php if ( ! $product->is_in_stock() ) : ?>
+						<span class="gueta-card__badge gueta-card__badge--out">אזל מהמלאי</span>
+					<?php endif; ?>
+					<?php if ( $on_sale ) : ?>
+						<span class="gueta-card__badge"><?php echo esc_html( gueta_card_discount_label( $product ) ); ?></span>
+					<?php endif; ?>
+				</div>
 			<?php endif; ?>
 
 			<label class="gueta-compare-switch gueta-card__compare" data-compare-switch>
@@ -819,11 +822,12 @@ function gueta_render_archive_card( $product ) {
 			</h3>
 			<div class="gueta-card__price"><?php echo wp_kses_post( $product->get_price_html() ); ?></div>
 
-			<button type="button" class="gueta-card__cta" data-quickview="<?php echo (int) $id; ?>">
-				<span>לפרטים ורכישה</span>
-				<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5 7 12l7 7"></path></svg>
-			</button>
 		</div>
+
+		<button type="button" class="gueta-card__cta" data-quickview="<?php echo (int) $id; ?>">
+			<span>לפרטים ורכישה</span>
+			<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 8 8 16m0 0h6m-6 0v-6"></path></svg>
+		</button>
 	</article>
 	<?php
 }
@@ -931,15 +935,15 @@ function gueta_render_quickview( $product ) {
 
 			<div class="gueta-quickview__price"><?php echo wp_kses_post( $product->get_price_html() ); ?></div>
 
-			<?php if ( $product->get_short_description() ) : ?>
-				<div class="gueta-quickview__excerpt"><?php echo wp_kses_post( $product->get_short_description() ); ?></div>
-			<?php endif; ?>
-
 			<div class="gueta-quickview__cart">
 				<?php woocommerce_template_single_add_to_cart(); ?>
 			</div>
 
-			<?php gueta_render_product_accordion(); ?>
+			<?php
+			// Every panel closed: the description already leads the panel list,
+			// so nothing here needs to be expanded on open.
+			gueta_render_product_accordion( false );
+			?>
 
 			<a class="gueta-quickview__full" href="<?php echo esc_url( $product->get_permalink() ); ?>">
 				לעמוד המוצר המלא
