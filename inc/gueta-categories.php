@@ -104,15 +104,28 @@ add_action( 'delete_product_cat', 'gueta_flush_category_cards' );
 add_action( 'switch_theme', 'gueta_flush_category_cards' );
 
 /**
- * Whether the strip should render on the current request.
+ * Whether the strip should render on the current request: the home page only.
  *
  * @return bool
  */
 function gueta_show_category_slider() {
-	$show = ! is_cart() && ! is_checkout() && ! is_account_page();
-
-	return (bool) apply_filters( 'gueta_show_category_slider', $show );
+	return (bool) apply_filters( 'gueta_show_category_slider', is_front_page() );
 }
+
+/**
+ * Flag the body when the strip renders, so the page below can adapt to it.
+ *
+ * @param string[] $classes Body classes.
+ * @return string[]
+ */
+function gueta_category_slider_body_class( $classes ) {
+	if ( gueta_has_woocommerce() && gueta_show_category_slider() && count( gueta_category_cards() ) > 1 ) {
+		$classes[] = 'gueta-has-cats';
+	}
+
+	return $classes;
+}
+add_filter( 'body_class', 'gueta_category_slider_body_class' );
 
 /**
  * Render the slider.

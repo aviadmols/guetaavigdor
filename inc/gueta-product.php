@@ -418,9 +418,13 @@ function gueta_render_product_accordion() {
  * @return void
  */
 function gueta_render_reviews() {
-	if ( ! function_exists( 'wc_reviews_enabled' ) || ! wc_reviews_enabled() ) {
+	static $rendered = false;
+
+	if ( $rendered || ! function_exists( 'wc_reviews_enabled' ) || ! wc_reviews_enabled() ) {
 		return;
 	}
+
+	$rendered = true;
 	?>
 	<section class="gueta-reviews" id="reviews">
 		<div class="gueta-reviews__inner">
@@ -499,3 +503,106 @@ function gueta_render_sticky_atc() {
 	<?php
 }
 add_action( 'wp_footer', 'gueta_render_sticky_atc' );
+
+/* -------------------------------------------------------------------------
+ * Elementor Pro theme builder
+ *
+ * The shop renders its product page from an Elementor single template, so
+ * none of the WooCommerce summary hooks above ever fire there. The same
+ * pieces are wired into Elementor's own render pipeline instead.
+ * ---------------------------------------------------------------------- */
+
+/**
+ * Resolve the product being rendered, falling back to the queried post.
+ *
+ * @return WC_Product|null
+ */
+function gueta_current_product() {
+	global $product;
+
+	if ( $product instanceof WC_Product ) {
+		return $product;
+	}
+
+	if ( ! function_exists( 'wc_get_product' ) ) {
+		return null;
+	}
+
+	$resolved = wc_get_product( get_the_ID() );
+
+	if ( $resolved instanceof WC_Product ) {
+		$product = $resolved;
+
+		return $resolved;
+	}
+
+	return null;
+}
+
+/**
+ * Replace the Product Content widget's wall of text with the accordion.
+ *
+ * @param string              $content Rendered widget HTML.
+ * @param \Elementor\Widget_Base $widget  Widget instance.
+ * @return string
+ */
+function gueta_elementor_product_content( $content, $widget ) {
+	if ( ! function_exists( 'is_product' ) || ! is_product() ) {
+		return $content;
+	}
+
+	if ( ! is_object( $widget ) || ! method_exists( $widget, 'get_name' ) || 'woocommerce-product-content' !== $widget->get_name() ) {
+		return $content;
+	}
+
+	$product = gueta_current_product();
+
+	if ( ! $product || ! gueta_product_panels( $product ) ) {
+		return $content;
+	}
+
+	ob_start();
+	gueta_render_rating_link();
+	gueta_render_product_accordion();
+
+	return (string) ob_get_clean();
+}
+add_filter( 'elementor/widget/render_content', 'gueta_elementor_product_content', 10, 2 );
+
+/**
+ * Reviews go straight after the single template, ahead of the footer.
+ *
+ * @return void
+ */
+function gueta_elementor_reviews() {
+	if ( function_exists( 'is_product' ) && is_product() ) {
+		gueta_current_product();
+		gueta_render_reviews();
+	}
+}
+add_action( 'elementor/theme/after_do_single', 'gueta_elementor_reviews' );
+
+/**
+ * Shortcodes for placing the pieces anywhere inside an Elementor template.
+ *
+ * @return void
+ */
+function gueta_product_shortcodes() {
+	$capture = static function ( $callback ) {
+		return static function () use ( $callback ) {
+			if ( ! gueta_current_product() ) {
+				return '';
+			}
+
+			ob_start();
+			$callback();
+
+			return (string) ob_get_clean();
+		};
+	};
+
+	add_shortcode( 'gueta_gallery', $capture( 'gueta_render_product_gallery' ) );
+	add_shortcode( 'gueta_accordion', $capture( 'gueta_render_product_accordion' ) );
+	add_shortcode( 'gueta_reviews', $capture( 'gueta_render_reviews' ) );
+}
+add_action( 'init', 'gueta_product_shortcodes' );

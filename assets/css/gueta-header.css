@@ -113,6 +113,46 @@
 	background: var(--gueta-sand);
 }
 
+/*
+ * The parent theme and the Elementor kit paint every button on hover and
+ * focus (button:hover / button:focus outrank a lone class). Pin ours back to
+ * their designed state; keyboard users still get the focus-visible outline.
+ */
+.gueta-icon-button:focus,
+.gueta-icon-button:active,
+.gueta-announce__arrow:hover,
+.gueta-announce__arrow:focus,
+.gueta-search__submit:hover,
+.gueta-search__submit:focus,
+.gueta-search__reset:hover,
+.gueta-search__reset:focus,
+.gueta-cats__nav:focus,
+.gueta-cart-qty__button:hover,
+.gueta-cart-qty__button:focus,
+.gueta-cart-line__remove:hover,
+.gueta-cart-line__remove:focus,
+.gueta-mobile-nav__toggle:hover,
+.gueta-mobile-nav__toggle:focus {
+	background: none;
+	border-color: transparent;
+	box-shadow: none;
+	color: var(--gueta-ink);
+}
+
+.gueta-icon-button:focus {
+	background: none;
+}
+
+.gueta-announce__arrow:hover,
+.gueta-announce__arrow:focus {
+	color: inherit;
+}
+
+.gueta-cats__nav:focus {
+	background: var(--gueta-paper);
+	box-shadow: 0 4px 10px rgb(0 0 0 / 12%);
+}
+
 .gueta-icon-button:focus-visible,
 .gueta-nav__link:focus-visible,
 .gueta-button:focus-visible {
@@ -708,18 +748,30 @@
 	transform: rotate(180deg);
 }
 
+/*
+ * The panel fades and settles in rather than popping. Visibility carries the
+ * closed state so it is neither focusable nor announced while hidden, and its
+ * delayed transition lets the fade out finish before it disappears.
+ */
 .gueta-mega {
 	background: var(--gueta-paper);
 	border-block: 1px solid var(--gueta-rule);
 	box-shadow: 0 14px 22px rgb(0 0 0 / 6%);
 	inset-inline: 0;
+	opacity: 0;
 	position: absolute;
 	top: 100%;
+	transform: translateY(-8px);
+	transition: opacity .22s ease, transform .22s ease, visibility 0s linear .22s;
+	visibility: hidden;
 	z-index: 45;
 }
 
-.gueta-mega[hidden] {
-	display: none;
+.gueta-nav__item.is-open .gueta-mega {
+	opacity: 1;
+	transform: none;
+	transition-delay: 0s;
+	visibility: visible;
 }
 
 .gueta-mega__inner {
@@ -1383,6 +1435,19 @@ body.gueta-locked {
 	background: var(--gueta-paper);
 	border-bottom: 1px solid var(--gueta-rule);
 	padding: 20px 0;
+	position: relative;
+	z-index: 1;
+}
+
+/*
+ * The home page hero is built in Elementor with a negative top margin so it
+ * could tuck under the old header. With the strip in between, that margin
+ * would pull the hero over the cards, so it is neutralised whenever the strip
+ * renders.
+ */
+body.gueta-has-cats .elementor > .elementor-top-section:first-child,
+body.gueta-has-cats .elementor > .e-con:first-child {
+	margin-top: 0 !important;
 }
 
 .gueta-cats *,

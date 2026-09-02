@@ -151,7 +151,7 @@ function gueta_render_desktop_nav() {
 						<?php echo $has_mega ? gueta_icon( 'chevron' ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 					</a>
 					<?php if ( $has_mega ) : ?>
-						<div class="gueta-mega" id="<?php echo esc_attr( $panel_id ); ?>" data-nav-panel hidden>
+						<div class="gueta-mega" id="<?php echo esc_attr( $panel_id ); ?>" data-nav-panel>
 							<div class="gueta-mega__inner">
 								<div class="gueta-mega__columns">
 									<?php foreach ( $item['mega']['columns'] as $column ) : ?>

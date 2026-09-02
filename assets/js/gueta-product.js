@@ -1,43 +1,108 @@
 /**
  * Single product page: gallery switching, the zoomable lightbox and the sticky
  * add to cart bar.
+ *
+ * The lightbox feeds from whichever gallery the page has: the theme's own
+ * [data-gallery], or the shop's Elementor shortcode gallery
+ * (#smart-main-product-image with .thumbnail-item[data-full-src]).
  */
 (function () {
 	'use strict';
-
-	var gallery = document.querySelector('[data-gallery]');
-	var lightbox = document.querySelector('[data-lightbox]');
 
 	/* ---------------------------------------------------------------------
 	 * Gallery and lightbox
 	 * ------------------------------------------------------------------ */
 
-	if (gallery && lightbox) {
-		var slides = Array.prototype.slice.call(gallery.querySelectorAll('[data-gallery-slide]'));
-		var thumbs = Array.prototype.slice.call(gallery.querySelectorAll('[data-gallery-thumb]'));
+	(function galleryAndLightbox() {
+		var lightbox = document.querySelector('[data-lightbox]');
+
+		if (!lightbox) {
+			return;
+		}
+
 		var image = lightbox.querySelector('[data-lightbox-image]');
 		var stage = lightbox.querySelector('[data-lightbox-stage]');
 		var prev = lightbox.querySelector('[data-lightbox-prev]');
 		var next = lightbox.querySelector('[data-lightbox-next]');
 		var close = lightbox.querySelector('[data-lightbox-close]');
+		var sources = [];
 		var index = 0;
 		var opener = null;
+		var onSelect = null;
 
-		function select(nextIndex) {
-			if (!slides.length) {
-				return;
-			}
+		var gallery = document.querySelector('[data-gallery]');
+		var smartMain = document.getElementById('smart-main-product-image');
 
-			index = (nextIndex + slides.length) % slides.length;
+		if (gallery) {
+			var slides = Array.prototype.slice.call(gallery.querySelectorAll('[data-gallery-slide]'));
+			var thumbs = Array.prototype.slice.call(gallery.querySelectorAll('[data-gallery-thumb]'));
 
-			slides.forEach(function (slide, i) {
-				slide.classList.toggle('is-active', i === index);
+			sources = slides.map(function (slide) {
+				return {
+					full: slide.getAttribute('data-full') || '',
+					alt: (slide.querySelector('img') || {}).alt || ''
+				};
 			});
+
+			onSelect = function (i) {
+				slides.forEach(function (slide, n) {
+					slide.classList.toggle('is-active', n === i);
+				});
+
+				thumbs.forEach(function (thumb, n) {
+					thumb.classList.toggle('is-active', n === i);
+					thumb.setAttribute('aria-selected', String(n === i));
+				});
+			};
 
 			thumbs.forEach(function (thumb, i) {
-				thumb.classList.toggle('is-active', i === index);
-				thumb.setAttribute('aria-selected', String(i === index));
+				thumb.addEventListener('click', function () {
+					select(i);
+				});
 			});
+
+			slides.forEach(function (slide, i) {
+				slide.addEventListener('click', function () {
+					select(i);
+					openLightbox();
+				});
+			});
+		} else if (smartMain) {
+			var smartThumbs = Array.prototype.slice.call(
+				document.querySelectorAll('.smart-gallery-thumbnails .thumbnail-item[data-full-src]')
+			);
+
+			sources = smartThumbs.length
+				? smartThumbs.map(function (thumb) {
+					return { full: thumb.getAttribute('data-full-src'), alt: smartMain.alt || '' };
+				})
+				: [{ full: smartMain.currentSrc || smartMain.src, alt: smartMain.alt || '' }];
+
+			smartMain.classList.add('gueta-zoomable');
+			smartMain.setAttribute('title', 'לחצו להגדלה');
+
+			smartMain.addEventListener('click', function () {
+				// Open on whichever image the shortcode currently shows.
+				var current = smartMain.getAttribute('src') || '';
+				var found = sources.findIndex(function (source) {
+					return source.full === current;
+				});
+
+				select(found >= 0 ? found : 0);
+				openLightbox();
+			});
+		}
+
+		if (!sources.length) {
+			return;
+		}
+
+		function select(i) {
+			index = (i + sources.length) % sources.length;
+
+			if (onSelect) {
+				onSelect(index);
+			}
 		}
 
 		function unzoom() {
@@ -45,19 +110,14 @@
 		}
 
 		function show() {
-			var slide = slides[index];
-
-			if (!slide) {
-				return;
-			}
+			var source = sources[index];
 
 			unzoom();
-			image.src = slide.getAttribute('data-full') || '';
-			image.alt = (slide.querySelector('img') || {}).alt || '';
+			image.src = source.full;
+			image.alt = source.alt;
 
-			// One image needs no stepping.
-			prev.hidden = slides.length < 2;
-			next.hidden = slides.length < 2;
+			prev.hidden = sources.length < 2;
+			next.hidden = sources.length < 2;
 		}
 
 		function openLightbox() {
@@ -83,19 +143,6 @@
 			select(index + delta);
 			show();
 		}
-
-		thumbs.forEach(function (thumb, i) {
-			thumb.addEventListener('click', function () {
-				select(i);
-			});
-		});
-
-		slides.forEach(function (slide, i) {
-			slide.addEventListener('click', function () {
-				select(i);
-				openLightbox();
-			});
-		});
 
 		prev.addEventListener('click', function () {
 			step(-1);
@@ -156,7 +203,7 @@
 
 			touchX = null;
 		}, { passive: true });
-	}
+	}());
 
 	/* ---------------------------------------------------------------------
 	 * Sticky add to cart
@@ -190,7 +237,7 @@
 
 		button.addEventListener('click', function () {
 			// Reuse the real form so variations, quantity and validation apply.
-			var submit = form.querySelector('button[type="submit"], input[type="submit"]');
+			var submit = form.querySelector('button[type="submit"], input[type="submit"], .single_add_to_cart_button');
 
 			if (submit && !submit.disabled) {
 				submit.click();

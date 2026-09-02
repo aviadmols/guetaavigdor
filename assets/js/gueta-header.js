@@ -142,10 +142,6 @@
 
 			openItem.classList.remove('is-open');
 
-			if (panel) {
-				panel.hidden = true;
-			}
-
 			if (trigger) {
 				trigger.setAttribute('aria-expanded', 'false');
 			}
@@ -168,7 +164,6 @@
 				return;
 			}
 
-			panel.hidden = false;
 			item.classList.add('is-open');
 
 			if (trigger) {

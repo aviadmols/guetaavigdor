@@ -126,6 +126,11 @@
 	border-color: var(--gueta-ink);
 }
 
+/* The shop's shortcode gallery, once the lightbox has attached to it. */
+.gueta-zoomable {
+	cursor: zoom-in;
+}
+
 /* -------------------------------------------------------------------------
  * Lightbox
  * ---------------------------------------------------------------------- */
