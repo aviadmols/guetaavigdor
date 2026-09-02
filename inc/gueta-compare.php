@@ -76,32 +76,6 @@ add_action( 'wp_enqueue_scripts', 'gueta_compare_assets', 27 );
  * ---------------------------------------------------------------------- */
 
 /**
- * The toggle placed on a product card.
- *
- * @param int $product_id Product id.
- * @return string
- */
-function gueta_compare_switch_html( $product_id ) {
-	ob_start();
-	?>
-	<label class="gueta-compare-switch" data-compare-switch>
-		<input
-			type="checkbox"
-			class="gueta-compare-switch__input"
-			value="<?php echo (int) $product_id; ?>"
-			data-compare-toggle
-		>
-		<span class="gueta-compare-switch__text">השוואה</span>
-		<span class="gueta-compare-switch__track" aria-hidden="true">
-			<span class="gueta-compare-switch__thumb"></span>
-		</span>
-	</label>
-	<?php
-
-	return (string) ob_get_clean();
-}
-
-/**
  * Add the switch to the shop's own product cards.
  *
  * The archive is drawn by a shortcode whose cards carry no product id, so the
@@ -151,13 +125,7 @@ function gueta_inject_compare_switches( $content, $widget ) {
 			continue;
 		}
 
-		$fragment = $dom->createDocumentFragment();
-
-		if ( ! $fragment->appendXML( gueta_compare_switch_html( $product_id ) ) ) {
-			continue;
-		}
-
-		$card->appendChild( $fragment );
+		gueta_append_compare_switch( $dom, $card, $product_id );
 		$card->setAttribute( 'data-compare-card', (string) $product_id );
 		$changed = true;
 	}
@@ -181,6 +149,47 @@ function gueta_inject_compare_switches( $content, $widget ) {
 	return $html;
 }
 add_filter( 'elementor/widget/render_content', 'gueta_inject_compare_switches', 20, 2 );
+
+/**
+ * Build the switch as DOM nodes and hang it off a card.
+ *
+ * Built node by node rather than parsed from a string: DOMDocumentFragment
+ * only accepts well formed XML, which HTML's bare attributes and void
+ * elements are not.
+ *
+ * @param DOMDocument $dom        Owning document.
+ * @param DOMElement  $card       Card to append to.
+ * @param int         $product_id Product id.
+ * @return void
+ */
+function gueta_append_compare_switch( $dom, $card, $product_id ) {
+	$label = $dom->createElement( 'label' );
+	$label->setAttribute( 'class', 'gueta-compare-switch' );
+	$label->setAttribute( 'data-compare-switch', '' );
+
+	$input = $dom->createElement( 'input' );
+	$input->setAttribute( 'type', 'checkbox' );
+	$input->setAttribute( 'class', 'gueta-compare-switch__input' );
+	$input->setAttribute( 'value', (string) $product_id );
+	$input->setAttribute( 'data-compare-toggle', '' );
+	$label->appendChild( $input );
+
+	$text = $dom->createElement( 'span' );
+	$text->setAttribute( 'class', 'gueta-compare-switch__text' );
+	$text->appendChild( $dom->createTextNode( 'השוואה' ) );
+	$label->appendChild( $text );
+
+	$track = $dom->createElement( 'span' );
+	$track->setAttribute( 'class', 'gueta-compare-switch__track' );
+	$track->setAttribute( 'aria-hidden', 'true' );
+
+	$thumb = $dom->createElement( 'span' );
+	$thumb->setAttribute( 'class', 'gueta-compare-switch__thumb' );
+	$track->appendChild( $thumb );
+	$label->appendChild( $track );
+
+	$card->appendChild( $label );
+}
 
 /**
  * Resolve a product id from its permalink, cached for the request.
