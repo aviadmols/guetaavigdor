@@ -202,14 +202,23 @@ function gueta_development_create_post( WP_REST_Request $request ) {
 }
 
 /**
- * Add the bridge settings page.
+ * Add the theme management area to the WordPress admin menu.
  *
  * @return void
  */
-function gueta_development_bridge_settings() {
-	add_options_page( 'Gueta Development Bridge', 'Gueta Bridge', 'manage_options', 'gueta-development-bridge', 'gueta_development_bridge_page' );
+function gueta_theme_admin_menu() {
+	add_menu_page(
+		'Gueta Theme',
+		'Gueta Theme',
+		'manage_options',
+		'gueta-theme',
+		'gueta_development_bridge_page',
+		'dashicons-admin-customizer',
+		58
+	);
+	add_submenu_page( 'gueta-theme', 'Connect Site', 'Connect Site', 'manage_options', 'gueta-development-bridge', 'gueta_development_bridge_page' );
 }
-add_action( 'admin_menu', 'gueta_development_bridge_settings' );
+add_action( 'admin_menu', 'gueta_theme_admin_menu' );
 
 /**
  * Render settings and generate a token once requested.
@@ -232,29 +241,48 @@ function gueta_development_bridge_page() {
 	}
 
 	if ( isset( $_POST['gueta_write_enabled'] ) && check_admin_referer( 'gueta_write_settings' ) ) {
-		update_option( 'gueta_development_write_enabled', '1' === $_POST['gueta_write_enabled'] ? '1' : '0', false );
+		update_option( 'gueta_development_write_enabled', '1', false );
+	} elseif ( isset( $_POST['gueta_write_settings'] ) && check_admin_referer( 'gueta_write_settings' ) ) {
+		update_option( 'gueta_development_write_enabled', '0', false );
 	}
 
+	$connection_enabled = (bool) get_option( 'gueta_development_token_hash' );
+	$write_enabled      = '1' === get_option( 'gueta_development_write_enabled', '0' );
 	?>
 	<div class="wrap">
-		<h1>Gueta Development Bridge</h1>
-		<p>The token is shown only once. Store it in your secure integration settings, never in the theme files.</p>
+		<h1>Gueta Theme</h1>
+		<p>Manage the theme connection and the development tools that can work with this site.</p>
+		<hr>
+		<h2>Connect this site</h2>
+		<p>Generate a private connection token for an approved development tool. The token is shown only once.</p>
 		<?php if ( $new_token ) : ?>
-			<p><strong>New token:</strong></p>
-			<code style="user-select:all;display:block;padding:12px;background:#fff;border:1px solid #ccd0d4;"><?php echo esc_html( $new_token ); ?></code>
+			<div class="notice notice-success inline">
+				<p><strong>Connection created.</strong> Copy this token now; it will not be shown again.</p>
+				<p><code style="user-select:all;display:block;padding:12px;"><?php echo esc_html( $new_token ); ?></code></p>
+			</div>
 		<?php endif; ?>
-		<form method="post" style="margin-top:20px;">
+		<table class="widefat striped" style="max-width:760px;">
+			<tbody>
+				<tr><td><strong>Status</strong></td><td><?php echo $connection_enabled ? '<span class="dashicons dashicons-yes-alt" style="color:#008a20;"></span> Connected' : '<span class="dashicons dashicons-minus"></span> Not connected'; ?></td></tr>
+				<tr><td><strong>Connection endpoint</strong></td><td><code><?php echo esc_html( rest_url( 'gueta/v1/context' ) ); ?></code></td></tr>
+			</tbody>
+		</table>
+		<form method="post" style="margin-top:16px;">
 			<?php wp_nonce_field( 'gueta_generate_token' ); ?>
-			<?php submit_button( 'Generate new token', 'primary', 'gueta_generate_token' ); ?>
+			<?php submit_button( $connection_enabled ? 'Reconnect site' : 'Connect site', 'primary', 'gueta_generate_token', false ); ?>
 		</form>
 		<form method="post">
 			<?php wp_nonce_field( 'gueta_revoke_token' ); ?>
-			<?php submit_button( 'Revoke token', 'delete', 'gueta_revoke_token' ); ?>
+			<?php submit_button( 'Disconnect site', 'delete', 'gueta_revoke_token', false ); ?>
 		</form>
+		<hr>
+		<h2>Permissions</h2>
+		<p>Read access is available to an authenticated tool. Write access creates drafts only and is disabled by default.</p>
 		<form method="post">
 			<?php wp_nonce_field( 'gueta_write_settings' ); ?>
-			<label><input type="checkbox" name="gueta_write_enabled" value="1" <?php checked( '1', get_option( 'gueta_development_write_enabled', '0' ) ); ?>> Enable draft creation through the bridge</label>
-			<?php submit_button( 'Save write setting' ); ?>
+			<input type="hidden" name="gueta_write_settings" value="1">
+			<label><input type="checkbox" name="gueta_write_enabled" value="1" <?php checked( $write_enabled ); ?>> Enable draft creation through the connection</label>
+			<?php submit_button( 'Save permissions', 'secondary', 'submit', false ); ?>
 		</form>
 	</div>
 	<?php
