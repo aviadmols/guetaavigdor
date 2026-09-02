@@ -44,7 +44,12 @@ function gueta_render_logo( $variant = '' ) {
 	?>
 	<a class="<?php echo esc_attr( $class ); ?>" href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
 		<?php
-		$logo_id = (int) get_theme_mod( 'custom_logo' );
+		// The theme's own setting wins, then the customizer's site logo.
+		$logo_id = (int) gueta_setting( 'logo_id', 0 );
+
+		if ( ! $logo_id ) {
+			$logo_id = (int) get_theme_mod( 'custom_logo' );
+		}
 
 		if ( $logo_id ) {
 			echo wp_get_attachment_image(

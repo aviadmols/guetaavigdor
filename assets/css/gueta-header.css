@@ -378,7 +378,7 @@
 .gueta-brand img {
 	display: block;
 	height: auto;
-	max-height: 62px;
+	max-height: var(--gueta-logo-height, 62px);
 	object-fit: contain;
 	width: auto;
 }
@@ -1223,17 +1223,23 @@ body.gueta-locked {
 	width: 30px;
 }
 
+/*
+ * The stepper draws its own border, so the input inside must stay bare. The
+ * kit styles bare inputs with padding and a border at a higher specificity,
+ * which pushed the number out of the control.
+ */
 .gueta-cart-qty__input {
 	appearance: textfield;
 	background: none;
-	border: 0;
+	border: none !important;
 	color: var(--gueta-ink);
 	font-family: inherit;
 	font-size: 14px;
 	height: 100%;
 	outline: 0;
+	padding: 0 !important;
 	text-align: center;
-	width: 34px;
+	width: 40px !important;
 }
 
 .gueta-cart-qty__input::-webkit-inner-spin-button,

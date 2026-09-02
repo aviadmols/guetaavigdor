@@ -296,6 +296,9 @@
 		}
 	});
 
+	// Cards fetched by the archive filter need their switches reconciled.
+	document.addEventListener('gueta:cards-rendered', syncSwitches);
+
 	// Another tab changing the selection keeps this one in step.
 	window.addEventListener('storage', function (event) {
 		if (STORAGE_KEY === event.key) {

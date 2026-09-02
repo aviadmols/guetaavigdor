@@ -1,0 +1,879 @@
+/**
+ * Category archive: sub category chips, toolbar, filter sidebar, product grid
+ * and quick view. Tokens come from gueta-header.css, loaded first.
+ */
+
+.gueta-archive,
+.gueta-archive *,
+.gueta-quickview-modal,
+.gueta-quickview-modal * {
+	box-sizing: border-box;
+}
+
+.gueta-archive {
+	margin: 0 auto;
+	max-width: var(--gueta-max);
+	padding: 0 var(--gueta-gutter);
+}
+
+/* -------------------------------------------------------------------------
+ * Sub category chips
+ * ---------------------------------------------------------------------- */
+
+.gueta-archive__chips {
+	display: flex;
+	gap: 16px;
+	list-style: none;
+	margin: 0 0 24px;
+	overflow-x: auto;
+	padding: 0 0 4px;
+	scrollbar-width: none;
+}
+
+.gueta-archive__chips::-webkit-scrollbar {
+	display: none;
+}
+
+.gueta-archive__chip {
+	color: var(--gueta-ink);
+	display: block;
+	flex: 0 0 140px;
+	text-decoration: none;
+}
+
+.gueta-archive__chip-media {
+	background: var(--gueta-sand);
+	border-radius: 6px;
+	display: block;
+	overflow: hidden;
+}
+
+.gueta-archive__chip-media img {
+	aspect-ratio: 1;
+	display: block;
+	height: auto;
+	object-fit: cover;
+	transition: transform .5s ease;
+	width: 100%;
+}
+
+.gueta-archive__chip:hover .gueta-archive__chip-media img {
+	transform: scale(1.05);
+}
+
+.gueta-archive__chip-name {
+	display: block;
+	font-size: 14px;
+	padding: 10px 4px 0;
+	text-align: center;
+}
+
+/* -------------------------------------------------------------------------
+ * Toolbar
+ * ---------------------------------------------------------------------- */
+
+.gueta-archive__toolbar {
+	align-items: center;
+	border-block: 1px solid var(--gueta-rule);
+	display: flex;
+	gap: 16px;
+	margin-bottom: 24px;
+	padding: 12px 0;
+}
+
+.gueta-archive__filter-button {
+	align-items: center;
+	background: var(--gueta-ink);
+	border: 0;
+	border-radius: 8px;
+	color: var(--gueta-paper);
+	cursor: pointer;
+	display: inline-flex;
+	font-family: inherit;
+	font-size: 15px;
+	font-weight: 600;
+	gap: 8px;
+	min-height: 40px;
+	padding: 0 18px;
+}
+
+.gueta-archive__filter-button svg {
+	fill: none;
+	height: 17px;
+	stroke: currentColor;
+	stroke-linecap: round;
+	stroke-width: 1.7;
+	width: 17px;
+}
+
+.gueta-archive__filter-count {
+	background: var(--gueta-paper);
+	border-radius: 999px;
+	color: var(--gueta-ink);
+	font-size: 12px;
+	min-width: 20px;
+	padding: 1px 6px;
+}
+
+.gueta-archive__filter-count[hidden] {
+	display: none;
+}
+
+.gueta-archive__count {
+	color: var(--gueta-muted);
+	font-size: 14px;
+	margin-inline-start: auto;
+	white-space: nowrap;
+}
+
+.gueta-archive__sort select {
+	background: var(--gueta-paper);
+	border: 1px solid var(--gueta-rule);
+	border-radius: 8px;
+	color: var(--gueta-ink);
+	font-family: inherit;
+	font-size: 14px;
+	min-height: 40px;
+	padding: 0 12px;
+}
+
+/* The toolbar's compare switch reveals the per card ones. */
+.gueta-archive__compare-toggle {
+	align-items: center;
+	cursor: pointer;
+	display: inline-flex;
+	gap: 8px;
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+.gueta-archive__compare-toggle input {
+	height: 1px;
+	opacity: 0;
+	position: absolute;
+	width: 1px;
+}
+
+.gueta-archive__compare-text {
+	color: var(--gueta-muted);
+	font-size: 14px;
+}
+
+.gueta-archive__compare-track {
+	background: var(--gueta-rule);
+	border-radius: 999px;
+	display: block;
+	flex: none;
+	height: 20px;
+	position: relative;
+	transition: background-color .25s ease;
+	width: 36px;
+}
+
+.gueta-archive__compare-thumb {
+	background: var(--gueta-paper);
+	border-radius: 50%;
+	box-shadow: 0 1px 3px rgb(0 0 0 / 25%);
+	display: block;
+	height: 16px;
+	inset-block-start: 2px;
+	inset-inline-start: 2px;
+	position: absolute;
+	transition: transform .25s ease;
+	width: 16px;
+}
+
+.gueta-archive__compare-toggle input:checked ~ .gueta-archive__compare-track {
+	background: var(--gueta-ink);
+}
+
+.gueta-archive__compare-toggle input:checked ~ .gueta-archive__compare-track .gueta-archive__compare-thumb {
+	transform: translateX(calc(var(--gueta-slide) * -16px));
+}
+
+/* -------------------------------------------------------------------------
+ * Layout
+ * ---------------------------------------------------------------------- */
+
+.gueta-archive__layout {
+	display: grid;
+	gap: 40px;
+	grid-template-columns: 280px minmax(0, 1fr);
+}
+
+.gueta-archive__main {
+	min-width: 0;
+}
+
+.gueta-archive__grid {
+	display: grid;
+	gap: 40px 30px;
+	grid-template-columns: repeat(var(--gueta-archive-columns, 3), minmax(0, 1fr));
+}
+
+.gueta-archive__empty {
+	color: var(--gueta-muted);
+	grid-column: 1 / -1;
+	padding: 40px 0;
+	text-align: center;
+}
+
+.gueta-archive.is-loading .gueta-archive__grid {
+	opacity: .45;
+	pointer-events: none;
+}
+
+.gueta-archive__more {
+	display: flex;
+	justify-content: center;
+	padding: 40px 0 8px;
+}
+
+.gueta-archive__more-button {
+	background: none;
+	border: 1px solid var(--gueta-ink);
+	border-radius: 8px;
+	color: var(--gueta-ink);
+	cursor: pointer;
+	font-family: inherit;
+	font-size: 15px;
+	font-weight: 600;
+	min-height: 48px;
+	padding: 0 40px;
+	transition: background-color .2s ease, color .2s ease;
+}
+
+.gueta-archive__more-button:hover {
+	background: var(--gueta-ink);
+	color: var(--gueta-paper);
+}
+
+.gueta-archive__more-button[hidden] {
+	display: none;
+}
+
+/* -------------------------------------------------------------------------
+ * Sidebar
+ * ---------------------------------------------------------------------- */
+
+.gueta-archive__sidebar-head,
+.gueta-archive__sidebar-foot {
+	display: none;
+}
+
+.gueta-archive__backdrop {
+	background: rgb(15 15 15 / 45%);
+	display: none;
+	inset: 0;
+	position: fixed;
+	z-index: 95;
+}
+
+.gueta-filter {
+	border-bottom: 1px solid var(--gueta-rule);
+}
+
+.gueta-filter__summary {
+	align-items: center;
+	cursor: pointer;
+	display: flex;
+	justify-content: space-between;
+	list-style: none;
+	padding: 16px 0;
+}
+
+.gueta-filter__summary::-webkit-details-marker {
+	display: none;
+}
+
+.gueta-filter__title {
+	font-size: 15px;
+	font-weight: 600;
+}
+
+.gueta-filter__chevron svg {
+	fill: none;
+	height: 16px;
+	stroke: var(--gueta-ink);
+	stroke-linecap: round;
+	stroke-width: 1.8;
+	transition: transform .25s ease;
+	width: 16px;
+}
+
+.gueta-filter[open] .gueta-filter__chevron svg {
+	transform: rotate(180deg);
+}
+
+.gueta-filter__body {
+	display: grid;
+	gap: 2px;
+	max-height: 260px;
+	overflow-y: auto;
+	padding-bottom: 14px;
+}
+
+.gueta-filter__option {
+	align-items: center;
+	border-radius: 6px;
+	cursor: pointer;
+	display: flex;
+	gap: 10px;
+	padding: 7px 6px;
+	transition: background-color .15s ease;
+}
+
+.gueta-filter__option:hover {
+	background: var(--gueta-sand);
+}
+
+.gueta-filter__option input {
+	height: 1px;
+	opacity: 0;
+	position: absolute;
+	width: 1px;
+}
+
+/* A box that fills in and shows its tick once checked. */
+.gueta-filter__check {
+	align-items: center;
+	border: 1.5px solid var(--gueta-rule);
+	border-radius: 4px;
+	display: flex;
+	flex: none;
+	height: 18px;
+	justify-content: center;
+	transition: background-color .2s ease, border-color .2s ease;
+	width: 18px;
+}
+
+.gueta-filter__check svg {
+	fill: none;
+	height: 12px;
+	opacity: 0;
+	stroke: var(--gueta-paper);
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-width: 2.4;
+	transform: scale(.6);
+	transition: opacity .18s ease, transform .18s ease;
+	width: 12px;
+}
+
+.gueta-filter__option input:checked ~ .gueta-filter__check {
+	background: var(--gueta-ink);
+	border-color: var(--gueta-ink);
+}
+
+.gueta-filter__option input:checked ~ .gueta-filter__check svg {
+	opacity: 1;
+	transform: scale(1);
+}
+
+.gueta-filter__option input:focus-visible ~ .gueta-filter__check {
+	outline: 2px solid var(--gueta-ink);
+	outline-offset: 2px;
+}
+
+.gueta-filter__label {
+	font-size: 14px;
+}
+
+.gueta-filter__count {
+	color: var(--gueta-soft);
+	font-size: 12px;
+	margin-inline-start: auto;
+}
+
+.gueta-filter__body--price {
+	display: flex;
+	gap: 10px;
+}
+
+.gueta-filter__body--price label {
+	align-items: center;
+	display: flex;
+	flex: 1;
+	gap: 6px;
+}
+
+.gueta-filter__body--price span {
+	color: var(--gueta-soft);
+	font-size: 13px;
+}
+
+.gueta-filter__body--price input {
+	background: var(--gueta-paper);
+	border: 1px solid var(--gueta-rule);
+	border-radius: 6px;
+	color: var(--gueta-ink);
+	font-family: inherit;
+	font-size: 14px;
+	min-width: 0;
+	padding: 9px 10px;
+	width: 100%;
+}
+
+.gueta-filter__body--price input:focus {
+	border-color: var(--gueta-ink);
+	outline: 0;
+}
+
+/* -------------------------------------------------------------------------
+ * Card
+ * ---------------------------------------------------------------------- */
+
+.gueta-card {
+	display: flex;
+	flex-direction: column;
+}
+
+.gueta-card__media {
+	background: var(--gueta-sand);
+	border-radius: 6px;
+	overflow: hidden;
+	position: relative;
+}
+
+.gueta-card__link {
+	display: block;
+}
+
+.gueta-card__image,
+.gueta-card__media img {
+	aspect-ratio: 1;
+	display: block;
+	height: auto;
+	object-fit: cover;
+	transition: transform .6s ease;
+	width: 100%;
+}
+
+.gueta-card:hover .gueta-card__image {
+	transform: scale(1.04);
+}
+
+.gueta-card__badge {
+	background: var(--gueta-ink);
+	border-radius: 999px;
+	color: var(--gueta-paper);
+	font-size: 12px;
+	font-weight: 700;
+	inset-block-start: 12px;
+	inset-inline-start: 12px;
+	padding: 5px 12px;
+	position: absolute;
+	z-index: 2;
+}
+
+.gueta-card__badge--muted {
+	background: rgb(22 22 22 / 55%);
+	inset-block-start: auto;
+	inset-block-end: 12px;
+}
+
+/* Actions ride in from the bottom on hover, and stay put on touch. */
+.gueta-card__actions {
+	display: flex;
+	gap: 8px;
+	inset: auto 12px 12px;
+	opacity: 0;
+	position: absolute;
+	transform: translateY(10px);
+	transition: opacity .25s ease, transform .25s ease;
+	z-index: 2;
+}
+
+.gueta-card:hover .gueta-card__actions,
+.gueta-card:focus-within .gueta-card__actions {
+	opacity: 1;
+	transform: none;
+}
+
+.gueta-card__action {
+	align-items: center;
+	background: var(--gueta-paper);
+	border: 0;
+	border-radius: 8px;
+	box-shadow: 0 2px 10px rgb(0 0 0 / 12%);
+	color: var(--gueta-ink);
+	cursor: pointer;
+	display: inline-flex;
+	flex: 1;
+	font-family: inherit;
+	font-size: 14px;
+	font-weight: 600;
+	gap: 8px;
+	justify-content: center;
+	min-height: 42px;
+	padding: 0 14px;
+	transition: background-color .2s ease;
+}
+
+.gueta-card__action:hover {
+	background: var(--gueta-ink);
+	color: var(--gueta-paper);
+}
+
+.gueta-card__action svg {
+	fill: none;
+	height: 17px;
+	stroke: currentColor;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-width: 1.6;
+	width: 17px;
+}
+
+/*
+ * The card switch only appears once the toolbar toggle is on. Both classes are
+ * named in the selector so this does not depend on whether the comparison
+ * stylesheet, which also sets display on .gueta-compare-switch, loads first.
+ */
+.gueta-card__compare.gueta-compare-switch {
+	background: rgb(255 255 255 / 92%);
+	border-radius: 8px;
+	display: none;
+	inset-block-start: 12px;
+	inset-inline-end: 12px;
+	margin: 0;
+	padding: 6px 10px;
+	position: absolute;
+	z-index: 2;
+}
+
+.gueta-archive.is-comparing .gueta-card__compare.gueta-compare-switch {
+	display: inline-flex;
+}
+
+.gueta-card__info {
+	display: grid;
+	gap: 6px;
+	padding: 14px 2px 0;
+}
+
+.gueta-card__title {
+	font-size: 15px;
+	font-weight: 400;
+	line-height: 1.45;
+	margin: 0;
+}
+
+.gueta-card__title a {
+	color: var(--gueta-ink);
+	text-decoration: none;
+}
+
+.gueta-card__title a:hover {
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.gueta-card__price {
+	font-size: 15px;
+	font-weight: 700;
+}
+
+.gueta-card__price del {
+	color: var(--gueta-soft);
+	font-weight: 400;
+	margin-inline-end: 6px;
+}
+
+.gueta-card__price ins {
+	text-decoration: none;
+}
+
+/* -------------------------------------------------------------------------
+ * Quick view
+ * ---------------------------------------------------------------------- */
+
+.gueta-quickview-modal {
+	inset: 0;
+	position: fixed;
+	transition: visibility 0s linear .3s;
+	visibility: hidden;
+	z-index: 115;
+}
+
+.gueta-quickview-modal[hidden] {
+	display: none;
+}
+
+.gueta-quickview-modal.is-open {
+	transition-delay: 0s;
+	visibility: visible;
+}
+
+.gueta-quickview-modal__backdrop {
+	background: rgb(15 15 15 / 45%);
+	inset: 0;
+	opacity: 0;
+	position: absolute;
+	transition: opacity .3s ease;
+}
+
+.gueta-quickview-modal.is-open .gueta-quickview-modal__backdrop {
+	opacity: 1;
+}
+
+.gueta-quickview-modal__panel {
+	background: var(--gueta-paper);
+	border-radius: 12px;
+	inset-block-start: 50%;
+	inset-inline-start: 50%;
+	max-height: 88vh;
+	max-width: min(900px, 92vw);
+	opacity: 0;
+	overflow: auto;
+	position: absolute;
+	transform: translate(50%, -46%);
+	transition: opacity .3s ease, transform .3s ease;
+	width: 100%;
+}
+
+[dir="ltr"] .gueta-quickview-modal__panel {
+	transform: translate(-50%, -46%);
+}
+
+.gueta-quickview-modal.is-open .gueta-quickview-modal__panel {
+	opacity: 1;
+	transform: translate(50%, -50%);
+}
+
+[dir="ltr"] .gueta-quickview-modal.is-open .gueta-quickview-modal__panel {
+	transform: translate(-50%, -50%);
+}
+
+.gueta-quickview-modal__close {
+	inset-block-start: 10px;
+	inset-inline-end: 10px;
+	position: absolute;
+	z-index: 2;
+}
+
+.gueta-quickview {
+	display: grid;
+	gap: 28px;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	padding: 28px;
+}
+
+.gueta-quickview__media {
+	background: var(--gueta-sand);
+	border-radius: 10px;
+	overflow: hidden;
+}
+
+.gueta-quickview__media img {
+	aspect-ratio: 1;
+	display: block;
+	height: auto;
+	object-fit: contain;
+	width: 100%;
+}
+
+.gueta-quickview__info {
+	display: grid;
+	align-content: start;
+	gap: 14px;
+}
+
+.gueta-quickview__title {
+	font-size: clamp(19px, 2vw, 24px);
+	font-weight: 700;
+	line-height: 1.3;
+	margin: 0;
+}
+
+.gueta-quickview__price {
+	font-size: 22px;
+	font-weight: 700;
+}
+
+.gueta-quickview__price del {
+	color: var(--gueta-soft);
+	font-size: 17px;
+	font-weight: 400;
+	margin-inline-end: 8px;
+}
+
+.gueta-quickview__price ins {
+	text-decoration: none;
+}
+
+.gueta-quickview__excerpt {
+	color: var(--gueta-muted);
+	font-size: 14px;
+	line-height: 1.7;
+}
+
+.gueta-quickview__full {
+	color: var(--gueta-ink);
+	font-size: 14px;
+	font-weight: 600;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.gueta-quickview__cart .quantity input {
+	border: 1px solid var(--gueta-rule);
+	border-radius: 8px;
+	min-height: 46px;
+	padding: 0 10px;
+	text-align: center;
+	width: 72px;
+}
+
+.gueta-quickview__cart .button,
+.gueta-quickview__cart button[type="submit"] {
+	background: var(--gueta-ink);
+	border: 0;
+	border-radius: 8px;
+	color: var(--gueta-paper);
+	cursor: pointer;
+	font-family: inherit;
+	font-size: 15px;
+	font-weight: 600;
+	min-height: 46px;
+	padding: 0 28px;
+}
+
+.gueta-quickview__loading {
+	color: var(--gueta-muted);
+	padding: 60px;
+	text-align: center;
+}
+
+/* -------------------------------------------------------------------------
+ * Responsive
+ * ---------------------------------------------------------------------- */
+
+@media (max-width: 1024px) {
+	.gueta-archive__layout {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.gueta-archive__grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 28px 16px;
+	}
+
+	/* The sidebar becomes a drawer driven by the toolbar button. */
+	.gueta-archive__sidebar {
+		background: var(--gueta-paper);
+		display: flex;
+		flex-direction: column;
+		inset-block: 0;
+		inset-inline-start: 0;
+		max-width: 92vw;
+		position: fixed;
+		transform: translateX(calc(var(--gueta-slide) * -100%));
+		transition: transform .35s cubic-bezier(.32, .72, 0, 1);
+		width: 340px;
+		z-index: 96;
+	}
+
+	.gueta-archive.is-filtering .gueta-archive__sidebar {
+		transform: translateX(0);
+	}
+
+	.gueta-archive.is-filtering .gueta-archive__backdrop {
+		display: block;
+	}
+
+	.gueta-archive__sidebar-head {
+		align-items: center;
+		border-bottom: 1px solid var(--gueta-rule);
+		display: flex;
+		justify-content: space-between;
+		padding: 16px 20px;
+	}
+
+	.gueta-archive__sidebar-head h2 {
+		font-size: 18px;
+		font-weight: 600;
+		margin: 0;
+	}
+
+	.gueta-archive__filters {
+		flex: 1;
+		overflow-y: auto;
+		padding: 0 20px;
+	}
+
+	.gueta-archive__sidebar-foot {
+		border-top: 1px solid var(--gueta-rule);
+		display: flex;
+		gap: 10px;
+		padding: 16px 20px calc(16px + env(safe-area-inset-bottom));
+	}
+
+	.gueta-archive__reset,
+	.gueta-archive__apply {
+		border-radius: 8px;
+		cursor: pointer;
+		flex: 1;
+		font-family: inherit;
+		font-size: 15px;
+		font-weight: 600;
+		min-height: 46px;
+	}
+
+	.gueta-archive__reset {
+		background: none;
+		border: 1px solid var(--gueta-ink);
+		color: var(--gueta-ink);
+	}
+
+	.gueta-archive__apply {
+		background: var(--gueta-ink);
+		border: 0;
+		color: var(--gueta-paper);
+	}
+
+	.gueta-quickview {
+		grid-template-columns: minmax(0, 1fr);
+		padding: 20px;
+	}
+}
+
+@media (max-width: 560px) {
+	.gueta-archive__toolbar {
+		flex-wrap: wrap;
+	}
+
+	.gueta-archive__count {
+		order: 4;
+		width: 100%;
+	}
+
+	.gueta-archive__chip {
+		flex-basis: 108px;
+	}
+
+	/* Touch has no hover, so the actions stay visible. */
+	.gueta-card__actions {
+		opacity: 1;
+		transform: none;
+	}
+
+	.gueta-card__action span {
+		display: none;
+	}
+
+	.gueta-card__action {
+		flex: none;
+		min-height: 38px;
+		padding: 0 12px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.gueta-card__image,
+	.gueta-card__actions,
+	.gueta-archive__sidebar,
+	.gueta-quickview-modal__panel {
+		transition-duration: .01ms;
+	}
+}

@@ -29,8 +29,10 @@ function gueta_category_cards() {
 	}
 
 	$cards = [];
+	$items = gueta_setting( 'cats_items', [] );
+	$items = is_array( $items ) ? $items : [];
 
-	foreach ( gueta_top_categories() as $term ) {
+	foreach ( gueta_top_categories() as $index => $term ) {
 		$thumbnail_id = (int) get_term_meta( $term->term_id, 'thumbnail_id', true );
 		$link         = get_term_link( $term );
 
@@ -38,14 +40,29 @@ function gueta_category_cards() {
 			continue;
 		}
 
+		$item = isset( $items[ $term->term_id ] ) && is_array( $items[ $term->term_id ] ) ? $items[ $term->term_id ] : [];
+
+		// A category is shown unless the settings screen has excluded it.
+		if ( array_key_exists( 'include', $item ) && empty( $item['include'] ) ) {
+			continue;
+		}
+
 		$cards[] = [
 			'id'    => $term->term_id,
-			'name'  => $term->name,
+			'name'  => ! empty( $item['title'] ) ? $item['title'] : $term->name,
 			'url'   => $link,
 			'image' => $thumbnail_id,
 			'text'  => gueta_category_card_text( $term ),
+			'order' => isset( $item['order'] ) ? (int) $item['order'] : ( $index + 1 ) * 10,
 		];
 	}
+
+	usort(
+		$cards,
+		static function ( $a, $b ) {
+			return $a['order'] <=> $b['order'];
+		}
+	);
 
 	set_transient( $cache_key, $cards, DAY_IN_SECONDS );
 
@@ -93,7 +110,13 @@ add_action( 'switch_theme', 'gueta_flush_category_cards' );
  * @return bool
  */
 function gueta_show_category_slider() {
-	return (bool) apply_filters( 'gueta_show_category_slider', is_front_page() );
+	if ( ! gueta_setting( 'cats_enabled', 1 ) ) {
+		return (bool) apply_filters( 'gueta_show_category_slider', false );
+	}
+
+	$show = 'all' === gueta_setting( 'cats_scope', 'front' ) ? true : is_front_page();
+
+	return (bool) apply_filters( 'gueta_show_category_slider', $show );
 }
 
 /**
