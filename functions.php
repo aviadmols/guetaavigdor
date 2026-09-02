@@ -32,8 +32,91 @@ function hello_elementor_child_scripts_styles() {
 		HELLO_ELEMENTOR_CHILD_VERSION
 	);
 
+	wp_enqueue_script(
+		'gueta-header',
+		get_stylesheet_directory_uri() . '/assets/js/gueta-header.js',
+		[],
+		HELLO_ELEMENTOR_CHILD_VERSION,
+		true
+	);
+
+	wp_localize_script(
+		'gueta-header',
+		'guetaHeader',
+		[
+			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			'nonce'  => wp_create_nonce( 'gueta_header_search' ),
+		]
+	);
+
 }
 add_action( 'wp_enqueue_scripts', 'hello_elementor_child_scripts_styles', 20 );
+
+/**
+ * Return product or post suggestions for the header search.
+ *
+ * @return void
+ */
+function gueta_header_search() {
+	check_ajax_referer( 'gueta_header_search', 'nonce' );
+
+	$term = isset( $_POST['term'] ) ? sanitize_text_field( wp_unslash( $_POST['term'] ) ) : '';
+	if ( strlen( $term ) < 2 ) {
+		wp_send_json_success( [ 'html' => '' ] );
+	}
+
+	$post_types = post_type_exists( 'product' ) ? [ 'product', 'post', 'page' ] : [ 'post', 'page' ];
+	$query      = new WP_Query(
+		[
+			'post_type'      => $post_types,
+			'post_status'    => 'publish',
+			's'              => $term,
+			'posts_per_page' => 6,
+			'no_found_rows'  => true,
+		]
+	);
+
+	ob_start();
+	if ( $query->have_posts() ) {
+		while ( $query->have_posts() ) {
+			$query->the_post();
+			?>
+			<a class="gueta-search-result" href="<?php the_permalink(); ?>">
+				<?php if ( has_post_thumbnail() ) : ?>
+					<span class="gueta-search-result__image"><?php the_post_thumbnail( 'thumbnail' ); ?></span>
+				<?php endif; ?>
+				<span class="gueta-search-result__title"><?php the_title(); ?></span>
+			</a>
+			<?php
+		}
+	} else {
+		echo '<p class="gueta-search-empty">לא נמצאו תוצאות</p>';
+	}
+	wp_reset_postdata();
+
+	wp_send_json_success( [ 'html' => ob_get_clean() ] );
+}
+add_action( 'wp_ajax_gueta_header_search', 'gueta_header_search' );
+add_action( 'wp_ajax_nopriv_gueta_header_search', 'gueta_header_search' );
+
+/**
+ * Register the primary navigation and provide useful links when no menu exists.
+ *
+ * @return void
+ */
+function gueta_register_navigation() {
+	register_nav_menus( [ 'primary' => 'Primary navigation' ] );
+}
+add_action( 'after_setup_theme', 'gueta_register_navigation' );
+
+/**
+ * Fallback navigation for a fresh installation.
+ *
+ * @return void
+ */
+function gueta_header_fallback_menu() {
+	echo '<ul class="gueta-menu"><li><a href="' . esc_url( home_url( '/' ) ) . '">ראשי</a></li><li class="menu-item-has-children"><a href="' . esc_url( home_url( '/shop/' ) ) . '">חנות</a><ul class="sub-menu"><li><a href="' . esc_url( home_url( '/shop/' ) ) . '">כל המוצרים</a></li><li><a href="' . esc_url( home_url( '/product-category/new/' ) ) . '">חדשים</a></li><li><a href="' . esc_url( home_url( '/product-category/sale/' ) ) . '">SALE</a></li></ul></li><li><a href="' . esc_url( home_url( '/about/' ) ) . '">אודות</a></li><li><a href="' . esc_url( home_url( '/contact/' ) ) . '">צור קשר</a></li></ul>';
+}
 
 /**
  * Register the authenticated bridge used by external development tools.
