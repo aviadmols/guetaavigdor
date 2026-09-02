@@ -33,24 +33,35 @@
 	 * ------------------------------------------------------------------ */
 
 	(function condense() {
-		var threshold = 90;
+		/*
+		 * Collapsing removes the row's height from the flow, which shortens the
+		 * document and can pull the scroll position back above a single
+		 * threshold, expanding it again: a flicker loop. Two thresholds far
+		 * enough apart to clear the row's own height break the cycle, and
+		 * collapsing at 4px means it goes as soon as the page moves.
+		 */
+		var collapseAt = 4;
+		var expandAt = 1;
 		var ticking = false;
 
 		function apply() {
 			ticking = false;
 
-			var condensed = window.scrollY > threshold;
+			var isCondensed = header.classList.contains('is-condensed');
+			var y = window.scrollY;
 
-			if (condensed === header.classList.contains('is-condensed')) {
+			if (!isCondensed && y > collapseAt) {
+				// Never collapse the row out from under an open mega menu.
+				if (!header.classList.contains('is-dimmed')) {
+					header.classList.add('is-condensed');
+				}
+
 				return;
 			}
 
-			// Never collapse the row out from under an open mega menu.
-			if (condensed && header.classList.contains('is-dimmed')) {
-				return;
+			if (isCondensed && y <= expandAt) {
+				header.classList.remove('is-condensed');
 			}
-
-			header.classList.toggle('is-condensed', condensed);
 		}
 
 		window.addEventListener('scroll', function () {
