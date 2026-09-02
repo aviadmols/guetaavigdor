@@ -82,21 +82,7 @@ function gueta_cart_drawer_html() {
  * @return void
  */
 function gueta_render_empty_cart() {
-	$terms = [];
-
-	if ( taxonomy_exists( 'product_cat' ) ) {
-		$terms = get_terms(
-			[
-				'taxonomy'   => 'product_cat',
-				'parent'     => 0,
-				'hide_empty' => true,
-				'orderby'    => 'count',
-				'order'      => 'DESC',
-				'number'     => 4,
-			]
-		);
-		$terms = is_wp_error( $terms ) ? [] : $terms;
-	}
+	$terms = gueta_top_categories( 4 );
 	?>
 	<div class="gueta-cart-empty">
 		<p class="gueta-cart-empty__title">העגלה שלך ריקה</p>

@@ -1480,6 +1480,15 @@ body.gueta-has-cats .elementor > .e-con:first-child {
 	display: none;
 }
 
+/* Cards run from the inline start whatever a list reset elsewhere may say. */
+[dir="rtl"] .gueta-cats__track {
+	direction: rtl;
+}
+
+[dir="ltr"] .gueta-cats__track {
+	direction: ltr;
+}
+
 .gueta-cats__item {
 	flex: 0 0 220px;
 	scroll-snap-align: start;

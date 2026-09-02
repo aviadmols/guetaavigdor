@@ -105,13 +105,10 @@ function gueta_search_terms( $taxonomy, $term ) {
 			'taxonomy'   => $taxonomy,
 			'name__like' => $term,
 			'hide_empty' => true,
-			'orderby'    => 'count',
-			'order'      => 'DESC',
-			'number'     => GUETA_SEARCH_TERM_LIMIT,
 		]
 	);
 
-	return is_wp_error( $terms ) ? [] : $terms;
+	return is_wp_error( $terms ) ? [] : gueta_sort_terms_by_count( $terms, GUETA_SEARCH_TERM_LIMIT );
 }
 
 /**
@@ -250,7 +247,7 @@ function gueta_render_suggest_terms( $title, $terms, $with_path ) {
 						<?php if ( $path ) : ?>
 							<span class="gueta-suggest__path"><?php echo esc_html( $path ); ?></span>
 						<?php endif; ?>
-						<span class="gueta-suggest__count"><?php echo esc_html( number_format_i18n( $term->count ) ); ?></span>
+						<span class="gueta-suggest__count"><?php echo esc_html( number_format_i18n( gueta_term_product_count( $term ) ) ); ?></span>
 					</a>
 				</li>
 			<?php endforeach; ?>

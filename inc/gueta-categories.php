@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return array
  */
 function gueta_category_cards() {
-	$cache_key = 'gueta_category_cards_' . get_locale();
+	$cache_key = 'gueta_category_cards_' . GUETA_CACHE_VERSION . '_' . get_locale();
 	$cached    = get_transient( $cache_key );
 
 	if ( is_array( $cached ) ) {
@@ -30,25 +30,7 @@ function gueta_category_cards() {
 
 	$cards = [];
 
-	if ( ! taxonomy_exists( 'product_cat' ) ) {
-		return $cards;
-	}
-
-	$terms = get_terms(
-		[
-			'taxonomy'   => 'product_cat',
-			'parent'     => 0,
-			'hide_empty' => true,
-			'orderby'    => 'count',
-			'order'      => 'DESC',
-		]
-	);
-
-	if ( is_wp_error( $terms ) ) {
-		return $cards;
-	}
-
-	foreach ( $terms as $term ) {
+	foreach ( gueta_top_categories() as $term ) {
 		$thumbnail_id = (int) get_term_meta( $term->term_id, 'thumbnail_id', true );
 		$link         = get_term_link( $term );
 
@@ -83,10 +65,12 @@ function gueta_category_card_text( $term ) {
 		return wp_html_excerpt( $description, 130, '…' );
 	}
 
+	$count = gueta_term_product_count( $term );
+
 	return sprintf(
 		/* translators: %s: number of products. */
-		_n( '%s מוצר בקטגוריה', '%s מוצרים בקטגוריה', $term->count, 'hello-elementor-child' ),
-		number_format_i18n( $term->count )
+		_n( '%s מוצר בקטגוריה', '%s מוצרים בקטגוריה', $count, 'hello-elementor-child' ),
+		number_format_i18n( $count )
 	);
 }
 
@@ -96,7 +80,7 @@ function gueta_category_card_text( $term ) {
  * @return void
  */
 function gueta_flush_category_cards() {
-	delete_transient( 'gueta_category_cards_' . get_locale() );
+	delete_transient( 'gueta_category_cards_' . GUETA_CACHE_VERSION . '_' . get_locale() );
 }
 add_action( 'created_product_cat', 'gueta_flush_category_cards' );
 add_action( 'edited_product_cat', 'gueta_flush_category_cards' );

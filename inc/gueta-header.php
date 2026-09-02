@@ -19,6 +19,11 @@ const GUETA_NAV_MAX_ITEMS = 8;
  */
 const GUETA_NAV_MAX_COLUMNS = 7;
 
+/**
+ * Bump to invalidate every cached navigation structure on deploy.
+ */
+const GUETA_CACHE_VERSION = '2';
+
 /* -------------------------------------------------------------------------
  * Theme setup
  * ---------------------------------------------------------------------- */
@@ -55,6 +60,70 @@ add_action( 'after_setup_theme', 'gueta_header_setup' );
  */
 function gueta_has_woocommerce() {
 	return function_exists( 'WC' ) && class_exists( 'WooCommerce' );
+}
+
+/* -------------------------------------------------------------------------
+ * Category counts and ordering
+ * ---------------------------------------------------------------------- */
+
+/**
+ * The product count WooCommerce itself shows for a term.
+ *
+ * WooCommerce keeps its real count in product_count_* term meta and only swaps
+ * it into $term->count on non-AJAX front end queries, while the term_taxonomy
+ * column that ORDER BY count reads is stale on this shop. Read the meta.
+ *
+ * @param WP_Term $term Term.
+ * @return int
+ */
+function gueta_term_product_count( $term ) {
+	$meta = get_term_meta( $term->term_id, 'product_count_' . $term->taxonomy, true );
+
+	return ( '' !== $meta && null !== $meta && false !== $meta ) ? (int) $meta : (int) $term->count;
+}
+
+/**
+ * Sort terms busiest first, in PHP rather than SQL, for the reason above.
+ *
+ * @param WP_Term[] $terms Terms.
+ * @param int       $limit Keep this many, or all when zero.
+ * @return WP_Term[]
+ */
+function gueta_sort_terms_by_count( $terms, $limit = 0 ) {
+	usort(
+		$terms,
+		static function ( $a, $b ) {
+			return gueta_term_product_count( $b ) <=> gueta_term_product_count( $a );
+		}
+	);
+
+	return $limit > 0 ? array_slice( $terms, 0, $limit ) : array_values( $terms );
+}
+
+/**
+ * Top level product categories, busiest first.
+ *
+ * @param int $limit Keep this many, or all when zero.
+ * @return WP_Term[]
+ */
+function gueta_top_categories( $limit = 0 ) {
+	if ( ! taxonomy_exists( 'product_cat' ) ) {
+		return [];
+	}
+
+	$terms = get_terms(
+		[
+			'taxonomy'   => 'product_cat',
+			'parent'     => 0,
+			'hide_empty' => true,
+		]
+	);
+
+	if ( is_wp_error( $terms ) || ! $terms ) {
+		return [];
+	}
+
+	return gueta_sort_terms_by_count( $terms, $limit );
 }
 
 /* -------------------------------------------------------------------------
@@ -130,7 +199,7 @@ add_action( 'wp_enqueue_scripts', 'gueta_header_assets', 25 );
  * @return array
  */
 function gueta_header_nav() {
-	$cache_key = 'gueta_header_nav_' . get_locale();
+	$cache_key = 'gueta_header_nav_' . GUETA_CACHE_VERSION . '_' . get_locale();
 	$cached    = get_transient( $cache_key );
 
 	if ( is_array( $cached ) ) {
@@ -154,7 +223,7 @@ function gueta_header_nav() {
  * @return void
  */
 function gueta_flush_nav_cache() {
-	delete_transient( 'gueta_header_nav_' . get_locale() );
+	delete_transient( 'gueta_header_nav_' . GUETA_CACHE_VERSION . '_' . get_locale() );
 }
 add_action( 'wp_update_nav_menu', 'gueta_flush_nav_cache' );
 add_action( 'switch_theme', 'gueta_flush_nav_cache' );
@@ -257,22 +326,9 @@ function gueta_menu_item_term( $menu_item ) {
  * @return array
  */
 function gueta_nav_from_product_categories() {
-	if ( ! taxonomy_exists( 'product_cat' ) ) {
-		return [];
-	}
+	$terms = gueta_top_categories( GUETA_NAV_MAX_ITEMS );
 
-	$terms = get_terms(
-		[
-			'taxonomy'   => 'product_cat',
-			'parent'     => 0,
-			'hide_empty' => true,
-			'orderby'    => 'count',
-			'order'      => 'DESC',
-			'number'     => GUETA_NAV_MAX_ITEMS,
-		]
-	);
-
-	if ( is_wp_error( $terms ) || ! $terms ) {
+	if ( ! $terms ) {
 		return [];
 	}
 
