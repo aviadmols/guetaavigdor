@@ -247,11 +247,15 @@
 	font-weight: 600;
 }
 
-/* A plus that loses its upright stroke when the panel opens. */
+/*
+ * A plus that keeps both strokes and rotates a quarter turn into an X when the
+ * panel opens, rather than collapsing into a minus.
+ */
 .gueta-accordion__sign {
 	flex: none;
 	height: 16px;
 	position: relative;
+	transition: transform .3s cubic-bezier(.32, .72, 0, 1);
 	width: 16px;
 }
 
@@ -259,22 +263,20 @@
 .gueta-accordion__sign::after {
 	background: var(--gueta-ink);
 	content: "";
+	height: 1.5px;
 	inset-block-start: 50%;
 	inset-inline-start: 0;
-	position: absolute;
-	transition: transform .25s ease, opacity .25s ease;
-	width: 100%;
-	height: 1.5px;
 	margin-top: -.75px;
+	position: absolute;
+	width: 100%;
 }
 
 .gueta-accordion__sign::after {
 	transform: rotate(90deg);
 }
 
-.gueta-accordion__item[open] .gueta-accordion__sign::after {
-	opacity: 0;
-	transform: rotate(0deg);
+.gueta-accordion__item[open] .gueta-accordion__sign {
+	transform: rotate(45deg);
 }
 
 .gueta-accordion__content {
