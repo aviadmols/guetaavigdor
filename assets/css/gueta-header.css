@@ -251,12 +251,14 @@
 .gueta-announce__arrow {
 	background: none;
 	border: 0;
+	border-radius: 0;
 	color: inherit;
 	cursor: pointer;
 	display: grid;
 	flex: none;
 	height: 32px;
 	opacity: .75;
+	padding: 0;
 	place-items: center;
 	width: 32px;
 }
@@ -471,11 +473,13 @@
 .gueta-search__reset {
 	background: none;
 	border: 0;
+	border-radius: 50%;
 	color: var(--gueta-soft);
 	cursor: pointer;
 	display: grid;
 	flex: none;
 	height: 26px;
+	padding: 0;
 	place-items: center;
 	width: 26px;
 }
@@ -1185,10 +1189,12 @@ body.gueta-locked {
 	align-self: start;
 	background: none;
 	border: 0;
+	border-radius: 50%;
 	color: var(--gueta-soft);
 	cursor: pointer;
 	display: grid;
 	height: 28px;
+	padding: 0;
 	place-items: center;
 	width: 28px;
 }
@@ -1214,14 +1220,17 @@ body.gueta-locked {
 	height: 34px;
 }
 
+/* The parent theme's reset pads every button 8px 16px; these are 30px wide. */
 .gueta-cart-qty__button {
 	background: none;
 	border: 0;
+	border-radius: 0;
 	color: var(--gueta-ink);
 	cursor: pointer;
 	font-size: 16px;
 	height: 100%;
 	line-height: 1;
+	padding: 0;
 	width: 30px;
 }
 
@@ -1753,12 +1762,13 @@ body.gueta-has-cats .elementor > .e-con:first-child {
 	transform: scaleX(-1) rotate(90deg);
 }
 
-.gueta-cart-panel {
+/* The collapsible notes and coupon sections (not the drawer's panel wrapper). */
+.gueta-cart-section {
 	display: grid;
 	gap: 8px;
 }
 
-.gueta-cart-panel textarea,
+.gueta-cart-section textarea,
 .gueta-cart-coupon-form input {
 	background: var(--gueta-paper);
 	border: 1px solid var(--gueta-rule);
@@ -1770,24 +1780,24 @@ body.gueta-has-cats .elementor > .e-con:first-child {
 	width: 100%;
 }
 
-.gueta-cart-panel textarea:focus,
+.gueta-cart-section textarea:focus,
 .gueta-cart-coupon-form input:focus {
 	border-color: var(--gueta-ink);
 	outline: 0;
 }
 
-.gueta-cart-panel textarea {
+.gueta-cart-section textarea {
 	resize: vertical;
 }
 
-.gueta-cart-panel__hint {
+.gueta-cart-section__hint {
 	color: var(--gueta-soft);
 	font-size: 12px;
 	margin: 0;
 	min-height: 16px;
 }
 
-.gueta-cart-panel__hint.is-error {
+.gueta-cart-section__hint.is-error {
 	color: var(--gueta-accent);
 }
 

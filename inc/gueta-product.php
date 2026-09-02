@@ -700,33 +700,52 @@ function gueta_replace_gallery_shortcode( $content, $widget ) {
 add_filter( 'elementor/widget/render_content', 'gueta_replace_gallery_shortcode', 10, 2 );
 
 /**
- * Point Elementor's generic Add to Cart widget at the product being viewed.
+ * Retarget the Add to Cart widget in the template data, before any widget is
+ * instantiated.
  *
- * The single template uses the widget that takes a fixed product id, so every
- * product page was adding that one product to the cart. Rewriting the setting
- * before the widget renders keeps its styling intact.
+ * This is the earliest and most reliable place: Elementor hands over the raw
+ * element tree of the document it is about to render, so rewriting the
+ * widget's product_id here means its own render builds the form for this
+ * product, keeping its button styling, without touching the global product or
+ * the rendered HTML afterwards.
  *
- * @param \Elementor\Element_Base $widget Widget about to render.
- * @return void
+ * @param array $data    Element tree.
+ * @param int   $post_id Document being rendered (the template, not the product).
+ * @return array
  */
-function gueta_retarget_add_to_cart_widget( $widget ) {
-	if ( ! function_exists( 'is_product' ) || ! is_product() ) {
-		return;
+function gueta_retarget_add_to_cart_data( $data, $post_id ) {
+	if ( ! is_array( $data ) || ! function_exists( 'is_product' ) || ! is_product() ) {
+		return $data;
 	}
 
-	if ( ! is_object( $widget ) || ! method_exists( $widget, 'get_name' ) || 'wc-add-to-cart' !== $widget->get_name() ) {
-		return;
+	$product_id = (int) get_queried_object_id();
+
+	if ( ! $product_id || 'product' !== get_post_type( $product_id ) ) {
+		return $data;
 	}
 
-	$product = gueta_queried_product();
+	$walk = static function ( array $elements ) use ( &$walk, $product_id ) {
+		foreach ( $elements as &$element ) {
+			if ( ! is_array( $element ) ) {
+				continue;
+			}
 
-	if ( ! $product || ! method_exists( $widget, 'set_settings' ) ) {
-		return;
-	}
+			if ( 'widget' === ( $element['elType'] ?? '' ) && 'wc-add-to-cart' === ( $element['widgetType'] ?? '' ) ) {
+				$element['settings']               = isset( $element['settings'] ) && is_array( $element['settings'] ) ? $element['settings'] : [];
+				$element['settings']['product_id'] = $product_id;
+			}
 
-	$widget->set_settings( 'product_id', $product->get_id() );
+			if ( ! empty( $element['elements'] ) && is_array( $element['elements'] ) ) {
+				$element['elements'] = $walk( $element['elements'] );
+			}
+		}
+
+		return $elements;
+	};
+
+	return $walk( $data );
 }
-add_action( 'elementor/frontend/widget/before_render', 'gueta_retarget_add_to_cart_widget' );
+add_filter( 'elementor/frontend/builder_content_data', 'gueta_retarget_add_to_cart_data', 10, 2 );
 
 /**
  * Safety net for the above: if the rendered form still names another product,

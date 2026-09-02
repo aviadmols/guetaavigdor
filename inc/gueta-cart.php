@@ -204,13 +204,13 @@ function gueta_render_cart_footer() {
 			</button>
 		</div>
 
-		<div class="gueta-cart-panel" data-cart-panel-body="note" hidden>
+		<div class="gueta-cart-section" data-cart-panel-body="note" hidden>
 			<label class="screen-reader-text" for="gueta-order-note">הערות להזמנה</label>
 			<textarea id="gueta-order-note" rows="3" placeholder="הערות להזמנה, למשל שעות מסירה מועדפות" data-cart-note><?php echo esc_textarea( $note ); ?></textarea>
-			<p class="gueta-cart-panel__hint" data-cart-note-status>ההערה נשמרת ותצורף להזמנה.</p>
+			<p class="gueta-cart-section__hint" data-cart-note-status>ההערה נשמרת ותצורף להזמנה.</p>
 		</div>
 
-		<div class="gueta-cart-panel" data-cart-panel-body="coupon" hidden>
+		<div class="gueta-cart-section" data-cart-panel-body="coupon" hidden>
 			<?php if ( $coupons ) : ?>
 				<ul class="gueta-cart-coupons">
 					<?php foreach ( $coupons as $code ) : ?>
@@ -228,7 +228,7 @@ function gueta_render_cart_footer() {
 				<input id="gueta-coupon" type="text" placeholder="קוד קופון" autocomplete="off" data-cart-coupon>
 				<button type="button" data-cart-coupon-apply>החלה</button>
 			</div>
-			<p class="gueta-cart-panel__hint" data-cart-coupon-status></p>
+			<p class="gueta-cart-section__hint" data-cart-coupon-status></p>
 		</div>
 
 		<div class="gueta-cart-total">
