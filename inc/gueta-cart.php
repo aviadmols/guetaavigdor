@@ -189,18 +189,153 @@ function gueta_render_cart_lines() {
  * @return void
  */
 function gueta_render_cart_footer() {
+	$coupons = WC()->cart->get_applied_coupons();
+	$note    = (string) WC()->session->get( 'gueta_order_note', '' );
 	?>
 	<div class="gueta-drawer__footer">
+		<div class="gueta-cart-extras">
+			<button type="button" class="gueta-cart-extra" data-cart-panel="note" aria-expanded="false">
+				<span>הערות</span>
+				<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5 7 12l7 7"></path></svg>
+			</button>
+			<button type="button" class="gueta-cart-extra" data-cart-panel="coupon" aria-expanded="false">
+				<span>קופון</span>
+				<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5 7 12l7 7"></path></svg>
+			</button>
+		</div>
+
+		<div class="gueta-cart-panel" data-cart-panel-body="note" hidden>
+			<label class="screen-reader-text" for="gueta-order-note">הערות להזמנה</label>
+			<textarea id="gueta-order-note" rows="3" placeholder="הערות להזמנה, למשל שעות מסירה מועדפות" data-cart-note><?php echo esc_textarea( $note ); ?></textarea>
+			<p class="gueta-cart-panel__hint" data-cart-note-status>ההערה נשמרת ותצורף להזמנה.</p>
+		</div>
+
+		<div class="gueta-cart-panel" data-cart-panel-body="coupon" hidden>
+			<?php if ( $coupons ) : ?>
+				<ul class="gueta-cart-coupons">
+					<?php foreach ( $coupons as $code ) : ?>
+						<li>
+							<span><?php echo esc_html( wc_format_coupon_code( $code ) ); ?></span>
+							<button type="button" data-cart-coupon-remove="<?php echo esc_attr( $code ); ?>" aria-label="הסרת הקופון">
+								<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"></path></svg>
+							</button>
+						</li>
+					<?php endforeach; ?>
+				</ul>
+			<?php endif; ?>
+			<div class="gueta-cart-coupon-form">
+				<label class="screen-reader-text" for="gueta-coupon">קוד קופון</label>
+				<input id="gueta-coupon" type="text" placeholder="קוד קופון" autocomplete="off" data-cart-coupon>
+				<button type="button" data-cart-coupon-apply>החלה</button>
+			</div>
+			<p class="gueta-cart-panel__hint" data-cart-coupon-status></p>
+		</div>
+
 		<div class="gueta-cart-total">
-			<span>סה"כ ביניים</span>
+			<span>סה"כ</span>
 			<strong><?php echo wp_kses_post( WC()->cart->get_cart_subtotal() ); ?></strong>
 		</div>
-		<p class="gueta-cart-note">המשלוח והמע"מ מחושבים בעמוד התשלום</p>
-		<a class="gueta-button gueta-button--solid" href="<?php echo esc_url( wc_get_checkout_url() ); ?>">מעבר לתשלום</a>
+		<p class="gueta-cart-note">מחיר המשלוח יחושב בהמשך</p>
+		<a class="gueta-button gueta-button--solid" href="<?php echo esc_url( wc_get_checkout_url() ); ?>">לתשלום</a>
 		<a class="gueta-button gueta-button--ghost" href="<?php echo esc_url( wc_get_cart_url() ); ?>">צפייה בעגלה</a>
 	</div>
 	<?php
 }
+
+/**
+ * Apply or remove a coupon from the drawer.
+ *
+ * @return void
+ */
+function gueta_ajax_cart_coupon() {
+	check_ajax_referer( 'gueta_header', 'nonce' );
+
+	if ( ! gueta_has_woocommerce() || ! WC()->cart ) {
+		wp_send_json_error( [ 'message' => 'החנות אינה זמינה כרגע.' ], 400 );
+	}
+
+	$code   = isset( $_POST['code'] ) ? wc_format_coupon_code( sanitize_text_field( wp_unslash( $_POST['code'] ) ) ) : '';
+	$remove = ! empty( $_POST['remove'] );
+
+	if ( ! $code ) {
+		wp_send_json_error( [ 'message' => 'צריך להזין קוד קופון.' ], 400 );
+	}
+
+	// WooCommerce reports success and failure through its notice store.
+	wc_clear_notices();
+
+	if ( $remove ) {
+		WC()->cart->remove_coupon( $code );
+		$message = 'הקופון הוסר.';
+	} else {
+		WC()->cart->apply_coupon( $code );
+		$notices = wc_get_notices( 'error' );
+		$message = $notices ? wp_strip_all_tags( $notices[0]['notice'] ) : 'הקופון הוחל.';
+
+		if ( $notices ) {
+			wc_clear_notices();
+			WC()->cart->calculate_totals();
+
+			wp_send_json_error(
+				[
+					'message' => $message,
+					'panel'   => gueta_drawer_panel_inner(),
+				],
+				200
+			);
+		}
+	}
+
+	wc_clear_notices();
+	WC()->cart->calculate_totals();
+
+	wp_send_json_success(
+		[
+			'message' => $message,
+			'panel'   => gueta_drawer_panel_inner(),
+			'badge'   => gueta_cart_count_html(),
+		]
+	);
+}
+add_action( 'wp_ajax_gueta_cart_coupon', 'gueta_ajax_cart_coupon' );
+add_action( 'wp_ajax_nopriv_gueta_cart_coupon', 'gueta_ajax_cart_coupon' );
+
+/**
+ * Keep the order note the shopper typed in the drawer.
+ *
+ * @return void
+ */
+function gueta_ajax_cart_note() {
+	check_ajax_referer( 'gueta_header', 'nonce' );
+
+	if ( ! gueta_has_woocommerce() || ! WC()->session ) {
+		wp_send_json_error( [ 'message' => 'החנות אינה זמינה כרגע.' ], 400 );
+	}
+
+	$note = isset( $_POST['note'] ) ? sanitize_textarea_field( wp_unslash( $_POST['note'] ) ) : '';
+
+	WC()->session->set( 'gueta_order_note', $note );
+
+	wp_send_json_success( [ 'message' => $note ? 'ההערה נשמרה.' : '' ] );
+}
+add_action( 'wp_ajax_gueta_cart_note', 'gueta_ajax_cart_note' );
+add_action( 'wp_ajax_nopriv_gueta_cart_note', 'gueta_ajax_cart_note' );
+
+/**
+ * Prefill the checkout's own note field with what the drawer collected.
+ *
+ * @param string $value Existing value.
+ * @param string $input Field key.
+ * @return string
+ */
+function gueta_prefill_order_note( $value, $input ) {
+	if ( 'order_comments' !== $input || $value || ! WC()->session ) {
+		return $value;
+	}
+
+	return (string) WC()->session->get( 'gueta_order_note', '' );
+}
+add_filter( 'woocommerce_checkout_get_value', 'gueta_prefill_order_note', 10, 2 );
 
 /**
  * Shop URL, falling back to the site root before WooCommerce pages exist.

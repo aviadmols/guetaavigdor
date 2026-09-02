@@ -1698,3 +1698,152 @@ body.gueta-has-cats .elementor > .e-con:first-child {
 		transition-duration: .01ms;
 	}
 }
+
+/* -------------------------------------------------------------------------
+ * Cart drawer: notes and coupon
+ * ---------------------------------------------------------------------- */
+
+.gueta-cart-extras {
+	display: grid;
+	gap: 10px;
+	grid-template-columns: 1fr 1fr;
+}
+
+.gueta-cart-extra {
+	align-items: center;
+	background: var(--gueta-paper);
+	border: 1px solid var(--gueta-rule);
+	border-radius: 8px;
+	color: var(--gueta-ink);
+	cursor: pointer;
+	display: flex;
+	font-family: inherit;
+	font-size: 15px;
+	justify-content: center;
+	gap: 8px;
+	min-height: 46px;
+	padding: 0 14px;
+	transition: border-color .2s ease;
+}
+
+.gueta-cart-extra:hover {
+	border-color: var(--gueta-ink);
+}
+
+.gueta-cart-extra svg {
+	fill: none;
+	height: 14px;
+	stroke: currentColor;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-width: 2;
+	transition: transform .25s ease;
+	width: 14px;
+}
+
+.gueta-cart-extra[aria-expanded="true"] svg {
+	transform: rotate(-90deg);
+}
+
+[dir="ltr"] .gueta-cart-extra svg {
+	transform: scaleX(-1);
+}
+
+[dir="ltr"] .gueta-cart-extra[aria-expanded="true"] svg {
+	transform: scaleX(-1) rotate(90deg);
+}
+
+.gueta-cart-panel {
+	display: grid;
+	gap: 8px;
+}
+
+.gueta-cart-panel textarea,
+.gueta-cart-coupon-form input {
+	background: var(--gueta-paper);
+	border: 1px solid var(--gueta-rule);
+	border-radius: 8px;
+	color: var(--gueta-ink);
+	font-family: inherit;
+	font-size: 14px;
+	padding: 11px 12px;
+	width: 100%;
+}
+
+.gueta-cart-panel textarea:focus,
+.gueta-cart-coupon-form input:focus {
+	border-color: var(--gueta-ink);
+	outline: 0;
+}
+
+.gueta-cart-panel textarea {
+	resize: vertical;
+}
+
+.gueta-cart-panel__hint {
+	color: var(--gueta-soft);
+	font-size: 12px;
+	margin: 0;
+	min-height: 16px;
+}
+
+.gueta-cart-panel__hint.is-error {
+	color: var(--gueta-accent);
+}
+
+.gueta-cart-coupon-form {
+	display: flex;
+	gap: 8px;
+}
+
+.gueta-cart-coupon-form button {
+	background: var(--gueta-ink);
+	border: 0;
+	border-radius: 8px;
+	color: var(--gueta-paper);
+	cursor: pointer;
+	flex: none;
+	font-family: inherit;
+	font-size: 14px;
+	font-weight: 600;
+	padding: 0 20px;
+}
+
+.gueta-cart-coupons {
+	display: grid;
+	gap: 6px;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.gueta-cart-coupons li {
+	align-items: center;
+	background: var(--gueta-sand);
+	border-radius: 6px;
+	display: flex;
+	font-size: 13px;
+	font-weight: 600;
+	gap: 8px;
+	justify-content: space-between;
+	padding: 8px 12px;
+}
+
+.gueta-cart-coupons button {
+	background: none;
+	border: 0;
+	color: var(--gueta-muted);
+	cursor: pointer;
+	display: grid;
+	padding: 2px;
+	place-items: center;
+}
+
+.gueta-cart-coupons svg {
+	fill: none;
+	height: 12px;
+	stroke: currentColor;
+	stroke-linecap: round;
+	stroke-width: 2;
+	width: 12px;
+}

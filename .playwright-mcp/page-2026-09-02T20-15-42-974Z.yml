@@ -1,0 +1,223 @@
+- generic [active] [ref=f25e1]:
+  - link "WhatsApp" [ref=f25e3] [cursor=pointer]:
+    - /url: https://api.whatsapp.com/send?phone=972509512625
+  - link "דילוג לתוכן" [ref=f25e6] [cursor=pointer]:
+    - /url: "#content"
+  - generic [ref=f25e7]:
+    - button "הודעה קודמת" [ref=f25e8] [cursor=pointer]
+    - generic [ref=f25e11]:
+      - paragraph [ref=f25e12]: משלוח מהיר לכל הארץ
+      - paragraph: ייעוץ מקצועי בטלפון לפני כל הזמנה
+      - paragraph: מאות מוצרים במלאי מיידי
+    - button "הודעה הבאה" [ref=f25e13] [cursor=pointer]
+  - banner [ref=f25e16]:
+    - generic [ref=f25e17]:
+      - link "גואטה אביגדור" [ref=f25e19] [cursor=pointer]:
+        - /url: https://guetaavigdor.ussl.co/
+      - search [ref=f25e23]:
+        - generic [ref=f25e24]: חיפוש באתר
+        - generic [ref=f25e25]:
+          - button "חיפוש" [ref=f25e26] [cursor=pointer]
+          - combobox "חיפוש באתר" [ref=f25e30]
+      - generic [ref=f25e31]:
+        - link "התחברות" [ref=f25e32] [cursor=pointer]:
+          - /url: https://guetaavigdor.ussl.co/%d7%94%d7%97%d7%a9%d7%91%d7%95%d7%9f-%d7%a9%d7%9c%d7%99/
+        - button "עגלת קניות" [ref=f25e36] [cursor=pointer]
+    - navigation "ניווט ראשי" [ref=f25e42]:
+      - list [ref=f25e43]:
+        - listitem [ref=f25e44]:
+          - link "כלי עבודה חשמליים" [ref=f25e45] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%9b%d7%9c%d7%99-%d7%a2%d7%91%d7%95%d7%93%d7%94/
+        - listitem [ref=f25e49]:
+          - link "מוצרי פרזול" [ref=f25e50] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%9e%d7%95%d7%a6%d7%a8%d7%99-%d7%a4%d7%a8%d7%96%d7%95%d7%9c/
+        - listitem [ref=f25e54]:
+          - link "כלי עבודה ידניים" [ref=f25e55] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%9b%d7%9c%d7%99-%d7%a2%d7%91%d7%95%d7%93%d7%94-%d7%99%d7%93%d7%a0%d7%99%d7%99%d7%9d/
+        - listitem [ref=f25e59]:
+          - link "מבצעים" [ref=f25e60] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/sale-2/
+        - listitem [ref=f25e62]:
+          - link "עצים" [ref=f25e63] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%a2%d7%a6%d7%99%d7%9d/
+        - listitem [ref=f25e67]:
+          - link "תחזוקה, ניקיון ושמנים" [ref=f25e68] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%aa%d7%97%d7%96%d7%95%d7%a7%d7%94-%d7%a0%d7%99%d7%a7%d7%99%d7%95%d7%9f-%d7%95%d7%a9%d7%9e%d7%a0%d7%99%d7%9d/
+        - listitem [ref=f25e70]:
+          - link "הדבקה ואטימה" [ref=f25e71] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%97%d7%95%d7%9e%d7%a8%d7%99-%d7%94%d7%93%d7%91%d7%a7%d7%94-%d7%95%d7%90%d7%98%d7%99%d7%9e%d7%94/
+        - listitem [ref=f25e75]:
+          - link "עשה זאת בעצמך" [ref=f25e76] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%99%d7%a6%d7%99%d7%a8%d7%94/
+        - listitem [ref=f25e80]:
+          - link "כל הקטגוריות" [ref=f25e81] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/catalog/
+  - generic [ref=f25e83]:
+    - paragraph [ref=f25e90]:
+      - generic [ref=f25e91]:
+        - link "דף הבית" [ref=f25e93] [cursor=pointer]:
+          - /url: https://guetaavigdor.ussl.co/
+        - text: »
+        - link "המוצרים שלנו" [ref=f25e95] [cursor=pointer]:
+          - /url: https://guetaavigdor.ussl.co/catalog/
+        - text: »
+        - link "טיפול במזיקים" [ref=f25e97] [cursor=pointer]:
+          - /url: https://guetaavigdor.ussl.co/products/%d7%98%d7%99%d7%a4%d7%95%d7%9c-%d7%91%d7%9e%d7%96%d7%99%d7%a7%d7%99%d7%9d/
+        - text: » משמר עץ שקוף נגד מזיקי עץ וריקבון – במבחר גדלים
+    - generic [ref=f25e99]:
+      - generic [ref=f25e101]:
+        - heading "משמר עץ שקוף נגד מזיקי עץ וריקבון – במבחר גדלים" [level=1] [ref=f25e104]
+        - paragraph [ref=f25e107]:
+          - generic [ref=f25e109]: ₪122.03
+          - text: –
+          - generic [ref=f25e111]: ₪379.00
+          - generic [ref=f25e112]: "טווח מחירים: ⁦₪122.03⁩ עד ⁦₪379.00⁩"
+        - generic [ref=f25e115]:
+          - generic [ref=f25e116]:
+            - generic [ref=f25e117]: כמות של קטר תוכי 6 אינץ' B.TECH BTM 500227 – חיתוך מדויק ונוח לעבודות עדינות
+            - spinbutton "כמות המוצר" [ref=f25e118]: "1"
+          - button "הוספה לסל" [ref=f25e119] [cursor=pointer]:
+            - generic [ref=f25e120]:
+              - generic [aria-hidden] [ref=f25e122]: 
+              - generic [ref=f25e123]: הוספה לסל
+        - generic [ref=f25e130]:
+          - generic [ref=f25e131]:
+            - generic [ref=f25e132]: מק"ט
+            - generic [ref=f25e133]: ללא
+          - generic [ref=f25e134]:
+            - generic [ref=f25e135]: קטגוריה
+            - link "טיפול במזיקים" [ref=f25e137] [cursor=pointer]:
+              - /url: https://guetaavigdor.ussl.co/products/%d7%98%d7%99%d7%a4%d7%95%d7%9c-%d7%91%d7%9e%d7%96%d7%99%d7%a7%d7%99%d7%9d/
+          - generic [ref=f25e138]:
+            - generic [ref=f25e139]: תגית
+            - link "משמר עץ" [ref=f25e141] [cursor=pointer]:
+              - /url: https://guetaavigdor.ussl.co/product-tag/%d7%9e%d7%a9%d7%9e%d7%a8-%d7%a2%d7%a5/
+        - generic [ref=f25e148]:
+          - group [ref=f25e149]:
+            - generic "תיאור" [ref=f25e150] [cursor=pointer]
+            - generic [ref=f25e153]:
+              - paragraph [ref=f25e154]:
+                - strong [ref=f25e155]: משמר עץ שקוף נגד מזיקים וריקבון – Bondex Preserve | להגנה ארוכת טווח לעץ חיצוני
+              - paragraph [ref=f25e156]:
+                - strong [ref=f25e157]: משמר עץ Bondex Preserve
+                - text: הוא חומר הגנה שקוף לשימוש חיצוני, המתמחה במניעת טרמיטים, פטריות, מזיקי עץ וריקבון. פתרון איכותי לשימור מבני עץ, פרגולות, דקים וגדרות לאורך שנים.
+              - paragraph [ref=f25e158]:
+                - text: העץ שלך חשוף לשמש, גשם, מזיקים או פטריות?
+                - strong [ref=f25e159]: Bondex Preserve – משמר עץ שקוף
+                - text: פותח במיוחד כדי להעניק שכבת הגנה חודרת ויעילה לעץ חיצוני.הפורמולה המתקדמת חודרת לעומק הסיבים ומסייעת לשמור על החוזק והעמידות של העץ גם בתנאים קשים במיוחד.
+              - paragraph [ref=f25e160]: החומר מתאים לשימוש בפרויקטים מגוונים כמו פרגולות, גדרות, קירות עץ חיצוניים, רהיטי גן ודקים. ניתן למרוח אותו לפני צביעה או לכה – ליצירת שכבת מגן כפולה.
+          - group [ref=f25e161]:
+            - generic [ref=f25e163] [cursor=pointer]:
+              - img "⚙️" [ref=f25e164]
+              - text: "מפרט טכני:"
+          - group [ref=f25e166]:
+            - generic [ref=f25e168] [cursor=pointer]:
+              - img "✅" [ref=f25e169]
+              - text: "יתרונות משמר עץ Bondex Preserve:"
+          - group [ref=f25e171]:
+            - generic "הוראות שימוש:" [ref=f25e172] [cursor=pointer]
+          - group [ref=f25e175]:
+            - generic "מפרט טכני" [ref=f25e176] [cursor=pointer]
+      - button "הגדלת התמונה" [ref=f25e185] [cursor=pointer]:
+        - img "משמר עץ שקוף נגד מזיקי עץ וריקבון - במבחר גדלים" [ref=f25e186]
+    - generic [ref=f25e198]:
+      - heading "בטוח יעניין אתכם" [level=2] [ref=f25e201]
+      - generic [ref=f25e206]:
+        - generic [ref=f25e207]:
+          - group "1 / 4" [ref=f25e208]:
+            - link "מרסס נטען של האנטר מרסס גב נטען של האנטר 18V כולל סוללה 5 אמפר ₪966.19" [ref=f25e210] [cursor=pointer]:
+              - /url: https://guetaavigdor.ussl.co/product/%d7%9e%d7%a8%d7%a1%d7%a1-%d7%92%d7%91-%d7%a0%d7%98%d7%a2%d7%9f-%d7%a9%d7%9c-%d7%94%d7%90%d7%a0%d7%98%d7%a8-18v-%d7%9b%d7%95%d7%9c%d7%9c-%d7%a1%d7%95%d7%9c%d7%9c%d7%94-5-%d7%90%d7%9e%d7%a4%d7%a8/
+              - img "מרסס נטען של האנטר" [ref=f25e212]
+              - generic [ref=f25e213]:
+                - heading "מרסס גב נטען של האנטר 18V כולל סוללה 5 אמפר" [level=3] [ref=f25e214]
+                - generic [ref=f25e215]: ₪966.19
+          - group "2 / 4" [ref=f25e218]:
+            - link "מרסס הדברה 5 ל' ₪95.81 מחיר ליח'" [ref=f25e220] [cursor=pointer]:
+              - /url: https://guetaavigdor.ussl.co/product/%d7%9e%d7%a8%d7%a1%d7%a1-%d7%94%d7%93%d7%91%d7%a8%d7%94-5-%d7%9c/
+              - generic [ref=f25e222]:
+                - heading "מרסס הדברה 5 ל'" [level=3] [ref=f25e223]
+                - generic [ref=f25e224]: ₪95.81
+                - generic [ref=f25e227]: מחיר ליח'
+          - group "3 / 4" [ref=f25e228]:
+            - link "רשת פיבר נגד זבובים ויתושים – גובה 1.5 מ' ₪18.00" [ref=f25e230] [cursor=pointer]:
+              - /url: https://guetaavigdor.ussl.co/product/%d7%a8%d7%a9%d7%aa-%d7%a4%d7%99%d7%91%d7%a8-%d7%a0%d7%92%d7%93-%d7%96%d7%91%d7%95%d7%91%d7%99%d7%9d-%d7%95%d7%99%d7%aa%d7%95%d7%a9%d7%99%d7%9d-%d7%9c%d7%97%d7%9c%d7%95%d7%9f/
+              - generic [ref=f25e232]:
+                - heading "רשת פיבר נגד זבובים ויתושים – גובה 1.5 מ'" [level=3] [ref=f25e233]
+                - generic [ref=f25e234]: ₪18.00
+          - group "4 / 4" [ref=f25e237]:
+            - 'link "מבצע דוקרן נירוסטה W להרחקת יונים המחיר המקורי היה: ₪18.15. המחיר הנוכחי הוא: ₪16.14." [ref=f25e239] [cursor=pointer]':
+              - /url: https://guetaavigdor.ussl.co/product/%d7%93%d7%95%d7%a7%d7%a8%d7%9f-w-%d7%9c%d7%94%d7%a8%d7%97%d7%a7%d7%aa-%d7%99%d7%95%d7%a0%d7%99%d7%9d-%d7%95%d7%a2%d7%95%d7%a8%d7%91%d7%99%d7%9d/
+              - generic [ref=f25e240]: מבצע
+              - generic [ref=f25e242]:
+                - heading "דוקרן נירוסטה W להרחקת יונים" [level=3] [ref=f25e243]
+                - generic [ref=f25e244]:
+                  - deletion [aria-hidden] [ref=f25e245]:
+                    - generic [ref=f25e246]: ₪18.15
+                  - generic [ref=f25e248]: "המחיר המקורי היה: ₪18.15."
+                  - insertion [aria-hidden] [ref=f25e249]:
+                    - generic [ref=f25e250]: ₪16.14
+                  - generic [ref=f25e252]: "המחיר הנוכחי הוא: ₪16.14."
+        - text: prev next
+  - contentinfo [ref=f25e253]:
+    - generic [ref=f25e261]:
+      - generic [ref=f25e263]:
+        - paragraph [ref=f25e266]: גואטה אביגדור בע”מ.
+        - paragraph [ref=f25e269]: הינה חברה ישראלית הנמצאת בבעלות משפחתית מלאה ועוסקת בתחום העץ והאביזרים הנדרשים לצורך התקנה והקמה של גגות רעפים פרגולות ודקים למגזר העסקי והפרטי.
+        - generic [ref=f25e272]:
+          - link "דברו איתנו" [ref=f25e274] [cursor=pointer]:
+            - /url: https://api.whatsapp.com/send?phone=972509512625
+            - generic [aria-hidden] [ref=f25e275]: 
+          - heading [level=3] [ref=f25e277]:
+            - link "דברו איתנו" [ref=f25e278] [cursor=pointer]:
+              - /url: https://api.whatsapp.com/send?phone=972509512625
+      - generic [ref=f25e280]:
+        - paragraph [ref=f25e283]: קופצים?
+        - generic [ref=f25e285]:
+          - paragraph [ref=f25e286]: א-ה בין השעות 07:30 ועד 16:30יום ו’ בין השעות 07:30 עד 13:00
+          - paragraph [ref=f25e287]: רח׳ זאב שלנג 3 א.ת.ח ראשל״צ(מאחורי הסינמה סיטי)
+          - paragraph [ref=f25e288]:
+            - text: דברו איתנו. 050-9512625
+            - link "info@guetaavigdor.co.il" [ref=f25e289] [cursor=pointer]:
+              - /url: mailto:info@guetaavigdor.co.il
+      - generic [ref=f25e291]:
+        - paragraph [ref=f25e294]: סושיאלס.
+        - list [ref=f25e297]:
+          - listitem [ref=f25e298]:
+            - link [ref=f25e299] [cursor=pointer]:
+              - /url: https://www.tiktok.com/@guetawood
+              - generic [aria-hidden] [ref=f25e301]: 
+          - listitem [ref=f25e302]:
+            - link [ref=f25e303] [cursor=pointer]:
+              - /url: https://www.instagram.com/gueta_avigdor/
+              - generic [aria-hidden] [ref=f25e305]: 
+          - listitem [ref=f25e306]:
+            - link [ref=f25e307] [cursor=pointer]:
+              - /url: https://www.facebook.com/guetaavigdor/?locale=he_IL
+              - generic [aria-hidden] [ref=f25e309]: 
+        - paragraph [ref=f25e312]: מבצעים, מוצרים חדשים וטיפים מקצועיים.
+        - form "ניוזלטר" [ref=f25e315]:
+          - generic [ref=f25e316]:
+            - generic [ref=f25e317]:
+              - generic [ref=f25e318] [cursor=pointer]: אימייל
+              - textbox "אימייל" [ref=f25e319]
+            - button "שליחה" [ref=f25e321] [cursor=pointer]:
+              - generic [ref=f25e323]:
+                - generic [aria-hidden] [ref=f25e324]: 
+                - generic [ref=f25e325]: שליחה
+    - paragraph [ref=f25e332]:
+      - text: © 2026 כל הזכויות שמורות לגואטה אביגדור מחסן עצים | תקנון האתר | הצהרת נגישות | פרטיות | אתר
+      - link "tabuzzco" [ref=f25e333] [cursor=pointer]:
+        - /url: https://tabuzzco.com
+  - generic [ref=f25e335]:
+    - generic [ref=f25e336]:
+      - img "משמר עץ שקוף נגד מזיקי עץ וריקבון - במבחר גדלים" [ref=f25e338]
+      - generic [ref=f25e339]:
+        - generic [ref=f25e340]: משמר עץ שקוף נגד מזיקי עץ וריקבון - במבחר גדלים
+        - generic [ref=f25e341]:
+          - generic [aria-hidden] [ref=f25e342]: ₪122.03
+          - text: –
+          - generic [aria-hidden] [ref=f25e343]: ₪379.00
+          - generic [ref=f25e344]: "טווח מחירים: ⁦₪122.03⁩ עד ⁦₪379.00⁩"
+    - button "הוספה לסל" [ref=f25e345] [cursor=pointer]
+  - generic [ref=f25e346]: desktop
+  - status [ref=f25e347]

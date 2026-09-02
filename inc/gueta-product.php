@@ -409,6 +409,72 @@ function gueta_render_product_accordion( $open_first = true ) {
 }
 
 /* -------------------------------------------------------------------------
+ * Variation swatches
+ * ---------------------------------------------------------------------- */
+
+/**
+ * Offer variation choices as buttons instead of a dropdown.
+ *
+ * WooCommerce's own <select> is kept, hidden, and stays the source of truth:
+ * variations.js reads and writes it, so availability, pricing and the reset
+ * link keep working. The buttons only mirror it.
+ *
+ * @param string $html Rendered dropdown.
+ * @param array  $args Dropdown arguments.
+ * @return string
+ */
+function gueta_variation_swatches( $html, $args ) {
+	$options   = isset( $args['options'] ) ? (array) $args['options'] : [];
+	$product   = $args['product'] ?? null;
+	$attribute = $args['attribute'] ?? '';
+	$selected  = $args['selected'] ?? '';
+
+	if ( ! $options || ! $product instanceof WC_Product || ! $attribute ) {
+		return $html;
+	}
+
+	$choices = [];
+
+	if ( taxonomy_exists( $attribute ) ) {
+		$terms = wc_get_product_terms( $product->get_id(), $attribute, [ 'fields' => 'all' ] );
+
+		foreach ( $terms as $term ) {
+			if ( in_array( $term->slug, $options, true ) ) {
+				$choices[ $term->slug ] = $term->name;
+			}
+		}
+	} else {
+		foreach ( $options as $option ) {
+			$choices[ $option ] = $option;
+		}
+	}
+
+	if ( count( $choices ) < 1 ) {
+		return $html;
+	}
+
+	ob_start();
+	?>
+	<div class="gueta-swatches" data-swatches role="group">
+		<?php foreach ( $choices as $value => $label ) : ?>
+			<button
+				type="button"
+				class="gueta-swatch<?php echo sanitize_title( $selected ) === sanitize_title( $value ) ? ' is-selected' : ''; ?>"
+				data-swatch="<?php echo esc_attr( $value ); ?>"
+				aria-pressed="<?php echo sanitize_title( $selected ) === sanitize_title( $value ) ? 'true' : 'false'; ?>"
+			>
+				<?php echo esc_html( $label ); ?>
+			</button>
+		<?php endforeach; ?>
+	</div>
+	<div class="gueta-swatches__native"><?php echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
+	<?php
+
+	return (string) ob_get_clean();
+}
+add_filter( 'woocommerce_dropdown_variation_attribute_options_html', 'gueta_variation_swatches', 20, 2 );
+
+/* -------------------------------------------------------------------------
  * Reviews
  * ---------------------------------------------------------------------- */
 
@@ -543,6 +609,31 @@ function gueta_current_product() {
 }
 
 /**
+ * The product this page is for, read from the query rather than the global.
+ *
+ * Elementor's Add to Cart widget points $GLOBALS['product'] at whichever
+ * product it was configured with and leaves it there, so anything checking
+ * "is this the right product?" has to ask the query instead.
+ *
+ * @return WC_Product|null
+ */
+function gueta_queried_product() {
+	if ( ! function_exists( 'wc_get_product' ) ) {
+		return null;
+	}
+
+	$id = get_queried_object_id();
+
+	if ( ! $id ) {
+		return null;
+	}
+
+	$product = wc_get_product( $id );
+
+	return $product instanceof WC_Product ? $product : null;
+}
+
+/**
  * Replace the Product Content widget's wall of text with the accordion.
  *
  * @param string              $content Rendered widget HTML.
@@ -627,7 +718,7 @@ function gueta_retarget_add_to_cart_widget( $widget ) {
 		return;
 	}
 
-	$product = gueta_current_product();
+	$product = gueta_queried_product();
 
 	if ( ! $product || ! method_exists( $widget, 'set_settings' ) ) {
 		return;
@@ -654,19 +745,31 @@ function gueta_correct_add_to_cart_markup( $content, $widget ) {
 		return $content;
 	}
 
-	$product = gueta_current_product();
+	$product = gueta_queried_product();
 
-	if ( ! $product || ! preg_match( '/name=["\']add-to-cart["\'][^>]*?value=["\'](\d+)["\']/', $content, $matches ) ) {
+	if ( ! $product ) {
 		return $content;
 	}
 
-	if ( (int) $matches[1] === $product->get_id() ) {
+	// A variable product's form carries a variations table; a wrong simple
+	// product's form carries an add-to-cart value that is not this product.
+	$matched = preg_match( '/name=["\']add-to-cart["\'][^>]*?value=["\'](\d+)["\']/', $content, $matches );
+	$correct_simple = $matched && (int) $matches[1] === $product->get_id();
+	$has_variations = false !== strpos( $content, 'variations_form' ) || false !== strpos( $content, 'variations' );
+
+	if ( $correct_simple || ( $product->is_type( 'variable' ) && $has_variations ) ) {
 		return $content;
 	}
+
+	// Render against this product, whatever the widget left in the global.
+	$previous           = $GLOBALS['product'] ?? null;
+	$GLOBALS['product'] = $product; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 
 	ob_start();
 	woocommerce_template_single_add_to_cart();
 	$correct = trim( (string) ob_get_clean() );
+
+	$GLOBALS['product'] = $previous; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 
 	return $correct ? '<div class="gueta-atc">' . $correct . '</div>' : $content;
 }

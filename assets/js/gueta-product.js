@@ -278,3 +278,97 @@
 		}
 	}());
 }());
+
+/**
+ * Variation swatches.
+ *
+ * The buttons drive WooCommerce's own <select>, which stays the source of
+ * truth, and mirror back whatever it reports: the chosen option and any
+ * combination it has marked unavailable.
+ */
+(function () {
+	'use strict';
+
+	function selectFor(group) {
+		var native = group.parentElement && group.parentElement.querySelector('.gueta-swatches__native select');
+
+		return native || null;
+	}
+
+	function sync(group) {
+		var select = selectFor(group);
+
+		if (!select) {
+			return;
+		}
+
+		var available = {};
+
+		Array.prototype.forEach.call(select.options, function (option) {
+			if (option.value) {
+				available[option.value] = !option.disabled;
+			}
+		});
+
+		Array.prototype.forEach.call(group.querySelectorAll('[data-swatch]'), function (button) {
+			var value = button.getAttribute('data-swatch');
+			var chosen = select.value === value;
+
+			button.classList.toggle('is-selected', chosen);
+			button.setAttribute('aria-pressed', String(chosen));
+			// Only disable what the select itself offers and marks unavailable.
+			button.disabled = Object.prototype.hasOwnProperty.call(available, value) && !available[value];
+		});
+	}
+
+	function syncAll() {
+		Array.prototype.forEach.call(document.querySelectorAll('[data-swatches]'), sync);
+	}
+
+	document.addEventListener('click', function (event) {
+		var button = event.target.closest('[data-swatch]');
+
+		if (!button || button.disabled) {
+			return;
+		}
+
+		event.preventDefault();
+
+		var group = button.closest('[data-swatches]');
+		var select = group && selectFor(group);
+
+		if (!select) {
+			return;
+		}
+
+		var value = button.getAttribute('data-swatch');
+
+		// Clicking the chosen one again clears it, as the reset link would.
+		select.value = select.value === value ? '' : value;
+
+		if (window.jQuery) {
+			window.jQuery(select).trigger('change');
+		} else {
+			select.dispatchEvent(new Event('change', { bubbles: true }));
+		}
+	});
+
+	document.addEventListener('change', function (event) {
+		if (event.target.matches('.gueta-swatches__native select')) {
+			syncAll();
+		}
+	});
+
+	if (window.jQuery) {
+		// WooCommerce recalculates availability on these.
+		window.jQuery(document.body).on(
+			'woocommerce_update_variation_values check_variations found_variation reset_data',
+			function () {
+				window.setTimeout(syncAll, 0);
+			}
+		);
+	}
+
+	document.addEventListener('gueta:quickview-rendered', syncAll);
+	syncAll();
+}());

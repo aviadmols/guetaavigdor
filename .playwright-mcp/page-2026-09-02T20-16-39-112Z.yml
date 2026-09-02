@@ -1,0 +1,796 @@
+- generic [active] [ref=f27e1]:
+  - generic "תפריט נגישות":
+    - button "תפריט נגישות" [ref=f27e3] [cursor=pointer]
+  - generic [aria-hidden]: Γ
+  - link "Skip to content" [ref=f27e6] [cursor=pointer]:
+    - /url: "#MainContent"
+  - generic [ref=f27e11]:
+    - generic [ref=f27e12]:
+      - group "2 / 2" [ref=f27e13]:
+        - button "חדשים כאן? הירשמו לניוזלטר וקבלו 5% הנחה" [ref=f27e16] [cursor=pointer]
+      - group "1 / 2" [ref=f27e17]:
+        - link "Holiday SALE 🍏 עד 30% הנחה על כל האתר" [ref=f27e20] [cursor=pointer]:
+          - /url: /collections/sale-%D7%A2%D7%93-15-%D7%94%D7%A0%D7%97%D7%94-%D7%94%D7%A4%D7%A8%D7%99%D7%98%D7%99%D7%9D-%D7%94%D7%9B%D7%99-%D7%A9%D7%95%D7%95%D7%99%D7%9D-copy
+      - group "2 / 2" [ref=f27e21]:
+        - button "חדשים כאן? הירשמו לניוזלטר וקבלו 5% הנחה" [ref=f27e24] [cursor=pointer]
+      - group "1 / 2" [ref=f27e25]:
+        - link "Holiday SALE 🍏 עד 30% הנחה על כל האתר" [ref=f27e28] [cursor=pointer]:
+          - /url: /collections/sale-%D7%A2%D7%93-15-%D7%94%D7%A0%D7%97%D7%94-%D7%94%D7%A4%D7%A8%D7%99%D7%98%D7%99%D7%9D-%D7%94%D7%9B%D7%99-%D7%A9%D7%95%D7%95%D7%99%D7%9D-copy
+    - generic:
+      - button "Previous slide" [ref=f27e29] [cursor=pointer]
+      - button "Next slide" [ref=f27e32] [cursor=pointer]
+  - generic:
+    - banner:
+      - generic [ref=f27e35]:
+        - link [ref=f27e37] [cursor=pointer]:
+          - /url: /
+          - img "KUALA" [ref=f27e38]
+        - search [ref=f27e42]:
+          - generic [ref=f27e43]:
+            - combobox "חיפוש" [ref=f27e44]
+            - generic [ref=f27e45]: חיפוש
+        - generic [ref=f27e51]:
+          - link [ref=f27e52] [cursor=pointer]:
+            - /url: "#swym-wishlist"
+          - link "Cart" [ref=f27e56] [cursor=pointer]:
+            - /url: /cart
+      - navigation "Primary" [ref=f27e66]:
+        - list [ref=f27e67]:
+          - listitem [ref=f27e68]:
+            - group [ref=f27e69]:
+              - generic "לפי חדרים" [ref=f27e70] [cursor=pointer]
+          - listitem [ref=f27e75]:
+            - group [ref=f27e76]:
+              - generic "ריהוט" [ref=f27e77] [cursor=pointer]
+          - listitem [ref=f27e82]:
+            - group [ref=f27e83]:
+              - generic "דקורציה ועיצוב הבית" [ref=f27e84] [cursor=pointer]
+          - listitem [ref=f27e89]:
+            - group [ref=f27e90]:
+              - generic "מוצרי חשמל" [ref=f27e91] [cursor=pointer]
+          - listitem [ref=f27e96]:
+            - group [ref=f27e97]:
+              - generic "תאורה" [ref=f27e98] [cursor=pointer]
+          - listitem [ref=f27e103]:
+            - link "אביזרים לחיות מחמד" [ref=f27e104] [cursor=pointer]:
+              - /url: /collections/%D7%97%D7%99%D7%95%D7%AA-%D7%9E%D7%97%D7%9E%D7%93
+          - listitem [ref=f27e106]:
+            - link "הנמכרים ביותר" [ref=f27e107] [cursor=pointer]:
+              - /url: /collections/best-sellers
+          - listitem [ref=f27e109]:
+            - link "& KUALA" [ref=f27e110] [cursor=pointer]:
+              - /url: /pages/%D7%91%D7%AA%D7%99%D7%9D-%D7%9E%D7%91%D7%A4%D7%A0%D7%99%D7%9D
+          - listitem [ref=f27e112]:
+            - group [ref=f27e113]:
+              - generic "מבצעים" [ref=f27e114] [cursor=pointer]
+  - generic [ref=f27e125]:
+    - main [ref=f27e126]:
+      - navigation "breadcrumbs" [ref=f27e129]:
+        - link "עמוד בית" [ref=f27e130] [cursor=pointer]:
+          - /url: /
+        - link "ספות וכורסאות" [ref=f27e132] [cursor=pointer]:
+          - /url: /collections/%D7%A1%D7%A4%D7%95%D7%AA-%D7%95%D7%9B%D7%95%D7%A8%D7%A1%D7%90%D7%95%D7%AA
+        - link "כורסאות" [ref=f27e134] [cursor=pointer]:
+          - /url: /collections/%D7%9B%D7%95%D7%A8%D7%A1%D7%90%D7%95%D7%AA-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F
+        - generic [ref=f27e136]: OLAV | כורסא מעוגלת עם רגלי ברזל מעוצבות
+      - generic [ref=f27e139]:
+        - region "Gallery Viewer" [ref=f27e142]:
+          - generic [ref=f27e144]:
+            - link "Skip to product information" [ref=f27e145] [cursor=pointer]:
+              - /url: "#ProductInfo-template--20607474925723__main"
+            - generic [ref=f27e146]:
+              - group "7 / 7" [ref=f27e147]:
+                - generic [ref=f27e148]:
+                  - img "OLAV | כורסא מעוגלת עם רגלי ברזל מעוצבות - KUALA" [ref=f27e150]
+                  - generic [aria-hidden] [ref=f27e151] [cursor=pointer]
+                  - button "Open media 6 in modal"
+              - group "1 / 7" [ref=f27e157]:
+                - generic [ref=f27e158]:
+                  - img "OLAV | כורסא מעוגלת עם רגלי ברזל מעוצבות - KUALA" [ref=f27e160]
+                  - generic [aria-hidden] [ref=f27e161] [cursor=pointer]
+                  - button "Open media 0 in modal"
+              - group "2 / 7" [ref=f27e167]:
+                - generic [ref=f27e168]:
+                  - img "OLAV | כורסא מעוגלת עם רגלי ברזל מעוצבות, גוון קורל - KUALA" [ref=f27e170]
+                  - generic [aria-hidden] [ref=f27e171] [cursor=pointer]
+                  - button "Open media 1 in modal"
+              - group "3 / 7" [ref=f27e177]:
+                - generic [ref=f27e178]:
+                  - img "OLAV | כורסא מעוגלת עם רגלי ברזל מעוצבות, גוון קורל - KUALA" [ref=f27e180]
+                  - generic [aria-hidden] [ref=f27e181] [cursor=pointer]
+                  - button "Open media 2 in modal"
+              - group "4 / 7" [ref=f27e187]:
+                - generic [ref=f27e188]:
+                  - img "OLAV | כורסא מעוגלת עם רגלי ברזל מעוצבות, גוון קורל - KUALA" [ref=f27e190]
+                  - generic [aria-hidden] [ref=f27e191] [cursor=pointer]
+                  - button "Open media 3 in modal"
+              - group "5 / 7" [ref=f27e197]:
+                - generic [ref=f27e198]:
+                  - img "OLAV | כורסא מעוגלת עם רגלי ברזל מעוצבות, גוון קורל - KUALA" [ref=f27e200]
+                  - generic [aria-hidden] [ref=f27e201] [cursor=pointer]
+                  - button "Open media 4 in modal"
+              - group "6 / 7" [ref=f27e207]:
+                - generic [ref=f27e208]:
+                  - img "OLAV | כורסא מעוגלת עם רגלי ברזל מעוצבות, גוון קורל - KUALA" [ref=f27e210]
+                  - generic [aria-hidden] [ref=f27e211] [cursor=pointer]
+                  - button "Open media 5 in modal"
+              - group "7 / 7" [ref=f27e217]:
+                - generic [ref=f27e218]:
+                  - img "OLAV | כורסא מעוגלת עם רגלי ברזל מעוצבות - KUALA" [ref=f27e220]
+                  - generic [aria-hidden] [ref=f27e221] [cursor=pointer]
+                  - button "Open media 6 in modal"
+              - group "1 / 7" [ref=f27e227]:
+                - generic [ref=f27e228]:
+                  - img "OLAV | כורסא מעוגלת עם רגלי ברזל מעוצבות - KUALA" [ref=f27e230]
+                  - generic [aria-hidden] [ref=f27e231] [cursor=pointer]
+                  - button "Open media 0 in modal"
+          - generic [ref=f27e238]:
+            - group "1 / 7" [ref=f27e239]:
+              - img "OLAV | כורסא מעוגלת עם רגלי ברזל מעוצבות - KUALA" [ref=f27e242] [cursor=pointer]
+            - group "2 / 7" [ref=f27e243]:
+              - img "OLAV | כורסא מעוגלת עם רגלי ברזל מעוצבות, גוון קורל - KUALA" [ref=f27e246] [cursor=pointer]
+            - group "3 / 7" [ref=f27e247]:
+              - img "OLAV | כורסא מעוגלת עם רגלי ברזל מעוצבות, גוון קורל - KUALA" [ref=f27e250] [cursor=pointer]
+            - group "4 / 7" [ref=f27e251]:
+              - img "OLAV | כורסא מעוגלת עם רגלי ברזל מעוצבות, גוון קורל - KUALA" [ref=f27e254] [cursor=pointer]
+            - group "5 / 7" [ref=f27e255]:
+              - img "OLAV | כורסא מעוגלת עם רגלי ברזל מעוצבות, גוון קורל - KUALA" [ref=f27e258] [cursor=pointer]
+            - group "6 / 7" [ref=f27e259]:
+              - img "OLAV | כורסא מעוגלת עם רגלי ברזל מעוצבות, גוון קורל - KUALA" [ref=f27e262] [cursor=pointer]
+            - group "7 / 7" [ref=f27e263]:
+              - img "OLAV | כורסא מעוגלת עם רגלי ברזל מעוצבות - KUALA" [ref=f27e266] [cursor=pointer]
+        - generic [ref=f27e269]:
+          - heading "OLAV כורסא מעוגלת עם רגלי ברזל מעוצבות" [level=1] [ref=f27e271]:
+            - generic [ref=f27e272]: OLAV
+            - generic [ref=f27e274]: כורסא מעוגלת עם רגלי ברזל מעוצבות
+          - status [ref=f27e276]:
+            - generic [ref=f27e278]:
+              - generic [ref=f27e279]: Sale price
+              - generic [ref=f27e280]: 1,640 ₪
+              - generic [ref=f27e281]: Regular price
+              - generic [ref=f27e282]:
+                - generic [ref=f27e283]: 2,050 ₪
+                - generic [ref=f27e284]: 410 ₪ הנחה
+            - generic [ref=f27e285]: רק 137 ₪ לחודש ב-12 תשלומים ללא ריבית
+          - group "גוון" [ref=f27e289]:
+            - radio "שמנת" [checked] [ref=f27e294] [cursor=pointer]
+            - generic [ref=f27e295] [cursor=pointer]: שמנת
+            - radio "אפור" [ref=f27e297] [cursor=pointer]
+            - generic [ref=f27e298] [cursor=pointer]: אפור
+          - generic [ref=f27e303]:
+            - generic [ref=f27e304]:
+              - generic [ref=f27e305]: Quantity
+              - generic [ref=f27e306]:
+                - button "Decrease quantity for OLAV | כורסא מעוגלת עם רגלי ברזל מעוצבות" [disabled] [ref=f27e307]
+                - spinbutton "Quantity" [ref=f27e309]: "1"
+                - button "Increase quantity for OLAV | כורסא מעוגלת עם רגלי ברזל מעוצבות" [ref=f27e310] [cursor=pointer]
+            - button "הוספה לעגלה" [ref=f27e312] [cursor=pointer]
+          - generic [ref=f27e314]:
+            - generic [ref=f27e315]: "שתפו:"
+            - generic [ref=f27e316]:
+              - link [ref=f27e317] [cursor=pointer]:
+                - /url: //www.facebook.com/sharer.php?u=https://kualastyle.com/products/olav
+              - link [ref=f27e321] [cursor=pointer]:
+                - /url: //pinterest.com/pin/create/button/?url=https://kualastyle.com/products/olav&media=//kualastyle.com/cdn/shop/products/097_1_46036f69-6bce-4eea-b051-2862754a5535.jpg?crop=center&height=1024&v=1739542618&width=1024&description=
+              - link [ref=f27e325] [cursor=pointer]:
+                - /url: https://wa.me/?text=%20https://kualastyle.com/products/olav
+          - group [ref=f27e330]:
+            - heading "תיאור" [level=2] [ref=f27e334] [cursor=pointer]
+          - group [ref=f27e338]:
+            - heading "מידות ומפרט טכני" [level=2] [ref=f27e342] [cursor=pointer]
+          - group [ref=f27e345]:
+            - heading "משלוחים וזמני אספקה" [level=2] [ref=f27e349] [cursor=pointer]
+          - group [ref=f27e352]:
+            - heading "תחזוקה וניקיון" [level=2] [ref=f27e356] [cursor=pointer]
+          - group [ref=f27e359]:
+            - heading "תמונות מהבתים שלכם" [level=2] [ref=f27e363] [cursor=pointer]
+      - generic [ref=f27e368]:
+        - heading [level=2] [ref=f27e371]
+        - generic [ref=f27e374]:
+          - group "1 / 8" [ref=f27e375]:
+            - generic [ref=f27e377]:
+              - generic [ref=f27e378]:
+                - link "ARVEDE | שידת אחסון מעץ, עם 2 דלתות" [ref=f27e379] [cursor=pointer]:
+                  - /url: /products/arvede?_pos=1&_sid=b8c813f2c&_ss=r
+                  - img "ARVEDE | שידת אחסון כפרית עם מדפים - KUALA" [ref=f27e382]
+                - generic [aria-hidden] [ref=f27e385]: 25% הנחה
+                - button "לבחירת אפשרויות" [ref=f27e387] [cursor=pointer]
+              - generic [ref=f27e390]:
+                - heading [level=3] [ref=f27e392]:
+                  - link "שידת אחסון מעץ, עם 2 דלתות ARVEDE" [ref=f27e393] [cursor=pointer]:
+                    - /url: /products/arvede?_pos=1&_sid=b8c813f2c&_ss=r
+                    - generic [ref=f27e394]: שידת אחסון מעץ, עם 2 דלתות
+                    - generic [ref=f27e395]: ARVEDE
+                - generic [ref=f27e398]:
+                  - generic [ref=f27e399]: Sale price
+                  - generic [ref=f27e400]: החל מ 2,318 ₪
+                  - generic [ref=f27e401]: Regular price
+                  - generic [ref=f27e402]: 3,090 ₪
+          - group "2 / 8" [ref=f27e403]:
+            - generic [ref=f27e405]:
+              - generic [ref=f27e406]:
+                - link "KAMER | מזנון מודרני מעץ ומתכת, עם מגירות ומדפים סגורים" [ref=f27e407] [cursor=pointer]:
+                  - /url: /products/kamer?_pos=2&_sid=b8c813f2c&_ss=r
+                  - img "KAMER | מזנון מודרני מעץ ומתכת, עם מגירות ומדפים סגורים - KUALA" [ref=f27e410]
+                - generic [aria-hidden] [ref=f27e413]: 15% הנחה
+                - button "לבחירת אפשרויות" [ref=f27e415] [cursor=pointer]
+              - generic [ref=f27e418]:
+                - heading [level=3] [ref=f27e420]:
+                  - link "מזנון מודרני מעץ ומתכת, עם מגירות ומדפים סגורים KAMER עמיד בפני שריטות" [ref=f27e421] [cursor=pointer]:
+                    - /url: /products/kamer?_pos=2&_sid=b8c813f2c&_ss=r
+                    - generic [ref=f27e422]: מזנון מודרני מעץ ומתכת, עם מגירות ומדפים סגורים
+                    - generic [ref=f27e423]: KAMER
+                    - generic [ref=f27e424]: עמיד בפני שריטות
+                - generic [ref=f27e431]:
+                  - generic [ref=f27e432]: Sale price
+                  - generic [ref=f27e433]: החל מ 3,987 ₪
+                  - generic [ref=f27e434]: Regular price
+                  - generic [ref=f27e435]: 4,690 ₪
+                - list [ref=f27e436]:
+                  - listitem [ref=f27e437] [cursor=pointer]:
+                    - link "KAMER | מזנון מודרני מעץ ומתכת, עם מגירות ומדפים סגורים - טבעי" [ref=f27e438]:
+                      - /url: /products/kamer?variant=36138390454427&_pos=2&_sid=b8c813f2c&_ss=r
+                      - generic: טבעי
+                  - listitem [ref=f27e439] [cursor=pointer]:
+                    - link "KAMER | מזנון מודרני מעץ ומתכת, עם מגירות ומדפים סגורים - מושחר" [ref=f27e440]:
+                      - /url: /products/kamer?variant=43948896813211&_pos=2&_sid=b8c813f2c&_ss=r
+                      - generic: מושחר
+                  - listitem [ref=f27e441] [cursor=pointer]:
+                    - link "KAMER | מזנון מודרני מעץ ומתכת, עם מגירות ומדפים סגורים - אגוז" [ref=f27e442]:
+                      - /url: /products/kamer?variant=43948896845979&_pos=2&_sid=b8c813f2c&_ss=r
+                      - generic: אגוז
+          - group "3 / 8" [ref=f27e443]:
+            - generic [ref=f27e445]:
+              - generic [ref=f27e446]:
+                - link "NALLA | קומודה מעץ עם 6 מגירות" [ref=f27e447] [cursor=pointer]:
+                  - /url: /products/nalla?_pos=3&_sid=b8c813f2c&_ss=r
+                  - img "NALLA | קומודה מעץ עם 6 מגירות - KUALA" [ref=f27e450]
+                - generic [aria-hidden] [ref=f27e453]: 25% הנחה
+                - button "לבחירת אפשרויות" [ref=f27e455] [cursor=pointer]
+              - generic [ref=f27e458]:
+                - heading [level=3] [ref=f27e460]:
+                  - link "קומודה מעץ עם 6 מגירות NALLA" [ref=f27e461] [cursor=pointer]:
+                    - /url: /products/nalla?_pos=3&_sid=b8c813f2c&_ss=r
+                    - generic [ref=f27e462]: קומודה מעץ עם 6 מגירות
+                    - generic [ref=f27e463]: NALLA
+                - generic [ref=f27e466]:
+                  - generic [ref=f27e467]: Sale price
+                  - generic [ref=f27e468]: החל מ 3,067 ₪
+                  - generic [ref=f27e469]: Regular price
+                  - generic [ref=f27e470]: 4,090 ₪
+                - list [ref=f27e471]:
+                  - listitem [ref=f27e472] [cursor=pointer]:
+                    - link "NALLA | קומודה מעץ עם 6 מגירות - אגוז" [ref=f27e473]:
+                      - /url: /products/nalla?variant=43769416941723&_pos=3&_sid=b8c813f2c&_ss=r
+                      - generic: אגוז
+                  - listitem [ref=f27e474] [cursor=pointer]:
+                    - link "NALLA | קומודה מעץ עם 6 מגירות - טבעי" [ref=f27e475]:
+                      - /url: /products/nalla?variant=43769416974491&_pos=3&_sid=b8c813f2c&_ss=r
+                      - generic: טבעי
+          - group "4 / 8" [ref=f27e476]:
+            - generic [ref=f27e478]:
+              - generic [ref=f27e479]:
+                - link "VILMA | מיטה נורדית מרופדת בבד אריג בגוון שמנת" [ref=f27e480] [cursor=pointer]:
+                  - /url: /products/vilma?_pos=4&_sid=b8c813f2c&_ss=r
+                  - img "VILMA | מיטה נורדית מרופדת בבד אריג בגוון שמנת - KUALA" [ref=f27e483]
+                - generic [aria-hidden] [ref=f27e486]: 25% הנחה
+                - button "לבחירת אפשרויות" [ref=f27e488] [cursor=pointer]
+              - generic [ref=f27e491]:
+                - heading [level=3] [ref=f27e493]:
+                  - link "מיטה נורדית מרופדת בבד אריג בגוון שמנת VILMA" [ref=f27e494] [cursor=pointer]:
+                    - /url: /products/vilma?_pos=4&_sid=b8c813f2c&_ss=r
+                    - generic [ref=f27e495]: מיטה נורדית מרופדת בבד אריג בגוון שמנת
+                    - generic [ref=f27e496]: VILMA
+                - generic [ref=f27e499]:
+                  - generic [ref=f27e500]: Sale price
+                  - generic [ref=f27e501]: החל מ 3,338 ₪
+                  - generic [ref=f27e502]: Regular price
+                  - generic [ref=f27e503]: 4,450 ₪
+          - group "5 / 8" [ref=f27e504]:
+            - generic [ref=f27e506]:
+              - generic [ref=f27e507]:
+                - link "DOUBLE KESS | סט שולחנות סלון עגולים מעץ ומתכת, קוטר 80 ו-60 ס\"מ" [ref=f27e508] [cursor=pointer]:
+                  - /url: /products/double-kess?_pos=5&_sid=b8c813f2c&_ss=r
+                  - img "DOUBLE KESS | סט שולחנות עץ אלון לסלון - KUALA" [ref=f27e511]
+                - generic [aria-hidden] [ref=f27e514]: 25% הנחה
+                - button "תצוגה מהירה" [ref=f27e516] [cursor=pointer]
+              - generic [ref=f27e519]:
+                - heading [level=3] [ref=f27e521]:
+                  - link "סט שולחנות סלון עגולים מעץ ומתכת, קוטר 80 ו-60 ס\"מ DOUBLE KESS" [ref=f27e522] [cursor=pointer]:
+                    - /url: /products/double-kess?_pos=5&_sid=b8c813f2c&_ss=r
+                    - generic [ref=f27e523]: סט שולחנות סלון עגולים מעץ ומתכת, קוטר 80 ו-60 ס"מ
+                    - generic [ref=f27e524]: DOUBLE KESS
+                - generic [ref=f27e527]:
+                  - generic [ref=f27e528]: Sale price
+                  - generic [ref=f27e529]: 1,538 ₪
+                  - generic [ref=f27e530]: Regular price
+                  - generic [ref=f27e531]: 2,050 ₪
+          - group "6 / 8" [ref=f27e532]:
+            - generic [ref=f27e534]:
+              - generic [ref=f27e535]:
+                - link "LUCIEN | שולחן אוכל עגול בארבעה גדלים" [ref=f27e536] [cursor=pointer]:
+                  - /url: /products/lucien-5?_pos=6&_sid=b8c813f2c&_ss=r
+                  - img "LUCIEN | שולחן אוכל עגול בארבעה גדלים" [ref=f27e539]
+                - generic [aria-hidden] [ref=f27e542]: 20% הנחה
+                - button "לבחירת אפשרויות" [ref=f27e544] [cursor=pointer]
+              - generic [ref=f27e547]:
+                - heading [level=3] [ref=f27e549]:
+                  - link "שולחן אוכל עגול בארבעה גדלים LUCIEN" [ref=f27e550] [cursor=pointer]:
+                    - /url: /products/lucien-5?_pos=6&_sid=b8c813f2c&_ss=r
+                    - generic [ref=f27e551]: שולחן אוכל עגול בארבעה גדלים
+                    - generic [ref=f27e552]: LUCIEN
+                - generic [ref=f27e555]:
+                  - generic [ref=f27e556]: Sale price
+                  - generic [ref=f27e557]: החל מ 2,952 ₪
+                  - generic [ref=f27e558]: Regular price
+                  - generic [ref=f27e559]: 3,690 ₪
+                - list [ref=f27e560]:
+                  - listitem [ref=f27e561] [cursor=pointer]:
+                    - link "LUCIEN | שולחן אוכל עגול בארבעה גדלים - שחור" [ref=f27e562]:
+                      - /url: /products/lucien-5?variant=43768223367323&_pos=6&_sid=b8c813f2c&_ss=r
+                      - generic: שחור
+                  - listitem [ref=f27e563] [cursor=pointer]:
+                    - link "LUCIEN | שולחן אוכל עגול בארבעה גדלים - בז'" [ref=f27e564]:
+                      - /url: /products/lucien-5?variant=43768223400091&_pos=6&_sid=b8c813f2c&_ss=r
+                      - generic: בז'
+          - group "7 / 8" [ref=f27e565]:
+            - generic [ref=f27e567]:
+              - generic [ref=f27e568]:
+                - link "JOPA | מזנון נורדי מעץ ומתכת, עם מגירות" [ref=f27e569] [cursor=pointer]:
+                  - /url: /products/jopa?_pos=7&_sid=b8c813f2c&_ss=r
+                  - img "JOPA | מזנון נורדי מעץ ומתכת, עם מגירות - KUALA" [ref=f27e572]
+                - generic [aria-hidden] [ref=f27e575]: 15% הנחה
+                - button "לבחירת אפשרויות" [ref=f27e577] [cursor=pointer]
+              - generic [ref=f27e580]:
+                - heading [level=3] [ref=f27e582]:
+                  - link "מזנון נורדי מעץ ומתכת, עם מגירות JOPA" [ref=f27e583] [cursor=pointer]:
+                    - /url: /products/jopa?_pos=7&_sid=b8c813f2c&_ss=r
+                    - generic [ref=f27e584]: מזנון נורדי מעץ ומתכת, עם מגירות
+                    - generic [ref=f27e585]: JOPA
+                - generic [ref=f27e588]:
+                  - generic [ref=f27e589]: Sale price
+                  - generic [ref=f27e590]: החל מ 3,902 ₪
+                  - generic [ref=f27e591]: Regular price
+                  - generic [ref=f27e592]: 4,590 ₪
+                - list [ref=f27e593]:
+                  - listitem [ref=f27e594] [cursor=pointer]:
+                    - link "JOPA | מזנון נורדי מעץ ומתכת, עם מגירות - טבעי" [ref=f27e595]:
+                      - /url: /products/jopa?variant=44032690716827&_pos=7&_sid=b8c813f2c&_ss=r
+                      - generic: טבעי
+                  - listitem [ref=f27e596] [cursor=pointer]:
+                    - link "JOPA | מזנון נורדי מעץ ומתכת, עם מגירות - אגוז" [ref=f27e597]:
+                      - /url: /products/jopa?variant=49181590880411&_pos=7&_sid=b8c813f2c&_ss=r
+                      - generic: אגוז
+          - group "8 / 8" [ref=f27e598]:
+            - generic [ref=f27e600]:
+              - generic [ref=f27e601]:
+                - link "NORD | שולחן סלון מלבני מברזל, פורמייקה ועץ, מגיע בשני גדלים" [ref=f27e602] [cursor=pointer]:
+                  - /url: /products/nord-3?_pos=8&_sid=b8c813f2c&_ss=r
+                  - img "NORD | שולחן סלון מברזל עץ וגימור במראה שיש - KUALA" [ref=f27e605]
+                - generic [aria-hidden] [ref=f27e608]: 25% הנחה
+                - button "לבחירת אפשרויות" [ref=f27e610] [cursor=pointer]
+              - generic [ref=f27e613]:
+                - heading [level=3] [ref=f27e615]:
+                  - link "שולחן סלון מלבני מברזל, פורמייקה ועץ, מגיע בשני גדלים NORD" [ref=f27e616] [cursor=pointer]:
+                    - /url: /products/nord-3?_pos=8&_sid=b8c813f2c&_ss=r
+                    - generic [ref=f27e617]: שולחן סלון מלבני מברזל, פורמייקה ועץ, מגיע בשני גדלים
+                    - generic [ref=f27e618]: NORD
+                - generic [ref=f27e621]:
+                  - generic [ref=f27e622]: Sale price
+                  - generic [ref=f27e623]: החל מ 2,318 ₪
+                  - generic [ref=f27e624]: Regular price
+                  - generic [ref=f27e625]: 3,090 ₪
+                - list [ref=f27e626]:
+                  - listitem [ref=f27e627] [cursor=pointer]:
+                    - link "NORD | שולחן סלון מלבני מברזל, פורמייקה ועץ, מגיע בשני גדלים - טבעי" [ref=f27e628]:
+                      - /url: /products/nord-3?variant=37540258709659&_pos=8&_sid=b8c813f2c&_ss=r
+                      - generic: טבעי
+                  - listitem [ref=f27e629] [cursor=pointer]:
+                    - link "NORD | שולחן סלון מלבני מברזל, פורמייקה ועץ, מגיע בשני גדלים - מושחר" [ref=f27e630]:
+                      - /url: /products/nord-3?variant=43936568148123&_pos=8&_sid=b8c813f2c&_ss=r
+                      - generic: מושחר
+                  - listitem [ref=f27e631] [cursor=pointer]:
+                    - link "NORD | שולחן סלון מלבני מברזל, פורמייקה ועץ, מגיע בשני גדלים - אגוז" [ref=f27e632]:
+                      - /url: /products/nord-3?variant=43936568180891&_pos=8&_sid=b8c813f2c&_ss=r
+                      - generic: אגוז
+      - generic [ref=f27e636]:
+        - heading [level=2] [ref=f27e639]
+        - generic [ref=f27e643]:
+          - group "1 / 12" [ref=f27e644]:
+            - generic [ref=f27e646]:
+              - generic [ref=f27e647]:
+                - link "ARILD | סט שולחנות סלון מעץ מלמין ומתכת" [ref=f27e648] [cursor=pointer]:
+                  - /url: /collections/%D7%9B%D7%95%D7%A8%D7%A1%D7%90%D7%95%D7%AA-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F/products/arild
+                  - img "ARILD | סט שולחנות סלון מעץ מלמין ומתכת" [ref=f27e651]
+                - generic [aria-hidden] [ref=f27e654]: 25% הנחה
+                - button "תצוגה מהירה" [ref=f27e656] [cursor=pointer]
+              - generic [ref=f27e659]:
+                - heading [level=3] [ref=f27e661]:
+                  - link "סט שולחנות סלון מעץ מלמין ומתכת ARILD" [ref=f27e662] [cursor=pointer]:
+                    - /url: /collections/%D7%9B%D7%95%D7%A8%D7%A1%D7%90%D7%95%D7%AA-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F/products/arild
+                    - generic [ref=f27e663]: סט שולחנות סלון מעץ מלמין ומתכת
+                    - generic [ref=f27e664]: ARILD
+                - generic [ref=f27e667]:
+                  - generic [ref=f27e668]: Sale price
+                  - generic [ref=f27e669]: 1,088 ₪
+                  - generic [ref=f27e670]: Regular price
+                  - generic [ref=f27e671]: 1,450 ₪
+          - group "2 / 12" [ref=f27e672]:
+            - generic [ref=f27e674]:
+              - generic [ref=f27e675]:
+                - link "FILEON | שולחן סלון אמורפי מעץ, 96/78 ס\"מ" [ref=f27e676] [cursor=pointer]:
+                  - /url: /collections/%D7%9B%D7%95%D7%A8%D7%A1%D7%90%D7%95%D7%AA-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F/products/fileon
+                  - img "FILEON | שולחן סלון אמורפי מעץ, 96/78 ס\"מ - KUALA" [ref=f27e679]
+                - generic [aria-hidden] [ref=f27e682]: 25% הנחה
+                - button "תצוגה מהירה" [ref=f27e684] [cursor=pointer]
+              - generic [ref=f27e687]:
+                - heading [level=3] [ref=f27e689]:
+                  - link "שולחן סלון אמורפי מעץ, 96/78 ס\"מ FILEON" [ref=f27e690] [cursor=pointer]:
+                    - /url: /collections/%D7%9B%D7%95%D7%A8%D7%A1%D7%90%D7%95%D7%AA-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F/products/fileon
+                    - generic [ref=f27e691]: שולחן סלון אמורפי מעץ, 96/78 ס"מ
+                    - generic [ref=f27e692]: FILEON
+                - generic [ref=f27e695]:
+                  - generic [ref=f27e696]: Sale price
+                  - generic [ref=f27e697]: 2,438 ₪
+                  - generic [ref=f27e698]: Regular price
+                  - generic [ref=f27e699]: 3,250 ₪
+          - group "3 / 12" [ref=f27e700]:
+            - generic [ref=f27e702]:
+              - generic [ref=f27e703]:
+                - link "SVEND | סט שולחנות מרובעים ממלמין ומתכת" [ref=f27e704] [cursor=pointer]:
+                  - /url: /collections/%D7%9B%D7%95%D7%A8%D7%A1%D7%90%D7%95%D7%AA-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F/products/svend
+                  - img "SVEND | סט שולחנות מרובעים ממלמין ומתכת" [ref=f27e707]
+                - generic [aria-hidden] [ref=f27e710]: 25% הנחה
+                - button "תצוגה מהירה" [ref=f27e712] [cursor=pointer]
+              - generic [ref=f27e715]:
+                - heading [level=3] [ref=f27e717]:
+                  - link "סט שולחנות מרובעים ממלמין ומתכת SVEND" [ref=f27e718] [cursor=pointer]:
+                    - /url: /collections/%D7%9B%D7%95%D7%A8%D7%A1%D7%90%D7%95%D7%AA-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F/products/svend
+                    - generic [ref=f27e719]: סט שולחנות מרובעים ממלמין ומתכת
+                    - generic [ref=f27e720]: SVEND
+                - generic [ref=f27e723]:
+                  - generic [ref=f27e724]: Sale price
+                  - generic [ref=f27e725]: 1,463 ₪
+                  - generic [ref=f27e726]: Regular price
+                  - generic [ref=f27e727]: 1,950 ₪
+          - group "4 / 12" [ref=f27e728]:
+            - generic [ref=f27e730]:
+              - generic [ref=f27e731]:
+                - link "NAZA | שולחן סלון עגול ממלמין ועץ, קוטר 80 ס\"מ" [ref=f27e732] [cursor=pointer]:
+                  - /url: /collections/%D7%9B%D7%95%D7%A8%D7%A1%D7%90%D7%95%D7%AA-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F/products/naza
+                  - img "NAZA | שולחן סלון עגול ממלמין ועץ, קוטר 80 ס\"מ - KUALA" [ref=f27e735]
+                - generic [aria-hidden] [ref=f27e738]: 25% הנחה
+                - button "תצוגה מהירה" [ref=f27e740] [cursor=pointer]
+              - generic [ref=f27e743]:
+                - heading [level=3] [ref=f27e745]:
+                  - link "שולחן סלון עגול ממלמין ועץ, קוטר 80 ס\"מ NAZA" [ref=f27e746] [cursor=pointer]:
+                    - /url: /collections/%D7%9B%D7%95%D7%A8%D7%A1%D7%90%D7%95%D7%AA-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F/products/naza
+                    - generic [ref=f27e747]: שולחן סלון עגול ממלמין ועץ, קוטר 80 ס"מ
+                    - generic [ref=f27e748]: NAZA
+                - generic [ref=f27e751]:
+                  - generic [ref=f27e752]: Sale price
+                  - generic [ref=f27e753]: 1,238 ₪
+                  - generic [ref=f27e754]: Regular price
+                  - generic [ref=f27e755]: 1,650 ₪
+          - group "5 / 12" [ref=f27e756]:
+            - generic [ref=f27e758]:
+              - generic [ref=f27e759]:
+                - link "FJONE | סט שולחנות סלון עגולים ממלמין ומתכת" [ref=f27e760] [cursor=pointer]:
+                  - /url: /collections/%D7%9B%D7%95%D7%A8%D7%A1%D7%90%D7%95%D7%AA-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F/products/fjone
+                  - img "FJONE | סט שולחנות סלון עגולים ממלמין ומתכת" [ref=f27e763]
+                - generic [aria-hidden] [ref=f27e766]: 25% הנחה
+                - button "תצוגה מהירה" [ref=f27e768] [cursor=pointer]
+              - generic [ref=f27e771]:
+                - heading [level=3] [ref=f27e773]:
+                  - link "סט שולחנות סלון עגולים ממלמין ומתכת FJONE" [ref=f27e774] [cursor=pointer]:
+                    - /url: /collections/%D7%9B%D7%95%D7%A8%D7%A1%D7%90%D7%95%D7%AA-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F/products/fjone
+                    - generic [ref=f27e775]: סט שולחנות סלון עגולים ממלמין ומתכת
+                    - generic [ref=f27e776]: FJONE
+                - generic [ref=f27e779]:
+                  - generic [ref=f27e780]: Sale price
+                  - generic [ref=f27e781]: 1,163 ₪
+                  - generic [ref=f27e782]: Regular price
+                  - generic [ref=f27e783]: 1,550 ₪
+          - group "6 / 12" [ref=f27e784]:
+            - generic [ref=f27e786]:
+              - generic [ref=f27e787]:
+                - link "PASO | שולחן סלון ריבועי ממלמין ומתכת, 55/55 ס\"מ" [ref=f27e788] [cursor=pointer]:
+                  - /url: /collections/%D7%9B%D7%95%D7%A8%D7%A1%D7%90%D7%95%D7%AA-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F/products/paso
+                  - img "PASO | שולחן סלון ריבועי ממלמין ומתכת, 55/55 ס\"מ - KUALA" [ref=f27e791]
+                - generic [aria-hidden] [ref=f27e794]: 25% הנחה
+                - button "תצוגה מהירה" [ref=f27e796] [cursor=pointer]
+              - generic [ref=f27e799]:
+                - heading [level=3] [ref=f27e801]:
+                  - link "שולחן סלון ריבועי ממלמין ומתכת, 55/55 ס\"מ PASO" [ref=f27e802] [cursor=pointer]:
+                    - /url: /collections/%D7%9B%D7%95%D7%A8%D7%A1%D7%90%D7%95%D7%AA-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F/products/paso
+                    - generic [ref=f27e803]: שולחן סלון ריבועי ממלמין ומתכת, 55/55 ס"מ
+                    - generic [ref=f27e804]: PASO
+                - generic [ref=f27e807]:
+                  - generic [ref=f27e808]: Sale price
+                  - generic [ref=f27e809]: 563 ₪
+                  - generic [ref=f27e810]: Regular price
+                  - generic [ref=f27e811]: 750 ₪
+          - group "7 / 12" [ref=f27e812]:
+            - generic [ref=f27e814]:
+              - generic [ref=f27e815]:
+                - link "YNGVES | סט שולחנות סלון מעץ אורן" [ref=f27e816] [cursor=pointer]:
+                  - /url: /collections/%D7%9B%D7%95%D7%A8%D7%A1%D7%90%D7%95%D7%AA-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F/products/yngves
+                  - img "YNGVES | סט שולחנות צד מעץ, מגיע בשני גוונים - KUALA" [ref=f27e819]
+                - generic [ref=f27e820]:
+                  - generic [aria-hidden] [ref=f27e822]: 25% הנחה
+                  - generic [aria-hidden] [ref=f27e823]: אספקה עד 14 ימי עסקים
+                - button "לבחירת אפשרויות" [ref=f27e825] [cursor=pointer]
+              - generic [ref=f27e828]:
+                - heading [level=3] [ref=f27e830]:
+                  - link "סט שולחנות סלון מעץ אורן YNGVES" [ref=f27e831] [cursor=pointer]:
+                    - /url: /collections/%D7%9B%D7%95%D7%A8%D7%A1%D7%90%D7%95%D7%AA-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F/products/yngves
+                    - generic [ref=f27e832]: סט שולחנות סלון מעץ אורן
+                    - generic [ref=f27e833]: YNGVES
+                - generic [ref=f27e836]:
+                  - generic [ref=f27e837]: Sale price
+                  - generic [ref=f27e838]: 1,013 ₪
+                  - generic [ref=f27e839]: Regular price
+                  - generic [ref=f27e840]: 1,350 ₪
+          - group "8 / 12" [ref=f27e841]:
+            - generic [ref=f27e843]:
+              - generic [ref=f27e844]:
+                - link "SAYA | שולחן סלון עגול מזכוכית, קוטר 80 ס\"מ" [ref=f27e845] [cursor=pointer]:
+                  - /url: /collections/%D7%9B%D7%95%D7%A8%D7%A1%D7%90%D7%95%D7%AA-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F/products/saya
+                  - img "SAYA | שולחן סלון עגול מזכוכית, קוטר 80 ס\"מ - KUALA" [ref=f27e848]
+                - generic [ref=f27e849]:
+                  - generic [aria-hidden] [ref=f27e851]: 25% הנחה
+                  - generic [aria-hidden] [ref=f27e852]: אספקה עד 14 ימי עסקים
+                - button "תצוגה מהירה" [ref=f27e854] [cursor=pointer]
+              - generic [ref=f27e857]:
+                - heading [level=3] [ref=f27e859]:
+                  - link "שולחן סלון עגול מזכוכית, קוטר 80 ס\"מ SAYA" [ref=f27e860] [cursor=pointer]:
+                    - /url: /collections/%D7%9B%D7%95%D7%A8%D7%A1%D7%90%D7%95%D7%AA-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F/products/saya
+                    - generic [ref=f27e861]: שולחן סלון עגול מזכוכית, קוטר 80 ס"מ
+                    - generic [ref=f27e862]: SAYA
+                - generic [ref=f27e865]:
+                  - generic [ref=f27e866]: Sale price
+                  - generic [ref=f27e867]: 2,393 ₪
+                  - generic [ref=f27e868]: Regular price
+                  - generic [ref=f27e869]: 3,190 ₪
+          - group "9 / 12" [ref=f27e870]:
+            - generic [ref=f27e872]:
+              - generic [ref=f27e873]:
+                - link "FOLDI | שולחן סלון ריבועי מזכוכית ומתכת, 90/90 ס\"מ" [ref=f27e874] [cursor=pointer]:
+                  - /url: /collections/%D7%9B%D7%95%D7%A8%D7%A1%D7%90%D7%95%D7%AA-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F/products/foldi
+                  - img "FOLDI | שולחן סלון ריבועי מזכוכית ומתכת, 90/90 ס\"מ - KUALA" [ref=f27e877]
+                - generic [aria-hidden] [ref=f27e880]: 25% הנחה
+                - button "תצוגה מהירה" [ref=f27e882] [cursor=pointer]
+              - generic [ref=f27e885]:
+                - heading [level=3] [ref=f27e887]:
+                  - link "שולחן סלון ריבועי מזכוכית ומתכת, 90/90 ס\"מ FOLDI" [ref=f27e888] [cursor=pointer]:
+                    - /url: /collections/%D7%9B%D7%95%D7%A8%D7%A1%D7%90%D7%95%D7%AA-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F/products/foldi
+                    - generic [ref=f27e889]: שולחן סלון ריבועי מזכוכית ומתכת, 90/90 ס"מ
+                    - generic [ref=f27e890]: FOLDI
+                - generic [ref=f27e893]:
+                  - generic [ref=f27e894]: Sale price
+                  - generic [ref=f27e895]: 2,663 ₪
+                  - generic [ref=f27e896]: Regular price
+                  - generic [ref=f27e897]: 3,550 ₪
+          - group "10 / 12" [ref=f27e898]:
+            - generic [ref=f27e900]:
+              - generic [ref=f27e901]:
+                - link "PAVAK | שולחן סלון מלבני מעץ, מתכת וזכוכית" [ref=f27e902] [cursor=pointer]:
+                  - /url: /collections/%D7%9B%D7%95%D7%A8%D7%A1%D7%90%D7%95%D7%AA-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F/products/pavak
+                  - img "PAVAK | שולחן סלון מלבני מעץ, מתכת וזכוכית" [ref=f27e905]
+                - generic [ref=f27e906]:
+                  - generic [aria-hidden] [ref=f27e908]: 25% הנחה
+                  - generic [ref=f27e909]: new
+                - button "תצוגה מהירה" [ref=f27e911] [cursor=pointer]
+              - generic [ref=f27e914]:
+                - heading [level=3] [ref=f27e916]:
+                  - link "שולחן סלון מלבני מעץ, מתכת וזכוכית PAVAK" [ref=f27e917] [cursor=pointer]:
+                    - /url: /collections/%D7%9B%D7%95%D7%A8%D7%A1%D7%90%D7%95%D7%AA-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F/products/pavak
+                    - generic [ref=f27e918]: שולחן סלון מלבני מעץ, מתכת וזכוכית
+                    - generic [ref=f27e919]: PAVAK
+                - generic [ref=f27e922]:
+                  - generic [ref=f27e923]: Sale price
+                  - generic [ref=f27e924]: 1,868 ₪
+                  - generic [ref=f27e925]: Regular price
+                  - generic [ref=f27e926]: 2,490 ₪
+          - group "11 / 12" [ref=f27e927]:
+            - generic [ref=f27e929]:
+              - generic [ref=f27e930]:
+                - link "PILOS | שולחן סלון עגול מעץ, מתכת וזכוכית, מגיע בשני גוונים" [ref=f27e931] [cursor=pointer]:
+                  - /url: /collections/%D7%9B%D7%95%D7%A8%D7%A1%D7%90%D7%95%D7%AA-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F/products/pilos
+                  - img "PILOS | שולחן סלון עגול מעץ, מתכת וזכוכית, מגיע בשני גוונים" [ref=f27e934]
+                - generic [ref=f27e935]:
+                  - generic [aria-hidden] [ref=f27e937]: 25% הנחה
+                  - generic [ref=f27e938]: new
+                - button "לבחירת אפשרויות" [ref=f27e940] [cursor=pointer]
+              - generic [ref=f27e943]:
+                - heading [level=3] [ref=f27e945]:
+                  - link "שולחן סלון עגול מעץ, מתכת וזכוכית, מגיע בשני גוונים PILOS" [ref=f27e946] [cursor=pointer]:
+                    - /url: /collections/%D7%9B%D7%95%D7%A8%D7%A1%D7%90%D7%95%D7%AA-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F/products/pilos
+                    - generic [ref=f27e947]: שולחן סלון עגול מעץ, מתכת וזכוכית, מגיע בשני גוונים
+                    - generic [ref=f27e948]: PILOS
+                - generic [ref=f27e951]:
+                  - generic [ref=f27e952]: Sale price
+                  - generic [ref=f27e953]: 1,643 ₪
+                  - generic [ref=f27e954]: Regular price
+                  - generic [ref=f27e955]: 2,190 ₪
+          - group "12 / 12" [ref=f27e956]:
+            - generic [ref=f27e958]:
+              - generic [ref=f27e959]:
+                - link "RILOS | שולחן סלון מלבני מעץ וראטן, מגיע בשני גוונים" [ref=f27e960] [cursor=pointer]:
+                  - /url: /collections/%D7%9B%D7%95%D7%A8%D7%A1%D7%90%D7%95%D7%AA-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F/products/rilos
+                  - img "RILOS | שולחן סלון מלבני מעץ וראטן, מגיע בשני גוונים" [ref=f27e963]
+                - generic [ref=f27e964]:
+                  - generic [aria-hidden] [ref=f27e966]: 25% הנחה
+                  - generic [ref=f27e967]: new
+                - button "לבחירת אפשרויות" [ref=f27e969] [cursor=pointer]
+              - generic [ref=f27e972]:
+                - heading [level=3] [ref=f27e974]:
+                  - link "שולחן סלון מלבני מעץ וראטן, מגיע בשני גוונים RILOS" [ref=f27e975] [cursor=pointer]:
+                    - /url: /collections/%D7%9B%D7%95%D7%A8%D7%A1%D7%90%D7%95%D7%AA-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F/products/rilos
+                    - generic [ref=f27e976]: שולחן סלון מלבני מעץ וראטן, מגיע בשני גוונים
+                    - generic [ref=f27e977]: RILOS
+                - generic [ref=f27e980]:
+                  - generic [ref=f27e981]: Sale price
+                  - generic [ref=f27e982]: 1,868 ₪
+                  - generic [ref=f27e983]: Regular price
+                  - generic [ref=f27e984]: 2,490 ₪
+    - heading [level=2] [ref=f27e990]
+    - contentinfo [ref=f27e992]:
+      - generic [ref=f27e997]:
+        - group [ref=f27e999]:
+          - generic "שמרו על קשר":
+            - paragraph: שמרו על קשר
+          - generic [ref=f27e1000]:
+            - link "03-715-7575" [ref=f27e1002] [cursor=pointer]:
+              - /url: tel:03-715-7575
+            - link "info@kualastyle.com" [ref=f27e1006] [cursor=pointer]:
+              - /url: mailto:info@kualastyle.com
+            - link "טופס יצירת קשר" [ref=f27e1011] [cursor=pointer]:
+              - /url: /pages/contact-page-1
+            - generic [ref=f27e1015]:
+              - paragraph [ref=f27e1016]: "שעות פעילות מוקד שירות הלקוחות:"
+              - paragraph [ref=f27e1018]: שירות הלקוחות פעיל בימים א'-ה' בין השעות 10:00 -16:00
+            - generic [ref=f27e1019]:
+              - paragraph [ref=f27e1020]: חנות הפופ-אפ שלנו
+              - generic [ref=f27e1021]:
+                - link "הראשונים 1, בית חירות" [ref=f27e1022] [cursor=pointer]:
+                  - /url: https://www.google.com/maps/search/?api=1&query=%D7%94%D7%A8%D7%90%D7%A9%D7%95%D7%A0%D7%99%D7%9D+1%2C+%D7%91%D7%99%D7%AA+%D7%97%D7%99%D7%A8%D7%95%D7%AA
+                - generic [ref=f27e1023]:
+                  - paragraph [ref=f27e1024]: ימים א' - ה' ⁦10:00-18:00⁩
+                  - paragraph [ref=f27e1025]: ימי ו' וערבי חג ⁦10:00-14:00⁩
+        - generic [ref=f27e1027]:
+          - paragraph [ref=f27e1029]: KUALA
+          - paragraph [ref=f27e1031]: זירת העיצוב המתקדמת בישראל, המאפשרת לכם לרהט כל חלל - מכל מקום ובכל שעה
+          - generic [ref=f27e1032]:
+            - paragraph [ref=f27e1033]: עקבו אחרינו
+            - list [ref=f27e1035]:
+              - listitem [ref=f27e1036]:
+                - link "Facebook" [ref=f27e1037] [cursor=pointer]:
+                  - /url: https://www.facebook.com/kualastyle
+              - listitem [ref=f27e1041]:
+                - link "Instagram" [ref=f27e1042] [cursor=pointer]:
+                  - /url: https://www.instagram.com/kualastyle
+              - listitem [ref=f27e1046]:
+                - link "Threads" [ref=f27e1047] [cursor=pointer]:
+                  - /url: https://www.threads.com/@kualastyle
+              - listitem [ref=f27e1051]:
+                - link "TikTok" [ref=f27e1052] [cursor=pointer]:
+                  - /url: https://www.tiktok.com/@kualastyle
+              - listitem [ref=f27e1056]:
+                - link "Pinterest" [ref=f27e1057] [cursor=pointer]:
+                  - /url: https://www.pinterest.com/kualastyle
+              - listitem [ref=f27e1061]:
+                - link "YouTube" [ref=f27e1062] [cursor=pointer]:
+                  - /url: https://youtube.com/@kualastyle?si=XWAYQbGOsCboh0U-
+        - group [ref=f27e1067]:
+          - generic "קולקציות נבחרות":
+            - paragraph: קולקציות נבחרות
+          - list [ref=f27e1068]:
+            - listitem [ref=f27e1069]:
+              - link "רהיטים לסלון" [ref=f27e1070] [cursor=pointer]:
+                - /url: /collections/%D7%A8%D7%94%D7%99%D7%98%D7%99%D7%9D-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F
+            - listitem [ref=f27e1071]:
+              - link "רהיטים לחדר שינה" [ref=f27e1072] [cursor=pointer]:
+                - /url: /collections/%D7%A8%D7%94%D7%99%D7%98%D7%99%D7%9D-%D7%9C%D7%97%D7%93%D7%A8-%D7%A9%D7%99%D7%A0%D7%94
+            - listitem [ref=f27e1073]:
+              - link "רהיטים לכניסה לבית" [ref=f27e1074] [cursor=pointer]:
+                - /url: /collections/%D7%A8%D7%94%D7%99%D7%98%D7%99%D7%9D-%D7%9C%D7%9B%D7%A0%D7%99%D7%A1%D7%94-%D7%9C%D7%91%D7%99%D7%AA
+            - listitem [ref=f27e1075]:
+              - link "רהיטים לפינת האוכל והמטבח" [ref=f27e1076] [cursor=pointer]:
+                - /url: /collections/%D7%A8%D7%94%D7%99%D7%98%D7%99%D7%9D-%D7%9C%D7%A4%D7%99%D7%A0%D7%AA-%D7%90%D7%95%D7%9B%D7%9C
+            - listitem [ref=f27e1077]:
+              - link "רהיטים לחדר ילדים ונוער" [ref=f27e1078] [cursor=pointer]:
+                - /url: /collections/%D7%A8%D7%94%D7%99%D7%98%D7%99%D7%9D-%D7%9C%D7%97%D7%93%D7%A8%D7%99-%D7%99%D7%9C%D7%93%D7%99%D7%9D
+            - listitem [ref=f27e1079]:
+              - link "מזנונים ושידות טלוויזיה לסלון" [ref=f27e1080] [cursor=pointer]:
+                - /url: /collections/%D7%9E%D7%96%D7%A0%D7%95%D7%9F-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F
+            - listitem [ref=f27e1081]:
+              - link "ספות לסלון" [ref=f27e1082] [cursor=pointer]:
+                - /url: /collections/%D7%A1%D7%A4%D7%95%D7%AA
+            - listitem [ref=f27e1083]:
+              - link "מיטות זוגיות" [ref=f27e1084] [cursor=pointer]:
+                - /url: /collections/%D7%9E%D7%99%D7%98%D7%95%D7%AA-%D7%9C%D7%97%D7%93%D7%A8-%D7%A9%D7%99%D7%A0%D7%94
+        - group [ref=f27e1086]:
+          - generic "נשמח לסייע":
+            - paragraph: נשמח לסייע
+          - list [ref=f27e1087]:
+            - listitem [ref=f27e1088]:
+              - link "יצירת קשר" [ref=f27e1089] [cursor=pointer]:
+                - /url: /pages/contact-page-1
+            - listitem [ref=f27e1090]:
+              - link "המיקומים שלנו" [ref=f27e1091] [cursor=pointer]:
+                - /url: /pages/%D7%94%D7%9E%D7%99%D7%A7%D7%95%D7%9E%D7%99%D7%9D-%D7%A9%D7%9C%D7%A0%D7%95
+            - listitem [ref=f27e1092]:
+              - link "מעצבי פנים ואדריכלים" [ref=f27e1093] [cursor=pointer]:
+                - /url: /pages/kuala-pro
+            - listitem [ref=f27e1094]:
+              - link "תשובות לכל השאלות שלך" [ref=f27e1095] [cursor=pointer]:
+                - /url: /pages/help-center
+            - listitem [ref=f27e1096]:
+              - link "מדיניות החזרות והחלפות" [ref=f27e1097] [cursor=pointer]:
+                - /url: /pages/%D7%94%D7%97%D7%9C%D7%A4%D7%95%D7%AA-%D7%94%D7%97%D7%96%D7%A8%D7%95%D7%AA-%D7%91%D7%99%D7%98%D7%95%D7%9C%D7%99-%D7%A2%D7%A1%D7%A7%D7%94
+            - listitem [ref=f27e1098]:
+              - link "סטטוס ההזמנה שלי" [ref=f27e1099] [cursor=pointer]:
+                - /url: /pages/track-your-order
+            - listitem [ref=f27e1100]:
+              - link "ביטול הזמנה" [ref=f27e1101] [cursor=pointer]:
+                - /url: /pages/cancel-order
+            - listitem [ref=f27e1102]:
+              - link "תעדות אחריות" [ref=f27e1103] [cursor=pointer]:
+                - /url: /pages/%D7%AA%D7%A2%D7%95%D7%93%D7%AA-%D7%90%D7%97%D7%A8%D7%99%D7%95%D7%AA
+        - group [ref=f27e1105]:
+          - generic "תקנון ומדיניות":
+            - paragraph: תקנון ומדיניות
+          - list [ref=f27e1106]:
+            - listitem [ref=f27e1107]:
+              - link "תקנון האתר" [ref=f27e1108] [cursor=pointer]:
+                - /url: /pages/%D7%AA%D7%A7%D7%A0%D7%95%D7%9F
+            - listitem [ref=f27e1109]:
+              - link "מדיניות פרטיות" [ref=f27e1110] [cursor=pointer]:
+                - /url: /pages/%D7%9E%D7%93%D7%99%D7%A0%D7%99%D7%95%D7%AA-%D7%A4%D7%A8%D7%98%D7%99%D7%95%D7%AA
+            - listitem [ref=f27e1111]:
+              - link "הצהרת נגישות" [ref=f27e1112] [cursor=pointer]:
+                - /url: /pages/%D7%94%D7%A6%D7%94%D7%A8%D7%AA-%D7%A0%D7%92%D7%99%D7%A9%D7%95%D7%AA
+            - listitem [ref=f27e1113]:
+              - link "מפת אתר" [ref=f27e1114] [cursor=pointer]:
+                - /url: /tools/sitemap
+            - listitem [ref=f27e1115]:
+              - link "המגזין" [ref=f27e1116] [cursor=pointer]:
+                - /url: /blogs/blog-post
+            - listitem [ref=f27e1117]:
+              - link "הגדרות קבצי עוגיות (cookies)" [ref=f27e1118] [cursor=pointer]:
+                - /url: /policies/#shopifyReshowConsentBanner
+            - listitem [ref=f27e1119]:
+              - link "דרושים" [ref=f27e1120] [cursor=pointer]:
+                - /url: /pages/%D7%93%D7%A8%D7%95%D7%A9%D7%99%D7%9D
+            - listitem [ref=f27e1121]:
+              - link "אודות" [ref=f27e1122] [cursor=pointer]:
+                - /url: /pages/about
+            - listitem [ref=f27e1123]:
+              - link "תקנון הגרלה" [ref=f27e1124] [cursor=pointer]:
+                - /url: /pages/2026-%D7%AA%D7%A7%D7%A0%D7%95%D7%9F-%D7%94%D7%92%D7%A8%D7%9C%D7%94
+  - generic [ref=f27e1125]:
+    - generic:
+      - generic:
+        - generic [ref=f27e1126]: Payment methods
+        - list [ref=f27e1127]:
+          - listitem [ref=f27e1128]:
+            - img "Paypal"
+          - listitem [ref=f27e1129]:
+            - img "Visa"
+          - listitem [ref=f27e1130]:
+            - img "Master"
+          - listitem [ref=f27e1131]:
+            - img "Diners club"
+          - listitem [ref=f27e1132]:
+            - img "KUALA"
+          - listitem [ref=f27e1133]:
+            - img "KUALA"
+          - listitem [ref=f27e1134]:
+            - img "KUALA"
+    - paragraph [ref=f27e1137]:
+      - text: כל הזכויות שמורות ל-
+      - link "KUALA" [ref=f27e1138] [cursor=pointer]:
+        - /url: /
+  - link "Chat on WhatsApp" [ref=f27e1139] [cursor=pointer]:
+    - /url: https://api.whatsapp.com/send?phone=97237157575

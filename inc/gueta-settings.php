@@ -36,6 +36,7 @@ function gueta_settings() {
 			'cats_enabled' => 1,
 			'cats_scope'   => 'front',
 			'cats_items'   => [],
+			'nav_condense' => 1,
 		]
 	);
 
@@ -129,6 +130,7 @@ function gueta_render_settings_page() {
 			'cats_enabled' => 1,
 			'cats_scope'   => 'front',
 			'cats_items'   => [],
+			'nav_condense' => 1,
 		]
 	);
 
@@ -166,6 +168,23 @@ function gueta_render_settings_page() {
 					<td>
 						<input type="number" id="gueta-logo-height" name="logo_height" min="20" max="160" value="<?php echo (int) $settings['logo_height']; ?>" class="small-text"> פיקסלים
 						<p class="description">במובייל הגובה מוקטן אוטומטית.</p>
+					</td>
+				</tr>
+			</table>
+
+			<hr>
+
+			<h2>תפריט הניווט</h2>
+
+			<table class="form-table" role="presentation">
+				<tr>
+					<th scope="row">גלילה</th>
+					<td>
+						<label>
+							<input type="checkbox" name="nav_condense" value="1" <?php checked( ! empty( $settings['nav_condense'] ) ); ?>>
+							לקפל את שורת התפריט כשגוללים למטה
+						</label>
+						<p class="description">כשמכובה, שורת התפריט נשארת גלויה בכל הגלילה.</p>
 					</td>
 				</tr>
 			</table>
@@ -329,6 +348,7 @@ function gueta_save_settings( $source ) {
 			'cats_enabled' => ! empty( $source['cats_enabled'] ) ? 1 : 0,
 			'cats_scope'   => in_array( $scope, [ 'front', 'all' ], true ) ? $scope : 'front',
 			'cats_items'   => $items,
+			'nav_condense' => ! empty( $source['nav_condense'] ) ? 1 : 0,
 		]
 	);
 }

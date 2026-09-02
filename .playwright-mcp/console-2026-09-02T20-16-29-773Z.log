@@ -1,0 +1,14 @@
+[     938ms] [WARNING] Boost > [WARN]  Theme is not integrated with SimplifiedIntegration flow @ https://kualastyle.com/collections/%D7%9B%D7%95%D7%A8%D7%A1%D7%90%D7%95%D7%AA-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F/products/olav:2435
+[    1924ms] [LOG] Running... @ https://kualastyle.com/web-pixels/strict/app/web-pixel-493453467@33a696d2f4bf0f977ff9b6b0ab6bb927.js:0
+[    2324ms] [LOG] %cHyper theme (v1.3.1) by Foxecom font-size: 14px; color: #FF5C00; @ https://kualastyle.com/cdn/shop/t/292/assets/theme.js?v=64065189640594572691783957257:0
+[    2556ms] [LOG] %c ► UpPromote Affiliate Marketing [Customer Referral Extension] - Loaded background-color: #092C4C; color: #fff; padding: 5px; @ https://cdn.shopify.com/extensions/01a047b6-7c9c-7b1d-8e30-6128ecf2408d/affliate-by-secomapp-124/assets/customer-referral.js:163
+[    2731ms] [WARNING] In a sandboxed environment, addEventListener may not behave as expected. @ https://kualastyle.com/web-pixels@0dfa916bwdc8841d5pf9ea94c2m0a5bcf0f/custom/web-pixel-187465883@2/sandbox/modern/collections/%D7%9B%D7%95%D7%A8%D7%A1%D7%90%D7%95%D7%AA-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F/products/olav:6
+[    2981ms] [WARNING] In a sandboxed environment, addEventListener may not behave as expected. @ https://kualastyle.com/web-pixels@0dfa916bwdc8841d5pf9ea94c2m0a5bcf0f/custom/web-pixel-190906523@1/sandbox/modern/collections/%D7%9B%D7%95%D7%A8%D7%A1%D7%90%D7%95%D7%AA-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F/products/olav:6
+[    6112ms] [LOG] %c ► UpPromote Affiliate Marketing [Application] - Running... background-color: #092C4C; color: #fff; padding: 5px; @ https://d1639lhkj5l89m.cloudfront.net/js/storefront/uppromote.js:0
+[    6820ms] [WARNING] [Meta Pixel] - Invalid parameter format for currency. Please refer https://developers.facebook.com/docs/meta-pixel/reference/ for valid parameter specifications. @ https://connect.facebook.net/en_US/fbevents.js:201
+[    8763ms] [LOG] Flashy Init [12157, v1.2.12, production] @ https://js.flashyapp.com/shopify.js?account_id=12157&shop=kuala-design.myshopify.com:32
+[   18598ms] Uncaught TypeError: window.boostWidgetIntegration.extend is not a function
+    at <anonymous> (https://cdn.boostcommerce.io/widget-integration/theme/customization/kuala-design.myshopify.com/IBfM8gReOd/customization-1784535081391.js:443:30)
+[   18624ms] [ERROR] Boost > [ERROR]  Cart icon selector not found in matched config @ https://kualastyle.com/collections/%D7%9B%D7%95%D7%A8%D7%A1%D7%90%D7%95%D7%AA-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F/products/olav:2435
+[   25205ms] [LOG] initReceiveEventAttentive @ https://cdn.boostcommerce.io/widget-integration/1.88.2/bc-widget-integration.js:13
+[   25207ms] [LOG] Analytic register events - Version SSR @ https://cdn.boostcommerce.io/widget-integration/1.88.2/bc-widget-integration.js:13

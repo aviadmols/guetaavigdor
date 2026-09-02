@@ -40,6 +40,10 @@
 		 * enough apart to clear the row's own height break the cycle, and
 		 * collapsing at 4px means it goes as soon as the page moves.
 		 */
+		if (!settings.navCondense) {
+			return;
+		}
+
 		var collapseAt = 4;
 		var expandAt = 1;
 		var ticking = false;
@@ -647,6 +651,129 @@
 			if (input) {
 				update(lineKey(input), Math.max(0, parseInt(input.value, 10) || 0));
 			}
+		});
+
+		/* -----------------------------------------------------------------
+		 * Notes and coupon
+		 * -------------------------------------------------------------- */
+
+		function panelFor(name) {
+			return drawer.querySelector('[data-cart-panel-body="' + name + '"]');
+		}
+
+		function setStatus(element, message, isError) {
+			if (!element) {
+				return;
+			}
+
+			element.textContent = message;
+			element.classList.toggle('is-error', Boolean(isError));
+		}
+
+		drawer.addEventListener('click', function (event) {
+			var toggle = event.target.closest('[data-cart-panel]');
+
+			if (toggle) {
+				var panel = panelFor(toggle.getAttribute('data-cart-panel'));
+				var open = 'true' === toggle.getAttribute('aria-expanded');
+
+				toggle.setAttribute('aria-expanded', String(!open));
+
+				if (panel) {
+					panel.hidden = open;
+
+					if (!open) {
+						var field = panel.querySelector('textarea, input');
+
+						if (field) {
+							field.focus();
+						}
+					}
+				}
+
+				return;
+			}
+
+			var apply = event.target.closest('[data-cart-coupon-apply]');
+			var drop = event.target.closest('[data-cart-coupon-remove]');
+
+			if (!apply && !drop) {
+				return;
+			}
+
+			var status = drawer.querySelector('[data-cart-coupon-status]');
+			var field = drawer.querySelector('[data-cart-coupon]');
+			var code = drop ? drop.getAttribute('data-cart-coupon-remove') : (field ? field.value.trim() : '');
+
+			if (!code) {
+				setStatus(status, 'צריך להזין קוד קופון.', true);
+				return;
+			}
+
+			setStatus(status, 'בודקים…', false);
+			drawer.classList.add('is-busy');
+
+			post('gueta_cart_coupon', { code: code, remove: drop ? '1' : '' })
+				.then(function (data) {
+					drawer.classList.remove('is-busy');
+
+					var payload = data && data.data ? data.data : {};
+
+					if (payload.panel) {
+						replacePanel(payload.panel);
+						// The coupon section stays open so the result is visible.
+						var reopened = drawer.querySelector('[data-cart-panel="coupon"]');
+						var body = panelFor('coupon');
+
+						if (reopened && body) {
+							reopened.setAttribute('aria-expanded', 'true');
+							body.hidden = false;
+						}
+					}
+
+					setStatus(
+						drawer.querySelector('[data-cart-coupon-status]'),
+						payload.message || '',
+						!(data && data.success)
+					);
+
+					if (payload.badge) {
+						var badge = header.querySelector('[data-cart-count]');
+
+						if (badge) {
+							badge.outerHTML = payload.badge;
+						}
+					}
+				})
+				.catch(function () {
+					drawer.classList.remove('is-busy');
+					setStatus(drawer.querySelector('[data-cart-coupon-status]'), strings.error || '', true);
+				});
+		});
+
+		var noteTimer = null;
+
+		drawer.addEventListener('input', function (event) {
+			var note = event.target.closest('[data-cart-note]');
+
+			if (!note) {
+				return;
+			}
+
+			window.clearTimeout(noteTimer);
+			noteTimer = window.setTimeout(function () {
+				post('gueta_cart_note', { note: note.value })
+					.then(function (data) {
+						setStatus(
+							drawer.querySelector('[data-cart-note-status]'),
+							data && data.success && data.data.message ? data.data.message : 'ההערה נשמרת ותצורף להזמנה.',
+							false
+						);
+					})
+					.catch(function () {
+						setStatus(drawer.querySelector('[data-cart-note-status]'), strings.error || '', true);
+					});
+			}, 600);
 		});
 
 		if (window.jQuery) {

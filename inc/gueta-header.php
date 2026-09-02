@@ -176,9 +176,10 @@ function gueta_header_assets() {
 		[
 			'ajaxUrl'  => admin_url( 'admin-ajax.php' ),
 			'nonce'    => wp_create_nonce( 'gueta_header' ),
-			'hasWoo'   => gueta_has_woocommerce(),
-			'openCart' => gueta_should_open_cart(),
-			'minChars' => 2,
+			'hasWoo'      => gueta_has_woocommerce(),
+			'openCart'    => gueta_should_open_cart(),
+			'navCondense' => (bool) gueta_setting( 'nav_condense', 1 ),
+			'minChars'    => 2,
 			'strings'  => [
 				'searching' => 'מחפשים…',
 				'error'     => 'משהו השתבש, נסו שוב.',

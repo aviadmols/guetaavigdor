@@ -629,3 +629,94 @@
 		transition-duration: .01ms;
 	}
 }
+
+/* -------------------------------------------------------------------------
+ * Variation swatches
+ * ---------------------------------------------------------------------- */
+
+/*
+ * WooCommerce's select is still there and still authoritative; it is only
+ * taken out of sight so the buttons can stand in for it.
+ */
+.gueta-swatches__native {
+	height: 0;
+	overflow: hidden;
+	position: absolute;
+	width: 0;
+}
+
+.gueta-swatches {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin: 4px 0 2px;
+}
+
+.gueta-swatch {
+	background: var(--gueta-paper);
+	border: 1px solid var(--gueta-rule);
+	border-radius: 8px;
+	color: var(--gueta-ink);
+	cursor: pointer;
+	font-family: inherit;
+	font-size: 15px;
+	font-weight: 500;
+	min-height: 44px;
+	padding: 0 18px;
+	transition: border-color .2s ease, background-color .2s ease, color .2s ease;
+}
+
+.gueta-swatch:hover {
+	border-color: var(--gueta-ink);
+}
+
+.gueta-swatch.is-selected {
+	background: var(--gueta-ink);
+	border-color: var(--gueta-ink);
+	color: var(--gueta-paper);
+}
+
+/* A combination WooCommerce says is unavailable. */
+.gueta-swatch[disabled] {
+	background: var(--gueta-sand);
+	color: var(--gueta-soft);
+	cursor: not-allowed;
+	position: relative;
+	text-decoration: line-through;
+}
+
+.gueta-swatch:focus-visible {
+	outline: 2px solid var(--gueta-ink);
+	outline-offset: 2px;
+}
+
+/* The label above each group, from WooCommerce's variations table. */
+.variations th.label,
+.variations .label label {
+	font-size: 14px;
+	font-weight: 600;
+	padding: 0 0 6px;
+	text-align: start;
+}
+
+.variations,
+.variations tbody,
+.variations tr,
+.variations td,
+.variations th {
+	border: 0;
+	display: block;
+	padding: 0;
+	width: auto;
+}
+
+.variations tr + tr {
+	margin-top: 14px;
+}
+
+.reset_variations {
+	color: var(--gueta-muted);
+	display: inline-block;
+	font-size: 13px;
+	margin-top: 8px;
+}
