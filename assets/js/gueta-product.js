@@ -1,0 +1,228 @@
+/**
+ * Single product page: gallery switching, the zoomable lightbox and the sticky
+ * add to cart bar.
+ */
+(function () {
+	'use strict';
+
+	var gallery = document.querySelector('[data-gallery]');
+	var lightbox = document.querySelector('[data-lightbox]');
+
+	/* ---------------------------------------------------------------------
+	 * Gallery and lightbox
+	 * ------------------------------------------------------------------ */
+
+	if (gallery && lightbox) {
+		var slides = Array.prototype.slice.call(gallery.querySelectorAll('[data-gallery-slide]'));
+		var thumbs = Array.prototype.slice.call(gallery.querySelectorAll('[data-gallery-thumb]'));
+		var image = lightbox.querySelector('[data-lightbox-image]');
+		var stage = lightbox.querySelector('[data-lightbox-stage]');
+		var prev = lightbox.querySelector('[data-lightbox-prev]');
+		var next = lightbox.querySelector('[data-lightbox-next]');
+		var close = lightbox.querySelector('[data-lightbox-close]');
+		var index = 0;
+		var opener = null;
+
+		function select(nextIndex) {
+			if (!slides.length) {
+				return;
+			}
+
+			index = (nextIndex + slides.length) % slides.length;
+
+			slides.forEach(function (slide, i) {
+				slide.classList.toggle('is-active', i === index);
+			});
+
+			thumbs.forEach(function (thumb, i) {
+				thumb.classList.toggle('is-active', i === index);
+				thumb.setAttribute('aria-selected', String(i === index));
+			});
+		}
+
+		function unzoom() {
+			lightbox.classList.remove('is-zoomed');
+		}
+
+		function show() {
+			var slide = slides[index];
+
+			if (!slide) {
+				return;
+			}
+
+			unzoom();
+			image.src = slide.getAttribute('data-full') || '';
+			image.alt = (slide.querySelector('img') || {}).alt || '';
+
+			// One image needs no stepping.
+			prev.hidden = slides.length < 2;
+			next.hidden = slides.length < 2;
+		}
+
+		function openLightbox() {
+			opener = document.activeElement;
+			show();
+			lightbox.hidden = false;
+			document.body.classList.add('gueta-locked');
+			close.focus();
+		}
+
+		function closeLightbox() {
+			lightbox.hidden = true;
+			unzoom();
+			document.body.classList.remove('gueta-locked');
+
+			if (opener && opener.focus) {
+				opener.focus();
+				opener = null;
+			}
+		}
+
+		function step(delta) {
+			select(index + delta);
+			show();
+		}
+
+		thumbs.forEach(function (thumb, i) {
+			thumb.addEventListener('click', function () {
+				select(i);
+			});
+		});
+
+		slides.forEach(function (slide, i) {
+			slide.addEventListener('click', function () {
+				select(i);
+				openLightbox();
+			});
+		});
+
+		prev.addEventListener('click', function () {
+			step(-1);
+		});
+
+		next.addEventListener('click', function () {
+			step(1);
+		});
+
+		close.addEventListener('click', closeLightbox);
+
+		// Click the image to zoom, click the surrounding stage to dismiss.
+		image.addEventListener('click', function (event) {
+			event.stopPropagation();
+			lightbox.classList.toggle('is-zoomed');
+		});
+
+		stage.addEventListener('click', function () {
+			if (lightbox.classList.contains('is-zoomed')) {
+				unzoom();
+				return;
+			}
+
+			closeLightbox();
+		});
+
+		document.addEventListener('keydown', function (event) {
+			if (lightbox.hidden) {
+				return;
+			}
+
+			if ('Escape' === event.key) {
+				closeLightbox();
+			} else if ('ArrowLeft' === event.key) {
+				step(1);
+			} else if ('ArrowRight' === event.key) {
+				step(-1);
+			}
+		});
+
+		// Swiping the stage moves between images.
+		var touchX = null;
+
+		stage.addEventListener('touchstart', function (event) {
+			touchX = event.changedTouches[0].clientX;
+		}, { passive: true });
+
+		stage.addEventListener('touchend', function (event) {
+			if (null === touchX || lightbox.classList.contains('is-zoomed')) {
+				return;
+			}
+
+			var delta = event.changedTouches[0].clientX - touchX;
+
+			if (Math.abs(delta) > 50) {
+				step(delta > 0 ? -1 : 1);
+			}
+
+			touchX = null;
+		}, { passive: true });
+	}
+
+	/* ---------------------------------------------------------------------
+	 * Sticky add to cart
+	 * ------------------------------------------------------------------ */
+
+	(function stickyAddToCart() {
+		var bar = document.querySelector('[data-sticky-atc]');
+		var form = document.querySelector('form.cart');
+
+		if (!bar || !form) {
+			return;
+		}
+
+		var button = bar.querySelector('[data-sticky-add]');
+		var label = button.textContent;
+
+		bar.hidden = false;
+
+		// Show the bar only once the real add to cart button has scrolled away.
+		if ('IntersectionObserver' in window) {
+			var observer = new IntersectionObserver(function (entries) {
+				entries.forEach(function (entry) {
+					bar.classList.toggle('is-visible', !entry.isIntersecting && entry.boundingClientRect.top < 0);
+				});
+			}, { rootMargin: '0px 0px -40% 0px' });
+
+			observer.observe(form);
+		} else {
+			bar.classList.add('is-visible');
+		}
+
+		button.addEventListener('click', function () {
+			// Reuse the real form so variations, quantity and validation apply.
+			var submit = form.querySelector('button[type="submit"], input[type="submit"]');
+
+			if (submit && !submit.disabled) {
+				submit.click();
+				return;
+			}
+
+			if (form.requestSubmit) {
+				form.requestSubmit();
+			} else {
+				form.submit();
+			}
+		});
+
+		// Mirror the price of the chosen variation.
+		if (window.jQuery) {
+			var price = bar.querySelector('[data-sticky-price]');
+
+			window.jQuery(form).on('show_variation', function (event, variation) {
+				if (price && variation && variation.price_html) {
+					price.innerHTML = variation.price_html;
+				}
+			});
+
+			window.jQuery(document.body).on('added_to_cart', function () {
+				button.textContent = 'נוסף לעגלה';
+				button.classList.add('is-added');
+
+				window.setTimeout(function () {
+					button.textContent = label;
+					button.classList.remove('is-added');
+				}, 2200);
+			});
+		}
+	}());
+}());

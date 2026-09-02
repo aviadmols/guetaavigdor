@@ -26,6 +26,44 @@
 	}
 
 	/* ---------------------------------------------------------------------
+	 * Condensed header
+	 *
+	 * Collapse the navigation row once the page is scrolled, so the sticky
+	 * header keeps taking less room the further down you are.
+	 * ------------------------------------------------------------------ */
+
+	(function condense() {
+		var threshold = 90;
+		var ticking = false;
+
+		function apply() {
+			ticking = false;
+
+			var condensed = window.scrollY > threshold;
+
+			if (condensed === header.classList.contains('is-condensed')) {
+				return;
+			}
+
+			// Never collapse the row out from under an open mega menu.
+			if (condensed && header.classList.contains('is-dimmed')) {
+				return;
+			}
+
+			header.classList.toggle('is-condensed', condensed);
+		}
+
+		window.addEventListener('scroll', function () {
+			if (!ticking) {
+				ticking = true;
+				window.requestAnimationFrame(apply);
+			}
+		}, { passive: true });
+
+		apply();
+	}());
+
+	/* ---------------------------------------------------------------------
 	 * Announcement rotator
 	 * ------------------------------------------------------------------ */
 
@@ -623,4 +661,69 @@
 			openDrawer();
 		}
 	}());
+}());
+
+/**
+ * Category slider under the header.
+ *
+ * Scroll snapping and native touch scrolling do the moving; the buttons just
+ * page the track. Kept direction agnostic: in RTL a container's scrollLeft runs
+ * from 0 down to negative, so distances are compared on the absolute value.
+ */
+(function () {
+	'use strict';
+
+	var slider = document.querySelector('[data-cats]');
+
+	if (!slider) {
+		return;
+	}
+
+	var track = slider.querySelector('[data-cats-track]');
+	var prev = slider.querySelector('[data-cats-prev]');
+	var next = slider.querySelector('[data-cats-next]');
+
+	if (!track || !prev || !next) {
+		return;
+	}
+
+	var isRtl = 'rtl' === getComputedStyle(track).direction;
+
+	function page() {
+		// Move by a full viewport of cards, minus one so context carries over.
+		var item = track.firstElementChild;
+		var step = item ? item.getBoundingClientRect().width + 20 : 240;
+
+		return Math.max(step, Math.floor(track.clientWidth / step) * step - step);
+	}
+
+	function scrollBy(forward) {
+		var amount = page() * (forward ? 1 : -1);
+
+		track.scrollBy({ left: isRtl ? -amount : amount, behavior: 'smooth' });
+	}
+
+	function sync() {
+		var travelled = Math.abs(track.scrollLeft);
+		var max = track.scrollWidth - track.clientWidth;
+
+		prev.disabled = travelled < 4;
+		next.disabled = travelled >= max - 4;
+	}
+
+	next.addEventListener('click', function () {
+		scrollBy(true);
+	});
+
+	prev.addEventListener('click', function () {
+		scrollBy(false);
+	});
+
+	track.addEventListener('scroll', function () {
+		window.clearTimeout(track.guetaSyncTimer);
+		track.guetaSyncTimer = window.setTimeout(sync, 80);
+	});
+
+	window.addEventListener('resize', sync);
+	sync();
 }());

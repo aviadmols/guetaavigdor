@@ -1,0 +1,624 @@
+/**
+ * Single product page: gallery, lightbox, accordion, reviews and sticky bar.
+ * Tokens come from gueta-header.css, which is always loaded first.
+ */
+
+.gueta-gallery,
+.gueta-gallery *,
+.gueta-accordion,
+.gueta-accordion *,
+.gueta-lightbox,
+.gueta-lightbox *,
+.gueta-sticky-atc,
+.gueta-sticky-atc *,
+.gueta-reviews,
+.gueta-reviews * {
+	box-sizing: border-box;
+}
+
+/* -------------------------------------------------------------------------
+ * Gallery
+ * ---------------------------------------------------------------------- */
+
+.gueta-gallery {
+	display: grid;
+	gap: 12px;
+}
+
+.gueta-gallery__stage {
+	background: var(--gueta-sand);
+	border-radius: 10px;
+	display: grid;
+	overflow: hidden;
+	position: relative;
+}
+
+.gueta-gallery__slide,
+.gueta-gallery__placeholder {
+	background: none;
+	border: 0;
+	cursor: zoom-in;
+	display: block;
+	grid-area: 1 / 1;
+	margin: 0;
+	padding: 0;
+	position: relative;
+	visibility: hidden;
+	width: 100%;
+}
+
+.gueta-gallery__slide.is-active,
+.gueta-gallery__placeholder {
+	visibility: visible;
+}
+
+.gueta-gallery__image,
+.gueta-gallery__placeholder img {
+	aspect-ratio: 1;
+	display: block;
+	height: auto;
+	object-fit: contain;
+	width: 100%;
+}
+
+.gueta-gallery__zoom {
+	align-items: center;
+	background: rgb(255 255 255 / 92%);
+	border-radius: 50%;
+	box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+	display: flex;
+	height: 40px;
+	inset-block-end: 16px;
+	inset-inline-end: 16px;
+	justify-content: center;
+	opacity: 0;
+	position: absolute;
+	transition: opacity .25s ease;
+	width: 40px;
+}
+
+.gueta-gallery__slide:hover .gueta-gallery__zoom,
+.gueta-gallery__slide:focus-visible .gueta-gallery__zoom {
+	opacity: 1;
+}
+
+.gueta-gallery__zoom svg {
+	fill: none;
+	height: 18px;
+	stroke: var(--gueta-ink);
+	stroke-linecap: round;
+	stroke-width: 1.6;
+	width: 18px;
+}
+
+.gueta-gallery__thumbs {
+	display: flex;
+	gap: 10px;
+	overflow-x: auto;
+	padding-bottom: 2px;
+	scrollbar-width: none;
+}
+
+.gueta-gallery__thumbs::-webkit-scrollbar {
+	display: none;
+}
+
+.gueta-gallery__thumb {
+	background: var(--gueta-sand);
+	border: 1.5px solid transparent;
+	border-radius: 8px;
+	cursor: pointer;
+	flex: 0 0 76px;
+	height: 76px;
+	overflow: hidden;
+	padding: 0;
+	transition: border-color .2s ease;
+}
+
+.gueta-gallery__thumb img {
+	display: block;
+	height: 100%;
+	object-fit: cover;
+	width: 100%;
+}
+
+.gueta-gallery__thumb.is-active {
+	border-color: var(--gueta-ink);
+}
+
+/* -------------------------------------------------------------------------
+ * Lightbox
+ * ---------------------------------------------------------------------- */
+
+.gueta-lightbox {
+	background: #f5f5f5;
+	inset: 0;
+	position: fixed;
+	z-index: 120;
+}
+
+.gueta-lightbox[hidden] {
+	display: none;
+}
+
+.gueta-lightbox__stage {
+	align-items: center;
+	display: flex;
+	inset: 0;
+	justify-content: center;
+	overflow: auto;
+	padding: 24px;
+	position: absolute;
+}
+
+.gueta-lightbox__image {
+	cursor: zoom-in;
+	display: block;
+	max-height: calc(100vh - 140px);
+	max-width: 100%;
+	object-fit: contain;
+	transition: transform .3s ease;
+	transform-origin: center center;
+}
+
+.gueta-lightbox.is-zoomed .gueta-lightbox__image {
+	cursor: zoom-out;
+	max-height: none;
+	max-width: none;
+	transform: scale(2);
+}
+
+.gueta-lightbox__bar {
+	display: flex;
+	gap: 14px;
+	inset-block-end: 28px;
+	inset-inline-start: 50%;
+	position: absolute;
+	transform: translateX(-50%);
+}
+
+.gueta-lightbox__button {
+	align-items: center;
+	background: var(--gueta-paper);
+	border: 0;
+	border-radius: 50%;
+	box-shadow: 0 4px 10px rgb(0 0 0 / 12%);
+	color: var(--gueta-ink);
+	cursor: pointer;
+	display: flex;
+	height: 54px;
+	justify-content: center;
+	padding: 0;
+	transition: background-color .2s ease;
+	width: 54px;
+}
+
+.gueta-lightbox__button:hover {
+	background: #eee;
+}
+
+.gueta-lightbox__button[hidden] {
+	display: none;
+}
+
+.gueta-lightbox__button svg {
+	fill: none;
+	height: 20px;
+	stroke: currentColor;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-width: 1.7;
+	width: 20px;
+}
+
+/* -------------------------------------------------------------------------
+ * Accordion
+ * ---------------------------------------------------------------------- */
+
+.gueta-accordion {
+	margin-top: 28px;
+}
+
+.gueta-accordion__item {
+	border-bottom: 1px solid rgb(0 0 0 / 14%);
+}
+
+.gueta-accordion__summary {
+	align-items: center;
+	cursor: pointer;
+	display: flex;
+	gap: 12px;
+	justify-content: space-between;
+	list-style: none;
+	padding: 17px 0;
+}
+
+.gueta-accordion__summary::-webkit-details-marker {
+	display: none;
+}
+
+.gueta-accordion__title {
+	font-size: 17px;
+	font-weight: 600;
+}
+
+/* A plus that loses its upright stroke when the panel opens. */
+.gueta-accordion__sign {
+	flex: none;
+	height: 16px;
+	position: relative;
+	width: 16px;
+}
+
+.gueta-accordion__sign::before,
+.gueta-accordion__sign::after {
+	background: var(--gueta-ink);
+	content: "";
+	inset-block-start: 50%;
+	inset-inline-start: 0;
+	position: absolute;
+	transition: transform .25s ease, opacity .25s ease;
+	width: 100%;
+	height: 1.5px;
+	margin-top: -.75px;
+}
+
+.gueta-accordion__sign::after {
+	transform: rotate(90deg);
+}
+
+.gueta-accordion__item[open] .gueta-accordion__sign::after {
+	opacity: 0;
+	transform: rotate(0deg);
+}
+
+.gueta-accordion__content {
+	color: var(--gueta-muted);
+	font-size: 15px;
+	line-height: 1.75;
+	padding-bottom: 22px;
+}
+
+.gueta-accordion__content > :first-child {
+	margin-top: 0;
+}
+
+.gueta-accordion__content > :last-child {
+	margin-bottom: 0;
+}
+
+.gueta-accordion__content ul,
+.gueta-accordion__content ol {
+	margin: 0 0 14px;
+	padding-inline-start: 20px;
+}
+
+.gueta-accordion__content li {
+	margin-bottom: 6px;
+}
+
+.gueta-accordion__content h1,
+.gueta-accordion__content h2,
+.gueta-accordion__content h3,
+.gueta-accordion__content h4 {
+	color: var(--gueta-ink);
+	font-size: 16px;
+	margin: 16px 0 6px;
+}
+
+.gueta-specs {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.gueta-specs th,
+.gueta-specs td {
+	border-bottom: 1px solid var(--gueta-rule);
+	font-size: 14px;
+	padding: 9px 0;
+	text-align: start;
+	vertical-align: top;
+}
+
+.gueta-specs th {
+	color: var(--gueta-ink);
+	font-weight: 600;
+	width: 40%;
+}
+
+/* -------------------------------------------------------------------------
+ * Rating link
+ * ---------------------------------------------------------------------- */
+
+.gueta-rating-link {
+	align-items: center;
+	color: var(--gueta-muted);
+	display: flex;
+	font-size: 14px;
+	gap: 8px;
+	margin-bottom: 10px;
+	text-decoration: none;
+}
+
+.gueta-rating-link:hover span {
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.gueta-rating-link .star-rating {
+	margin: 0;
+}
+
+/* -------------------------------------------------------------------------
+ * Reviews
+ * ---------------------------------------------------------------------- */
+
+.gueta-reviews {
+	border-top: 1px solid var(--gueta-rule);
+	margin-top: 48px;
+	padding: 40px 0 8px;
+}
+
+.gueta-reviews__inner {
+	margin: 0 auto;
+	max-width: 820px;
+}
+
+.gueta-reviews__heading {
+	font-size: clamp(22px, 2.4vw, 30px);
+	font-weight: 700;
+	margin: 0 0 24px;
+}
+
+.gueta-reviews #reviews h2,
+.gueta-reviews .woocommerce-Reviews-title {
+	font-size: 18px;
+	font-weight: 600;
+	margin: 0 0 18px;
+}
+
+.gueta-reviews .commentlist {
+	display: grid;
+	gap: 20px;
+	list-style: none;
+	margin: 0 0 32px;
+	padding: 0;
+}
+
+.gueta-reviews .commentlist .review {
+	border: 1px solid var(--gueta-rule);
+	border-radius: 10px;
+	padding: 18px 20px;
+}
+
+.gueta-reviews .comment_container {
+	display: flex;
+	gap: 14px;
+}
+
+.gueta-reviews .avatar {
+	border-radius: 50%;
+	flex: none;
+	height: 44px;
+	width: 44px;
+}
+
+.gueta-reviews .comment-text {
+	flex: 1;
+	min-width: 0;
+}
+
+.gueta-reviews .woocommerce-review__author {
+	font-weight: 600;
+}
+
+.gueta-reviews .woocommerce-review__published-date {
+	color: var(--gueta-soft);
+	font-size: 13px;
+}
+
+.gueta-reviews .description {
+	color: var(--gueta-muted);
+	line-height: 1.7;
+}
+
+.gueta-reviews .comment-form {
+	display: grid;
+	gap: 16px;
+}
+
+.gueta-reviews .comment-form p {
+	margin: 0;
+}
+
+.gueta-reviews .comment-form label {
+	display: block;
+	font-size: 14px;
+	font-weight: 600;
+	margin-bottom: 6px;
+}
+
+.gueta-reviews .comment-form input[type="text"],
+.gueta-reviews .comment-form input[type="email"],
+.gueta-reviews .comment-form textarea {
+	background: var(--gueta-paper);
+	border: 1.5px solid var(--gueta-rule);
+	border-radius: 8px;
+	color: var(--gueta-ink);
+	font-family: inherit;
+	font-size: 15px;
+	padding: 12px 14px;
+	width: 100%;
+}
+
+.gueta-reviews .comment-form input:focus,
+.gueta-reviews .comment-form textarea:focus {
+	border-color: var(--gueta-ink);
+	outline: 0;
+}
+
+.gueta-reviews .comment-form textarea {
+	min-height: 130px;
+	resize: vertical;
+}
+
+.gueta-reviews .comment-form-rating select {
+	border: 1.5px solid var(--gueta-rule);
+	border-radius: 8px;
+	font-family: inherit;
+	font-size: 15px;
+	padding: 11px 14px;
+}
+
+.gueta-reviews .comment-form .submit {
+	background: var(--gueta-ink);
+	border: 0;
+	border-radius: 8px;
+	color: var(--gueta-paper);
+	cursor: pointer;
+	font-family: inherit;
+	font-size: 15px;
+	font-weight: 600;
+	justify-self: start;
+	min-height: 48px;
+	padding: 0 32px;
+	transition: background-color .2s ease;
+}
+
+.gueta-reviews .comment-form .submit:hover {
+	background: #000;
+}
+
+.gueta-reviews .woocommerce-noreviews {
+	color: var(--gueta-muted);
+}
+
+/* -------------------------------------------------------------------------
+ * Sticky add to cart
+ * ---------------------------------------------------------------------- */
+
+.gueta-sticky-atc {
+	background: var(--gueta-paper);
+	border-top: 1px solid var(--gueta-rule);
+	box-shadow: 0 -6px 20px rgb(0 0 0 / 8%);
+	inset: auto 0 0;
+	position: fixed;
+	transform: translateY(100%);
+	transition: transform .3s ease;
+	z-index: 90;
+}
+
+.gueta-sticky-atc[hidden] {
+	display: none;
+}
+
+.gueta-sticky-atc.is-visible {
+	transform: translateY(0);
+}
+
+.gueta-sticky-atc__inner {
+	align-items: center;
+	display: flex;
+	gap: 16px;
+	justify-content: space-between;
+	margin: 0 auto;
+	max-width: var(--gueta-max);
+	padding: 10px var(--gueta-gutter) calc(10px + env(safe-area-inset-bottom));
+}
+
+.gueta-sticky-atc__info {
+	align-items: center;
+	display: flex;
+	gap: 12px;
+	min-width: 0;
+}
+
+.gueta-sticky-atc__media {
+	background: var(--gueta-sand);
+	border-radius: 8px;
+	flex: none;
+	height: 54px;
+	overflow: hidden;
+	width: 54px;
+}
+
+.gueta-sticky-atc__media img {
+	display: block;
+	height: 100%;
+	object-fit: cover;
+	width: 100%;
+}
+
+.gueta-sticky-atc__text {
+	display: grid;
+	gap: 2px;
+	min-width: 0;
+}
+
+.gueta-sticky-atc__title {
+	font-size: 14px;
+	font-weight: 600;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.gueta-sticky-atc__price {
+	font-size: 15px;
+	font-weight: 700;
+}
+
+.gueta-sticky-atc__price del {
+	color: var(--gueta-soft);
+	font-weight: 400;
+	margin-inline-end: 6px;
+}
+
+.gueta-sticky-atc__price ins {
+	text-decoration: none;
+}
+
+.gueta-sticky-atc__cta {
+	background: var(--gueta-ink);
+	border: 0;
+	border-radius: 8px;
+	color: var(--gueta-paper);
+	cursor: pointer;
+	flex: none;
+	font-family: inherit;
+	font-size: 15px;
+	font-weight: 600;
+	min-height: 48px;
+	padding: 0 34px;
+	transition: background-color .2s ease;
+}
+
+.gueta-sticky-atc__cta:hover {
+	background: #000;
+}
+
+.gueta-sticky-atc__cta.is-added {
+	background: #1a7f37;
+}
+
+@media (max-width: 640px) {
+	.gueta-sticky-atc__title {
+		max-width: 42vw;
+	}
+
+	.gueta-sticky-atc__cta {
+		padding: 0 20px;
+	}
+
+	.gueta-lightbox__button {
+		height: 46px;
+		width: 46px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.gueta-sticky-atc,
+	.gueta-lightbox__image {
+		transition-duration: .01ms;
+	}
+}

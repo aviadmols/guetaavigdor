@@ -52,3 +52,5 @@
 
 <?php gueta_render_mobile_nav(); ?>
 <?php gueta_render_cart_drawer(); ?>
+
+<?php gueta_render_category_slider(); ?>

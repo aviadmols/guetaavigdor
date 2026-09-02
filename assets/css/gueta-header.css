@@ -275,8 +275,26 @@
 	gap: 4px;
 }
 
+/*
+ * The nav row collapses once the page is scrolled, leaving the search and cart
+ * pinned. Animating grid-template-rows to 0fr removes its height without
+ * needing a fixed pixel value.
+ */
 .gueta-header__nav {
 	border-top: 1px solid var(--gueta-rule);
+	display: grid;
+	grid-template-rows: 1fr;
+	transition: grid-template-rows .3s ease, border-color .3s ease;
+}
+
+.gueta-header__nav > * {
+	min-height: 0;
+	overflow: hidden;
+}
+
+.gueta-header.is-condensed .gueta-header__nav {
+	border-top-color: transparent;
+	grid-template-rows: 0fr;
 }
 
 .gueta-header__scrim {
@@ -374,6 +392,17 @@
 	min-width: 0;
 	outline: 0;
 	padding: 8px 0;
+}
+
+/*
+ * The rounded outline belongs to .gueta-search__field, so the input itself must
+ * stay bare. Elementor kits and the parent theme style bare inputs with a
+ * higher specificity than the class rule above, which draws a second box inside
+ * the field, so win it on the id.
+ */
+#gueta-search-bar,
+.gueta-search__input {
+	border: none !important;
 }
 
 .gueta-search__input::placeholder {
@@ -1338,6 +1367,240 @@ body.gueta-locked {
 	.gueta-drawer__backdrop,
 	.gueta-announce__item,
 	.gueta-mega__banner img {
+		transition-duration: .01ms;
+	}
+}
+
+/* -------------------------------------------------------------------------
+ * Category slider under the header
+ *
+ * Card design mirrors the site's custom-cat-grid; the sliding behaviour
+ * mirrors the reference storefront. Scroll snapping does the work, so there is
+ * no carousel library and touch swiping is native.
+ * ---------------------------------------------------------------------- */
+
+.gueta-cats {
+	background: var(--gueta-paper);
+	border-bottom: 1px solid var(--gueta-rule);
+	padding: 20px 0;
+}
+
+.gueta-cats *,
+.gueta-cats *::before,
+.gueta-cats *::after {
+	box-sizing: border-box;
+}
+
+.gueta-cats__inner {
+	margin: 0 auto;
+	max-width: var(--gueta-max);
+	padding: 0 var(--gueta-gutter);
+	position: relative;
+}
+
+.gueta-cats__track {
+	display: flex;
+	gap: 20px;
+	list-style: none;
+	margin: 0;
+	overflow-x: auto;
+	overscroll-behavior-x: contain;
+	padding: 0;
+	scroll-behavior: smooth;
+	scroll-snap-type: x mandatory;
+	scrollbar-width: none;
+}
+
+.gueta-cats__track::-webkit-scrollbar {
+	display: none;
+}
+
+.gueta-cats__item {
+	flex: 0 0 220px;
+	scroll-snap-align: start;
+}
+
+.gueta-cat {
+	aspect-ratio: 1;
+	background: var(--gueta-sand);
+	border-radius: 6px;
+	color: var(--gueta-ink);
+	display: block;
+	overflow: hidden;
+	position: relative;
+	text-decoration: none;
+}
+
+.gueta-cat__media {
+	display: block;
+	inset: 0;
+	position: absolute;
+}
+
+.gueta-cat__image {
+	display: block;
+	height: 100%;
+	object-fit: cover;
+	transition: transform .6s ease;
+	width: 100%;
+}
+
+.gueta-cat:hover .gueta-cat__image,
+.gueta-cat:focus-visible .gueta-cat__image {
+	transform: scale(1.06);
+}
+
+.gueta-cat__title {
+	background: rgb(255 255 255 / 82%);
+	display: block;
+	font-size: clamp(17px, 1.5vw, 21px);
+	font-weight: 600;
+	inset-block-start: 16px;
+	inset-inline-end: 16px;
+	line-height: 1.3;
+	max-width: calc(100% - 32px);
+	padding: 5px 14px;
+	position: absolute;
+	width: fit-content;
+}
+
+.gueta-cat__arrow {
+	align-items: center;
+	background: rgb(255 255 255 / 92%);
+	border-radius: 50%;
+	display: flex;
+	height: 34px;
+	inset-block-end: 16px;
+	inset-inline-start: 16px;
+	justify-content: center;
+	position: absolute;
+	transition: background-color .3s ease, transform .3s ease;
+	width: 34px;
+	z-index: 2;
+}
+
+.gueta-cat__arrow svg {
+	fill: none;
+	height: 16px;
+	stroke: var(--gueta-ink);
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-width: 2;
+	width: 16px;
+}
+
+.gueta-cat:hover .gueta-cat__arrow {
+	background: var(--gueta-paper);
+	transform: translateX(calc(var(--gueta-slide) * 3px));
+}
+
+.gueta-cat__text {
+	background: linear-gradient(to top, rgb(0 0 0 / 85%), rgb(0 0 0 / 0%));
+	color: #fff;
+	display: block;
+	font-size: 14px;
+	inset: auto 0 0;
+	line-height: 1.5;
+	opacity: 0;
+	padding-block: 40px 18px;
+	/* The inline start clears the arrow badge sitting in the same corner. */
+	padding-inline: 62px 16px;
+	position: absolute;
+	transform: translateY(16px);
+	transition: opacity .35s ease, transform .35s ease;
+}
+
+.gueta-cat:hover .gueta-cat__text,
+.gueta-cat:focus-visible .gueta-cat__text {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+/* Navigation, revealed on hover like the reference. */
+
+.gueta-cats__nav {
+	align-items: center;
+	background: var(--gueta-paper);
+	border: 0;
+	border-radius: 50%;
+	box-shadow: 0 4px 10px rgb(0 0 0 / 12%);
+	color: var(--gueta-ink);
+	cursor: pointer;
+	display: flex;
+	height: 38px;
+	inset-block-start: 50%;
+	justify-content: center;
+	opacity: 0;
+	padding: 0;
+	position: absolute;
+	transform: translateY(-50%);
+	transition: opacity .25s ease, background-color .25s ease;
+	width: 38px;
+	z-index: 3;
+}
+
+.gueta-cats__nav--prev {
+	inset-inline-end: calc(var(--gueta-gutter) / 3);
+}
+
+.gueta-cats__nav--next {
+	inset-inline-start: calc(var(--gueta-gutter) / 3);
+}
+
+/* The base chevron points to the inline start, so flip the one facing back. */
+.gueta-cats__nav--prev .gueta-icon {
+	transform: scaleX(-1);
+}
+
+[dir="rtl"] .gueta-cats__nav--prev .gueta-icon {
+	transform: none;
+}
+
+[dir="rtl"] .gueta-cats__nav--next .gueta-icon {
+	transform: scaleX(-1);
+}
+
+.gueta-cats:hover .gueta-cats__nav,
+.gueta-cats:focus-within .gueta-cats__nav {
+	opacity: 1;
+}
+
+.gueta-cats__nav:hover {
+	background: var(--gueta-sand);
+}
+
+.gueta-cats__nav[disabled] {
+	cursor: default;
+	opacity: 0 !important;
+	pointer-events: none;
+}
+
+@media (max-width: 1024px) {
+	.gueta-cats {
+		padding: 14px 0;
+	}
+
+	.gueta-cats__item {
+		flex-basis: 158px;
+	}
+
+	.gueta-cats__track {
+		gap: 12px;
+	}
+
+	/* Touch swiping replaces the arrows. */
+	.gueta-cats__nav {
+		display: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.gueta-cats__track {
+		scroll-behavior: auto;
+	}
+
+	.gueta-cat__image,
+	.gueta-cat__text {
 		transition-duration: .01ms;
 	}
 }
