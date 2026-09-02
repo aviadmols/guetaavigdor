@@ -1,0 +1,323 @@
+- generic [active] [ref=f47e1]:
+  - link "WhatsApp" [ref=f47e3] [cursor=pointer]:
+    - /url: https://api.whatsapp.com/send?phone=972509512625
+  - link "דילוג לתוכן" [ref=f47e6] [cursor=pointer]:
+    - /url: "#content"
+  - generic [ref=f47e7]:
+    - button "הודעה קודמת" [ref=f47e8] [cursor=pointer]
+    - generic [ref=f47e11]:
+      - paragraph [ref=f47e12]: משלוח מהיר לכל הארץ
+      - paragraph: ייעוץ מקצועי בטלפון לפני כל הזמנה
+      - paragraph: מאות מוצרים במלאי מיידי
+    - button "הודעה הבאה" [ref=f47e13] [cursor=pointer]
+  - banner [ref=f47e16]:
+    - generic [ref=f47e17]:
+      - link "גואטה אביגדור" [ref=f47e19] [cursor=pointer]:
+        - /url: https://guetaavigdor.ussl.co/
+      - search [ref=f47e23]:
+        - generic [ref=f47e24]: חיפוש באתר
+        - generic [ref=f47e25]:
+          - button "חיפוש" [ref=f47e26] [cursor=pointer]
+          - combobox "חיפוש באתר" [ref=f47e30]
+      - generic [ref=f47e31]:
+        - link "התחברות" [ref=f47e32] [cursor=pointer]:
+          - /url: https://guetaavigdor.ussl.co/%d7%94%d7%97%d7%a9%d7%91%d7%95%d7%9f-%d7%a9%d7%9c%d7%99/
+        - button "עגלת קניות" [ref=f47e36] [cursor=pointer]:
+          - generic [ref=f47e41]: "1"
+    - navigation "ניווט ראשי" [ref=f47e43]:
+      - list [ref=f47e44]:
+        - listitem [ref=f47e45]:
+          - link "כלי עבודה חשמליים" [ref=f47e46] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%9b%d7%9c%d7%99-%d7%a2%d7%91%d7%95%d7%93%d7%94/
+        - listitem [ref=f47e50]:
+          - link "מוצרי פרזול" [ref=f47e51] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%9e%d7%95%d7%a6%d7%a8%d7%99-%d7%a4%d7%a8%d7%96%d7%95%d7%9c/
+        - listitem [ref=f47e55]:
+          - link "כלי עבודה ידניים" [ref=f47e56] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%9b%d7%9c%d7%99-%d7%a2%d7%91%d7%95%d7%93%d7%94-%d7%99%d7%93%d7%a0%d7%99%d7%99%d7%9d/
+        - listitem [ref=f47e60]:
+          - link "מבצעים" [ref=f47e61] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/sale-2/
+        - listitem [ref=f47e63]:
+          - link "עצים" [ref=f47e64] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%a2%d7%a6%d7%99%d7%9d/
+        - listitem [ref=f47e68]:
+          - link "תחזוקה, ניקיון ושמנים" [ref=f47e69] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%aa%d7%97%d7%96%d7%95%d7%a7%d7%94-%d7%a0%d7%99%d7%a7%d7%99%d7%95%d7%9f-%d7%95%d7%a9%d7%9e%d7%a0%d7%99%d7%9d/
+        - listitem [ref=f47e71]:
+          - link "הדבקה ואטימה" [ref=f47e72] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%97%d7%95%d7%9e%d7%a8%d7%99-%d7%94%d7%93%d7%91%d7%a7%d7%94-%d7%95%d7%90%d7%98%d7%99%d7%9e%d7%94/
+        - listitem [ref=f47e76]:
+          - link "עשה זאת בעצמך" [ref=f47e77] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%99%d7%a6%d7%99%d7%a8%d7%94/
+        - listitem [ref=f47e81]:
+          - link "כל הקטגוריות" [ref=f47e82] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/catalog/
+  - generic [ref=f47e84]:
+    - paragraph [ref=f47e91]:
+      - generic [ref=f47e92]:
+        - link "דף הבית" [ref=f47e94] [cursor=pointer]:
+          - /url: https://guetaavigdor.ussl.co/
+        - text: »
+        - link "המוצרים שלנו" [ref=f47e96] [cursor=pointer]:
+          - /url: https://guetaavigdor.ussl.co/catalog/
+        - text: »
+        - link "עשה זאת בעצמך" [ref=f47e98] [cursor=pointer]:
+          - /url: https://guetaavigdor.ussl.co/products/%d7%99%d7%a6%d7%99%d7%a8%d7%94/
+        - text: » אפוקסי לעץ בסיס + מקשה במבחר גדלים
+    - generic [ref=f47e100]:
+      - generic [ref=f47e102]:
+        - heading "אפוקסי לעץ בסיס + מקשה במבחר גדלים" [level=1] [ref=f47e105]
+        - paragraph [ref=f47e108]:
+          - generic [ref=f47e110]: ₪175.00
+          - text: –
+          - generic [ref=f47e112]: ₪585.00
+          - generic [ref=f47e113]: "טווח מחירים: ⁦₪175.00⁩ עד ⁦₪585.00⁩"
+        - generic [ref=f47e116]:
+          - generic [ref=f47e117]:
+            - generic [ref=f47e118]: כמות של קטר תוכי 6 אינץ' B.TECH BTM 500227 – חיתוך מדויק ונוח לעבודות עדינות
+            - spinbutton "כמות המוצר" [ref=f47e119]: "1"
+          - button "הוספה לסל" [ref=f47e120] [cursor=pointer]:
+            - generic [ref=f47e121]:
+              - generic [aria-hidden] [ref=f47e123]: 
+              - generic [ref=f47e124]: הוספה לסל
+        - generic [ref=f47e131]:
+          - generic [ref=f47e132]:
+            - generic [ref=f47e133]: מק"ט
+            - generic [ref=f47e134]: ללא
+          - generic [ref=f47e135]:
+            - generic [ref=f47e136]: קטגוריות
+            - generic [ref=f47e137]:
+              - link "עשה זאת בעצמך" [ref=f47e138] [cursor=pointer]:
+                - /url: https://guetaavigdor.ussl.co/products/%d7%99%d7%a6%d7%99%d7%a8%d7%94/
+              - text: ","
+              - link "מבצעים" [ref=f47e139] [cursor=pointer]:
+                - /url: https://guetaavigdor.ussl.co/products/sale-2/
+              - text: ","
+              - link "אפוקסי" [ref=f47e140] [cursor=pointer]:
+                - /url: https://guetaavigdor.ussl.co/products/%d7%99%d7%a6%d7%99%d7%a8%d7%94/%d7%90%d7%a4%d7%95%d7%a7%d7%a1%d7%99/
+        - generic [ref=f47e147]:
+          - group [ref=f47e148]:
+            - generic "מפרט טכני" [ref=f47e149] [cursor=pointer]
+            - table [ref=f47e157]:
+              - rowgroup [ref=f47e158]:
+                - row [ref=f47e159]:
+                  - columnheader [ref=f47e160]:
+                    - strong [ref=f47e161]: מאפיין
+                  - columnheader [ref=f47e162]:
+                    - strong [ref=f47e163]: פרטים
+              - rowgroup [ref=f47e164]:
+                - row [ref=f47e165]:
+                  - cell [ref=f47e166]:
+                    - strong [ref=f47e167]: יחס ערבוב במשקל
+                  - cell [ref=f47e168]:
+                    - strong [ref=f47e169]: 100:50
+                - row [ref=f47e170]:
+                  - cell [ref=f47e171]:
+                    - strong [ref=f47e172]: יחס ערבוב בנפח
+                  - cell [ref=f47e173]:
+                    - strong [ref=f47e174]: 100:60
+                - row [ref=f47e175]:
+                  - cell [ref=f47e176]:
+                    - strong [ref=f47e177]: טמפרטורת עבודה מומלצת
+                  - cell [ref=f47e178]:
+                    - strong [ref=f47e179]: 22–25 °C (לא מתאים לשימוש מתחת ל-18 °C)
+                - row [ref=f47e180]:
+                  - cell [ref=f47e181]:
+                    - strong [ref=f47e182]: זמן עבודה
+                  - cell [ref=f47e183]:
+                    - strong [ref=f47e184]: כ-60 דקות (בהתאם לכמות ועובי היציקה)
+                - row [ref=f47e185]:
+                  - cell [ref=f47e186]:
+                    - strong [ref=f47e187]: ייבוש ראשוני
+                  - cell [ref=f47e188]:
+                    - strong [ref=f47e189]: 12 שעות
+                - row [ref=f47e190]:
+                  - cell [ref=f47e191]:
+                    - strong [ref=f47e192]: ייבוש מלא
+                  - cell [ref=f47e193]:
+                    - strong [ref=f47e194]: 24 שעות (התקשות מלאה לאחר 7 ימים)
+                - row [ref=f47e195]:
+                  - cell [ref=f47e196]:
+                    - strong [ref=f47e197]: צבע
+                  - cell [ref=f47e198]:
+                    - strong [ref=f47e199]: שקוף (עשוי להצהיב לאורך זמן, במיוחד בחשיפה לשמש)
+          - group [ref=f47e200]:
+            - generic "שימושים ויישומים" [ref=f47e201] [cursor=pointer]
+          - group [ref=f47e204]:
+            - generic "מידע שימושי לפני ובזמן ההתקנה" [ref=f47e205] [cursor=pointer]
+          - group [ref=f47e208]:
+            - generic "אזהרות" [ref=f47e209] [cursor=pointer]
+          - group [ref=f47e212]:
+            - generic "שאלות נפוצות" [ref=f47e213] [cursor=pointer]
+      - generic [ref=f47e220]:
+        - button "הגדלת התמונה" [ref=f47e222] [cursor=pointer]:
+          - img "אפוקסי לעץ בסיס + מקשה במבחר גדלים" [ref=f47e223]
+        - tablist "תמונות המוצר" [ref=f47e228]:
+          - tab "תמונה 1" [selected] [ref=f47e229] [cursor=pointer]
+          - tab "תמונה 2" [ref=f47e230] [cursor=pointer]
+          - tab "תמונה 3" [ref=f47e231] [cursor=pointer]
+          - tab "תמונה 4" [ref=f47e232] [cursor=pointer]
+    - generic [ref=f47e240]:
+      - heading "בטוח יעניין אתכם" [level=2] [ref=f47e243]
+      - generic [ref=f47e248]:
+        - generic [ref=f47e249]:
+          - group "1 / 8" [ref=f47e250]:
+            - 'link "מבצע מכסחת דשא V60 (ללא סוללה ומטען) המחיר המקורי היה: ₪2,682.74. המחיר הנוכחי הוא: ₪2,414.46." [ref=f47e252] [cursor=pointer]':
+              - /url: https://guetaavigdor.ussl.co/product/%d7%9e%d7%9b%d7%a1%d7%97%d7%aa-%d7%93%d7%a9%d7%90-v60-%d7%9c%d7%9c%d7%90-%d7%a1%d7%95%d7%9c%d7%9c%d7%94-%d7%95%d7%9e%d7%98%d7%a2%d7%9f/
+              - generic [ref=f47e253]: מבצע
+              - generic [ref=f47e255]:
+                - heading "מכסחת דשא V60 (ללא סוללה ומטען)" [level=3] [ref=f47e256]
+                - generic [ref=f47e257]:
+                  - deletion [aria-hidden] [ref=f47e258]:
+                    - generic [ref=f47e259]: ₪2,682.74
+                  - generic [ref=f47e261]: "המחיר המקורי היה: ₪2,682.74."
+                  - insertion [aria-hidden] [ref=f47e262]:
+                    - generic [ref=f47e263]: ₪2,414.46
+                  - generic [ref=f47e265]: "המחיר הנוכחי הוא: ₪2,414.46."
+          - group "2 / 8" [ref=f47e266]:
+            - 'link "מבצע פטישון נטען מקיטה פטישון נטען 18V מתוצרת Makita המחיר המקורי היה: ₪899.62. המחיר הנוכחי הוא: ₪821.97." [ref=f47e268] [cursor=pointer]':
+              - /url: https://guetaavigdor.ussl.co/product/%d7%a4%d7%98%d7%99%d7%a9%d7%95%d7%9f-%d7%a0%d7%98%d7%a2%d7%9f-18v-%d7%9e%d7%aa%d7%95%d7%a6%d7%a8%d7%aa-makita/
+              - generic [ref=f47e269]:
+                - generic [ref=f47e270]: מבצע
+                - img "פטישון נטען מקיטה" [ref=f47e271]
+              - generic [ref=f47e272]:
+                - heading "פטישון נטען 18V מתוצרת Makita" [level=3] [ref=f47e273]
+                - generic [ref=f47e274]:
+                  - deletion [aria-hidden] [ref=f47e275]:
+                    - generic [ref=f47e276]: ₪899.62
+                  - generic [ref=f47e278]: "המחיר המקורי היה: ₪899.62."
+                  - insertion [aria-hidden] [ref=f47e279]:
+                    - generic [ref=f47e280]: ₪821.97
+                  - generic [ref=f47e282]: "המחיר הנוכחי הוא: ₪821.97."
+          - group "3 / 8" [ref=f47e283]:
+            - 'link "מבצע ספריי צבע זכוכית חלבית המחיר המקורי היה: ₪40.00. המחיר הנוכחי הוא: ₪39.00." [ref=f47e285] [cursor=pointer]':
+              - /url: https://guetaavigdor.ussl.co/product/%d7%a1%d7%a4%d7%a8%d7%99%d7%99-%d7%a6%d7%91%d7%a2-%d7%96%d7%9b%d7%95%d7%9b%d7%99%d7%aa-%d7%97%d7%9c%d7%91%d7%99%d7%aa/
+              - generic [ref=f47e286]: מבצע
+              - generic [ref=f47e288]:
+                - heading "ספריי צבע זכוכית חלבית" [level=3] [ref=f47e289]
+                - generic [ref=f47e290]:
+                  - deletion [aria-hidden] [ref=f47e291]:
+                    - generic [ref=f47e292]: ₪40.00
+                  - generic [ref=f47e294]: "המחיר המקורי היה: ₪40.00."
+                  - insertion [aria-hidden] [ref=f47e295]:
+                    - generic [ref=f47e296]: ₪39.00
+                  - generic [ref=f47e298]: "המחיר הנוכחי הוא: ₪39.00."
+          - group "4 / 8" [ref=f47e299]:
+            - 'link "מבצע אבקת צבע לגיוון אפוקסי במבחר צבעים טווח מחירים: ⁦₪30.00⁩ עד ⁦₪40.00⁩" [ref=f47e301] [cursor=pointer]':
+              - /url: https://guetaavigdor.ussl.co/product/%d7%9b%d7%93%d7%95%d7%a8-%d7%9e%d7%92%d7%95%d7%95%d7%9f-%d7%9c%d7%90%d7%a4%d7%95%d7%a7%d7%a1%d7%99-%d7%91%d7%9e%d7%91%d7%97%d7%a8-%d7%a6%d7%91%d7%a2%d7%99%d7%9d/
+              - generic [ref=f47e302]: מבצע
+              - generic [ref=f47e304]:
+                - heading "אבקת צבע לגיוון אפוקסי במבחר צבעים" [level=3] [ref=f47e305]
+                - generic [ref=f47e306]:
+                  - generic [ref=f47e308]: ₪30.00
+                  - text: –
+                  - generic [ref=f47e310]: ₪40.00
+                  - generic [ref=f47e311]: "טווח מחירים: ⁦₪30.00⁩ עד ⁦₪40.00⁩"
+          - group "5 / 8" [ref=f47e312]:
+            - link "DTD154Z מברגת אימפקט דגם DTD154Z מתוצרת Makita ₪711.03" [ref=f47e314] [cursor=pointer]:
+              - /url: https://guetaavigdor.ussl.co/product/%d7%9e%d7%91%d7%a8%d7%92%d7%aa-%d7%90%d7%99%d7%9e%d7%a4%d7%a7%d7%98-%d7%93%d7%92%d7%9d-dtd154z-%d7%9e%d7%aa%d7%95%d7%a6%d7%a8%d7%aa-makita/
+              - img "DTD154Z" [ref=f47e316]
+              - generic [ref=f47e317]:
+                - heading "מברגת אימפקט דגם DTD154Z מתוצרת Makita" [level=3] [ref=f47e318]
+                - generic [ref=f47e319]: ₪711.03
+          - group "6 / 8" [ref=f47e322]:
+            - 'link "מבצע שמן טאנג לעץ שמן טאנג לעץ המחיר המקורי היה: ₪161.37. המחיר הנוכחי הוא: ₪153.30." [ref=f47e324] [cursor=pointer]':
+              - /url: https://guetaavigdor.ussl.co/product/%d7%a9%d7%9e%d7%9f-%d7%98%d7%90%d7%a0%d7%92-%d7%9c%d7%a2%d7%a5/
+              - generic [ref=f47e325]:
+                - generic [ref=f47e326]: מבצע
+                - img "שמן טאנג לעץ" [ref=f47e327]
+              - generic [ref=f47e328]:
+                - heading "שמן טאנג לעץ" [level=3] [ref=f47e329]
+                - generic [ref=f47e330]:
+                  - deletion [aria-hidden] [ref=f47e331]:
+                    - generic [ref=f47e332]: ₪161.37
+                  - generic [ref=f47e334]: "המחיר המקורי היה: ₪161.37."
+                  - insertion [aria-hidden] [ref=f47e335]:
+                    - generic [ref=f47e336]: ₪153.30
+                  - generic [ref=f47e338]: "המחיר הנוכחי הוא: ₪153.30."
+          - group "7 / 8" [ref=f47e339]:
+            - link "פקק עץ אלון לסתימת חורי כיס פקק עץ אלון לסתימת חורי כיס 50 יחידות KREG ₪63.00" [ref=f47e341] [cursor=pointer]:
+              - /url: https://guetaavigdor.ussl.co/product/%d7%a4%d7%a7%d7%a7-%d7%a2%d7%a5-%d7%90%d7%9c%d7%95%d7%9f-%d7%9c%d7%a1%d7%aa%d7%99%d7%9e%d7%aa-%d7%97%d7%95%d7%a8%d7%99-%d7%9b%d7%99%d7%a1-50-%d7%99%d7%97%d7%99%d7%93%d7%95%d7%aa-kreg/
+              - img "פקק עץ אלון לסתימת חורי כיס" [ref=f47e343]
+              - generic [ref=f47e344]:
+                - heading "פקק עץ אלון לסתימת חורי כיס 50 יחידות KREG" [level=3] [ref=f47e345]
+                - generic [ref=f47e346]: ₪63.00
+          - group "8 / 8" [ref=f47e349]:
+            - 'link "מבצע פטיש חציבה 11 ק\"ג מבית Einhell המחיר המקורי היה: ₪1,750.00. המחיר הנוכחי הוא: ₪1,615.00." [ref=f47e351] [cursor=pointer]':
+              - /url: https://guetaavigdor.ussl.co/product/%d7%a4%d7%98%d7%99%d7%a9-%d7%97%d7%a6%d7%99%d7%91%d7%94-11-%d7%a7%d7%92-%d7%9e%d7%91%d7%99%d7%aa-einhell-%d7%90%d7%99%d7%99%d7%a0%d7%94%d7%9c/
+              - generic [ref=f47e352]: מבצע
+              - generic [ref=f47e354]:
+                - heading "פטיש חציבה 11 ק\"ג מבית Einhell" [level=3] [ref=f47e355]
+                - generic [ref=f47e356]:
+                  - deletion [aria-hidden] [ref=f47e357]:
+                    - generic [ref=f47e358]: ₪1,750.00
+                  - generic [ref=f47e360]: "המחיר המקורי היה: ₪1,750.00."
+                  - insertion [aria-hidden] [ref=f47e361]:
+                    - generic [ref=f47e362]: ₪1,615.00
+                  - generic [ref=f47e364]: "המחיר הנוכחי הוא: ₪1,615.00."
+        - button "Next slide" [ref=f47e365] [cursor=pointer]: prev
+        - button "Previous slide" [disabled]: next
+  - contentinfo [ref=f47e366]:
+    - generic [ref=f47e374]:
+      - generic [ref=f47e376]:
+        - paragraph [ref=f47e379]: גואטה אביגדור בע”מ.
+        - paragraph [ref=f47e382]: הינה חברה ישראלית הנמצאת בבעלות משפחתית מלאה ועוסקת בתחום העץ והאביזרים הנדרשים לצורך התקנה והקמה של גגות רעפים פרגולות ודקים למגזר העסקי והפרטי.
+        - generic [ref=f47e385]:
+          - link "דברו איתנו" [ref=f47e387] [cursor=pointer]:
+            - /url: https://api.whatsapp.com/send?phone=972509512625
+            - generic [aria-hidden] [ref=f47e388]: 
+          - heading [level=3] [ref=f47e390]:
+            - link "דברו איתנו" [ref=f47e391] [cursor=pointer]:
+              - /url: https://api.whatsapp.com/send?phone=972509512625
+      - generic [ref=f47e393]:
+        - paragraph [ref=f47e396]: קופצים?
+        - generic [ref=f47e398]:
+          - paragraph [ref=f47e399]: א-ה בין השעות 07:30 ועד 16:30יום ו’ בין השעות 07:30 עד 13:00
+          - paragraph [ref=f47e400]: רח׳ זאב שלנג 3 א.ת.ח ראשל״צ(מאחורי הסינמה סיטי)
+          - paragraph [ref=f47e401]:
+            - text: דברו איתנו. 050-9512625
+            - link "info@guetaavigdor.co.il" [ref=f47e402] [cursor=pointer]:
+              - /url: mailto:info@guetaavigdor.co.il
+      - generic [ref=f47e404]:
+        - paragraph [ref=f47e407]: סושיאלס.
+        - list [ref=f47e410]:
+          - listitem [ref=f47e411]:
+            - link [ref=f47e412] [cursor=pointer]:
+              - /url: https://www.tiktok.com/@guetawood
+              - generic [aria-hidden] [ref=f47e414]: 
+          - listitem [ref=f47e415]:
+            - link [ref=f47e416] [cursor=pointer]:
+              - /url: https://www.instagram.com/gueta_avigdor/
+              - generic [aria-hidden] [ref=f47e418]: 
+          - listitem [ref=f47e419]:
+            - link [ref=f47e420] [cursor=pointer]:
+              - /url: https://www.facebook.com/guetaavigdor/?locale=he_IL
+              - generic [aria-hidden] [ref=f47e422]: 
+        - paragraph [ref=f47e425]: מבצעים, מוצרים חדשים וטיפים מקצועיים.
+        - form "ניוזלטר" [ref=f47e428]:
+          - generic [ref=f47e429]:
+            - generic [ref=f47e430]:
+              - generic [ref=f47e431] [cursor=pointer]: אימייל
+              - textbox "אימייל" [ref=f47e432]
+            - button "שליחה" [ref=f47e434] [cursor=pointer]:
+              - generic [ref=f47e436]:
+                - generic [aria-hidden] [ref=f47e437]: 
+                - generic [ref=f47e438]: שליחה
+    - paragraph [ref=f47e445]:
+      - text: © 2026 כל הזכויות שמורות לגואטה אביגדור מחסן עצים | תקנון האתר | הצהרת נגישות | פרטיות | אתר
+      - link "tabuzzco" [ref=f47e446] [cursor=pointer]:
+        - /url: https://tabuzzco.com
+  - generic [ref=f47e448]:
+    - generic [ref=f47e449]:
+      - img "אפוקסי לעץ בסיס + מקשה במבחר גדלים" [ref=f47e451]
+      - generic [ref=f47e452]:
+        - generic [ref=f47e453]: אפוקסי לעץ בסיס + מקשה במבחר גדלים
+        - generic [ref=f47e454]:
+          - generic [aria-hidden] [ref=f47e455]: ₪175.00
+          - text: –
+          - generic [aria-hidden] [ref=f47e456]: ₪585.00
+          - generic [ref=f47e457]: "טווח מחירים: ⁦₪175.00⁩ עד ⁦₪585.00⁩"
+    - button "הוספה לסל" [ref=f47e458] [cursor=pointer]
+  - generic [ref=f47e459]: desktop
+  - status [ref=f47e460]

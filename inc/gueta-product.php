@@ -714,6 +714,8 @@ add_filter( 'elementor/widget/render_content', 'gueta_replace_gallery_shortcode'
  * @return array
  */
 function gueta_retarget_add_to_cart_data( $data, $post_id ) {
+	gueta_diag( 'builder_content_data', [ 'document' => (int) $post_id ] );
+
 	if ( ! is_array( $data ) || ! function_exists( 'is_product' ) || ! is_product() ) {
 		return $data;
 	}
@@ -730,9 +732,14 @@ function gueta_retarget_add_to_cart_data( $data, $post_id ) {
 				continue;
 			}
 
+			if ( 'widget' === ( $element['elType'] ?? '' ) ) {
+				gueta_diag( 'widget_seen', [ 'type' => (string) ( $element['widgetType'] ?? '' ) ] );
+			}
+
 			if ( 'widget' === ( $element['elType'] ?? '' ) && 'wc-add-to-cart' === ( $element['widgetType'] ?? '' ) ) {
 				$element['settings']               = isset( $element['settings'] ) && is_array( $element['settings'] ) ? $element['settings'] : [];
 				$element['settings']['product_id'] = $product_id;
+				gueta_diag( 'retargeted', [ 'to' => $product_id ] );
 			}
 
 			if ( ! empty( $element['elements'] ) && is_array( $element['elements'] ) ) {
@@ -748,6 +755,51 @@ function gueta_retarget_add_to_cart_data( $data, $post_id ) {
 add_filter( 'elementor/frontend/builder_content_data', 'gueta_retarget_add_to_cart_data', 10, 2 );
 
 /**
+ * Record what the add to cart hooks saw, and print it as an HTML comment when
+ * a product page is requested with ?gueta_diag=1.
+ *
+ * Only booleans, ids and widget type names are recorded: nothing here is
+ * sensitive, and it is what lets the behaviour on the live site be read
+ * without server access.
+ *
+ * @param string|null $event Event name, or null to fetch the log.
+ * @param array       $info  Details.
+ * @return array
+ */
+function gueta_diag( $event = null, $info = [] ) {
+	static $log = [];
+
+	if ( null !== $event ) {
+		$log[] = array_merge( [ 'event' => $event ], $info );
+	}
+
+	return $log;
+}
+
+/**
+ * Print the diagnostics log for ?gueta_diag=1.
+ *
+ * @return void
+ */
+function gueta_print_diag() {
+	if ( ! isset( $_GET['gueta_diag'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		return;
+	}
+
+	$summary = [
+		'is_product'                 => function_exists( 'is_product' ) && is_product(),
+		'queried_object_id'          => (int) get_queried_object_id(),
+		'queried_post_type'          => get_post_type( get_queried_object_id() ),
+		'builder_content_data_hooked' => (int) has_filter( 'elementor/frontend/builder_content_data', 'gueta_retarget_add_to_cart_data' ),
+		'render_content_hooked'      => (int) has_filter( 'elementor/widget/render_content', 'gueta_correct_add_to_cart_markup' ),
+		'events'                     => gueta_diag(),
+	];
+
+	echo "\n<!-- gueta-diag " . wp_json_encode( $summary, JSON_UNESCAPED_UNICODE ) . " -->\n";
+}
+add_action( 'wp_footer', 'gueta_print_diag', 999 );
+
+/**
  * Safety net for the above: if the rendered form still names another product,
  * replace it with the real add to cart form for this one.
  *
@@ -760,11 +812,14 @@ function gueta_correct_add_to_cart_markup( $content, $widget ) {
 		return $content;
 	}
 
-	if ( ! is_object( $widget ) || ! method_exists( $widget, 'get_name' ) || 'wc-add-to-cart' !== $widget->get_name() ) {
+	$name = ( is_object( $widget ) && method_exists( $widget, 'get_name' ) ) ? $widget->get_name() : '';
+
+	if ( 'wc-add-to-cart' !== $name ) {
 		return $content;
 	}
 
 	$product = gueta_queried_product();
+	gueta_diag( 'render_content', [ 'widget' => $name, 'product' => $product ? $product->get_id() : 0, 'has_form' => false !== strpos( $content, 'add-to-cart' ) ] );
 
 	if ( ! $product ) {
 		return $content;
@@ -829,5 +884,40 @@ function gueta_product_shortcodes() {
 	add_shortcode( 'gueta_gallery', $capture( 'gueta_render_product_gallery' ) );
 	add_shortcode( 'gueta_accordion', $capture( 'gueta_render_product_accordion' ) );
 	add_shortcode( 'gueta_reviews', $capture( 'gueta_render_reviews' ) );
+	add_shortcode( 'gueta_add_to_cart', 'gueta_add_to_cart_shortcode' );
+}
+
+/**
+ * The add to cart form for the product being viewed, for use in a template.
+ *
+ * Renders WooCommerce's own form for the queried product, so a variable
+ * product gets its variations (as swatch buttons) and a simple one its
+ * quantity and button. Drop [gueta_add_to_cart] into a Shortcode widget in
+ * place of a widget pinned to a fixed product.
+ *
+ * @return string
+ */
+function gueta_add_to_cart_shortcode() {
+	$product = gueta_queried_product();
+
+	if ( ! $product && function_exists( 'wc_get_product' ) ) {
+		$candidate = wc_get_product( get_the_ID() );
+		$product   = $candidate instanceof WC_Product ? $candidate : null;
+	}
+
+	if ( ! $product ) {
+		return '';
+	}
+
+	$previous           = $GLOBALS['product'] ?? null;
+	$GLOBALS['product'] = $product; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+
+	ob_start();
+	woocommerce_template_single_add_to_cart();
+	$html = trim( (string) ob_get_clean() );
+
+	$GLOBALS['product'] = $previous; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+
+	return $html ? '<div class="gueta-atc">' . $html . '</div>' : '';
 }
 add_action( 'init', 'gueta_product_shortcodes' );
