@@ -1,3 +1,17 @@
+Gueta Development Bridge
+========================
+
+After activating this child theme, open Settings > Gueta Bridge in WordPress.
+
+1. Generate a token and copy it immediately. It is displayed only once.
+2. Keep the token in the external integration's secret storage. Do not commit it.
+3. Use the token as an Authorization header: Bearer YOUR_TOKEN.
+4. Read site context at /wp-json/gueta/v1/context.
+5. Read published posts at /wp-json/gueta/v1/posts?post_type=post.
+6. Enable draft creation in the settings only when needed, then POST JSON with title, content, and post_type to /wp-json/gueta/v1/posts.
+
+This bridge deliberately does not expose direct SQL or database credentials. Revoke and regenerate the token immediately if it is exposed.
+
 === Hello Elementor Child ===
 
 Contributors: elemntor
