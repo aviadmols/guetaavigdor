@@ -58,6 +58,18 @@
 	display: none !important;
 }
 
+/*
+ * The Elementor kit's Custom CSS carries `@media (max-width:767px){ body {
+ * display:none !important } }`, which blanks the whole site on phones. Until
+ * that rule is deleted in Site Settings this outranks it on specificity
+ * (html body beats body, both important) so the site stays visible.
+ */
+@media (max-width: 767px) {
+	html body {
+		display: block !important;
+	}
+}
+
 /* The parent theme ships this, but the header must not depend on that. */
 .screen-reader-text {
 	border: 0;

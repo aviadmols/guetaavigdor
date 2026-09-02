@@ -570,6 +570,106 @@ function gueta_elementor_product_content( $content, $widget ) {
 add_filter( 'elementor/widget/render_content', 'gueta_elementor_product_content', 10, 2 );
 
 /**
+ * Swap the site's gallery shortcode for the theme's own gallery.
+ *
+ * The shortcode renders a fixed size <img> with its own thumbnail script and
+ * no zoom. Replacing it gives responsive images, lazy loading and the
+ * lightbox, and keeps the gallery in one place.
+ *
+ * @param string                 $content Rendered widget HTML.
+ * @param \Elementor\Widget_Base $widget  Widget instance.
+ * @return string
+ */
+function gueta_replace_gallery_shortcode( $content, $widget ) {
+	if ( ! function_exists( 'is_product' ) || ! is_product() ) {
+		return $content;
+	}
+
+	if ( ! is_object( $widget ) || ! method_exists( $widget, 'get_name' ) || 'shortcode' !== $widget->get_name() ) {
+		return $content;
+	}
+
+	if ( false === strpos( $content, 'smart-product-gallery-wrapper' ) ) {
+		return $content;
+	}
+
+	if ( ! gueta_current_product() ) {
+		return $content;
+	}
+
+	ob_start();
+	gueta_render_product_gallery();
+	$gallery = trim( (string) ob_get_clean() );
+
+	return $gallery ? $gallery : $content;
+}
+add_filter( 'elementor/widget/render_content', 'gueta_replace_gallery_shortcode', 10, 2 );
+
+/**
+ * Point Elementor's generic Add to Cart widget at the product being viewed.
+ *
+ * The single template uses the widget that takes a fixed product id, so every
+ * product page was adding that one product to the cart. Rewriting the setting
+ * before the widget renders keeps its styling intact.
+ *
+ * @param \Elementor\Element_Base $widget Widget about to render.
+ * @return void
+ */
+function gueta_retarget_add_to_cart_widget( $widget ) {
+	if ( ! function_exists( 'is_product' ) || ! is_product() ) {
+		return;
+	}
+
+	if ( ! is_object( $widget ) || ! method_exists( $widget, 'get_name' ) || 'wc-add-to-cart' !== $widget->get_name() ) {
+		return;
+	}
+
+	$product = gueta_current_product();
+
+	if ( ! $product || ! method_exists( $widget, 'set_settings' ) ) {
+		return;
+	}
+
+	$widget->set_settings( 'product_id', $product->get_id() );
+}
+add_action( 'elementor/frontend/widget/before_render', 'gueta_retarget_add_to_cart_widget' );
+
+/**
+ * Safety net for the above: if the rendered form still names another product,
+ * replace it with the real add to cart form for this one.
+ *
+ * @param string                 $content Rendered widget HTML.
+ * @param \Elementor\Widget_Base $widget  Widget instance.
+ * @return string
+ */
+function gueta_correct_add_to_cart_markup( $content, $widget ) {
+	if ( ! function_exists( 'is_product' ) || ! is_product() ) {
+		return $content;
+	}
+
+	if ( ! is_object( $widget ) || ! method_exists( $widget, 'get_name' ) || 'wc-add-to-cart' !== $widget->get_name() ) {
+		return $content;
+	}
+
+	$product = gueta_current_product();
+
+	if ( ! $product || ! preg_match( '/name=["\']add-to-cart["\'][^>]*?value=["\'](\d+)["\']/', $content, $matches ) ) {
+		return $content;
+	}
+
+	if ( (int) $matches[1] === $product->get_id() ) {
+		return $content;
+	}
+
+	ob_start();
+	woocommerce_template_single_add_to_cart();
+	$correct = trim( (string) ob_get_clean() );
+
+	return $correct ? '<div class="gueta-atc">' . $correct . '</div>' : $content;
+}
+add_filter( 'elementor/widget/render_content', 'gueta_correct_add_to_cart_markup', 10, 2 );
+
+/**
  * Reviews go straight after the single template, ahead of the footer.
  *
  * @return void
