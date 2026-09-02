@@ -31,7 +31,9 @@ add_action( 'after_setup_theme', 'gueta_product_setup', 20 );
  * @return void
  */
 function gueta_product_assets() {
-	if ( ! function_exists( 'is_product' ) || ! is_product() ) {
+	// Listings need these too: quick view renders the product page's own
+	// gallery and accordion inside its modal.
+	if ( ! gueta_has_woocommerce() || ! ( is_product() || is_shop() || is_product_taxonomy() || is_search() ) ) {
 		return;
 	}
 
@@ -164,7 +166,7 @@ function gueta_render_product_gallery() {
  * @return void
  */
 function gueta_render_lightbox() {
-	if ( ! function_exists( 'is_product' ) || ! is_product() ) {
+	if ( ! gueta_has_woocommerce() || ! ( is_product() || is_shop() || is_product_taxonomy() || is_search() ) ) {
 		return;
 	}
 	?>

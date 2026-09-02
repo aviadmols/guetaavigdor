@@ -14,6 +14,8 @@
 	--gueta-rule: #e5e5e5;
 	--gueta-sand: #fafafa;
 	--gueta-accent: #b42318;
+	/* The shop's own orange, used for calls to action. */
+	--gueta-accent-warm: #f0591d;
 	--gueta-bar-height: 96px;
 	--gueta-nav-height: 52px;
 	--gueta-radius: 12px;

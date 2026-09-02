@@ -19,6 +19,7 @@
 	var countLabel = archive.querySelector('[data-archive-count]');
 	var sortSelect = archive.querySelector('[data-archive-sort]');
 	var activeCount = archive.querySelector('[data-archive-active-count]');
+	var clearButton = archive.querySelector('.gueta-archive__clear');
 	var moreButton = archive.querySelector('[data-archive-more]');
 	var compareToggle = archive.querySelector('[data-archive-compare-toggle]');
 	var category = archive.getAttribute('data-category') || '';
@@ -123,6 +124,10 @@
 			activeCount.hidden = !active;
 		}
 
+		if (clearButton) {
+			clearButton.hidden = !active;
+		}
+
 		if (!append) {
 			syncUrl(state);
 		}
@@ -210,21 +215,22 @@
 		});
 	}
 
-	var reset = archive.querySelector('[data-archive-reset]');
+	// Delegated: reset exists both in the toolbar and in the drawer's footer.
+	archive.addEventListener('click', function (event) {
+		if (!event.target.closest('[data-archive-reset]')) {
+			return;
+		}
 
-	if (reset) {
-		reset.addEventListener('click', function () {
-			form.reset();
-			Array.prototype.forEach.call(form.querySelectorAll('input'), function (input) {
-				if ('checkbox' === input.type) {
-					input.checked = false;
-				} else {
-					input.value = '';
-				}
-			});
-			reload();
+		Array.prototype.forEach.call(form.querySelectorAll('input'), function (input) {
+			if ('checkbox' === input.type) {
+				input.checked = false;
+			} else {
+				input.value = '';
+			}
 		});
-	}
+
+		reload();
+	});
 
 	// The filter drawer on narrow screens.
 	archive.addEventListener('click', function (event) {
@@ -290,6 +296,8 @@
 				.then(function (data) {
 					if (data && data.success) {
 						body.innerHTML = data.data.html;
+						// The gallery it carries needs its own lightbox wiring.
+						document.dispatchEvent(new CustomEvent('gueta:quickview-rendered'));
 						return;
 					}
 

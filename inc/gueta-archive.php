@@ -303,6 +303,11 @@ function gueta_render_archive( $atts = [] ) {
 				<span class="gueta-archive__filter-count" data-archive-active-count hidden>0</span>
 			</button>
 
+			<button type="button" class="gueta-archive__clear" data-archive-reset hidden>
+				<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"></path></svg>
+				<span>ניקוי הסינון</span>
+			</button>
+
 			<label class="gueta-archive__compare-toggle">
 				<input type="checkbox" data-archive-compare-toggle>
 				<span class="gueta-archive__compare-text">השוואה</span>
@@ -514,36 +519,131 @@ function gueta_render_archive_filters( $term, $state ) {
 		true
 	);
 
-	foreach ( gueta_archive_attribute_taxonomies() as $taxonomy => $label ) {
-		$terms = get_terms(
-			[
-				'taxonomy'   => $taxonomy,
-				'hide_empty' => true,
-			]
-		);
+	$labels = gueta_archive_attribute_taxonomies();
 
-		if ( is_wp_error( $terms ) || ! $terms ) {
+	// Only the attributes the products in this category actually carry.
+	foreach ( gueta_archive_facets( $term ) as $taxonomy => $options ) {
+		if ( empty( $labels[ $taxonomy ] ) || count( $options ) < 2 ) {
 			continue;
 		}
 
 		gueta_render_filter_group(
-			$label,
+			$labels[ $taxonomy ],
 			$taxonomy,
-			array_map(
-				static function ( $attribute_term ) {
-					return [
-						'value' => $attribute_term->slug,
-						'label' => $attribute_term->name,
-						'count' => (int) $attribute_term->count,
-					];
-				},
-				$terms
-			),
+			array_values( $options ),
 			$state['attributes'][ $taxonomy ] ?? [],
 			false
 		);
 	}
 }
+
+/**
+ * Which attribute terms the products in a category actually use, with counts.
+ *
+ * Offering every attribute taxonomy in the shop meant a category of two hand
+ * tools listed filters for volume and thickness, so the facets are derived
+ * from the products on show instead.
+ *
+ * @param WP_Term|null $term Current category.
+ * @return array<string,array>
+ */
+function gueta_archive_facets( $term ) {
+	$cache_key = 'gueta_facets_' . GUETA_CACHE_VERSION . '_' . ( $term ? (int) $term->term_id : 0 );
+	$cached    = get_transient( $cache_key );
+
+	if ( is_array( $cached ) ) {
+		return $cached;
+	}
+
+	$taxonomies = array_keys( gueta_archive_attribute_taxonomies() );
+	$facets     = [];
+
+	if ( ! $taxonomies ) {
+		set_transient( $cache_key, $facets, 6 * HOUR_IN_SECONDS );
+
+		return $facets;
+	}
+
+	$args = [
+		'post_type'              => 'product',
+		'post_status'            => 'publish',
+		'posts_per_page'         => -1,
+		'fields'                 => 'ids',
+		'no_found_rows'          => true,
+		'update_post_meta_cache' => false,
+		'update_post_term_cache' => false,
+	];
+
+	if ( $term ) {
+		$args['tax_query'] = [ // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_tax_query
+			[
+				'taxonomy' => 'product_cat',
+				'field'    => 'term_id',
+				'terms'    => $term->term_id,
+			],
+		];
+	}
+
+	$ids = get_posts( $args );
+
+	if ( $ids ) {
+		$objects = wp_get_object_terms( $ids, $taxonomies, [ 'fields' => 'all_with_object_id' ] );
+
+		if ( ! is_wp_error( $objects ) ) {
+			foreach ( $objects as $object ) {
+				if ( ! isset( $facets[ $object->taxonomy ][ $object->slug ] ) ) {
+					$facets[ $object->taxonomy ][ $object->slug ] = [
+						'value' => $object->slug,
+						'label' => $object->name,
+						'count' => 0,
+					];
+				}
+
+				++$facets[ $object->taxonomy ][ $object->slug ]['count'];
+			}
+		}
+	}
+
+	foreach ( $facets as $taxonomy => $options ) {
+		uasort(
+			$options,
+			static function ( $a, $b ) {
+				return $b['count'] <=> $a['count'];
+			}
+		);
+
+		$facets[ $taxonomy ] = $options;
+	}
+
+	set_transient( $cache_key, $facets, 6 * HOUR_IN_SECONDS );
+
+	return $facets;
+}
+
+/**
+ * Drop the facet caches a saved product could have changed.
+ *
+ * Keyed per category, so only that product's categories and the shop wide
+ * entry need clearing.
+ *
+ * @param int $post_id Product id.
+ * @return void
+ */
+function gueta_flush_facets_for_product( $post_id ) {
+	if ( 'product' !== get_post_type( $post_id ) ) {
+		return;
+	}
+
+	delete_transient( 'gueta_facets_' . GUETA_CACHE_VERSION . '_0' );
+
+	foreach ( wp_get_post_terms( $post_id, 'product_cat', [ 'fields' => 'ids' ] ) as $term_id ) {
+		foreach ( array_merge( [ $term_id ], get_ancestors( $term_id, 'product_cat', 'taxonomy' ) ) as $id ) {
+			delete_transient( 'gueta_facets_' . GUETA_CACHE_VERSION . '_' . (int) $id );
+		}
+	}
+}
+add_action( 'save_post_product', 'gueta_flush_facets_for_product' );
+add_action( 'woocommerce_update_product', 'gueta_flush_facets_for_product' );
 
 /**
  * Attribute taxonomies worth offering as filters.
@@ -706,13 +806,6 @@ function gueta_render_archive_card( $product ) {
 				<span class="gueta-card__badge gueta-card__badge--muted">אזל מהמלאי</span>
 			<?php endif; ?>
 
-			<div class="gueta-card__actions">
-				<button type="button" class="gueta-card__action" data-quickview="<?php echo (int) $id; ?>">
-					<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-					<span>הצצה מהירה</span>
-				</button>
-			</div>
-
 			<label class="gueta-compare-switch gueta-card__compare" data-compare-switch>
 				<input type="checkbox" class="gueta-compare-switch__input" value="<?php echo (int) $id; ?>" data-compare-toggle>
 				<span class="gueta-compare-switch__text">השוואה</span>
@@ -725,6 +818,11 @@ function gueta_render_archive_card( $product ) {
 				<a href="<?php echo esc_url( $link ); ?>"><?php echo esc_html( $product->get_name() ); ?></a>
 			</h3>
 			<div class="gueta-card__price"><?php echo wp_kses_post( $product->get_price_html() ); ?></div>
+
+			<button type="button" class="gueta-card__cta" data-quickview="<?php echo (int) $id; ?>">
+				<span>לפרטים ורכישה</span>
+				<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5 7 12l7 7"></path></svg>
+			</button>
 		</div>
 	</article>
 	<?php
@@ -819,21 +917,18 @@ function gueta_render_quickview( $product ) {
 
 	$GLOBALS['product'] = $product; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 
-	$images = gueta_gallery_image_ids( $product );
-
 	ob_start();
 	?>
 	<div class="gueta-quickview">
 		<div class="gueta-quickview__media">
-			<?php if ( $images ) : ?>
-				<?php echo wp_get_attachment_image( $images[0], 'woocommerce_single', false, [ 'class' => 'gueta-quickview__image' ] ); ?>
-			<?php else : ?>
-				<?php echo wp_kses_post( wc_placeholder_img( 'woocommerce_single' ) ); ?>
-			<?php endif; ?>
+			<?php gueta_render_product_gallery(); ?>
 		</div>
 
 		<div class="gueta-quickview__info">
 			<h2 class="gueta-quickview__title"><?php echo esc_html( $product->get_name() ); ?></h2>
+
+			<?php gueta_render_rating_link(); ?>
+
 			<div class="gueta-quickview__price"><?php echo wp_kses_post( $product->get_price_html() ); ?></div>
 
 			<?php if ( $product->get_short_description() ) : ?>
@@ -843,6 +938,8 @@ function gueta_render_quickview( $product ) {
 			<div class="gueta-quickview__cart">
 				<?php woocommerce_template_single_add_to_cart(); ?>
 			</div>
+
+			<?php gueta_render_product_accordion(); ?>
 
 			<a class="gueta-quickview__full" href="<?php echo esc_url( $product->get_permalink() ); ?>">
 				לעמוד המוצר המלא

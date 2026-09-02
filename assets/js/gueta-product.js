@@ -13,7 +13,7 @@
 	 * Gallery and lightbox
 	 * ------------------------------------------------------------------ */
 
-	(function galleryAndLightbox() {
+	function galleryAndLightbox() {
 		var lightbox = document.querySelector('[data-lightbox]');
 
 		if (!lightbox) {
@@ -203,7 +203,12 @@
 
 			touchX = null;
 		}, { passive: true });
-	}());
+	}
+
+	galleryAndLightbox();
+
+	// Quick view injects a fresh gallery, so bind to that one too.
+	document.addEventListener('gueta:quickview-rendered', galleryAndLightbox);
 
 	/* ---------------------------------------------------------------------
 	 * Sticky add to cart
