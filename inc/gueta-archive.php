@@ -933,11 +933,11 @@ function gueta_render_quickview( $product ) {
 
 			<?php gueta_render_rating_link(); ?>
 
-			<div class="gueta-quickview__price"><?php echo wp_kses_post( $product->get_price_html() ); ?></div>
-
-			<div class="gueta-quickview__cart">
-				<?php woocommerce_template_single_add_to_cart(); ?>
-			</div>
+			<?php
+			// Adding from here stays in the modal, which is the whole point of
+			// a quick view; the product page keeps its ordinary post.
+			gueta_render_buy_box( $product, [ 'price' => 'on', 'ajax' => true ] );
+			?>
 
 			<?php
 			// Every panel closed: the description already leads the panel list,

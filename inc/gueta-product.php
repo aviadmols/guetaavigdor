@@ -53,6 +53,23 @@ function gueta_product_assets() {
 		gueta_asset_version( '/assets/js/gueta-product.js' ),
 		true
 	);
+
+	/*
+	 * WooCommerce enqueues its variation script from the add to cart template
+	 * itself, which on a listing page runs inside the quick view AJAX request:
+	 * long after the page that asked for it was sent, so the swatches there had
+	 * nothing driving them. Asking for it here also prints the two wp.template
+	 * blocks the script reads a variation's price and availability from.
+	 */
+	wp_enqueue_script( 'wc-add-to-cart-variation' );
+
+	wp_localize_script(
+		'gueta-product',
+		'guetaProduct',
+		[
+			'addToCart' => class_exists( 'WC_AJAX' ) ? WC_AJAX::get_endpoint( 'add_to_cart' ) : '',
+		]
+	);
 }
 add_action( 'wp_enqueue_scripts', 'gueta_product_assets', 26 );
 
@@ -791,63 +808,13 @@ function gueta_print_diag() {
 		'queried_object_id'          => (int) get_queried_object_id(),
 		'queried_post_type'          => get_post_type( get_queried_object_id() ),
 		'builder_content_data_hooked' => (int) has_filter( 'elementor/frontend/builder_content_data', 'gueta_retarget_add_to_cart_data' ),
-		'render_content_hooked'      => (int) has_filter( 'elementor/widget/render_content', 'gueta_correct_add_to_cart_markup' ),
+		'render_content_hooked'      => (int) has_filter( 'elementor/widget/render_content', 'gueta_replace_add_to_cart_widget' ),
 		'events'                     => gueta_diag(),
 	];
 
 	echo "\n<!-- gueta-diag " . wp_json_encode( $summary, JSON_UNESCAPED_UNICODE ) . " -->\n";
 }
 add_action( 'wp_footer', 'gueta_print_diag', 999 );
-
-/**
- * Safety net for the above: if the rendered form still names another product,
- * replace it with the real add to cart form for this one.
- *
- * @param string                 $content Rendered widget HTML.
- * @param \Elementor\Widget_Base $widget  Widget instance.
- * @return string
- */
-function gueta_correct_add_to_cart_markup( $content, $widget ) {
-	if ( ! function_exists( 'is_product' ) || ! is_product() ) {
-		return $content;
-	}
-
-	$name = ( is_object( $widget ) && method_exists( $widget, 'get_name' ) ) ? $widget->get_name() : '';
-
-	if ( 'wc-add-to-cart' !== $name ) {
-		return $content;
-	}
-
-	$product = gueta_queried_product();
-	gueta_diag( 'render_content', [ 'widget' => $name, 'product' => $product ? $product->get_id() : 0, 'has_form' => false !== strpos( $content, 'add-to-cart' ) ] );
-
-	if ( ! $product ) {
-		return $content;
-	}
-
-	// A variable product's form carries a variations table; a wrong simple
-	// product's form carries an add-to-cart value that is not this product.
-	$matched = preg_match( '/name=["\']add-to-cart["\'][^>]*?value=["\'](\d+)["\']/', $content, $matches );
-	$correct_simple = $matched && (int) $matches[1] === $product->get_id();
-	$has_variations = false !== strpos( $content, 'variations_form' ) || false !== strpos( $content, 'variations' );
-
-	if ( $correct_simple || ( $product->is_type( 'variable' ) && $has_variations ) ) {
-		return $content;
-	}
-
-	// Render against this product, whatever the widget left in the global.
-	$previous           = $GLOBALS['product'] ?? null;
-	$GLOBALS['product'] = $product; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-
-	ob_start();
-	woocommerce_template_single_add_to_cart();
-	$correct = trim( (string) ob_get_clean() );
-
-	$GLOBALS['product'] = $previous; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-
-	return $correct ? '<div class="gueta-atc">' . $correct . '</div>' : $content;
-}
-add_filter( 'elementor/widget/render_content', 'gueta_correct_add_to_cart_markup', 10, 2 );
 
 /**
  * Reviews go straight after the single template, ahead of the footer.
@@ -884,40 +851,5 @@ function gueta_product_shortcodes() {
 	add_shortcode( 'gueta_gallery', $capture( 'gueta_render_product_gallery' ) );
 	add_shortcode( 'gueta_accordion', $capture( 'gueta_render_product_accordion' ) );
 	add_shortcode( 'gueta_reviews', $capture( 'gueta_render_reviews' ) );
-	add_shortcode( 'gueta_add_to_cart', 'gueta_add_to_cart_shortcode' );
-}
-
-/**
- * The add to cart form for the product being viewed, for use in a template.
- *
- * Renders WooCommerce's own form for the queried product, so a variable
- * product gets its variations (as swatch buttons) and a simple one its
- * quantity and button. Drop [gueta_add_to_cart] into a Shortcode widget in
- * place of a widget pinned to a fixed product.
- *
- * @return string
- */
-function gueta_add_to_cart_shortcode() {
-	$product = gueta_queried_product();
-
-	if ( ! $product && function_exists( 'wc_get_product' ) ) {
-		$candidate = wc_get_product( get_the_ID() );
-		$product   = $candidate instanceof WC_Product ? $candidate : null;
-	}
-
-	if ( ! $product ) {
-		return '';
-	}
-
-	$previous           = $GLOBALS['product'] ?? null;
-	$GLOBALS['product'] = $product; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-
-	ob_start();
-	woocommerce_template_single_add_to_cart();
-	$html = trim( (string) ob_get_clean() );
-
-	$GLOBALS['product'] = $previous; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-
-	return $html ? '<div class="gueta-atc">' . $html . '</div>' : '';
 }
 add_action( 'init', 'gueta_product_shortcodes' );
