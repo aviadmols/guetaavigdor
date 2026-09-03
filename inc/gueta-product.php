@@ -717,14 +717,19 @@ function gueta_replace_gallery_shortcode( $content, $widget ) {
 add_filter( 'elementor/widget/render_content', 'gueta_replace_gallery_shortcode', 10, 2 );
 
 /**
- * Retarget the Add to Cart widget in the template data, before any widget is
- * instantiated.
+ * Turn the Add to Cart widget into the buy box, in the template data, before
+ * any widget is instantiated.
  *
- * This is the earliest and most reliable place: Elementor hands over the raw
- * element tree of the document it is about to render, so rewriting the
- * widget's product_id here means its own render builds the form for this
- * product, keeping its button styling, without touching the global product or
- * the rendered HTML afterwards.
+ * This is the one place on this site that reliably reaches that widget. The
+ * diagnostic showed why: elementor/widget/render_content fires for the product
+ * content and shortcode widgets on this template but never for wc-add-to-cart,
+ * and pointing its product_id at the product being viewed left it rendering
+ * the same pinned product's form regardless. Elementor does hand over the raw
+ * element tree though, so the widget is swapped for a shortcode widget holding
+ * [gueta_buy], which renders through an ordinary shortcode instead.
+ *
+ * Settings whose names begin with an underscore are Elementor's own layout and
+ * visibility ones; they carry over so the widget keeps its place on the page.
  *
  * @param array $data    Element tree.
  * @param int   $post_id Document being rendered (the template, not the product).
@@ -754,9 +759,20 @@ function gueta_retarget_add_to_cart_data( $data, $post_id ) {
 			}
 
 			if ( 'widget' === ( $element['elType'] ?? '' ) && 'wc-add-to-cart' === ( $element['widgetType'] ?? '' ) ) {
-				$element['settings']               = isset( $element['settings'] ) && is_array( $element['settings'] ) ? $element['settings'] : [];
-				$element['settings']['product_id'] = $product_id;
-				gueta_diag( 'retargeted', [ 'to' => $product_id ] );
+				$settings = isset( $element['settings'] ) && is_array( $element['settings'] ) ? $element['settings'] : [];
+				$kept     = [];
+
+				foreach ( $settings as $key => $value ) {
+					if ( 0 === strpos( (string) $key, '_' ) ) {
+						$kept[ $key ] = $value;
+					}
+				}
+
+				$kept['shortcode']     = '[gueta_buy]';
+				$element['widgetType'] = 'shortcode';
+				$element['settings']   = $kept;
+
+				gueta_diag( 'converted', [ 'to' => $product_id ] );
 			}
 
 			if ( ! empty( $element['elements'] ) && is_array( $element['elements'] ) ) {
@@ -809,6 +825,7 @@ function gueta_print_diag() {
 		'queried_post_type'          => get_post_type( get_queried_object_id() ),
 		'builder_content_data_hooked' => (int) has_filter( 'elementor/frontend/builder_content_data', 'gueta_retarget_add_to_cart_data' ),
 		'render_content_hooked'      => (int) has_filter( 'elementor/widget/render_content', 'gueta_replace_add_to_cart_widget' ),
+		'buy_shortcode'              => (int) shortcode_exists( 'gueta_buy' ),
 		'events'                     => gueta_diag(),
 	];
 
