@@ -24,6 +24,12 @@ if ( ! $handled ) :
 		?>
 		<article <?php post_class( 'gueta-post' ); ?>>
 
+			<?php if ( has_post_thumbnail() ) : ?>
+				<figure class="gueta-post__cover">
+					<?php the_post_thumbnail( 'full', [ 'alt' => '' ] ); ?>
+				</figure>
+			<?php endif; ?>
+
 			<header class="gueta-post__head">
 				<div class="gueta-post__measure">
 					<?php gueta_blog_breadcrumb(); ?>
@@ -31,12 +37,6 @@ if ( ! $handled ) :
 					<?php gueta_blog_meta(); ?>
 				</div>
 			</header>
-
-			<?php if ( has_post_thumbnail() ) : ?>
-				<figure class="gueta-post__cover">
-					<?php the_post_thumbnail( 'full', [ 'alt' => '' ] ); ?>
-				</figure>
-			<?php endif; ?>
 
 			<div class="gueta-post__body">
 				<div class="gueta-post__measure">

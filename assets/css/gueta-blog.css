@@ -76,9 +76,10 @@
  * An article
  * ---------------------------------------------------------------------- */
 
+/* The heading sits under the picture, so the band opens beneath it. */
 .gueta-post__head {
 	background: var(--gueta-sand);
-	padding: 44px 0 52px;
+	padding: 38px 0 42px;
 }
 
 .gueta-post__title {
@@ -114,11 +115,15 @@
 	padding: 0 var(--gueta-gutter);
 }
 
+.gueta-post__cover {
+	padding-block-start: 32px;
+}
+
 .gueta-post__cover img {
 	border-radius: var(--gueta-radius);
 	display: block;
 	height: auto;
-	margin-top: -28px;
+	margin-bottom: 32px;
 	width: 100%;
 }
 
@@ -450,7 +455,7 @@
 
 	.gueta-post__cover img {
 		border-radius: 8px;
-		margin-top: -18px;
+		margin-bottom: 22px;
 	}
 }
 
