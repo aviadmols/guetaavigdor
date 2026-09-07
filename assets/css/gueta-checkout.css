@@ -550,14 +550,45 @@
 }
 
 .woocommerce-checkout #payment li.wc_payment_method {
+	align-items: center;
 	background: var(--gueta-paper);
 	border: 1px solid var(--gueta-rule);
 	border-radius: 10px;
+	column-gap: 10px;
 	cursor: pointer;
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr);
 	list-style: none;
 	margin: 0;
 	padding: 16px 18px;
+	row-gap: 10px;
 	transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.woocommerce-checkout #payment li.wc_payment_method > input[type="radio"] {
+	grid-column: 1;
+	margin: 0;
+}
+
+.woocommerce-checkout #payment li.wc_payment_method > label {
+	grid-column: 2;
+	margin: 0;
+}
+
+/* The gateway's own note sits under both, across the card. */
+.woocommerce-checkout #payment li.wc_payment_method > .payment_box {
+	grid-column: 1 / -1;
+}
+
+/*
+ * The gateway sizes its card logos inline at 25px, which on a card this
+ * wide pushed the wording onto three lines. Force, because an inline style
+ * is the one thing a stylesheet cannot outrank otherwise.
+ */
+.woocommerce-checkout #payment label img {
+	height: 20px !important;
+	vertical-align: middle;
+	width: auto !important;
 }
 
 .woocommerce-checkout #payment li.wc_payment_method:hover {
@@ -579,12 +610,13 @@
 }
 
 .woocommerce-checkout #payment .payment_box {
-	background: none;
+	background: var(--gueta-sand);
+	border-radius: 8px;
 	color: var(--gueta-muted);
 	font-size: 13px;
 	line-height: 1.6;
-	margin: 10px 0 0;
-	padding: 0;
+	margin: 0;
+	padding: 12px 14px;
 }
 
 .woocommerce-checkout #payment .payment_box::before {
@@ -596,15 +628,19 @@
 	margin: 18px 0;
 }
 
-/* The one button that costs money wears the shop's orange. */
+/*
+ * The one button that costs money wears the shop's orange. It was coming
+ * out light blue at a three pixel radius from a rule that does not appear
+ * in any stylesheet the page will enumerate, so this one is forced.
+ */
 .woocommerce-checkout #place_order {
-	background: var(--gueta-accent-warm);
-	border: 0;
-	border-radius: 8px;
-	color: var(--gueta-paper);
+	background: var(--gueta-accent-warm) !important;
+	border: 0 !important;
+	border-radius: 8px !important;
+	color: var(--gueta-paper) !important;
 	cursor: pointer;
 	font-family: inherit;
-	font-size: 17px;
+	font-size: 17px !important;
 	font-weight: 600;
 	min-height: 56px;
 	padding: 0 24px;
