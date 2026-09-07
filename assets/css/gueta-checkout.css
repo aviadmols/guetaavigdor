@@ -349,33 +349,11 @@
 }
 
 /* -------------------------------------------------------------------------
- * Notices, coupon and the returning customer
+ * Coupon and the returning customer
+ *
+ * Notices are styled once in gueta-header.css, so they look the same here
+ * as they do anywhere else in the shop.
  * ---------------------------------------------------------------------- */
-
-.woocommerce-checkout .woocommerce-info,
-.woocommerce-checkout .woocommerce-error,
-.woocommerce-checkout .woocommerce-message {
-	background: var(--gueta-sand);
-	border: 1px solid var(--gueta-rule);
-	border-radius: 8px;
-	border-top-width: 1px;
-	color: var(--gueta-ink);
-	font-size: 14px;
-	line-height: 1.6;
-	list-style: none;
-	margin: 0 0 20px;
-	padding: 14px 16px;
-}
-
-.woocommerce-checkout .woocommerce-error {
-	border-color: var(--gueta-accent);
-}
-
-.woocommerce-checkout .woocommerce-info::before,
-.woocommerce-checkout .woocommerce-error::before,
-.woocommerce-checkout .woocommerce-message::before {
-	display: none;
-}
 
 .woocommerce-checkout .woocommerce-form-login,
 .woocommerce-checkout .checkout_coupon {

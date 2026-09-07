@@ -16,6 +16,8 @@
 	--gueta-rule: #e5e5e5;
 	--gueta-sand: #fafafa;
 	--gueta-accent: #b42318;
+	/* Only the success notice wears this. */
+	--gueta-good: #10794a;
 	/* The shop's own orange, used for calls to action. */
 	--gueta-accent-warm: #f0591d;
 	--gueta-bar-height: 96px;
@@ -1889,4 +1891,131 @@ body.gueta-has-cats .elementor > .e-con:first-child {
 	stroke-linecap: round;
 	stroke-width: 2;
 	width: 12px;
+}
+
+/* -------------------------------------------------------------------------
+ * WooCommerce notices
+ *
+ * The default is a grey slab with a tick drawn in a pseudo element and a
+ * border only along the top. These are cards on the page's own terms: a rule
+ * all the way round, the eight pixel radius the drawer uses, a coloured bar
+ * down the leading edge to say at a glance which of the three it is, and the
+ * action inside wearing the theme's button.
+ *
+ * The colour bar is an inset shadow rather than a border, so the four sides
+ * keep the same one pixel rule and nothing shifts by three pixels.
+ * ---------------------------------------------------------------------- */
+
+.woocommerce-notices-wrapper:empty {
+	display: none;
+}
+
+.woocommerce-notices-wrapper {
+	margin-inline: auto;
+	max-width: var(--gueta-max);
+	padding: 20px var(--gueta-gutter) 0;
+}
+
+.woocommerce-message,
+.woocommerce-info,
+.woocommerce-error {
+	align-items: center;
+	background: var(--gueta-paper);
+	border: 1px solid var(--gueta-rule);
+	border-radius: 8px;
+	box-shadow: inset 3px 0 0 0 var(--gueta-soft);
+	color: var(--gueta-ink);
+	display: flex;
+	flex-wrap: wrap;
+	font-size: 15px;
+	gap: 10px 16px;
+	line-height: 1.6;
+	list-style: none;
+	margin: 0 0 16px;
+	padding: 15px 18px;
+}
+
+[dir="rtl"] .woocommerce-message,
+[dir="rtl"] .woocommerce-info,
+[dir="rtl"] .woocommerce-error {
+	box-shadow: inset -3px 0 0 0 var(--gueta-soft);
+}
+
+.woocommerce-message {
+	box-shadow: inset 3px 0 0 0 var(--gueta-good);
+}
+
+[dir="rtl"] .woocommerce-message {
+	box-shadow: inset -3px 0 0 0 var(--gueta-good);
+}
+
+.woocommerce-error {
+	box-shadow: inset 3px 0 0 0 var(--gueta-accent);
+}
+
+[dir="rtl"] .woocommerce-error {
+	box-shadow: inset -3px 0 0 0 var(--gueta-accent);
+}
+
+/* WooCommerce draws its own tick and cross in a pseudo element. */
+.woocommerce-message::before,
+.woocommerce-info::before,
+.woocommerce-error::before {
+	display: none;
+}
+
+.woocommerce-error {
+	display: block;
+}
+
+.woocommerce-error li {
+	list-style: none;
+	margin: 0;
+}
+
+.woocommerce-error li + li {
+	margin-top: 6px;
+}
+
+/* The action sits at the far end, and drops below on a narrow screen. */
+.woocommerce-message .button,
+.woocommerce-info .button,
+.woocommerce-error .button {
+	align-items: center;
+	background: var(--gueta-ink);
+	border: 0;
+	border-radius: 8px;
+	color: var(--gueta-paper);
+	display: inline-flex;
+	flex: none;
+	font-size: 14px;
+	font-weight: 600;
+	margin-inline-start: auto;
+	min-height: 40px;
+	padding: 0 20px;
+	text-decoration: none;
+	transition: background-color .25s ease;
+	white-space: nowrap;
+}
+
+.woocommerce-message .button:hover,
+.woocommerce-info .button:hover,
+.woocommerce-error .button:hover {
+	background: var(--gueta-accent-warm);
+	color: var(--gueta-paper);
+}
+
+@media (max-width: 560px) {
+	.woocommerce-message,
+	.woocommerce-info,
+	.woocommerce-error {
+		font-size: 14px;
+	}
+
+	.woocommerce-message .button,
+	.woocommerce-info .button,
+	.woocommerce-error .button {
+		margin-inline-start: 0;
+		width: 100%;
+	}
 }
