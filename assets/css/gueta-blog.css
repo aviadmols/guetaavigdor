@@ -22,12 +22,18 @@
 	box-sizing: border-box;
 }
 
+/*
+ * The measure is the width of the words, not of the box around them, so the
+ * gutter is added to the cap rather than taken out of it. With the site's
+ * hundred pixel gutter it was eating both sides of a 760px box and leaving a
+ * 560px column, narrower than intended and out of step with everything else.
+ */
 .gueta-post__measure,
 .gueta-magazine__inner,
 .gueta-related__inner,
 .gueta-lead__inner {
 	margin-inline: auto;
-	max-width: 760px;
+	max-width: calc(760px + var(--gueta-gutter) * 2);
 	padding-inline: var(--gueta-gutter);
 	width: 100%;
 }
@@ -96,9 +102,15 @@
 	margin: 0;
 }
 
+/*
+ * The picture breaks out past the words on both sides, which is what gives
+ * an article its shape. On the site's full grid it ran seventeen hundred
+ * pixels over a column of seven hundred and looked like two pages stapled
+ * together.
+ */
 .gueta-post__cover {
 	margin: 0 auto;
-	max-width: var(--gueta-max);
+	max-width: calc(1080px + var(--gueta-gutter) * 2);
 	padding: 0 var(--gueta-gutter);
 }
 
