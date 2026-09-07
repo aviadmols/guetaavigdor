@@ -132,7 +132,7 @@ function gueta_search_index_currency() {
 	}
 
 	return [
-		's'    => get_woocommerce_currency_symbol(),
+		's'    => gueta_plain_text( get_woocommerce_currency_symbol() ),
 		'd'    => wc_get_price_decimals(),
 		'ds'   => wc_get_price_decimal_separator(),
 		'ts'   => wc_get_price_thousand_separator(),
@@ -290,14 +290,14 @@ function gueta_search_index_row( $post_id, $home, $uploads ) {
 	$size = $product ? 'woocommerce_thumbnail' : 'thumbnail';
 
 	return [
-		get_the_title( $post_id ),
+		gueta_plain_text( get_the_title( $post_id ) ),
 		gueta_search_index_relative( (string) get_permalink( $post_id ), $home ),
 		gueta_search_index_relative( (string) get_the_post_thumbnail_url( $post_id, $size ), $uploads ),
 		$prices[0],
 		$prices[1],
 		$prices[2],
-		$product ? (string) $product->get_sku() : '',
-		implode( ' ', $keywords ),
+		$product ? gueta_plain_text( $product->get_sku() ) : '',
+		gueta_plain_text( implode( ' ', $keywords ) ),
 	];
 }
 
@@ -336,13 +336,13 @@ function gueta_search_index_terms( $taxonomy, $home, $with_path ) {
 		}
 
 		$row = [
-			$term->name,
+			gueta_plain_text( $term->name ),
 			gueta_search_index_relative( $link, $home ),
 			gueta_term_product_count( $term ),
 		];
 
 		if ( $with_path ) {
-			$row[] = gueta_term_path( $term );
+			$row[] = gueta_plain_text( gueta_term_path( $term ) );
 		}
 
 		$rows[] = $row;
@@ -375,7 +375,7 @@ function gueta_search_index_articles( $home ) {
 
 	foreach ( $query->posts as $post_id ) {
 		$rows[] = [
-			get_the_title( $post_id ),
+			gueta_plain_text( get_the_title( $post_id ) ),
 			gueta_search_index_relative( (string) get_permalink( $post_id ), $home ),
 		];
 	}

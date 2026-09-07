@@ -138,6 +138,24 @@ function gueta_search_articles( $term ) {
 }
 
 /**
+ * A title as characters rather than as HTML.
+ *
+ * WordPress runs titles through wptexturize, which turns quotation marks and
+ * dashes into entities, and WooCommerce hands back the shekel sign as one
+ * too. Anything that escapes on output, esc_html here or the browser's own
+ * escaping in the suggestion panel, then escapes the ampersand that starts
+ * the entity, and the shopper reads &#8362; where a price should be.
+ *
+ * Decoding first means one escape at the end, which is the right number.
+ *
+ * @param string $value Text as WordPress hands it over.
+ * @return string
+ */
+function gueta_plain_text( $value ) {
+	return html_entity_decode( wp_strip_all_tags( (string) $value ), ENT_QUOTES, 'UTF-8' );
+}
+
+/**
  * The breadcrumb of a category, so "עץ אורן" reads as "עצים › עץ אורן".
  *
  * @param WP_Term $term Product category.
@@ -243,9 +261,9 @@ function gueta_render_suggest_terms( $title, $terms, $with_path ) {
 				?>
 				<li>
 					<a href="<?php echo esc_url( $link ); ?>">
-						<span class="gueta-suggest__term"><?php echo esc_html( $term->name ); ?></span>
+						<span class="gueta-suggest__term"><?php echo esc_html( gueta_plain_text( $term->name ) ); ?></span>
 						<?php if ( $path ) : ?>
-							<span class="gueta-suggest__path"><?php echo esc_html( $path ); ?></span>
+							<span class="gueta-suggest__path"><?php echo esc_html( gueta_plain_text( $path ) ); ?></span>
 						<?php endif; ?>
 						<span class="gueta-suggest__count"><?php echo esc_html( number_format_i18n( gueta_term_product_count( $term ) ) ); ?></span>
 					</a>
@@ -273,7 +291,7 @@ function gueta_render_suggest_articles( $post_ids ) {
 			<?php foreach ( $post_ids as $post_id ) : ?>
 				<li>
 					<a href="<?php echo esc_url( (string) get_permalink( $post_id ) ); ?>">
-						<span class="gueta-suggest__term"><?php echo esc_html( get_the_title( $post_id ) ); ?></span>
+						<span class="gueta-suggest__term"><?php echo esc_html( gueta_plain_text( get_the_title( $post_id ) ) ); ?></span>
 					</a>
 				</li>
 			<?php endforeach; ?>
@@ -305,7 +323,7 @@ function gueta_render_suggest_product( $post_id ) {
 			<?php endif; ?>
 		</span>
 		<span class="gueta-suggest__body">
-			<span class="gueta-suggest__title"><?php echo esc_html( get_the_title( $post_id ) ); ?></span>
+			<span class="gueta-suggest__title"><?php echo esc_html( gueta_plain_text( get_the_title( $post_id ) ) ); ?></span>
 			<?php if ( $product ) : ?>
 				<span class="gueta-suggest__price"><?php echo wp_kses_post( $product->get_price_html() ); ?></span>
 			<?php endif; ?>
