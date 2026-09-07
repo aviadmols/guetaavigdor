@@ -1,0 +1,265 @@
+- generic [active] [ref=f44e1]:
+  - link "WhatsApp" [ref=f44e3] [cursor=pointer]:
+    - /url: https://api.whatsapp.com/send?phone=972509512625
+  - link "דילוג לתוכן" [ref=f44e6] [cursor=pointer]:
+    - /url: "#content"
+  - generic [ref=f44e7]:
+    - button "הודעה קודמת" [ref=f44e8] [cursor=pointer]
+    - generic [ref=f44e11]:
+      - paragraph [ref=f44e12]: משלוח מהיר לכל הארץ
+      - paragraph: ייעוץ מקצועי בטלפון לפני כל הזמנה
+      - paragraph: מאות מוצרים במלאי מיידי
+    - button "הודעה הבאה" [ref=f44e13] [cursor=pointer]
+  - banner [ref=f44e16]:
+    - generic [ref=f44e17]:
+      - link [ref=f44e19] [cursor=pointer]:
+        - /url: https://guetaavigdor.ussl.co/
+        - img "גואטה אביגדור" [ref=f44e20]
+      - search [ref=f44e23]:
+        - generic [ref=f44e24]: חיפוש באתר
+        - generic [ref=f44e25]:
+          - button "חיפוש" [ref=f44e26] [cursor=pointer]
+          - combobox "חיפוש באתר" [ref=f44e30]
+      - generic [ref=f44e31]:
+        - link "התחברות" [ref=f44e32] [cursor=pointer]:
+          - /url: https://guetaavigdor.ussl.co/%d7%94%d7%97%d7%a9%d7%91%d7%95%d7%9f-%d7%a9%d7%9c%d7%99/
+        - button "עגלת קניות" [ref=f44e36] [cursor=pointer]:
+          - generic [ref=f44e41]: "1"
+    - navigation "ניווט ראשי" [ref=f44e43]:
+      - list [ref=f44e44]:
+        - listitem [ref=f44e45]:
+          - link "כלי עבודה חשמליים" [ref=f44e46] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%9b%d7%9c%d7%99-%d7%a2%d7%91%d7%95%d7%93%d7%94/
+        - listitem [ref=f44e50]:
+          - link "מוצרי פרזול" [ref=f44e51] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%9e%d7%95%d7%a6%d7%a8%d7%99-%d7%a4%d7%a8%d7%96%d7%95%d7%9c/
+        - listitem [ref=f44e55]:
+          - link "כלי עבודה ידניים" [ref=f44e56] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%9b%d7%9c%d7%99-%d7%a2%d7%91%d7%95%d7%93%d7%94-%d7%99%d7%93%d7%a0%d7%99%d7%99%d7%9d/
+        - listitem [ref=f44e60]:
+          - link "מבצעים" [ref=f44e61] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/sale-2/
+        - listitem [ref=f44e63]:
+          - link "עצים" [ref=f44e64] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%a2%d7%a6%d7%99%d7%9d/
+        - listitem [ref=f44e68]:
+          - link "תחזוקה, ניקיון ושמנים" [ref=f44e69] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%aa%d7%97%d7%96%d7%95%d7%a7%d7%94-%d7%a0%d7%99%d7%a7%d7%99%d7%95%d7%9f-%d7%95%d7%a9%d7%9e%d7%a0%d7%99%d7%9d/
+        - listitem [ref=f44e71]:
+          - link "הדבקה ואטימה" [ref=f44e72] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%97%d7%95%d7%9e%d7%a8%d7%99-%d7%94%d7%93%d7%91%d7%a7%d7%94-%d7%95%d7%90%d7%98%d7%99%d7%9e%d7%94/
+        - listitem [ref=f44e76]:
+          - link "עשה זאת בעצמך" [ref=f44e77] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%99%d7%a6%d7%99%d7%a8%d7%94/
+        - listitem [ref=f44e81]:
+          - link "כל הקטגוריות" [ref=f44e82] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/catalog/
+  - main [ref=f44e84]:
+    - form "תשלום" [ref=f44e94]:
+      - generic [ref=f44e95]:
+        - generic [ref=f44e96]:
+          - generic [ref=f44e98]:
+            - text: לקוח חוזר?
+            - link "לחץ כאן להתחברות" [ref=f44e99] [cursor=pointer]:
+              - /url: "#"
+          - generic [ref=f44e100]:
+            - generic [ref=f44e101]:
+              - generic [ref=f44e102]:
+                - heading "פרטי תשלום" [level=3] [ref=f44e103]
+                - generic [ref=f44e104]:
+                  - paragraph [ref=f44e105]:
+                    - generic: שם פרטי
+                    - textbox "שם פרטי" [ref=f44e107]
+                  - paragraph [ref=f44e108]:
+                    - generic: שם משפחה
+                    - textbox "שם משפחה" [ref=f44e110]
+                  - paragraph [ref=f44e111]:
+                    - generic: טלפון
+                    - textbox "טלפון" [ref=f44e113]
+                  - paragraph [ref=f44e114]:
+                    - generic: כתובת אימייל
+                    - textbox "כתובת אימייל" [ref=f44e116]
+                  - paragraph [ref=f44e117]:
+                    - generic: עיר או יישוב
+                    - combobox "עיר או יישוב" [ref=f44e120]
+                  - paragraph [ref=f44e121]:
+                    - generic: רחוב
+                    - textbox "רחוב" [ref=f44e123]:
+                      - /placeholder: מספר בית ושם רחוב
+                  - paragraph [ref=f44e124]:
+                    - generic: מספר בית
+                    - textbox "מספר בית" [ref=f44e126]:
+                      - /placeholder: " "
+                  - paragraph [ref=f44e127]:
+                    - generic: מיקוד (אופציונלי)
+                    - textbox "מיקוד (אופציונלי)" [ref=f44e129]:
+                      - /placeholder: " "
+                  - paragraph [ref=f44e130]:
+                    - generic: דירה, כניסה או קומה (אופציונלי)
+                    - textbox "דירה, כניסה או קומה (אופציונלי)" [ref=f44e132]:
+                      - /placeholder: דירה, סוויטה, יחידה וכו' (אופציונלי)
+                  - paragraph [ref=f44e133]:
+                    - generic: שם החברה (אופציונלי)
+                    - textbox "שם החברה (אופציונלי)" [ref=f44e135]:
+                      - /placeholder: שם החברה
+              - paragraph [ref=f44e137]:
+                - generic [ref=f44e138]:
+                  - checkbox "צור חשבון?" [ref=f44e139]
+                  - text: צור חשבון?
+            - generic [ref=f44e140]:
+              - generic [ref=f44e141]:
+                - heading "לשלוח לכתובת אחרת?" [level=3] [ref=f44e142]:
+                  - generic [ref=f44e143] [cursor=pointer]:
+                    - checkbox "לשלוח לכתובת אחרת?" [checked] [ref=f44e144]
+                    - generic [ref=f44e145]: לשלוח לכתובת אחרת?
+                - generic [ref=f44e147]:
+                  - paragraph [ref=f44e148]:
+                    - generic: שם פרטי
+                    - textbox "שם פרטי" [ref=f44e150]
+                  - paragraph [ref=f44e151]:
+                    - generic: שם משפחה
+                    - textbox "שם משפחה" [ref=f44e153]
+                  - paragraph [ref=f44e154]:
+                    - generic: עיר או יישוב
+                    - combobox "עיר או יישוב" [ref=f44e157]
+                  - paragraph [ref=f44e158]:
+                    - generic: רחוב
+                    - textbox "רחוב" [ref=f44e160]:
+                      - /placeholder: מספר בית ושם רחוב
+                  - paragraph [ref=f44e161]:
+                    - generic: מספר בית
+                    - textbox "מספר בית" [ref=f44e163]:
+                      - /placeholder: " "
+                  - paragraph [ref=f44e164]:
+                    - generic: מיקוד (אופציונלי)
+                    - textbox "מיקוד (אופציונלי)" [ref=f44e166]:
+                      - /placeholder: " "
+                  - paragraph [ref=f44e167]:
+                    - generic: דירה, כניסה או קומה (אופציונלי)
+                    - textbox "דירה, כניסה או קומה (אופציונלי)" [ref=f44e169]:
+                      - /placeholder: דירה, סוויטה, יחידה וכו' (אופציונלי)
+                  - paragraph [ref=f44e170]:
+                    - generic: שם החברה (אופציונלי)
+                    - textbox "שם החברה (אופציונלי)" [ref=f44e172]:
+                      - /placeholder: שם החברה
+                  - paragraph [ref=f44e173]:
+                    - generic: טלפון
+                    - textbox "טלפון" [ref=f44e175]:
+                      - /placeholder: " "
+              - paragraph [ref=f44e178]:
+                - generic: הערות להזמנה (אופציונלי)
+                - textbox "הערות להזמנה (אופציונלי)" [ref=f44e180]:
+                  - /placeholder: שעות מסירה מועדפות, קומה, גישה למשאית וכל דבר שיעזור לנו.
+        - generic [ref=f44e182]:
+          - generic [ref=f44e183]:
+            - heading "ההזמנה שלך" [level=3] [ref=f44e184]
+            - table [ref=f44e186]:
+              - rowgroup [ref=f44e187]:
+                - row [ref=f44e188]:
+                  - columnheader "מוצר" [ref=f44e189]
+                  - columnheader "סכום ביניים" [ref=f44e190]
+              - rowgroup [ref=f44e191]:
+                - row [ref=f44e192]:
+                  - cell [ref=f44e193]:
+                    - text: איירלס מרסס צבע בוכנתי + אביזרים HUNTER
+                    - strong [ref=f44e194]: × 1
+                  - cell "₪1,700.00" [ref=f44e195]
+              - rowgroup [ref=f44e198]:
+                - row [ref=f44e199]:
+                  - rowheader "סכום ביניים" [ref=f44e200]
+                  - cell "₪1,700.00" [ref=f44e201]
+                - row [ref=f44e204]:
+                  - 'cell "משלוח משלוח עד הבית (עד 7 ימי עסקים): ₪45.00 איסוף עצמי" [ref=f44e205]':
+                    - generic [ref=f44e206]: משלוח
+                    - list [ref=f44e207]:
+                      - listitem [ref=f44e208] [cursor=pointer]:
+                        - 'radio "משלוח עד הבית (עד 7 ימי עסקים): ₪45.00" [checked] [ref=f44e209]'
+                        - generic [ref=f44e210]:
+                          - text: "משלוח עד הבית (עד 7 ימי עסקים):"
+                          - generic [ref=f44e211]: ₪45.00
+                      - listitem [ref=f44e213] [cursor=pointer]:
+                        - radio "איסוף עצמי" [ref=f44e214]
+                        - text: איסוף עצמי
+                - row [ref=f44e215]:
+                  - rowheader "סה\"כ" [ref=f44e216]
+                  - cell "₪1,745.00 (כולל ₪259.32 מע\"מ)" [ref=f44e217]:
+                    - strong [ref=f44e218]:
+                      - generic [ref=f44e219]: ₪1,745.00
+                    - generic [ref=f44e221]:
+                      - text: (כולל
+                      - generic [ref=f44e222]: ₪259.32
+                      - text: מע"מ)
+          - paragraph [ref=f44e225]:
+            - text: יש לך קופון?
+            - link "לחץ כאן כדי להזין את קוד הקופון שלך" [ref=f44e226] [cursor=pointer]:
+              - /url: "#"
+          - generic [ref=f44e228]:
+            - list [ref=f44e229]:
+              - listitem [ref=f44e230] [cursor=pointer]:
+                - radio "תשלום באשראי, אפל וגוגל פיי" [checked] [ref=f44e231]
+                - generic [ref=f44e232]: תשלום באשראי, אפל וגוגל פיי
+                - generic [ref=f44e236]: הזינו כרטיס אשראי או שלמו בקליק באמצעות Apple Pay או Google Pay במסך הבא.
+              - listitem [ref=f44e237] [cursor=pointer]:
+                - radio "תשלום טלפוני" [ref=f44e238]
+                - generic [ref=f44e239]: תשלום טלפוני
+            - generic [ref=f44e240]:
+              - paragraph [ref=f44e242]:
+                - generic [ref=f44e243]:
+                  - checkbox "קראתי והסכמתי אל תנאי שימוש" [ref=f44e244]
+                  - generic [ref=f44e245]:
+                    - text: קראתי והסכמתי אל
+                    - link "תנאי שימוש" [ref=f44e246] [cursor=pointer]:
+                      - /url: https://guetaavigdor.ussl.co/terms/
+              - button "שליחת הזמנה" [ref=f44e247] [cursor=pointer]
+  - contentinfo [ref=f44e249]:
+    - generic [ref=f44e257]:
+      - generic [ref=f44e259]:
+        - paragraph [ref=f44e262]: גואטה אביגדור בע”מ.
+        - paragraph [ref=f44e265]: הינה חברה ישראלית הנמצאת בבעלות משפחתית מלאה ועוסקת בתחום העץ והאביזרים הנדרשים לצורך התקנה והקמה של גגות רעפים פרגולות ודקים למגזר העסקי והפרטי.
+        - generic [ref=f44e268]:
+          - link "דברו איתנו" [ref=f44e270] [cursor=pointer]:
+            - /url: https://api.whatsapp.com/send?phone=972509512625
+            - generic [aria-hidden] [ref=f44e271]: 
+          - heading [level=3] [ref=f44e273]:
+            - link "דברו איתנו" [ref=f44e274] [cursor=pointer]:
+              - /url: https://api.whatsapp.com/send?phone=972509512625
+      - generic [ref=f44e276]:
+        - paragraph [ref=f44e279]: קופצים?
+        - generic [ref=f44e281]:
+          - paragraph [ref=f44e282]: א-ה בין השעות 07:30 ועד 16:30יום ו’ בין השעות 07:30 עד 13:00
+          - paragraph [ref=f44e283]: רח׳ זאב שלנג 3 א.ת.ח ראשל״צ(מאחורי הסינמה סיטי)
+          - paragraph [ref=f44e284]:
+            - text: דברו איתנו. 050-9512625
+            - link "info@guetaavigdor.co.il" [ref=f44e285] [cursor=pointer]:
+              - /url: mailto:info@guetaavigdor.co.il
+      - generic [ref=f44e287]:
+        - paragraph [ref=f44e290]: סושיאלס.
+        - list [ref=f44e293]:
+          - listitem [ref=f44e294]:
+            - link [ref=f44e295] [cursor=pointer]:
+              - /url: https://www.tiktok.com/@guetawood
+              - generic [aria-hidden] [ref=f44e297]: 
+          - listitem [ref=f44e298]:
+            - link [ref=f44e299] [cursor=pointer]:
+              - /url: https://www.instagram.com/gueta_avigdor/
+              - generic [aria-hidden] [ref=f44e301]: 
+          - listitem [ref=f44e302]:
+            - link [ref=f44e303] [cursor=pointer]:
+              - /url: https://www.facebook.com/guetaavigdor/?locale=he_IL
+              - generic [aria-hidden] [ref=f44e305]: 
+        - paragraph [ref=f44e308]: מבצעים, מוצרים חדשים וטיפים מקצועיים.
+        - form "ניוזלטר" [ref=f44e311]:
+          - generic [ref=f44e312]:
+            - generic [ref=f44e313]:
+              - generic [ref=f44e314] [cursor=pointer]: אימייל
+              - textbox "אימייל" [ref=f44e315]
+            - button "שליחה" [ref=f44e317] [cursor=pointer]:
+              - generic [ref=f44e319]:
+                - generic [aria-hidden] [ref=f44e320]: 
+                - generic [ref=f44e321]: שליחה
+    - paragraph [ref=f44e328]:
+      - text: © 2026 כל הזכויות שמורות לגואטה אביגדור מחסן עצים | תקנון האתר | הצהרת נגישות | פרטיות | אתר
+      - link "tabuzzco" [ref=f44e329] [cursor=pointer]:
+        - /url: https://tabuzzco.com
+  - generic [ref=f44e330]: desktop
+  - status [ref=f44e331]

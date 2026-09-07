@@ -181,24 +181,35 @@
 
 .woocommerce-checkout form.checkout .form-row:has(input.input-text) > label,
 .woocommerce-checkout form.checkout .form-row:has(textarea) > label {
+	background: transparent;
 	color: var(--gueta-soft);
 	font-size: 16px;
 	font-weight: 400;
-	inset-block-start: 19px;
-	inset-inline-start: 17px;
+	inset-inline-start: 11px;
+	line-height: 1.4;
 	margin: 0;
+	padding-inline: 6px;
 	pointer-events: none;
 	position: absolute;
-	transition: color .15s ease, font-size .15s ease, inset-block-start .15s ease;
+	/* Physical and forced: see the note under the raised state. */
+	top: 18px !important;
+	transition: background-color .15s ease, color .15s ease, font-size .15s ease, top .15s ease;
 }
 
 .woocommerce-checkout form.checkout .form-row:has(input.input-text:focus) > label,
 .woocommerce-checkout form.checkout .form-row:has(input.input-text:not(:placeholder-shown)) > label,
 .woocommerce-checkout form.checkout .form-row:has(textarea:focus) > label,
 .woocommerce-checkout form.checkout .form-row:has(textarea:not(:placeholder-shown)) > label {
+	background: var(--gueta-paper);
 	color: var(--gueta-muted);
-	font-size: 11px;
-	inset-block-start: 9px;
+	font-size: 12px;
+	/*
+	 * Physical top rather than the logical property, and forced. Something
+	 * on this site pins these labels with a rule that does not appear in any
+	 * stylesheet the page will enumerate, the fifth time that has come up
+	 * here, and it reaches inset-block-start but not top.
+	 */
+	top: -11px !important;
 }
 
 /* Anything else keeps a label of the ordinary kind. */
@@ -237,7 +248,7 @@
 	height: auto;
 	line-height: 1.4;
 	min-height: 58px;
-	padding: 25px 16px 8px;
+	padding: 16px 16px;
 	transition: border-color .2s ease;
 	width: 100%;
 }
@@ -287,7 +298,7 @@
 
 .woocommerce-checkout .form-row textarea {
 	min-height: 108px;
-	padding-top: 28px;
+	padding-top: 18px;
 	resize: vertical;
 }
 
