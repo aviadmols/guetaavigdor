@@ -233,7 +233,7 @@
 
 .gueta-announce {
 	align-items: center;
-	background: var(--gueta-ink);
+	background: var(--gueta-accent-warm);
 	color: var(--gueta-paper);
 	display: flex;
 	gap: 8px;
@@ -246,12 +246,13 @@
 .gueta-announce__viewport {
 	display: grid;
 	flex: 1;
-	min-height: 50px;
+	min-height: 40px;
 	place-items: center;
 }
 
 .gueta-announce__item {
-	font-size: 13px;
+	font-size: 16px;
+	font-weight: 600;
 	grid-area: 1 / 1;
 	letter-spacing: .02em;
 	margin: 0;
