@@ -255,6 +255,15 @@
 			} catch (error) {
 				// Storage can be refused; the toggle still works for this view.
 			}
+
+			/*
+			 * The comparison bar lives in the footer and is driven by its own
+			 * script, which has no way to see this switch move. The storage event
+			 * only reaches other tabs, so say it out loud for this one.
+			 */
+			document.dispatchEvent(new CustomEvent('gueta:compare-mode', {
+				detail: { on: compareToggle.checked }
+			}));
 		});
 
 		try {

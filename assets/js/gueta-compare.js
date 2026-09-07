@@ -16,6 +16,8 @@
 	}
 
 	var STORAGE_KEY = 'guetaCompare';
+	// Written by the archive toolbar's switch, which owns compare mode.
+	var MODE_KEY = 'guetaCompareMode';
 	var max = settings.max || 5;
 	var list = bar.querySelector('[data-compare-list]');
 	var counter = bar.querySelector('[data-compare-count]');
@@ -32,6 +34,22 @@
 			return Array.isArray(parsed) ? parsed.map(Number).filter(Boolean).slice(0, max) : [];
 		} catch (error) {
 			return [];
+		}
+	}
+
+	/**
+	 * Whether the shopper has compare mode switched on. With it off the card
+	 * switches are hidden, so the bar has nothing to stand for and stays away,
+	 * even when a selection from earlier is still in storage.
+	 */
+	function comparing() {
+		try {
+			return Boolean(window.localStorage.getItem(MODE_KEY));
+		} catch (error) {
+			// A private window refuses storage; read the switch itself instead.
+			var toggle = document.querySelector('[data-archive-compare-toggle]');
+
+			return Boolean(toggle && toggle.checked);
 		}
 	}
 
@@ -105,7 +123,7 @@
 
 		list.innerHTML = html;
 
-		if (selection.length) {
+		if (selection.length && comparing()) {
 			bar.hidden = false;
 			window.requestAnimationFrame(function () {
 				bar.classList.add('is-visible');
@@ -114,7 +132,8 @@
 			bar.classList.remove('is-visible');
 			closeDrawer();
 			window.setTimeout(function () {
-				if (!selection.length) {
+				// The switch may have gone back on while the bar slid away.
+				if (!(selection.length && comparing())) {
 					bar.hidden = true;
 				}
 			}, 320);
@@ -299,11 +318,18 @@
 	// Cards fetched by the archive filter need their switches reconciled.
 	document.addEventListener('gueta:cards-rendered', syncSwitches);
 
+	// The toolbar switch announces compare mode; the bar comes and goes with it.
+	document.addEventListener('gueta:compare-mode', function () {
+		renderBar();
+	});
+
 	// Another tab changing the selection keeps this one in step.
 	window.addEventListener('storage', function (event) {
 		if (STORAGE_KEY === event.key) {
 			selection = read();
 			refresh(isDrawerOpen());
+		} else if (MODE_KEY === event.key) {
+			renderBar();
 		}
 	});
 
