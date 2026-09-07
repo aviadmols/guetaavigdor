@@ -23,6 +23,77 @@ function gueta_force_ajax_add_to_cart( $value ) {
 add_filter( 'option_woocommerce_enable_ajax_add_to_cart', 'gueta_force_ajax_add_to_cart' );
 add_filter( 'default_option_woocommerce_enable_ajax_add_to_cart', 'gueta_force_ajax_add_to_cart' );
 
+/* -------------------------------------------------------------------------
+ * There is no cart page
+ *
+ * The drawer is the cart. The page stays assigned in WooCommerce, because
+ * wc_get_cart_url() is read all over core and by gateways, but nobody is ever
+ * sent to look at it.
+ * ---------------------------------------------------------------------- */
+
+/**
+ * Send anyone who lands on the cart page back to the shop, with the drawer
+ * opening on arrival so they see the thing they came for.
+ *
+ * A bookmark, a gateway returning a shopper mid payment, or a stray link in
+ * somebody's email all end up here. WooCommerce keeps its notices in the
+ * session, so anything it wanted to say survives the hop.
+ *
+ * @return void
+ */
+function gueta_no_cart_page() {
+	if ( is_admin() || wp_doing_ajax() || ! function_exists( 'is_cart' ) || ! is_cart() ) {
+		return;
+	}
+
+	$target = gueta_shop_url();
+
+	// A shop page set to the cart page would otherwise loop forever.
+	if ( ! $target || untrailingslashit( $target ) === untrailingslashit( (string) wc_get_cart_url() ) ) {
+		return;
+	}
+
+	if ( WC()->session ) {
+		WC()->session->set( 'gueta_open_cart', true );
+	}
+
+	wp_safe_redirect( $target, 302 );
+	exit;
+}
+add_action( 'template_redirect', 'gueta_no_cart_page', 5 );
+
+/**
+ * Keep WooCommerce from sending a shopper to the cart page after adding to
+ * it. The drawer already opens, which is the whole point.
+ *
+ * @return string
+ */
+function gueta_never_redirect_to_cart() {
+	return 'no';
+}
+add_filter( 'option_woocommerce_cart_redirect_after_add', 'gueta_never_redirect_to_cart' );
+add_filter( 'default_option_woocommerce_cart_redirect_after_add', 'gueta_never_redirect_to_cart' );
+
+/**
+ * Drop the view cart button out of the added to cart notice, which is the
+ * last place core offers the page. Only the wording is left.
+ *
+ * @param string $message Notice markup.
+ * @return string
+ */
+function gueta_drop_view_cart_link( $message ) {
+	$cart = gueta_has_woocommerce() ? (string) wc_get_cart_url() : '';
+
+	if ( ! $cart || ! is_string( $message ) ) {
+		return $message;
+	}
+
+	$pattern = "#<a[^>]+href=['\"]" . preg_quote( $cart, '#' ) . "['\"][^>]*>.*?</a>#is";
+
+	return trim( (string) preg_replace( $pattern, '', $message ) );
+}
+add_filter( 'wc_add_to_cart_message_html', 'gueta_drop_view_cart_link' );
+
 /**
  * Number of items currently in the cart.
  *
@@ -243,7 +314,6 @@ function gueta_render_cart_footer() {
 		</div>
 		<p class="gueta-cart-note">מחיר המשלוח יחושב בהמשך</p>
 		<a class="gueta-button gueta-button--solid" href="<?php echo esc_url( wc_get_checkout_url() ); ?>">לתשלום</a>
-		<a class="gueta-button gueta-button--ghost" href="<?php echo esc_url( wc_get_cart_url() ); ?>">צפייה בעגלה</a>
 
 		<?php if ( ! is_user_logged_in() ) : ?>
 			<p class="gueta-cart-club">
