@@ -184,6 +184,23 @@ function gueta_render_cart_lines() {
 }
 
 /**
+ * Where a shopper goes to sign in.
+ *
+ * No redirect argument is attached. WooCommerce sends a shopper back to the
+ * page they came from by reading the referer, which is the right page here,
+ * and this function also runs while the drawer is being refreshed over AJAX,
+ * where the current URL is the fragments endpoint rather than anywhere a
+ * shopper would want to land.
+ *
+ * @return string
+ */
+function gueta_login_url() {
+	return gueta_has_woocommerce()
+		? (string) wc_get_page_permalink( 'myaccount' )
+		: wp_login_url();
+}
+
+/**
  * Render the subtotal and the checkout actions.
  *
  * @return void
@@ -227,6 +244,13 @@ function gueta_render_cart_footer() {
 		<p class="gueta-cart-note">מחיר המשלוח יחושב בהמשך</p>
 		<a class="gueta-button gueta-button--solid" href="<?php echo esc_url( wc_get_checkout_url() ); ?>">לתשלום</a>
 		<a class="gueta-button gueta-button--ghost" href="<?php echo esc_url( wc_get_cart_url() ); ?>">צפייה בעגלה</a>
+
+		<?php if ( ! is_user_logged_in() ) : ?>
+			<p class="gueta-cart-club">
+				התחברו לאתר כדי לראות את המבצעים וההנחות שיש לחברי המועדון.
+				<a class="gueta-cart-club__link" href="<?php echo esc_url( gueta_login_url() ); ?>">התחברות</a>
+			</p>
+		<?php endif; ?>
 	</div>
 	<?php
 }

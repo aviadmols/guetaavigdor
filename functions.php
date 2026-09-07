@@ -345,10 +345,16 @@ add_filter( 'wp_resource_hints', 'gueta_font_resource_hints', 10, 2 );
  * is prefixed with `body[class]`, which outranks a single class by one and
  * settles it.
  *
- * The force stops there on purpose. A font chosen for one particular widget in
- * the editor carries more classes than this and still wins, which is what an
- * author who set it would expect. Icon elements are left out entirely: they are
- * fonts too, and renaming their family would turn the glyphs into letters.
+ * Specificity alone was not enough. This site already carries a global font
+ * declared with !important, which outranks any selector however specific, so
+ * the declaration below is marked the same way. That is blunt: a font chosen
+ * for one particular widget in the editor is overridden too. Removing the
+ * !important on the other side, by pointing Elementor's global font at Google
+ * Sans in Site Settings, is the tidier home for this and lets this rule go
+ * back to plain specificity.
+ *
+ * Icon elements are left out entirely: they are fonts too, and renaming their
+ * family would turn the glyphs into letters.
  *
  * @return void
  */
@@ -376,7 +382,7 @@ function gueta_typography_override() {
 
 	wp_add_inline_style(
 		'gueta-typography',
-		implode( ',', $targets ) . '{font-family:var(--gueta-font,"Google Sans",Heebo,Arial,sans-serif)}'
+		implode( ',', $targets ) . '{font-family:var(--gueta-font,"Google Sans",Heebo,Arial,sans-serif)!important}'
 	);
 }
 add_action( 'wp_enqueue_scripts', 'gueta_typography_override', 100 );

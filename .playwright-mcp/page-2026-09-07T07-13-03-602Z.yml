@@ -1,0 +1,274 @@
+- generic [active] [ref=f3e1]:
+  - link "WhatsApp" [ref=f3e3] [cursor=pointer]:
+    - /url: https://api.whatsapp.com/send?phone=972509512625
+  - link "דילוג לתוכן" [ref=f3e6] [cursor=pointer]:
+    - /url: "#content"
+  - generic [ref=f3e7]:
+    - button "הודעה קודמת" [ref=f3e8] [cursor=pointer]
+    - generic [ref=f3e11]:
+      - paragraph [ref=f3e12]: משלוח מהיר לכל הארץ
+      - paragraph: ייעוץ מקצועי בטלפון לפני כל הזמנה
+      - paragraph: מאות מוצרים במלאי מיידי
+    - button "הודעה הבאה" [ref=f3e13] [cursor=pointer]
+  - banner [ref=f3e16]:
+    - generic [ref=f3e17]:
+      - link [ref=f3e19] [cursor=pointer]:
+        - /url: https://guetaavigdor.ussl.co/
+        - img "גואטה אביגדור" [ref=f3e20]
+      - search [ref=f3e23]:
+        - generic [ref=f3e24]: חיפוש באתר
+        - generic [ref=f3e25]:
+          - button "חיפוש" [ref=f3e26] [cursor=pointer]
+          - combobox "חיפוש באתר" [ref=f3e30]
+      - generic [ref=f3e31]:
+        - link "התחברות" [ref=f3e32] [cursor=pointer]:
+          - /url: https://guetaavigdor.ussl.co/%d7%94%d7%97%d7%a9%d7%91%d7%95%d7%9f-%d7%a9%d7%9c%d7%99/
+        - button "עגלת קניות" [ref=f3e36] [cursor=pointer]
+    - navigation "ניווט ראשי" [ref=f3e42]:
+      - list [ref=f3e43]:
+        - listitem [ref=f3e44]:
+          - link "כלי עבודה חשמליים" [ref=f3e45] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%9b%d7%9c%d7%99-%d7%a2%d7%91%d7%95%d7%93%d7%94/
+        - listitem [ref=f3e49]:
+          - link "מוצרי פרזול" [ref=f3e50] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%9e%d7%95%d7%a6%d7%a8%d7%99-%d7%a4%d7%a8%d7%96%d7%95%d7%9c/
+        - listitem [ref=f3e54]:
+          - link "כלי עבודה ידניים" [ref=f3e55] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%9b%d7%9c%d7%99-%d7%a2%d7%91%d7%95%d7%93%d7%94-%d7%99%d7%93%d7%a0%d7%99%d7%99%d7%9d/
+        - listitem [ref=f3e59]:
+          - link "מבצעים" [ref=f3e60] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/sale-2/
+        - listitem [ref=f3e62]:
+          - link "עצים" [ref=f3e63] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%a2%d7%a6%d7%99%d7%9d/
+        - listitem [ref=f3e67]:
+          - link "תחזוקה, ניקיון ושמנים" [ref=f3e68] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%aa%d7%97%d7%96%d7%95%d7%a7%d7%94-%d7%a0%d7%99%d7%a7%d7%99%d7%95%d7%9f-%d7%95%d7%a9%d7%9e%d7%a0%d7%99%d7%9d/
+        - listitem [ref=f3e70]:
+          - link "הדבקה ואטימה" [ref=f3e71] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%97%d7%95%d7%9e%d7%a8%d7%99-%d7%94%d7%93%d7%91%d7%a7%d7%94-%d7%95%d7%90%d7%98%d7%99%d7%9e%d7%94/
+        - listitem [ref=f3e75]:
+          - link "עשה זאת בעצמך" [ref=f3e76] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%99%d7%a6%d7%99%d7%a8%d7%94/
+        - listitem [ref=f3e80]:
+          - link "כל הקטגוריות" [ref=f3e81] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/catalog/
+  - main [ref=f3e83]:
+    - generic [ref=f3e85]:
+      - generic [ref=f3e90]:
+        - paragraph [ref=f3e93]: גואטה אביגדור – מחסן עצים בע״מ
+        - heading "אנחנו כאן כדי לייעץ, לכוון ולעזור לכם לבחור נכון" [level=1] [ref=f3e96]
+        - paragraph [ref=f3e99]: מבחר עצים, חומרי בנייה וציוד משלים ללקוחות פרטיים ולעסקים בכל הארץ.
+        - link "צפו בקטלוג המוצרים" [ref=f3e103] [cursor=pointer]:
+          - /url: "#catalog"
+          - generic [ref=f3e104]:
+            - generic [aria-hidden] [ref=f3e106]: 
+            - generic [ref=f3e107]: צפו בקטלוג המוצרים
+      - generic [ref=f3e117]:
+        - img "Default Title" [ref=f3e119]
+        - img "Default Title" [ref=f3e121]
+        - img "Default Title" [ref=f3e123]
+        - img "Default Title" [ref=f3e125]
+        - img "Default Title" [ref=f3e127]
+        - img "Default Title" [ref=f3e129]
+        - img "Default Title" [ref=f3e131]
+        - img "Default Title" [ref=f3e133]
+        - img "Default Title" [ref=f3e135]
+        - img "Default Title" [ref=f3e137]
+        - img "Default Title" [ref=f3e139]
+        - img "Default Title" [ref=f3e141]
+        - img "Default Title" [ref=f3e143]
+        - img "Default Title" [ref=f3e145]
+        - img "Default Title" [ref=f3e147]
+        - img "Default Title" [ref=f3e149]
+        - img "Default Title" [ref=f3e151]
+        - img "Default Title" [ref=f3e153]
+      - generic [ref=f3e157]:
+        - generic [ref=f3e161]:
+          - heading "על מה אנחנו היום?" [level=2] [ref=f3e164]
+          - paragraph [ref=f3e167]: מגוון עצים, חומרי עבודה וציוד מקצועי עם ייעוץ מניסיון של עשרות שנים.
+        - generic [ref=f3e171]:
+          - link "עצים חץ אצלנו תמצאו עץ אורן, איפאה ולוחות לבנייה במחירי מחסן עצים סיטונאיים, עם אספקה מהירה ומלאי מעודכן." [ref=f3e172] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%a2%d7%a6%d7%99%d7%9d/
+            - generic [ref=f3e175]: עצים
+            - img "חץ" [ref=f3e176]
+            - generic [ref=f3e177]: אצלנו תמצאו עץ אורן, איפאה ולוחות לבנייה במחירי מחסן עצים סיטונאיים, עם אספקה מהירה ומלאי מעודכן.
+          - link "פלטות חץ מגוון פלטות עץ, לבידים ומדפים לבנייה ולנגרות – סנדוויץ', OSB, MDF, בוצ'ר ולאמי במגוון עוביים, כולל אפשרות לחיתוך לפי מידה במחירי מבצע." [ref=f3e178] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%a2%d7%a6%d7%99%d7%9d/%d7%a4%d7%9c%d7%98%d7%95%d7%aa/
+            - generic [ref=f3e181]: פלטות
+            - img "חץ" [ref=f3e182]
+            - generic [ref=f3e183]: מגוון פלטות עץ, לבידים ומדפים לבנייה ולנגרות – סנדוויץ', OSB, MDF, בוצ'ר ולאמי במגוון עוביים, כולל אפשרות לחיתוך לפי מידה במחירי מבצע.
+          - link "במבוק חץ גדר עץ במבוק לגינה ולמרפסת. דק במבוק ובמבוק סינטטי איכותי, חזק ועמיד לאורך זמן." [ref=f3e184] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%91%d7%9e%d7%91%d7%95%d7%a7/
+            - generic [ref=f3e187]: במבוק
+            - img "חץ" [ref=f3e188]
+            - generic [ref=f3e189]: גדר עץ במבוק לגינה ולמרפסת. דק במבוק ובמבוק סינטטי איכותי, חזק ועמיד לאורך זמן.
+          - link "דקים חץ מגוון דקים מעץ טבעי או סינטטי עמיד ללא תחזוקה – אספקה מהירה, ייעוץ מקצועי ומערכת חיתוך בהתאמה אישית במחירי סיטונאות." [ref=f3e190] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%93%d7%a7-%d7%a1%d7%99%d7%a0%d7%98%d7%98%d7%99/
+            - generic [ref=f3e193]: דקים
+            - img "חץ" [ref=f3e194]
+            - generic [ref=f3e195]: מגוון דקים מעץ טבעי או סינטטי עמיד ללא תחזוקה – אספקה מהירה, ייעוץ מקצועי ומערכת חיתוך בהתאמה אישית במחירי סיטונאות.
+          - link "דשא סינטטי חץ פתרונות דשא סינטטי למראה טבעי וירק - מגוון רחב של סוגים, גבהים ומברשות הברשה מקצועיות במחירי מבצע." [ref=f3e196] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%93%d7%a9%d7%90-%d7%a1%d7%99%d7%a0%d7%98%d7%98%d7%99/
+            - generic [ref=f3e199]: דשא סינטטי
+            - img "חץ" [ref=f3e200]
+            - generic [ref=f3e201]: פתרונות דשא סינטטי למראה טבעי וירק - מגוון רחב של סוגים, גבהים ומברשות הברשה מקצועיות במחירי מבצע.
+          - link "פנל מבודד חץ מבחר פנלים מבודדים (איסכורית) איכותיים לגגות וקירות, במגוון עוביים ובחיתוך לפי מידה." [ref=f3e202] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%92%d7%92%d7%95%d7%aa/%d7%a4%d7%a0%d7%9c-%d7%9e%d7%91%d7%95%d7%93%d7%93/
+            - generic [ref=f3e205]: פנל מבודד
+            - img "חץ" [ref=f3e206]
+            - generic [ref=f3e207]: מבחר פנלים מבודדים (איסכורית) איכותיים לגגות וקירות, במגוון עוביים ובחיתוך לפי מידה.
+          - 'link "טיפול במזיקים חץ מוצרים ופתרונות להדברה, הגנה והרחקת מזיקים: מרססים, תכשירים להגנה על עץ, רשתות ודוקרנים להרחקת יונים." [ref=f3e208] [cursor=pointer]':
+            - /url: https://guetaavigdor.ussl.co/products/%d7%98%d7%99%d7%a4%d7%95%d7%9c-%d7%91%d7%9e%d7%96%d7%99%d7%a7%d7%99%d7%9d/
+            - generic [ref=f3e211]: טיפול במזיקים
+            - img "חץ" [ref=f3e212]
+            - generic [ref=f3e213]: "מוצרים ופתרונות להדברה, הגנה והרחקת מזיקים: מרססים, תכשירים להגנה על עץ, רשתות ודוקרנים להרחקת יונים."
+          - link "בטיחות חץ ציוד בטיחות והגנה אישית לעבודה בטוחה – כפפות עבודה מקצועיות, משקפי ומסכות מגן, נעלי עבודה וגלאים במחירי מבצע." [ref=f3e214] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%91%d7%98%d7%99%d7%97%d7%95%d7%aa/
+            - generic [ref=f3e217]: בטיחות
+            - img "חץ" [ref=f3e218]
+            - generic [ref=f3e219]: ציוד בטיחות והגנה אישית לעבודה בטוחה – כפפות עבודה מקצועיות, משקפי ומסכות מגן, נעלי עבודה וגלאים במחירי מבצע.
+          - link "גינון חץ ציוד וכלים לתחזוקת הגינה והחצר – מכסחות דשא, חרמשים, גוזמי גדר חיה, מערכות ואביזרי השקיה וכלי עבודה ידניים במחירי מבצע." [ref=f3e220] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%92%d7%99%d7%a0%d7%95%d7%9f/
+            - generic [ref=f3e223]: גינון
+            - img "חץ" [ref=f3e224]
+            - generic [ref=f3e225]: ציוד וכלים לתחזוקת הגינה והחצר – מכסחות דשא, חרמשים, גוזמי גדר חיה, מערכות ואביזרי השקיה וכלי עבודה ידניים במחירי מבצע.
+          - 'link "הדבקה ואטימה חץ כל מה שצריך לעבודה חזקה ועמידה לאורך זמן: דבקים עוצמתיים למגוון חומרים, חומרי איטום מתקדמים נגד מים ורטיבות וכל הציוד המשלים." [ref=f3e226] [cursor=pointer]':
+            - /url: https://guetaavigdor.ussl.co/products/%d7%97%d7%95%d7%9e%d7%a8%d7%99-%d7%94%d7%93%d7%91%d7%a7%d7%94-%d7%95%d7%90%d7%98%d7%99%d7%9e%d7%94/
+            - generic [ref=f3e229]: הדבקה ואטימה
+            - img "חץ" [ref=f3e230]
+            - generic [ref=f3e231]: "כל מה שצריך לעבודה חזקה ועמידה לאורך זמן: דבקים עוצמתיים למגוון חומרים, חומרי איטום מתקדמים נגד מים ורטיבות וכל הציוד המשלים."
+          - 'link "ברגים ומסמרים חץ מגוון רחב של ברגים, דיבלים ואמצעי חיבור לכל סוגי המשטחים: ברגי גבס, ברגי עץ וסיבית, ברגי דק, פח-פח ופתרונות עיגון." [ref=f3e232] [cursor=pointer]':
+            - /url: https://guetaavigdor.ussl.co/products/%d7%91%d7%a8%d7%92%d7%99%d7%9d-%d7%95%d7%9e%d7%a1%d7%9e%d7%a8%d7%99%d7%9d/
+            - generic [ref=f3e235]: ברגים ומסמרים
+            - img "חץ" [ref=f3e236]
+            - generic [ref=f3e237]: "מגוון רחב של ברגים, דיבלים ואמצעי חיבור לכל סוגי המשטחים: ברגי גבס, ברגי עץ וסיבית, ברגי דק, פח-פח ופתרונות עיגון."
+          - link "עשה זאת בעצמך חץ כל החומרים, הכלים והציוד ליצירה, יציקות אפוקסי, חידוש רהיטים ופרויקטים של עשה זאת בעצמך." [ref=f3e238] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%99%d7%a6%d7%99%d7%a8%d7%94/
+            - generic [ref=f3e241]: עשה זאת בעצמך
+            - img "חץ" [ref=f3e242]
+            - generic [ref=f3e243]: כל החומרים, הכלים והציוד ליצירה, יציקות אפוקסי, חידוש רהיטים ופרויקטים של עשה זאת בעצמך.
+          - link "כלי עבודה חשמליים חץ מחדשים את ארגז הכלים? מגוון רחב של כלי עבודה חשמליים, ציוד מדידה, מכשירי שטיפה ואביזרים מקצועיים – עכשיו במחירי מבצע מיוחדים וגם באפשרות להשכרה יומית!" [ref=f3e244] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%9b%d7%9c%d7%99-%d7%a2%d7%91%d7%95%d7%93%d7%94/
+            - generic [ref=f3e247]: כלי עבודה חשמליים
+            - img "חץ" [ref=f3e248]
+            - generic [ref=f3e249]: מחדשים את ארגז הכלים? מגוון רחב של כלי עבודה חשמליים, ציוד מדידה, מכשירי שטיפה ואביזרים מקצועיים – עכשיו במחירי מבצע מיוחדים וגם באפשרות להשכרה יומית!
+          - link "מברשות צבע חץ ציוד וציוד נלווה לצביעה מקצועית – מברשות צבע מכל הסוגים, רולרים, פדים, מרססי איירלס ואביזרים נלווים במחירי מבצע לרכישה או להשכרה." [ref=f3e250] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%9e%d7%91%d7%a8%d7%a9%d7%95%d7%aa-%d7%a6%d7%91%d7%a2/
+            - generic [ref=f3e253]: מברשות צבע
+            - img "חץ" [ref=f3e254]
+            - generic [ref=f3e255]: ציוד וציוד נלווה לצביעה מקצועית – מברשות צבע מכל הסוגים, רולרים, פדים, מרססי איירלס ואביזרים נלווים במחירי מבצע לרכישה או להשכרה.
+          - link "מוצרי פרזול חץ מבחר עשיר של מוצרי פרזול, בריחים מעוצבים, גלגלים ואביזרי חיבור לכל פרויקט – באיכות גבוהה ובמחירים משתלמים." [ref=f3e256] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%9e%d7%95%d7%a6%d7%a8%d7%99-%d7%a4%d7%a8%d7%96%d7%95%d7%9c/
+            - generic [ref=f3e259]: מוצרי פרזול
+            - img "חץ" [ref=f3e260]
+            - generic [ref=f3e261]: מבחר עשיר של מוצרי פרזול, בריחים מעוצבים, גלגלים ואביזרי חיבור לכל פרויקט – באיכות גבוהה ובמחירים משתלמים.
+          - 'link "צבעים ולכות חץ כל מה שצריך לצביעה, הגנה וחידוש משטחי עץ: מגוון רחב של צבעים, לכות, מסירי צבע ואביזרי התזה מקצועיים." [ref=f3e262] [cursor=pointer]':
+            - /url: https://guetaavigdor.ussl.co/products/%d7%a6%d7%91%d7%a2%d7%99%d7%9d-%d7%95%d7%9c%d7%9b%d7%95%d7%aa/
+            - generic [ref=f3e265]: צבעים ולכות
+            - img "חץ" [ref=f3e266]
+            - generic [ref=f3e267]: "כל מה שצריך לצביעה, הגנה וחידוש משטחי עץ: מגוון רחב של צבעים, לכות, מסירי צבע ואביזרי התזה מקצועיים."
+          - link "תחזוקה, ניקיון ושמנים חץ פתרונות תחזוקה, ניקיון וטיפוח מקצועיים – שמנים, חומרי הגנה והזנה לעץ, תרסיסים, מוצרי ניקוי וציוד נלווה לרכישה במחירי מבצע או להשכרה." [ref=f3e268] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%aa%d7%97%d7%96%d7%95%d7%a7%d7%94-%d7%a0%d7%99%d7%a7%d7%99%d7%95%d7%9f-%d7%95%d7%a9%d7%9e%d7%a0%d7%99%d7%9d/
+            - generic [ref=f3e271]: תחזוקה, ניקיון ושמנים
+            - img "חץ" [ref=f3e272]
+            - generic [ref=f3e273]: פתרונות תחזוקה, ניקיון וטיפוח מקצועיים – שמנים, חומרי הגנה והזנה לעץ, תרסיסים, מוצרי ניקוי וציוד נלווה לרכישה במחירי מבצע או להשכרה.
+          - link "כלי עבודה ידניים חץ כל כלי העבודה הידניים, הציוד והאביזרים הנדרשים לעבודה מדויקת, עמידה ומקצועית בכל פרויקט." [ref=f3e274] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%9b%d7%9c%d7%99-%d7%a2%d7%91%d7%95%d7%93%d7%94-%d7%99%d7%93%d7%a0%d7%99%d7%99%d7%9d/
+            - generic [ref=f3e277]: כלי עבודה ידניים
+            - img "חץ" [ref=f3e278]
+            - generic [ref=f3e279]: כל כלי העבודה הידניים, הציוד והאביזרים הנדרשים לעבודה מדויקת, עמידה ומקצועית בכל פרויקט.
+          - link "אביזרי חשמל חץ מחברים את הבית לבטיחות ולאיכות – ציוד ואביזרי חשמל היקפיים, סוללות עוצמתיות ופתרונות חיבור מתקדמים לכל צורך." [ref=f3e280] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%90%d7%91%d7%99%d7%96%d7%a8%d7%99-%d7%97%d7%a9%d7%9e%d7%9c/
+            - generic [ref=f3e283]: אביזרי חשמל
+            - img "חץ" [ref=f3e284]
+            - generic [ref=f3e285]: מחברים את הבית לבטיחות ולאיכות – ציוד ואביזרי חשמל היקפיים, סוללות עוצמתיות ופתרונות חיבור מתקדמים לכל צורך.
+          - link "אביזרים לכלי עבודה חץ מוציאים את המקסימום מכלי העבודה – מגוון פתרונות אחסון וארגון, להבים, דיסקים וציוד משלים מהמותגים המובילים לעבודה יעילה ומסודרת." [ref=f3e286] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%90%d7%91%d7%99%d7%96%d7%a8%d7%99%d7%9d-%d7%9c%d7%9b%d7%9c%d7%99-%d7%a2%d7%91%d7%95%d7%93%d7%94/
+            - generic [ref=f3e289]: אביזרים לכלי עבודה
+            - img "חץ" [ref=f3e290]
+            - generic [ref=f3e291]: מוציאים את המקסימום מכלי העבודה – מגוון פתרונות אחסון וארגון, להבים, דיסקים וציוד משלים מהמותגים המובילים לעבודה יעילה ומסודרת.
+          - link "סולמות חץ מגוון סולמות איכותיים לכל גובה ומטרה – סולמות אלומיניום, טלסקופיים, סולמות עץ ופתרונות לעליית גג, לרכישה במחירי מבצע או להשכרה." [ref=f3e292] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%a1%d7%95%d7%9c%d7%9e%d7%95%d7%aa/
+            - generic [ref=f3e295]: סולמות
+            - img "חץ" [ref=f3e296]
+            - generic [ref=f3e297]: מגוון סולמות איכותיים לכל גובה ומטרה – סולמות אלומיניום, טלסקופיים, סולמות עץ ופתרונות לעליית גג, לרכישה במחירי מבצע או להשכרה.
+          - link "גגות חץ מגוון רחב של לוחות קירוי, סנטף, יריעות איטום ופתרונות אוורור במחירי מחסן, לגג עמיד וחזק לאורך שנים." [ref=f3e298] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%92%d7%92%d7%95%d7%aa/
+            - generic [ref=f3e301]: גגות
+            - img "חץ" [ref=f3e302]
+            - generic [ref=f3e303]: מגוון רחב של לוחות קירוי, סנטף, יריעות איטום ופתרונות אוורור במחירי מחסן, לגג עמיד וחזק לאורך שנים.
+          - link "פחים ומרזבים חץ פתרונות ניקוז ואיטום מתקדמים – מגוון מרזבים, צינורות, זוויות ופחי הלבשה ואיטום בגדלים וצבעים שונים במחירי מבצע." [ref=f3e304] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%a4%d7%97%d7%99%d7%9d-%d7%95%d7%9e%d7%a8%d7%96%d7%91%d7%99%d7%9d/
+            - generic [ref=f3e307]: פחים ומרזבים
+            - img "חץ" [ref=f3e308]
+            - generic [ref=f3e309]: פתרונות ניקוז ואיטום מתקדמים – מגוון מרזבים, צינורות, זוויות ופחי הלבשה ואיטום בגדלים וצבעים שונים במחירי מבצע.
+          - link "ג'יג חץ פתרונות נגרות וחיבור מקצועיים – מגוון מערכות ג'יג, מובילי חיתוך וקידוח, קליבות וברגים ייעודיים מבית Kreg במחירי מבצע." [ref=f3e310] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%92%d7%99%d7%92/
+            - generic [ref=f3e313]: ג'יג
+            - img "חץ" [ref=f3e314]
+            - generic [ref=f3e315]: פתרונות נגרות וחיבור מקצועיים – מגוון מערכות ג'יג, מובילי חיתוך וקידוח, קליבות וברגים ייעודיים מבית Kreg במחירי מבצע.
+      - generic [ref=f3e327]:
+        - generic [ref=f3e328]:
+          - generic [ref=f3e329]: "\"ביקשתי לבנות גדר במבוק ללא ניסיון קודם. צוות המחסן ביקש סרטון של החצר, בנה עבורי הצעת מחיר משתלמת במיוחד והסביר לי בסבלנות כיצד לבצע את העבודה. התוצאה יצאה נהדרת, תודה!\""
+          - generic [ref=f3e330]: אלירן ב'
+        - generic [ref=f3e331]:
+          - generic [ref=f3e332] [cursor=pointer]
+          - generic [ref=f3e333] [cursor=pointer]
+          - generic [ref=f3e334] [cursor=pointer]
+          - generic [ref=f3e335] [cursor=pointer]
+          - generic [ref=f3e336] [cursor=pointer]
+          - generic [ref=f3e337] [cursor=pointer]
+          - generic [ref=f3e338] [cursor=pointer]
+  - contentinfo [ref=f3e343]:
+    - generic [ref=f3e351]:
+      - generic [ref=f3e353]:
+        - paragraph [ref=f3e356]: גואטה אביגדור בע”מ.
+        - paragraph [ref=f3e359]: הינה חברה ישראלית הנמצאת בבעלות משפחתית מלאה ועוסקת בתחום העץ והאביזרים הנדרשים לצורך התקנה והקמה של גגות רעפים פרגולות ודקים למגזר העסקי והפרטי.
+        - generic [ref=f3e362]:
+          - link "דברו איתנו" [ref=f3e364] [cursor=pointer]:
+            - /url: https://api.whatsapp.com/send?phone=972509512625
+            - generic [aria-hidden] [ref=f3e365]: 
+          - heading [level=3] [ref=f3e367]:
+            - link "דברו איתנו" [ref=f3e368] [cursor=pointer]:
+              - /url: https://api.whatsapp.com/send?phone=972509512625
+      - generic [ref=f3e370]:
+        - paragraph [ref=f3e373]: קופצים?
+        - generic [ref=f3e375]:
+          - paragraph [ref=f3e376]: א-ה בין השעות 07:30 ועד 16:30יום ו’ בין השעות 07:30 עד 13:00
+          - paragraph [ref=f3e377]: רח׳ זאב שלנג 3 א.ת.ח ראשל״צ(מאחורי הסינמה סיטי)
+          - paragraph [ref=f3e378]:
+            - text: דברו איתנו. 050-9512625
+            - link "info@guetaavigdor.co.il" [ref=f3e379] [cursor=pointer]:
+              - /url: mailto:info@guetaavigdor.co.il
+      - generic [ref=f3e381]:
+        - paragraph [ref=f3e384]: סושיאלס.
+        - list [ref=f3e387]:
+          - listitem [ref=f3e388]:
+            - link [ref=f3e389] [cursor=pointer]:
+              - /url: https://www.tiktok.com/@guetawood
+              - generic [aria-hidden] [ref=f3e391]: 
+          - listitem [ref=f3e392]:
+            - link [ref=f3e393] [cursor=pointer]:
+              - /url: https://www.instagram.com/gueta_avigdor/
+              - generic [aria-hidden] [ref=f3e395]: 
+          - listitem [ref=f3e396]:
+            - link [ref=f3e397] [cursor=pointer]:
+              - /url: https://www.facebook.com/guetaavigdor/?locale=he_IL
+              - generic [aria-hidden] [ref=f3e399]: 
+        - paragraph [ref=f3e402]: מבצעים, מוצרים חדשים וטיפים מקצועיים.
+        - form "ניוזלטר" [ref=f3e405]:
+          - generic [ref=f3e406]:
+            - generic [ref=f3e407]:
+              - generic [ref=f3e408] [cursor=pointer]: אימייל
+              - textbox "אימייל" [ref=f3e409]
+            - button "שליחה" [ref=f3e411] [cursor=pointer]:
+              - generic [ref=f3e413]:
+                - generic [aria-hidden] [ref=f3e414]: 
+                - generic [ref=f3e415]: שליחה
+    - paragraph [ref=f3e422]:
+      - text: © 2026 כל הזכויות שמורות לגואטה אביגדור מחסן עצים | תקנון האתר | הצהרת נגישות | פרטיות | אתר
+      - link "tabuzzco" [ref=f3e423] [cursor=pointer]:
+        - /url: https://tabuzzco.com
+  - generic [ref=f3e424]: desktop
+  - status [ref=f3e425]

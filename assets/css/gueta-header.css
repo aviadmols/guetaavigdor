@@ -1283,6 +1283,27 @@ body.gueta-locked {
 	margin: -4px 0 4px;
 }
 
+/* The club prompt under the drawer's two buttons, for signed out shoppers. */
+.gueta-cart-club {
+	color: var(--gueta-muted);
+	font-size: 13px;
+	line-height: 1.5;
+	margin: 4px 0 0;
+	text-align: center;
+}
+
+.gueta-cart-club__link {
+	color: var(--gueta-ink);
+	font-weight: 600;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+	white-space: nowrap;
+}
+
+.gueta-cart-club__link:hover {
+	color: var(--gueta-accent-warm);
+}
+
 /* Empty state ------------------------------------------------------------- */
 
 .gueta-cart-empty__title {
