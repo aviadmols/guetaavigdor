@@ -23,8 +23,24 @@
 	--gueta-radius: 12px;
 	--gueta-shadow: 0 4px 16px rgb(0 0 0 / 12%);
 	--gueta-gutter: clamp(16px, 3vw, 40px);
-	--gueta-max: 1440px;
+	--gueta-max: 1980px;
 	--gueta-slide: 1;
+}
+
+/*
+ * The site's grid on a desktop screen: 1980px across with 100px down each
+ * side, matching the Elementor sections on this site. The clamp above keeps
+ * narrower screens breathing, and this takes over only where there is room.
+ *
+ * Every container the theme renders reads these two, so the header bar, the
+ * navigation under it, the mega menu, the category strip, the archive and the
+ * comparison bar all land on the same edges. Widening the bar alone would
+ * have pushed it out of line with the navigation directly beneath it.
+ */
+@media (min-width: 1025px) {
+	:root {
+		--gueta-gutter: 100px;
+	}
 }
 
 [dir="rtl"] {
