@@ -1,0 +1,13 @@
+[     820ms] [WARNING] Boost > [WARN]  Theme is not integrated with SimplifiedIntegration flow @ https://kualastyle.com/blogs/blog-post:2457
+[    1614ms] [LOG] %cHyper theme (v1.3.1) by Foxecom font-size: 14px; color: #FF5C00; @ https://kualastyle.com/cdn/shop/t/292/assets/theme.js?v=64065189640594572691783957257:0
+[    1740ms] [LOG] %c ► UpPromote Affiliate Marketing [Customer Referral Extension] - Loaded background-color: #092C4C; color: #fff; padding: 5px; @ https://cdn.shopify.com/extensions/01a047b6-7c9c-7b1d-8e30-6128ecf2408d/affliate-by-secomapp-124/assets/customer-referral.js:163
+[    1944ms] [LOG] Running... @ https://kualastyle.com/web-pixels/strict/app/web-pixel-493453467@33a696d2f4bf0f977ff9b6b0ab6bb927.js:0
+[    2283ms] [WARNING] In a sandboxed environment, addEventListener may not behave as expected. @ https://kualastyle.com/web-pixels@80079e4cw22952a98p55856082md4f1b6b4/custom/web-pixel-187465883@2/sandbox/modern/blogs/blog-post:6
+[    2492ms] [LOG] %c ► UpPromote Affiliate Marketing [Application] - Running... background-color: #092C4C; color: #fff; padding: 5px; @ https://d1639lhkj5l89m.cloudfront.net/js/storefront/uppromote.js:0
+[    2708ms] [WARNING] In a sandboxed environment, addEventListener may not behave as expected. @ https://kualastyle.com/web-pixels@80079e4cw22952a98p55856082md4f1b6b4/custom/web-pixel-190906523@1/sandbox/modern/blogs/blog-post:6
+[    3908ms] [LOG] Flashy Init [12157, v1.2.12, production] @ https://js.flashyapp.com/shopify.js?account_id=12157&shop=kuala-design.myshopify.com:32
+[   13700ms] Uncaught TypeError: window.boostWidgetIntegration.extend is not a function
+    at <anonymous> (https://cdn.boostcommerce.io/widget-integration/theme/customization/kuala-design.myshopify.com/IBfM8gReOd/customization-1784535081391.js:443:30)
+[   13738ms] [ERROR] Boost > [ERROR]  Cart icon selector not found in matched config @ https://kualastyle.com/blogs/blog-post:2457
+[   13837ms] [LOG] initReceiveEventAttentive @ https://cdn.boostcommerce.io/widget-integration/1.88.2/bc-widget-integration.js:13
+[   13838ms] [LOG] Analytic register events - Version SSR @ https://cdn.boostcommerce.io/widget-integration/1.88.2/bc-widget-integration.js:13

@@ -1,0 +1,303 @@
+- generic [active] [ref=f13e1]:
+  - link "WhatsApp" [ref=f13e3] [cursor=pointer]:
+    - /url: https://api.whatsapp.com/send?phone=972509512625
+  - link "דילוג לתוכן" [ref=f13e6] [cursor=pointer]:
+    - /url: "#content"
+  - generic [ref=f13e7]:
+    - button "הודעה קודמת" [ref=f13e8] [cursor=pointer]
+    - generic [ref=f13e11]:
+      - paragraph [ref=f13e12]: משלוח מהיר לכל הארץ
+      - paragraph: ייעוץ מקצועי בטלפון לפני כל הזמנה
+      - paragraph: מאות מוצרים במלאי מיידי
+    - button "הודעה הבאה" [ref=f13e13] [cursor=pointer]
+  - banner [ref=f13e16]:
+    - generic [ref=f13e17]:
+      - link [ref=f13e19] [cursor=pointer]:
+        - /url: https://guetaavigdor.ussl.co/
+        - img "גואטה אביגדור" [ref=f13e20]
+      - search [ref=f13e23]:
+        - generic [ref=f13e24]: חיפוש באתר
+        - generic [ref=f13e25]:
+          - button "חיפוש" [ref=f13e26] [cursor=pointer]
+          - combobox "חיפוש באתר" [ref=f13e30]
+      - generic [ref=f13e31]:
+        - link "התחברות" [ref=f13e32] [cursor=pointer]:
+          - /url: https://guetaavigdor.ussl.co/%d7%94%d7%97%d7%a9%d7%91%d7%95%d7%9f-%d7%a9%d7%9c%d7%99/
+        - button "עגלת קניות" [ref=f13e36] [cursor=pointer]:
+          - generic [ref=f13e41]: "1"
+    - navigation "ניווט ראשי" [ref=f13e43]:
+      - list [ref=f13e44]:
+        - listitem [ref=f13e45]:
+          - link "כלי עבודה חשמליים" [ref=f13e46] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%9b%d7%9c%d7%99-%d7%a2%d7%91%d7%95%d7%93%d7%94/
+        - listitem [ref=f13e50]:
+          - link "מוצרי פרזול" [ref=f13e51] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%9e%d7%95%d7%a6%d7%a8%d7%99-%d7%a4%d7%a8%d7%96%d7%95%d7%9c/
+        - listitem [ref=f13e55]:
+          - link "כלי עבודה ידניים" [ref=f13e56] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%9b%d7%9c%d7%99-%d7%a2%d7%91%d7%95%d7%93%d7%94-%d7%99%d7%93%d7%a0%d7%99%d7%99%d7%9d/
+        - listitem [ref=f13e60]:
+          - link "מבצעים" [ref=f13e61] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/sale-2/
+        - listitem [ref=f13e63]:
+          - link "עצים" [ref=f13e64] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%a2%d7%a6%d7%99%d7%9d/
+        - listitem [ref=f13e68]:
+          - link "תחזוקה, ניקיון ושמנים" [ref=f13e69] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%aa%d7%97%d7%96%d7%95%d7%a7%d7%94-%d7%a0%d7%99%d7%a7%d7%99%d7%95%d7%9f-%d7%95%d7%a9%d7%9e%d7%a0%d7%99%d7%9d/
+        - listitem [ref=f13e71]:
+          - link "הדבקה ואטימה" [ref=f13e72] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%97%d7%95%d7%9e%d7%a8%d7%99-%d7%94%d7%93%d7%91%d7%a7%d7%94-%d7%95%d7%90%d7%98%d7%99%d7%9e%d7%94/
+        - listitem [ref=f13e76]:
+          - link "עשה זאת בעצמך" [ref=f13e77] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%99%d7%a6%d7%99%d7%a8%d7%94/
+        - listitem [ref=f13e81]:
+          - link "כל הקטגוריות" [ref=f13e82] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/catalog/
+  - generic [ref=f13e84]:
+    - paragraph [ref=f13e91]:
+      - generic [ref=f13e92]:
+        - link "דף הבית" [ref=f13e94] [cursor=pointer]:
+          - /url: https://guetaavigdor.ussl.co/
+        - text: »
+        - link "המוצרים שלנו" [ref=f13e96] [cursor=pointer]:
+          - /url: https://guetaavigdor.ussl.co/catalog/
+        - text: »
+        - link "תחזוקה, ניקיון ושמנים" [ref=f13e98] [cursor=pointer]:
+          - /url: https://guetaavigdor.ussl.co/products/%d7%aa%d7%97%d7%96%d7%95%d7%a7%d7%94-%d7%a0%d7%99%d7%a7%d7%99%d7%95%d7%9f-%d7%95%d7%a9%d7%9e%d7%a0%d7%99%d7%9d/
+        - text: » איירלס מרסס צבע בוכנתי + אביזרים HUNTER
+    - generic [ref=f13e100]:
+      - generic [ref=f13e102]:
+        - heading "איירלס מרסס צבע בוכנתי + אביזרים HUNTER" [level=1] [ref=f13e105]
+        - paragraph [ref=f13e108]:
+          - deletion [aria-hidden] [ref=f13e109]:
+            - generic [ref=f13e110]: ₪2,000.00
+          - generic [ref=f13e112]: "המחיר המקורי היה: ₪2,000.00."
+          - insertion [aria-hidden] [ref=f13e113]:
+            - generic [ref=f13e114]: ₪1,700.00
+          - generic [ref=f13e116]: "המחיר הנוכחי הוא: ₪1,700.00."
+        - generic [ref=f13e122]:
+          - generic [ref=f13e123]:
+            - button "הפחתת יחידה" [disabled] [ref=f13e124]: −
+            - generic [ref=f13e125]: כמות של איירלס מרסס צבע בוכנתי + אביזרים HUNTER
+            - spinbutton "כמות המוצר" [ref=f13e126]: "1"
+            - button "הוספת יחידה" [ref=f13e127] [cursor=pointer]: +
+          - button "הוספה לסל" [ref=f13e128] [cursor=pointer]
+        - generic [ref=f13e135]:
+          - generic [ref=f13e136]:
+            - generic [ref=f13e137]: מק"ט
+            - generic [ref=f13e138]: "21277"
+          - generic [ref=f13e139]:
+            - generic [ref=f13e140]: קטגוריות
+            - generic [ref=f13e141]:
+              - link "תחזוקה, ניקיון ושמנים" [ref=f13e142] [cursor=pointer]:
+                - /url: https://guetaavigdor.ussl.co/products/%d7%aa%d7%97%d7%96%d7%95%d7%a7%d7%94-%d7%a0%d7%99%d7%a7%d7%99%d7%95%d7%9f-%d7%95%d7%a9%d7%9e%d7%a0%d7%99%d7%9d/
+              - text: ","
+              - link "כלי עבודה חשמליים" [ref=f13e143] [cursor=pointer]:
+                - /url: https://guetaavigdor.ussl.co/products/%d7%9b%d7%9c%d7%99-%d7%a2%d7%91%d7%95%d7%93%d7%94/
+              - text: ","
+              - link "צבעים ולכות" [ref=f13e144] [cursor=pointer]:
+                - /url: https://guetaavigdor.ussl.co/products/%d7%a6%d7%91%d7%a2%d7%99%d7%9d-%d7%95%d7%9c%d7%9b%d7%95%d7%aa/
+              - text: ","
+              - link "מברשות צבע" [ref=f13e145] [cursor=pointer]:
+                - /url: https://guetaavigdor.ussl.co/products/%d7%9e%d7%91%d7%a8%d7%a9%d7%95%d7%aa-%d7%a6%d7%91%d7%a2/
+              - text: ","
+              - link "מרססי צבע" [ref=f13e146] [cursor=pointer]:
+                - /url: https://guetaavigdor.ussl.co/products/%d7%9b%d7%9c%d7%99-%d7%a2%d7%91%d7%95%d7%93%d7%94/%d7%9e%d7%a8%d7%a1%d7%a1%d7%99-%d7%a6%d7%91%d7%a2-%d7%9b%d7%9c%d7%99-%d7%a2%d7%91%d7%95%d7%93%d7%94/
+          - generic [ref=f13e147]:
+            - generic [ref=f13e148]: תגית
+            - link "Hunter" [ref=f13e150] [cursor=pointer]:
+              - /url: https://guetaavigdor.ussl.co/product-tag/hunter/
+          - generic [ref=f13e151]:
+            - text: "מותג:"
+            - link "Hunter" [ref=f13e152] [cursor=pointer]:
+              - /url: https://guetaavigdor.ussl.co/מותג/hunter/
+        - generic [ref=f13e159]:
+          - group [ref=f13e160]:
+            - generic "תקציר מפרט טכני:" [ref=f13e161] [cursor=pointer]
+            - table [ref=f13e166]:
+              - rowgroup [ref=f13e167]:
+                - row [ref=f13e168]:
+                  - columnheader "מאפיין" [ref=f13e169]
+                  - columnheader "נתון" [ref=f13e170]
+              - rowgroup [ref=f13e171]:
+                - row [ref=f13e172]:
+                  - cell "מתח עבודה" [ref=f13e173]
+                  - cell "230V" [ref=f13e174]
+                - row [ref=f13e175]:
+                  - cell "הספק" [ref=f13e176]
+                  - cell "850W" [ref=f13e177]
+                - row [ref=f13e178]:
+                  - cell "ספיקה" [ref=f13e179]
+                  - cell "1.1 ליטר לדקה" [ref=f13e180]
+                - row [ref=f13e181]:
+                  - cell "לחץ עבודה מרבי" [ref=f13e182]
+                  - cell "3000 PSI" [ref=f13e183]
+                - row [ref=f13e184]:
+                  - cell "אורך צינור" [ref=f13e185]
+                  - cell "7.5 מטר" [ref=f13e186]
+                - row [ref=f13e187]:
+                  - cell "משקל" [ref=f13e188]
+                  - cell "8.3 ק\"ג" [ref=f13e189]
+                - row [ref=f13e190]:
+                  - cell "מק\"ט יצרן" [ref=f13e191]
+                  - cell "100900-011" [ref=f13e192]
+          - group [ref=f13e193]:
+            - generic [ref=f13e195] [cursor=pointer]:
+              - text: יתרונות המוצר
+              - img "✅" [ref=f13e196]
+          - group [ref=f13e198]:
+            - generic "מידע שימושי לפני ובזמן התקנה ️" [ref=f13e199] [cursor=pointer]
+      - button "הגדלת התמונה" [ref=f13e208] [cursor=pointer]:
+        - img "איירלס מרסס צבע בוכנתי + אביזרים HUNTER" [ref=f13e209]
+    - generic [ref=f13e221]:
+      - heading "בטוח יעניין אתכם" [level=2] [ref=f13e224]
+      - generic [ref=f13e229]:
+        - generic [ref=f13e230]:
+          - group "1 / 8" [ref=f13e231]:
+            - link "תרסיס מנקה מגעים WD-40 400ml ₪43.37 מחיר ליח'" [ref=f13e233] [cursor=pointer]:
+              - /url: https://guetaavigdor.ussl.co/product/%d7%aa%d7%a8%d7%a1%d7%99%d7%a1-%d7%9e%d7%a0%d7%a7%d7%94-%d7%9e%d7%92%d7%a2%d7%99%d7%9d-wd-40-400ml/
+              - generic [ref=f13e235]:
+                - heading "תרסיס מנקה מגעים WD-40 400ml" [level=3] [ref=f13e236]
+                - generic [ref=f13e237]: ₪43.37
+                - generic [ref=f13e240]: מחיר ליח'
+          - group "2 / 8" [ref=f13e241]:
+            - link "מטליות ניקוי להסרת סיליקון, קצף פוליאוריטני ודבקים ₪59.50" [ref=f13e243] [cursor=pointer]:
+              - /url: https://guetaavigdor.ussl.co/product/%d7%9e%d7%98%d7%9c%d7%99%d7%95%d7%aa-%d7%a0%d7%99%d7%a7%d7%95%d7%99-%d7%9c%d7%94%d7%a1%d7%a8%d7%aa-%d7%a1%d7%99%d7%9c%d7%99%d7%a7%d7%95%d7%9f-%d7%a7%d7%a6%d7%a3-%d7%a4%d7%95%d7%9c%d7%99%d7%90%d7%95/
+              - generic [ref=f13e245]:
+                - heading "מטליות ניקוי להסרת סיליקון, קצף פוליאוריטני ודבקים" [level=3] [ref=f13e246]
+                - generic [ref=f13e247]: ₪59.50
+          - group "3 / 8" [ref=f13e250]:
+            - 'link "מבצע מוט סרגל לטאה המחיר המקורי היה: ₪369.13. המחיר הנוכחי הוא: ₪331.81." [ref=f13e252] [cursor=pointer]':
+              - /url: https://guetaavigdor.ussl.co/product/%d7%9e%d7%95%d7%98-%d7%a1%d7%a8%d7%92%d7%9c-%d7%9c%d7%98%d7%90%d7%94/
+              - generic [ref=f13e253]: מבצע
+              - generic [ref=f13e255]:
+                - heading "מוט סרגל לטאה" [level=3] [ref=f13e256]
+                - generic [ref=f13e257]:
+                  - deletion [aria-hidden] [ref=f13e258]:
+                    - generic [ref=f13e259]: ₪369.13
+                  - generic [ref=f13e261]: "המחיר המקורי היה: ₪369.13."
+                  - insertion [aria-hidden] [ref=f13e262]:
+                    - generic [ref=f13e263]: ₪331.81
+                  - generic [ref=f13e265]: "המחיר הנוכחי הוא: ₪331.81."
+          - group "4 / 8" [ref=f13e266]:
+            - link "אקדח סיכות פנאומטי U14/50K אקדח סיכות פנאומטי 14-50 מ\"מ U14/50K ₪1,057.97" [ref=f13e268] [cursor=pointer]:
+              - /url: https://guetaavigdor.ussl.co/product/%d7%90%d7%a7%d7%93%d7%97-%d7%a1%d7%99%d7%9b%d7%95%d7%aa-%d7%a4%d7%a0%d7%90%d7%95%d7%9e%d7%98%d7%99-14-50-%d7%9e%d7%9e-u14-50k/
+              - img "אקדח סיכות פנאומטי U14/50K" [ref=f13e270]
+              - generic [ref=f13e271]:
+                - heading "אקדח סיכות פנאומטי 14-50 מ\"מ U14/50K" [level=3] [ref=f13e272]
+                - generic [ref=f13e273]: ₪1,057.97
+          - group "5 / 8" [ref=f13e276]:
+            - link "מסור גרונג 250 מ\"מ של Einhell ₪1,099.32" [ref=f13e278] [cursor=pointer]:
+              - /url: https://guetaavigdor.ussl.co/product/%d7%9e%d7%a1%d7%95%d7%a8-%d7%92%d7%a8%d7%95%d7%a0%d7%92-250-%d7%9e%d7%9e-einhell/
+              - generic [ref=f13e280]:
+                - heading "מסור גרונג 250 מ\"מ של Einhell" [level=3] [ref=f13e281]
+                - generic [ref=f13e282]: ₪1,099.32
+          - group "6 / 8" [ref=f13e285]:
+            - 'link "מבצע סרגל + נעילה למשור וג’יקסו אורך פתיחה 900 או GATOR 600 טווח מחירים: ⁦₪99.00⁩ עד ⁦₪169.00⁩" [ref=f13e287] [cursor=pointer]':
+              - /url: https://guetaavigdor.ussl.co/product/%d7%a1%d7%a8%d7%92%d7%9c-%d7%a0%d7%a2%d7%99%d7%9c%d7%94-%d7%9c%d7%9e%d7%a9%d7%95%d7%a8-%d7%95%d7%92%d7%99%d7%a7%d7%a1%d7%95-%d7%90%d7%95%d7%a8%d7%9a-gator-600/
+              - generic [ref=f13e288]: מבצע
+              - generic [ref=f13e290]:
+                - heading "סרגל + נעילה למשור וג’יקסו אורך פתיחה 900 או GATOR 600" [level=3] [ref=f13e291]
+                - generic [ref=f13e292]:
+                  - generic [ref=f13e294]: ₪99.00
+                  - text: –
+                  - generic [ref=f13e296]: ₪169.00
+                  - generic [ref=f13e297]: "טווח מחירים: ⁦₪99.00⁩ עד ⁦₪169.00⁩"
+          - group "7 / 8" [ref=f13e298]:
+            - 'link "מבצע ספרי צבע טורבו לבן ספריי צבע טורבו 2X לבן מבריק המחיר המקורי היה: ₪75.64. המחיר הנוכחי הוא: ₪69.59." [ref=f13e300] [cursor=pointer]':
+              - /url: https://guetaavigdor.ussl.co/product/%d7%a1%d7%a4%d7%a8%d7%99%d7%99-%d7%a6%d7%91%d7%a2-%d7%98%d7%95%d7%a8%d7%91%d7%95-2x-%d7%9c%d7%91%d7%9f-%d7%9e%d7%91%d7%a8%d7%99%d7%a7/
+              - generic [ref=f13e301]:
+                - generic [ref=f13e302]: מבצע
+                - img "ספרי צבע טורבו לבן" [ref=f13e303]
+              - generic [ref=f13e304]:
+                - heading "ספריי צבע טורבו 2X לבן מבריק" [level=3] [ref=f13e305]
+                - generic [ref=f13e306]:
+                  - deletion [aria-hidden] [ref=f13e307]:
+                    - generic [ref=f13e308]: ₪75.64
+                  - generic [ref=f13e310]: "המחיר המקורי היה: ₪75.64."
+                  - insertion [aria-hidden] [ref=f13e311]:
+                    - generic [ref=f13e312]: ₪69.59
+                  - generic [ref=f13e314]: "המחיר הנוכחי הוא: ₪69.59."
+          - group "8 / 8" [ref=f13e315]:
+            - 'link "מבצע סט כלי עבודה נטענים סט 3 כלי עבודה נטענים 18V 4Ah ומטען מהיר Stanley המחיר המקורי היה: ₪4,034.19. המחיר הנוכחי הוא: ₪2,521.37." [ref=f13e317] [cursor=pointer]':
+              - /url: https://guetaavigdor.ussl.co/product/%d7%a1%d7%98-3-%d7%9b%d7%9c%d7%99-%d7%a2%d7%91%d7%95%d7%93%d7%94-%d7%a0%d7%98%d7%a2%d7%a0%d7%99%d7%9d-18v-4ah-%d7%95%d7%9e%d7%98%d7%a2%d7%9f-%d7%9e%d7%94%d7%99%d7%a8-stanley/
+              - generic [ref=f13e318]:
+                - generic [ref=f13e319]: מבצע
+                - img "סט כלי עבודה נטענים" [ref=f13e320]
+              - generic [ref=f13e321]:
+                - heading "סט 3 כלי עבודה נטענים 18V 4Ah ומטען מהיר Stanley" [level=3] [ref=f13e322]
+                - generic [ref=f13e323]:
+                  - deletion [aria-hidden] [ref=f13e324]:
+                    - generic [ref=f13e325]: ₪4,034.19
+                  - generic [ref=f13e327]: "המחיר המקורי היה: ₪4,034.19."
+                  - insertion [aria-hidden] [ref=f13e328]:
+                    - generic [ref=f13e329]: ₪2,521.37
+                  - generic [ref=f13e331]: "המחיר הנוכחי הוא: ₪2,521.37."
+        - button "Next slide" [ref=f13e332] [cursor=pointer]: prev
+        - button "Previous slide" [disabled]: next
+  - contentinfo [ref=f13e333]:
+    - generic [ref=f13e341]:
+      - generic [ref=f13e343]:
+        - paragraph [ref=f13e346]: גואטה אביגדור בע”מ.
+        - paragraph [ref=f13e349]: הינה חברה ישראלית הנמצאת בבעלות משפחתית מלאה ועוסקת בתחום העץ והאביזרים הנדרשים לצורך התקנה והקמה של גגות רעפים פרגולות ודקים למגזר העסקי והפרטי.
+        - generic [ref=f13e352]:
+          - link "דברו איתנו" [ref=f13e354] [cursor=pointer]:
+            - /url: https://api.whatsapp.com/send?phone=972509512625
+            - generic [aria-hidden] [ref=f13e355]: 
+          - heading [level=3] [ref=f13e357]:
+            - link "דברו איתנו" [ref=f13e358] [cursor=pointer]:
+              - /url: https://api.whatsapp.com/send?phone=972509512625
+      - generic [ref=f13e360]:
+        - paragraph [ref=f13e363]: קופצים?
+        - generic [ref=f13e365]:
+          - paragraph [ref=f13e366]: א-ה בין השעות 07:30 ועד 16:30יום ו’ בין השעות 07:30 עד 13:00
+          - paragraph [ref=f13e367]: רח׳ זאב שלנג 3 א.ת.ח ראשל״צ(מאחורי הסינמה סיטי)
+          - paragraph [ref=f13e368]:
+            - text: דברו איתנו. 050-9512625
+            - link "info@guetaavigdor.co.il" [ref=f13e369] [cursor=pointer]:
+              - /url: mailto:info@guetaavigdor.co.il
+      - generic [ref=f13e371]:
+        - paragraph [ref=f13e374]: סושיאלס.
+        - list [ref=f13e377]:
+          - listitem [ref=f13e378]:
+            - link [ref=f13e379] [cursor=pointer]:
+              - /url: https://www.tiktok.com/@guetawood
+              - generic [aria-hidden] [ref=f13e381]: 
+          - listitem [ref=f13e382]:
+            - link [ref=f13e383] [cursor=pointer]:
+              - /url: https://www.instagram.com/gueta_avigdor/
+              - generic [aria-hidden] [ref=f13e385]: 
+          - listitem [ref=f13e386]:
+            - link [ref=f13e387] [cursor=pointer]:
+              - /url: https://www.facebook.com/guetaavigdor/?locale=he_IL
+              - generic [aria-hidden] [ref=f13e389]: 
+        - paragraph [ref=f13e392]: מבצעים, מוצרים חדשים וטיפים מקצועיים.
+        - form "ניוזלטר" [ref=f13e395]:
+          - generic [ref=f13e396]:
+            - generic [ref=f13e397]:
+              - generic [ref=f13e398] [cursor=pointer]: אימייל
+              - textbox "אימייל" [ref=f13e399]
+            - button "שליחה" [ref=f13e401] [cursor=pointer]:
+              - generic [ref=f13e403]:
+                - generic [aria-hidden] [ref=f13e404]: 
+                - generic [ref=f13e405]: שליחה
+    - paragraph [ref=f13e412]:
+      - text: © 2026 כל הזכויות שמורות לגואטה אביגדור מחסן עצים | תקנון האתר | הצהרת נגישות | פרטיות | אתר
+      - link "tabuzzco" [ref=f13e413] [cursor=pointer]:
+        - /url: https://tabuzzco.com
+  - generic [ref=f13e415]:
+    - generic [ref=f13e416]:
+      - img "איירלס מרסס צבע בוכנתי + אביזרים HUNTER" [ref=f13e418]
+      - generic [ref=f13e419]:
+        - generic [ref=f13e420]: איירלס מרסס צבע בוכנתי + אביזרים HUNTER
+        - generic [ref=f13e421]:
+          - deletion [aria-hidden] [ref=f13e422]:
+            - generic [ref=f13e423]: ₪2,000.00
+          - generic [ref=f13e424]: "המחיר המקורי היה: ₪2,000.00."
+          - insertion [aria-hidden] [ref=f13e425]:
+            - generic [ref=f13e426]: ₪1,700.00
+          - generic [ref=f13e427]: "המחיר הנוכחי הוא: ₪1,700.00."
+    - button "הוספה לסל" [ref=f13e428] [cursor=pointer]
+  - generic [ref=f13e429]: desktop
+  - status [ref=f13e430]

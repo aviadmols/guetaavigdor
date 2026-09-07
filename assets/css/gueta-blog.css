@@ -1,0 +1,449 @@
+/**
+ * The magazine.
+ *
+ * Two pages share this file: an article, and the page that lists them. Both
+ * are quiet on purpose. The only strong thing on an article is the headline;
+ * everything else gets out of the way of the words.
+ *
+ * The measure matters more than anything else here. The parent theme let a
+ * line run the full width of the page, so the eye had to hunt for the start of
+ * the next one. Held to 760px a line of Hebrew lands around seventy
+ * characters, which is where reading stops being work.
+ *
+ * Tokens come from gueta-header.css, which loads first.
+ */
+
+.gueta-post,
+.gueta-post *,
+.gueta-magazine,
+.gueta-magazine *,
+.gueta-related,
+.gueta-related * {
+	box-sizing: border-box;
+}
+
+.gueta-post__measure,
+.gueta-magazine__inner,
+.gueta-related__inner,
+.gueta-lead__inner {
+	margin-inline: auto;
+	max-width: 760px;
+	padding-inline: var(--gueta-gutter);
+	width: 100%;
+}
+
+.gueta-magazine__inner,
+.gueta-related__inner,
+.gueta-lead__inner {
+	max-width: var(--gueta-max);
+}
+
+/* -------------------------------------------------------------------------
+ * The trail
+ * ---------------------------------------------------------------------- */
+
+.gueta-post__crumbs {
+	color: var(--gueta-soft);
+	font-size: 13px;
+	line-height: 1.7;
+	margin-bottom: 26px;
+}
+
+.gueta-post__crumbs a {
+	color: var(--gueta-muted);
+	text-decoration: none;
+	transition: color .25s ease;
+}
+
+.gueta-post__crumbs a:hover {
+	color: var(--gueta-ink);
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.gueta-post__crumbs-here,
+.gueta-post__crumbs .breadcrumb_last {
+	color: var(--gueta-ink);
+}
+
+/* -------------------------------------------------------------------------
+ * An article
+ * ---------------------------------------------------------------------- */
+
+.gueta-post__head {
+	background: var(--gueta-sand);
+	padding: 44px 0 52px;
+}
+
+.gueta-post__title {
+	color: var(--gueta-ink);
+	font-size: clamp(30px, 4vw, 44px);
+	font-weight: 500;
+	letter-spacing: -.015em;
+	line-height: 1.2;
+	margin: 0 0 16px;
+}
+
+.gueta-post__meta,
+.gueta-lead__meta,
+.gueta-card-post__meta {
+	align-items: center;
+	color: var(--gueta-soft);
+	display: flex;
+	flex-wrap: wrap;
+	font-size: 13px;
+	gap: 8px;
+	margin: 0;
+}
+
+.gueta-post__cover {
+	margin: 0 auto;
+	max-width: var(--gueta-max);
+	padding: 0 var(--gueta-gutter);
+}
+
+.gueta-post__cover img {
+	border-radius: var(--gueta-radius);
+	display: block;
+	height: auto;
+	margin-top: -28px;
+	width: 100%;
+}
+
+.gueta-post__body {
+	padding: 48px 0 72px;
+}
+
+/* The words themselves. */
+.gueta-post__body .gueta-post__measure {
+	color: var(--gueta-ink);
+	font-size: 17px;
+	line-height: 1.8;
+}
+
+.gueta-post__body p {
+	margin: 0 0 22px;
+}
+
+.gueta-post__body h2 {
+	font-size: 25px;
+	font-weight: 600;
+	letter-spacing: -.01em;
+	line-height: 1.3;
+	margin: 44px 0 14px;
+}
+
+.gueta-post__body h3 {
+	font-size: 20px;
+	font-weight: 600;
+	line-height: 1.4;
+	margin: 32px 0 10px;
+}
+
+.gueta-post__body h2:first-child,
+.gueta-post__body h3:first-child {
+	margin-top: 0;
+}
+
+.gueta-post__body a {
+	color: var(--gueta-ink);
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.gueta-post__body a:hover {
+	color: var(--gueta-accent-warm);
+}
+
+.gueta-post__body ul,
+.gueta-post__body ol {
+	margin: 0 0 22px;
+	padding-inline-start: 22px;
+}
+
+.gueta-post__body li {
+	margin-bottom: 8px;
+}
+
+.gueta-post__body img {
+	border-radius: var(--gueta-radius);
+	height: auto;
+	max-width: 100%;
+}
+
+.gueta-post__body blockquote {
+	border-inline-start: 2px solid var(--gueta-ink);
+	color: var(--gueta-muted);
+	font-size: 19px;
+	line-height: 1.7;
+	margin: 32px 0;
+	padding-inline-start: 20px;
+}
+
+.gueta-post__body table {
+	border-collapse: collapse;
+	font-size: 15px;
+	width: 100%;
+}
+
+.gueta-post__body th,
+.gueta-post__body td {
+	border-bottom: 1px solid var(--gueta-rule);
+	padding: 10px 8px;
+	text-align: start;
+}
+
+/* -------------------------------------------------------------------------
+ * The lead on the listing
+ * ---------------------------------------------------------------------- */
+
+.gueta-lead {
+	background: var(--gueta-sand);
+	padding: 40px 0 48px;
+}
+
+.gueta-lead__inner {
+	align-items: center;
+	display: grid;
+	gap: 48px;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+}
+
+.gueta-lead__title {
+	font-size: clamp(26px, 3.2vw, 38px);
+	font-weight: 500;
+	letter-spacing: -.015em;
+	line-height: 1.22;
+	margin: 0 0 14px;
+}
+
+.gueta-lead__title a {
+	color: var(--gueta-ink);
+	text-decoration: none;
+}
+
+.gueta-lead__title a:hover {
+	text-decoration: underline;
+	text-underline-offset: 4px;
+}
+
+.gueta-lead__excerpt {
+	color: var(--gueta-muted);
+	font-size: 15px;
+	line-height: 1.75;
+	margin: 16px 0 24px;
+}
+
+.gueta-lead__more {
+	background: var(--gueta-ink);
+	border-radius: 8px;
+	color: var(--gueta-paper);
+	display: inline-flex;
+	font-size: 15px;
+	font-weight: 600;
+	min-height: 46px;
+	align-items: center;
+	padding: 0 26px;
+	text-decoration: none;
+	transition: background-color .25s ease;
+}
+
+.gueta-lead__more:hover {
+	background: var(--gueta-accent-warm);
+	color: var(--gueta-paper);
+}
+
+.gueta-lead__media {
+	display: block;
+	overflow: hidden;
+}
+
+.gueta-lead__media img {
+	border-radius: var(--gueta-radius);
+	display: block;
+	height: auto;
+	width: 100%;
+}
+
+.gueta-lead__blank {
+	background: var(--gueta-rule);
+	border-radius: var(--gueta-radius);
+	display: block;
+	padding-top: 62%;
+}
+
+/* -------------------------------------------------------------------------
+ * The listing
+ * ---------------------------------------------------------------------- */
+
+.gueta-magazine__list {
+	padding: 56px 0 80px;
+}
+
+.gueta-magazine__head {
+	margin-bottom: 26px;
+}
+
+.gueta-magazine__title {
+	font-size: 22px;
+	font-weight: 600;
+	letter-spacing: -.01em;
+	margin: 0;
+}
+
+.gueta-magazine__grid,
+.gueta-related__grid {
+	display: grid;
+	gap: 40px 28px;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.gueta-card-post__media {
+	display: block;
+	margin-bottom: 14px;
+	overflow: hidden;
+}
+
+.gueta-card-post__media img {
+	aspect-ratio: 4 / 3;
+	border-radius: var(--gueta-radius);
+	display: block;
+	height: auto;
+	object-fit: cover;
+	transition: transform .5s ease;
+	width: 100%;
+}
+
+.gueta-card-post:hover .gueta-card-post__media img {
+	transform: scale(1.03);
+}
+
+.gueta-card-post__blank {
+	aspect-ratio: 4 / 3;
+	background: var(--gueta-rule);
+	border-radius: var(--gueta-radius);
+	display: block;
+}
+
+.gueta-card-post__title {
+	font-size: 17px;
+	font-weight: 500;
+	line-height: 1.45;
+	margin: 0 0 8px;
+}
+
+.gueta-card-post__title a {
+	color: var(--gueta-ink);
+	text-decoration: none;
+}
+
+.gueta-card-post__title a:hover {
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.gueta-magazine__empty {
+	color: var(--gueta-muted);
+}
+
+/* -------------------------------------------------------------------------
+ * Paging
+ * ---------------------------------------------------------------------- */
+
+.gueta-magazine__pages {
+	margin-top: 52px;
+}
+
+.gueta-magazine__pages ul {
+	display: flex;
+	gap: 8px;
+	justify-content: center;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.gueta-magazine__pages a,
+.gueta-magazine__pages span {
+	align-items: center;
+	border: 1px solid var(--gueta-rule);
+	border-radius: 8px;
+	color: var(--gueta-muted);
+	display: flex;
+	font-size: 14px;
+	justify-content: center;
+	min-height: 38px;
+	padding: 0 13px;
+	text-decoration: none;
+	transition: border-color .2s ease, color .2s ease;
+}
+
+.gueta-magazine__pages a:hover {
+	border-color: var(--gueta-ink);
+	color: var(--gueta-ink);
+}
+
+.gueta-magazine__pages .current {
+	background: var(--gueta-ink);
+	border-color: var(--gueta-ink);
+	color: var(--gueta-paper);
+}
+
+/* -------------------------------------------------------------------------
+ * What to read next
+ * ---------------------------------------------------------------------- */
+
+.gueta-related {
+	background: var(--gueta-sand);
+	padding: 56px 0 72px;
+}
+
+.gueta-related__title {
+	font-size: 22px;
+	font-weight: 600;
+	letter-spacing: -.01em;
+	margin: 0 0 26px;
+}
+
+/* -------------------------------------------------------------------------
+ * Narrow screens
+ * ---------------------------------------------------------------------- */
+
+@media (max-width: 900px) {
+	.gueta-lead__inner {
+		gap: 28px;
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.gueta-lead__media {
+		grid-row: 1;
+	}
+
+	.gueta-magazine__grid,
+	.gueta-related__grid {
+		gap: 32px 20px;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (max-width: 600px) {
+	.gueta-magazine__grid,
+	.gueta-related__grid {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.gueta-post__body .gueta-post__measure {
+		font-size: 16px;
+	}
+
+	.gueta-post__cover img {
+		border-radius: 8px;
+		margin-top: -18px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.gueta-card-post__media img {
+		transition-duration: .01ms;
+	}
+}

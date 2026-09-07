@@ -1,0 +1,343 @@
+- generic [active] [ref=f25e1]:
+  - generic [aria-hidden]: Γ
+  - link "Skip to content" [ref=f25e2] [cursor=pointer]:
+    - /url: "#MainContent"
+  - generic [ref=f25e7]:
+    - generic [ref=f25e8]:
+      - group "2 / 2" [ref=f25e9]:
+        - button "חדשים כאן? הירשמו לניוזלטר וקבלו 5% הנחה" [ref=f25e12] [cursor=pointer]
+      - group "1 / 2" [ref=f25e13]:
+        - 'link "עוד 02 : 12 : 13 : 01 לסיום Holiday SALE 🍏 עד 30% הנחה על כל האתר" [ref=f25e14] [cursor=pointer]':
+          - /url: https://kualastyle.com/collections/the-home-team
+          - generic [ref=f25e15]:
+            - generic [ref=f25e16]: עוד
+            - generic [ref=f25e18]:
+              - generic [ref=f25e19]: "02 :"
+              - generic [ref=f25e21]: "12 :"
+              - generic [ref=f25e23]: "13 :"
+              - generic [ref=f25e25]: "01"
+            - generic [ref=f25e27]: לסיום
+          - generic [ref=f25e28]: Holiday SALE 🍏 עד 30% הנחה על כל האתר
+      - group "2 / 2" [ref=f25e29]:
+        - button "חדשים כאן? הירשמו לניוזלטר וקבלו 5% הנחה" [ref=f25e32] [cursor=pointer]
+      - group "1 / 2" [ref=f25e33]:
+        - 'link "עוד 02 : 12 : 13 : 01 לסיום Holiday SALE 🍏 עד 30% הנחה על כל האתר" [ref=f25e34] [cursor=pointer]':
+          - /url: https://kualastyle.com/collections/the-home-team
+          - generic [ref=f25e35]:
+            - generic [ref=f25e36]: עוד
+            - generic [ref=f25e38]:
+              - generic [ref=f25e39]: "02 :"
+              - generic [ref=f25e41]: "12 :"
+              - generic [ref=f25e43]: "13 :"
+              - generic [ref=f25e45]: "01"
+            - generic [ref=f25e47]: לסיום
+          - generic [ref=f25e48]: Holiday SALE 🍏 עד 30% הנחה על כל האתר
+    - generic:
+      - button "Previous slide" [ref=f25e49] [cursor=pointer]
+      - button "Next slide" [ref=f25e52] [cursor=pointer]
+  - generic:
+    - banner:
+      - generic [ref=f25e55]:
+        - link [ref=f25e57] [cursor=pointer]:
+          - /url: /
+          - img "KUALA" [ref=f25e58]
+        - search [ref=f25e62]:
+          - generic [ref=f25e63]:
+            - combobox "חיפוש" [ref=f25e64]
+            - generic [ref=f25e65]: חיפוש
+        - generic [ref=f25e71]:
+          - link [ref=f25e72] [cursor=pointer]:
+            - /url: "#swym-wishlist"
+          - link "Cart" [ref=f25e76] [cursor=pointer]:
+            - /url: /cart
+      - navigation "Primary" [ref=f25e86]:
+        - list [ref=f25e87]:
+          - listitem [ref=f25e88]:
+            - group [ref=f25e89]:
+              - generic "לפי חדרים" [ref=f25e90] [cursor=pointer]
+          - listitem [ref=f25e95]:
+            - group [ref=f25e96]:
+              - generic "ריהוט" [ref=f25e97] [cursor=pointer]
+          - listitem [ref=f25e102]:
+            - group [ref=f25e103]:
+              - generic "דקורציה ועיצוב הבית" [ref=f25e104] [cursor=pointer]
+          - listitem [ref=f25e109]:
+            - group [ref=f25e110]:
+              - generic "מוצרי חשמל" [ref=f25e111] [cursor=pointer]
+          - listitem [ref=f25e116]:
+            - group [ref=f25e117]:
+              - generic "תאורה" [ref=f25e118] [cursor=pointer]
+          - listitem [ref=f25e123]:
+            - link "אביזרים לחיות מחמד" [ref=f25e124] [cursor=pointer]:
+              - /url: /collections/%D7%97%D7%99%D7%95%D7%AA-%D7%9E%D7%97%D7%9E%D7%93
+          - listitem [ref=f25e126]:
+            - link "הנמכרים ביותר" [ref=f25e127] [cursor=pointer]:
+              - /url: /collections/best-sellers
+          - listitem [ref=f25e129]:
+            - link "& KUALA" [ref=f25e130] [cursor=pointer]:
+              - /url: /pages/%D7%91%D7%AA%D7%99%D7%9D-%D7%9E%D7%91%D7%A4%D7%A0%D7%99%D7%9D
+          - listitem [ref=f25e132]:
+            - group [ref=f25e133]:
+              - generic "מבצעים" [ref=f25e134] [cursor=pointer]
+  - generic [ref=f25e145]:
+    - main [ref=f25e146]:
+      - navigation "breadcrumbs" [ref=f25e149]:
+        - link "עמוד בית" [ref=f25e150] [cursor=pointer]:
+          - /url: /
+        - link "מגזין" [ref=f25e152] [cursor=pointer]:
+          - /url: /blogs/blog-post
+        - generic [ref=f25e154]: קומודה לחדר שינה - איך לשלב אחסון ועיצוב בצורה מושלמת
+      - article [ref=f25e156]:
+        - generic [ref=f25e157]:
+          - generic [ref=f25e159]:
+            - generic [ref=f25e160]:
+              - heading "קומודה לחדר שינה - איך לשלב אחסון ועיצוב בצורה מושלמת" [level=1] [ref=f25e161]
+              - generic [ref=f25e162]:
+                - time [ref=f25e164]: 22 בנוב׳ 2025
+                - generic [ref=f25e166]: Daniel Edri
+            - generic [ref=f25e167]:
+              - heading "קומודה לחדר שינה - איך לשלב אחסון ועיצוב בצורה מושלמת" [level=1] [ref=f25e168]
+              - paragraph [ref=f25e169]: אתם עומדים מול הארון בבוקר, מחפשים חולצה, והכל מעורבב? מגירות שלא סוגרות כי הן מלאות מדי? בגדים מקופלים על הכיסא כי אין איפה לשים אותם? אנחנו מכירים את זה היטב. קומודה לחדר שינה היא לא רק רהיט נוסף - היא הפתרון לארגון חכם ולעיצוב מושלם של החלל הכי אישי בבית. אנחנו כאן כדי להראות לכם איך קומודה מעוצבת יכולה לשנות את חדר השינה שלכם לגמרי - גם מבחינה פרקטית וגם מבחינה ויזואלית.
+              - heading "למה כל חדר שינה צריך קומודה איכותית?" [level=2] [ref=f25e170]
+              - paragraph [ref=f25e171]: "אנחנו תמיד אומרים שקומודה טובה עושה שתי עבודות בו זמנית: היא מארגנת את הבלגן ומוסיפה אופי לחדר. חשבו על זה - כמה בגדים יש לכם שלא מתלים בארון? חולצות, גרביים, תחתונים, פיג'מות, אביזרים, תכשיטים. כל אלה צריכים בית מסודר, ולא ערימה על הכיסא או על הרצפה."
+              - paragraph [ref=f25e172]: אבל מעבר לאחסון, קומודה מעוצבת היא גם נקודת מוקד בחדר השינה. היא יכולה להפוך קיר ריק למרכז עיצובי מרשים, במיוחד כשמשלבים אותה עם מראה דקורטיביות, תמונות מעוצבות, או צמחים. ב-קואלה אנחנו מציעים קומודות שמשלבות פונקציונליות מושלמת עם עיצוב שמושך את העין.
+              - heading "הסוגים השונים של קומודות לחדר שינה" [level=2] [ref=f25e173]
+              - heading "קומודה גבוהה - מקסימום אחסון, מינימום שטח" [level=3] [ref=f25e174]
+              - paragraph [ref=f25e175]: אם יש לכם חדר שינה קטן וצריכים הרבה מקום אחסון, קומודה גבוהה עם 5-6 מגירות היא הפתרון המושלם. היא תופסת פחות שטח רצפה אבל נותנת הרבה נפח פנימי. אנחנו אוהבים לשים קומודות גבוהות בפינות או ליד הקיר הפנוי, ולשלב אותן עם מראה מעליהן כדי ליצור תחנת הלבשה מושלמת.
+              - paragraph [ref=f25e176]: הקולקציה שלנו ב-קואלה כוללת קומודות גבוהות בעיצובים מודרניים ובצבעים ניטרליים שמשתלבים בכל סגנון - מקלאסי ועד מינימליסטי.
+              - heading "קומודה רחבה ונמוכה - אלגנטיות ונוחות" [level=3] [ref=f25e177]
+              - paragraph [ref=f25e178]: קומודה רחבה עם 3-4 מגירות רחבות מתאימה מאוד למי שיש לו מקום בחדר ורוצה משטח עליון גדול. המשטח הזה הוא זהב - אפשר לשים עליו מנורת שולחן מעוצבת, תמונות ממוסגרות, או אפילו טלוויזיה קטנה. בנוסף, המגירות הרחבות מושלמות לאחסון מצעים או בגדים גדולים.
+              - paragraph [ref=f25e179]: אנחנו ב-קואלה מציעים קומודות רחבות עם גימורים איכותיים ומגירות שקטות שנסגרות בנעימות - בלי טריקות מעצבנות בבוקר מוקדם.
+              - heading "קומודה עם שילוב זכוכית או עץ - נגיעה מיוחדת" [level=3] [ref=f25e180]
+              - paragraph [ref=f25e181]: אם אתם רוצים משהו קצת שונה, קומודה עם דלתות זכוכית או גימור עץ טבעי יכולה להוסיף אופי ייחודי לחדר. זכוכית מעניקה מראה קליל ואלגנטי, בעוד עץ טבעי מביא חמימות ותחושה אורגנית. שני הסגנונים האלה מתאימים מאוד למי שאוהב לשלב טקסטורות שונות בעיצוב הבית.
+              - heading "טיפים שלנו לבחירת קומודה מושלמת לחדר השינה" [level=2] [ref=f25e182]
+              - heading "1. מדדו את השטח והתכננו את המיקום" [level=3] [ref=f25e183]
+              - paragraph [ref=f25e184]: לפני שאתם מזמינים קומודה, מדדו בדיוק את המקום שבו תרצו לשים אותה. תוודאו שיש לפחות 80-90 ס"מ מרווח מול הקומודה כדי לפתוח מגירות בנוחות. אם אתם שמים אותה מול המיטה או ליד הדלת, חשבו על זרימת התנועה בחדר - אתם לא רוצים שהקומודה תחסום מעבר.
+              - paragraph [ref=f25e185]: אנחנו תמיד ממליצים לשרטט את החדר על דף ולתכנן איפה כל רהיט יעמוד - זה חוסך הרבה כאב ראש אחר כך.
+              - heading "2. בחרו גובה שמתאים לשימוש" [level=3] [ref=f25e186]
+              - paragraph [ref=f25e187]: קומודה גבוהה (120-140 ס"מ) מתאימה למי שצריך הרבה אחסון ויש לו פחות מקום אופקי. קומודה נמוכה (80-100 ס"מ) מושלמת למי שרוצה משטח עבודה עליון או מקום לטלוויזיה. חשבו מה חשוב לכם יותר - אחסון מקסימלי או משטח שימושי.
+              - heading "3. התאימו את הסגנון למיטה ולארון" [level=3] [ref=f25e188]
+              - paragraph [ref=f25e189]: קומודה צריכה להשתלב עם שאר הרהיטים בחדר השינה - במיוחד עם המיטה הזוגית והארון הזזה. אם יש לכם מיטה מרופדת בגוון בהיר, קומודה בעץ טבעי או בגוון תואם תשלים את המראה. אם יש לכם מיטה מודרנית עם קווים נקיים, קומודה מינימליסטית עם ידיות פשוטות תהיה הבחירה הנכונה.
+              - paragraph [ref=f25e190]: ב-קואלה יש לנו קומודות במגוון סגנונות - מודרניות, קלאסיות, וסקנדינביות - כדי שתמצאו את ההתאמה המושלמת לעיצוב שלכם.
+              - heading "4. בדקו את איכות המגירות והמסילות" [level=3] [ref=f25e191]
+              - paragraph [ref=f25e192]: זה הפרט שעושה את כל הההבדל. מגירות עם מסילות טלסקופיות נפתחות חלק ועד הסוף, מה שמאפשר גישה נוחה לכל התוכן. מגירות עם מנגנון סגירה שקטה (Soft Close) נסגרות בעדינות בלי להתרסק - זה גם נעים יותר וגם מאריך את חיי הרהיט.
+              - paragraph [ref=f25e193]: כל הקומודות שלנו ב-קואלה מגיעות עם מסילות איכותיות ומנגנוני סגירה שקטה - כי אנחנו יודעים שהפרטים הקטנים האלה הם שעושים את ההבדל ביומיום.
+              - heading "5. חשבו על האחסון הפנימי" [level=3] [ref=f25e194]
+              - paragraph [ref=f25e195]: מגירות עמוקות (15-20 ס"מ) מתאימות לבגדים מקופלים כמו חולצות וסוודרים. מגירות רדודות (7-10 ס"מ) טובות לתחתונים, גרביים, או תכשיטים. אם אפשר, בחרו קומודה עם מגירות בגדלים שונים כדי למקסם את האחסון.
+              - paragraph [ref=f25e196]: אנחנו ב-קואלה מציעים קומודות עם חלוקה חכמה של מגירות שמאפשרת אחסון יעיל לכל סוגי הבגדים.
+              - heading "6. שלבו קומודה עם תמונות מעוצבות ומראות" [level=3] [ref=f25e197]
+              - paragraph [ref=f25e198]: קומודה היא הבסיס המושלם לתצוגה עיצובית. תלו מעליה מראה דקורטיבית שתרחיב את החלל, או שלבו תמונות מעוצבות מהקולקציה שלנו ליצירת קיר גלריה אישי. הוסיפו מנורת שולחן או צמחים קטנים על המשטח העליון, ותקבלו פינה מעוצבת שמושכת את העין.
+              - heading "איך לארגן את הקומודה בצורה חכמה" [level=2] [ref=f25e199]
+              - paragraph [ref=f25e200]: "אחרי שבחרתם את הקומודה המושלמת, הגיע הזמן לארגן אותה נכון. אנחנו תמיד ממליצים לחלק את המגירות לפי קטגוריות: מגירה עליונה לתחתונים וגרביים, מגירה שנייה לחולצות וטישרטים, מגירה שלישית למכנסיים או חצאיות. אם יש לכם מגירות נוספות, השתמשו בהן למצעים, פיג'מות, או בגדי ספורט."
+              - paragraph [ref=f25e201]: השתמשו במחלקי מגירות קטנים כדי לשמור על סדר - זה מונע מהבגדים להתערבב ועוזר לכם למצוא מה שאתם מחפשים מהר יותר. ב-קואלה אנחנו מאמינים שאחסון חכם הוא המפתח לבית מסודר ולחיים נעימים יותר.
+              - heading "תנו לנו לעזור לכם ליצור חדר שינה מסודר ומעוצב" [level=2] [ref=f25e202]
+              - paragraph [ref=f25e203]: אנחנו ב-קואלה מאמינים שקומודה לחדר שינה היא לא רק רהיט אחסון - היא חלק מרכזי בעיצוב החלל הכי אינטימי בבית. עם המגוון הרחב שלנו של קומודות מעוצבות - גבוהות, רחבות, מודרניות וקלאסיות - אתם בטוח תמצאו את הפתרון המושלם שמשלב אחסון חכם עם סטייל שמדבר אליכם.
+              - paragraph [ref=f25e204]: שלבו את הקומודה עם שידות לילה מעוצבות, מיטה זוגית מרופדה, וארון הזזה מהקולקציה שלנו, ותקבלו חדר שינה הרמוני שמרגיש כמו חלום. הכל באיכות בלתי מתפשרת, במחירים נגישים, ועם משלוח חינם עד הדלת.
+              - paragraph [ref=f25e205]: מוכנים לשדרג את חדר השינה שלכם? היכנסו לאתר של קואלה, גלו את קולקציית הקומודות המעוצבות שלנו, ותראו איך קל זה ליצור חדר שינה מסודר ויפה - בכמה קליקים פשוטים.
+              - paragraph [ref=f25e206]:
+                - strong [ref=f25e207]: גלו את קולקציית הקומודות המעוצבות שלנו כאן
+            - generic [ref=f25e209]:
+              - generic [ref=f25e210]: "שתפו:"
+              - generic [ref=f25e211]:
+                - link [ref=f25e212] [cursor=pointer]:
+                  - /url: //www.facebook.com/sharer.php?u=https://kualastyle.com/blogs/blog-post/%D7%A7%D7%95%D7%9E%D7%95%D7%93%D7%94-%D7%9C%D7%97%D7%93%D7%A8-%D7%A9%D7%99%D7%A0%D7%94-%D7%90%D7%99%D7%9A-%D7%9C%D7%A9%D7%9C%D7%91-%D7%90%D7%97%D7%A1%D7%95%D7%9F-%D7%95%D7%A2%D7%99%D7%A6%D7%95%D7%91-%D7%91%D7%A6%D7%95%D7%A8%D7%94-%D7%9E%D7%95%D7%A9%D7%9C%D7%9E%D7%AA
+                - link [ref=f25e216] [cursor=pointer]:
+                  - /url: "//pinterest.com/pin/create/button/?url=https://kualastyle.com/blogs/blog-post/%D7%A7%D7%95%D7%9E%D7%95%D7%93%D7%94-%D7%9C%D7%97%D7%93%D7%A8-%D7%A9%D7%99%D7%A0%D7%94-%D7%90%D7%99%D7%9A-%D7%9C%D7%A9%D7%9C%D7%91-%D7%90%D7%97%D7%A1%D7%95%D7%9F-%D7%95%D7%A2%D7%99%D7%A6%D7%95%D7%91-%D7%91%D7%A6%D7%95%D7%A8%D7%94-%D7%9E%D7%95%D7%A9%D7%9C%D7%9E%D7%AA&media=Liquid error (snippets/social-sharing line 28): invalid url input&description="
+                - link [ref=f25e220] [cursor=pointer]:
+                  - /url: https://wa.me/?text=%20https://kualastyle.com/blogs/blog-post/%25D7%25A7%25D7%2595%25D7%259E%25D7%2595%25D7%2593%25D7%2594-%25D7%259C%25D7%2597%25D7%2593%25D7%25A8-%25D7%25A9%25D7%2599%25D7%25A0%25D7%2594-%25D7%2590%25D7%2599%25D7%259A-%25D7%259C%25D7%25A9%25D7%259C%25D7%2591-%25D7%2590%25D7%2597%25D7%25A1%25D7%2595%25D7%259F-%25D7%2595%25D7%25A2%25D7%2599%25D7%25A6%25D7%2595%25D7%2591-%25D7%2591%25D7%25A6%25D7%2595%25D7%25A8%25D7%2594-%25D7%259E%25D7%2595%25D7%25A9%25D7%259C%25D7%259E%25D7%25AA
+          - generic [ref=f25e224]:
+            - heading "מאמרים קשורים" [level=2] [ref=f25e226]
+            - generic [ref=f25e228]:
+              - generic [ref=f25e230]:
+                - link [ref=f25e232] [cursor=pointer]:
+                  - /url: /blogs/blog-post/%D7%90%D7%99%D7%9A-%D7%9C%D7%91%D7%97%D7%95%D7%A8-%D7%9E%D7%99%D7%98%D7%94-%D7%96%D7%95%D7%92%D7%99%D7%AA-%D7%9E%D7%A2%D7%95%D7%A6%D7%91%D7%AA-%D7%94%D7%9E%D7%93%D7%A8%D7%99%D7%9A-%D7%94%D7%9E%D7%9C%D7%90-%D7%9C%D7%A9%D7%99%D7%A0%D7%94-%D7%9E%D7%95%D7%A9%D7%9C%D7%9E%D7%AA
+                  - img "איך לבחור מיטה זוגית מעוצבת - המדריך המלא לשינה מושלמת - KUALA" [ref=f25e234]
+                - generic [ref=f25e236]:
+                  - heading [level=3] [ref=f25e237]:
+                    - link "איך לבחור מיטה זוגית מעוצבת - המדריך המלא לשינה מושלמת" [ref=f25e238] [cursor=pointer]:
+                      - /url: /blogs/blog-post/%D7%90%D7%99%D7%9A-%D7%9C%D7%91%D7%97%D7%95%D7%A8-%D7%9E%D7%99%D7%98%D7%94-%D7%96%D7%95%D7%92%D7%99%D7%AA-%D7%9E%D7%A2%D7%95%D7%A6%D7%91%D7%AA-%D7%94%D7%9E%D7%93%D7%A8%D7%99%D7%9A-%D7%94%D7%9E%D7%9C%D7%90-%D7%9C%D7%A9%D7%99%D7%A0%D7%94-%D7%9E%D7%95%D7%A9%D7%9C%D7%9E%D7%AA
+                  - generic [ref=f25e239]:
+                    - time [ref=f25e241]: 22 בנוב׳ 2025
+                    - generic [ref=f25e243]: Daniel Edri
+              - generic [ref=f25e245]:
+                - link [ref=f25e247] [cursor=pointer]:
+                  - /url: /blogs/blog-post/%D7%90%D7%99%D7%9A-%D7%9C%D7%94%D7%A4%D7%95%D7%9A-%D7%9B%D7%9C-%D7%97%D7%9C%D7%9C-%D7%91%D7%91%D7%99%D7%AA-%D7%9C%D7%A4%D7%95%D7%A0%D7%A7%D7%A6%D7%99%D7%95%D7%A0%D7%9C%D7%99-%D7%95%D7%9E%D7%A2%D7%95%D7%A6%D7%91-%D7%A2%D7%9D-%D7%A8%D7%94%D7%99%D7%98%D7%99%D7%9D-%D7%97%D7%9B%D7%9E%D7%99%D7%9D
+                  - img "איך להפוך כל חלל בבית לפונקציונלי ומעוצב עם רהיטים חכמים - KUALA" [ref=f25e249]
+                - generic [ref=f25e251]:
+                  - heading [level=3] [ref=f25e252]:
+                    - link "איך להפוך כל חלל בבית לפונקציונלי ומעוצב עם רהיטים חכמים" [ref=f25e253] [cursor=pointer]:
+                      - /url: /blogs/blog-post/%D7%90%D7%99%D7%9A-%D7%9C%D7%94%D7%A4%D7%95%D7%9A-%D7%9B%D7%9C-%D7%97%D7%9C%D7%9C-%D7%91%D7%91%D7%99%D7%AA-%D7%9C%D7%A4%D7%95%D7%A0%D7%A7%D7%A6%D7%99%D7%95%D7%A0%D7%9C%D7%99-%D7%95%D7%9E%D7%A2%D7%95%D7%A6%D7%91-%D7%A2%D7%9D-%D7%A8%D7%94%D7%99%D7%98%D7%99%D7%9D-%D7%97%D7%9B%D7%9E%D7%99%D7%9D
+                  - generic [ref=f25e254]:
+                    - time [ref=f25e256]: 19 באוק׳ 2025
+                    - generic [ref=f25e258]: Daniel Edri
+              - generic [ref=f25e260]:
+                - link [ref=f25e262] [cursor=pointer]:
+                  - /url: /blogs/blog-post/%D7%A8%D7%90%D7%A9-%D7%9E%D7%99%D7%98%D7%94-%D7%9B%D7%A8%D7%99%D7%95%D7%AA-%D7%A2%D7%A5-%D7%90%D7%95-%D7%9E%D7%A8%D7%95%D7%A4%D7%93-%D7%9E%D7%94-%D7%94%D7%91%D7%97%D7%99%D7%A8%D7%94-%D7%A9%D7%9C%D7%9B%D7%9D-%D7%90%D7%95%D7%9E%D7%A8%D7%AA-%D7%A2%D7%9C-%D7%94%D7%A1%D7%92%D7%A0%D7%95%D7%9F-%D7%A9%D7%9C%D7%9B%D7%9D
+                  - img "ראש מיטה כריות, עץ או מרופד – מה הבחירה שלכם אומרת על הסגנון שלכם? - KUALA" [ref=f25e264]
+                - generic [ref=f25e266]:
+                  - heading [level=3] [ref=f25e267]:
+                    - link "ראש מיטה כריות, עץ או מרופד – מה הבחירה שלכם אומרת על הסגנון שלכם?" [ref=f25e268] [cursor=pointer]:
+                      - /url: /blogs/blog-post/%D7%A8%D7%90%D7%A9-%D7%9E%D7%99%D7%98%D7%94-%D7%9B%D7%A8%D7%99%D7%95%D7%AA-%D7%A2%D7%A5-%D7%90%D7%95-%D7%9E%D7%A8%D7%95%D7%A4%D7%93-%D7%9E%D7%94-%D7%94%D7%91%D7%97%D7%99%D7%A8%D7%94-%D7%A9%D7%9C%D7%9B%D7%9D-%D7%90%D7%95%D7%9E%D7%A8%D7%AA-%D7%A2%D7%9C-%D7%94%D7%A1%D7%92%D7%A0%D7%95%D7%9F-%D7%A9%D7%9C%D7%9B%D7%9D
+                  - generic [ref=f25e269]:
+                    - time [ref=f25e271]: 26 בספט׳ 2025
+                    - generic [ref=f25e273]: Shay Bankhalter
+    - heading [level=2] [ref=f25e279]
+    - contentinfo [ref=f25e281]:
+      - generic [ref=f25e286]:
+        - group [ref=f25e288]:
+          - generic "שמרו על קשר":
+            - paragraph: שמרו על קשר
+          - generic [ref=f25e289]:
+            - link "03-715-7575" [ref=f25e291] [cursor=pointer]:
+              - /url: tel:03-715-7575
+            - link "info@kualastyle.com" [ref=f25e295] [cursor=pointer]:
+              - /url: mailto:info@kualastyle.com
+            - link "טופס יצירת קשר" [ref=f25e300] [cursor=pointer]:
+              - /url: /pages/contact-page-1
+            - generic [ref=f25e304]:
+              - paragraph [ref=f25e305]: "שעות פעילות מוקד שירות הלקוחות:"
+              - paragraph [ref=f25e307]: שירות הלקוחות פעיל בימים א'-ה' בין השעות 10:00 -16:00
+            - generic [ref=f25e308]:
+              - paragraph [ref=f25e309]: חנות הפופ-אפ שלנו
+              - generic [ref=f25e310]:
+                - link "הראשונים 1, בית חירות" [ref=f25e311] [cursor=pointer]:
+                  - /url: https://www.google.com/maps/search/?api=1&query=%D7%94%D7%A8%D7%90%D7%A9%D7%95%D7%A0%D7%99%D7%9D+1%2C+%D7%91%D7%99%D7%AA+%D7%97%D7%99%D7%A8%D7%95%D7%AA
+                - generic [ref=f25e312]:
+                  - paragraph [ref=f25e313]: ימים א' - ה' ⁦10:00-18:00⁩
+                  - paragraph [ref=f25e314]: ימי ו' וערבי חג ⁦10:00-14:00⁩
+        - generic [ref=f25e316]:
+          - paragraph [ref=f25e318]: KUALA
+          - paragraph [ref=f25e320]: זירת העיצוב המתקדמת בישראל, המאפשרת לכם לרהט כל חלל - מכל מקום ובכל שעה
+          - generic [ref=f25e321]:
+            - paragraph [ref=f25e322]: עקבו אחרינו
+            - list [ref=f25e324]:
+              - listitem [ref=f25e325]:
+                - link "Facebook" [ref=f25e326] [cursor=pointer]:
+                  - /url: https://www.facebook.com/kualastyle
+              - listitem [ref=f25e330]:
+                - link "Instagram" [ref=f25e331] [cursor=pointer]:
+                  - /url: https://www.instagram.com/kualastyle
+              - listitem [ref=f25e335]:
+                - link "Threads" [ref=f25e336] [cursor=pointer]:
+                  - /url: https://www.threads.com/@kualastyle
+              - listitem [ref=f25e340]:
+                - link "TikTok" [ref=f25e341] [cursor=pointer]:
+                  - /url: https://www.tiktok.com/@kualastyle
+              - listitem [ref=f25e345]:
+                - link "Pinterest" [ref=f25e346] [cursor=pointer]:
+                  - /url: https://www.pinterest.com/kualastyle
+              - listitem [ref=f25e350]:
+                - link "YouTube" [ref=f25e351] [cursor=pointer]:
+                  - /url: https://youtube.com/@kualastyle?si=XWAYQbGOsCboh0U-
+        - group [ref=f25e356]:
+          - generic "קולקציות נבחרות":
+            - paragraph: קולקציות נבחרות
+          - list [ref=f25e357]:
+            - listitem [ref=f25e358]:
+              - link "רהיטים לסלון" [ref=f25e359] [cursor=pointer]:
+                - /url: /collections/%D7%A8%D7%94%D7%99%D7%98%D7%99%D7%9D-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F
+            - listitem [ref=f25e360]:
+              - link "רהיטים לחדר שינה" [ref=f25e361] [cursor=pointer]:
+                - /url: /collections/%D7%A8%D7%94%D7%99%D7%98%D7%99%D7%9D-%D7%9C%D7%97%D7%93%D7%A8-%D7%A9%D7%99%D7%A0%D7%94
+            - listitem [ref=f25e362]:
+              - link "רהיטים לכניסה לבית" [ref=f25e363] [cursor=pointer]:
+                - /url: /collections/%D7%A8%D7%94%D7%99%D7%98%D7%99%D7%9D-%D7%9C%D7%9B%D7%A0%D7%99%D7%A1%D7%94-%D7%9C%D7%91%D7%99%D7%AA
+            - listitem [ref=f25e364]:
+              - link "רהיטים לפינת האוכל והמטבח" [ref=f25e365] [cursor=pointer]:
+                - /url: /collections/%D7%A8%D7%94%D7%99%D7%98%D7%99%D7%9D-%D7%9C%D7%A4%D7%99%D7%A0%D7%AA-%D7%90%D7%95%D7%9B%D7%9C
+            - listitem [ref=f25e366]:
+              - link "רהיטים לחדר ילדים ונוער" [ref=f25e367] [cursor=pointer]:
+                - /url: /collections/%D7%A8%D7%94%D7%99%D7%98%D7%99%D7%9D-%D7%9C%D7%97%D7%93%D7%A8%D7%99-%D7%99%D7%9C%D7%93%D7%99%D7%9D
+            - listitem [ref=f25e368]:
+              - link "מזנונים ושידות טלוויזיה לסלון" [ref=f25e369] [cursor=pointer]:
+                - /url: /collections/%D7%9E%D7%96%D7%A0%D7%95%D7%9F-%D7%9C%D7%A1%D7%9C%D7%95%D7%9F
+            - listitem [ref=f25e370]:
+              - link "ספות לסלון" [ref=f25e371] [cursor=pointer]:
+                - /url: /collections/%D7%A1%D7%A4%D7%95%D7%AA
+            - listitem [ref=f25e372]:
+              - link "מיטות זוגיות" [ref=f25e373] [cursor=pointer]:
+                - /url: /collections/%D7%9E%D7%99%D7%98%D7%95%D7%AA-%D7%9C%D7%97%D7%93%D7%A8-%D7%A9%D7%99%D7%A0%D7%94
+        - group [ref=f25e375]:
+          - generic "נשמח לסייע":
+            - paragraph: נשמח לסייע
+          - list [ref=f25e376]:
+            - listitem [ref=f25e377]:
+              - link "יצירת קשר" [ref=f25e378] [cursor=pointer]:
+                - /url: /pages/contact-page-1
+            - listitem [ref=f25e379]:
+              - link "המיקומים שלנו" [ref=f25e380] [cursor=pointer]:
+                - /url: /pages/%D7%94%D7%9E%D7%99%D7%A7%D7%95%D7%9E%D7%99%D7%9D-%D7%A9%D7%9C%D7%A0%D7%95
+            - listitem [ref=f25e381]:
+              - link "מעצבי פנים ואדריכלים" [ref=f25e382] [cursor=pointer]:
+                - /url: /pages/kuala-pro
+            - listitem [ref=f25e383]:
+              - link "תשובות לכל השאלות שלך" [ref=f25e384] [cursor=pointer]:
+                - /url: /pages/help-center
+            - listitem [ref=f25e385]:
+              - link "מדיניות החזרות והחלפות" [ref=f25e386] [cursor=pointer]:
+                - /url: /pages/%D7%94%D7%97%D7%9C%D7%A4%D7%95%D7%AA-%D7%94%D7%97%D7%96%D7%A8%D7%95%D7%AA-%D7%91%D7%99%D7%98%D7%95%D7%9C%D7%99-%D7%A2%D7%A1%D7%A7%D7%94
+            - listitem [ref=f25e387]:
+              - link "סטטוס ההזמנה שלי" [ref=f25e388] [cursor=pointer]:
+                - /url: /pages/track-your-order
+            - listitem [ref=f25e389]:
+              - link "ביטול הזמנה" [ref=f25e390] [cursor=pointer]:
+                - /url: /pages/cancel-order
+            - listitem [ref=f25e391]:
+              - link "תעדות אחריות" [ref=f25e392] [cursor=pointer]:
+                - /url: /pages/%D7%AA%D7%A2%D7%95%D7%93%D7%AA-%D7%90%D7%97%D7%A8%D7%99%D7%95%D7%AA
+        - group [ref=f25e394]:
+          - generic "תקנון ומדיניות":
+            - paragraph: תקנון ומדיניות
+          - list [ref=f25e395]:
+            - listitem [ref=f25e396]:
+              - link "תקנון האתר" [ref=f25e397] [cursor=pointer]:
+                - /url: /pages/%D7%AA%D7%A7%D7%A0%D7%95%D7%9F
+            - listitem [ref=f25e398]:
+              - link "מדיניות פרטיות" [ref=f25e399] [cursor=pointer]:
+                - /url: /pages/%D7%9E%D7%93%D7%99%D7%A0%D7%99%D7%95%D7%AA-%D7%A4%D7%A8%D7%98%D7%99%D7%95%D7%AA
+            - listitem [ref=f25e400]:
+              - link "הצהרת נגישות" [ref=f25e401] [cursor=pointer]:
+                - /url: /pages/%D7%94%D7%A6%D7%94%D7%A8%D7%AA-%D7%A0%D7%92%D7%99%D7%A9%D7%95%D7%AA
+            - listitem [ref=f25e402]:
+              - link "מפת אתר" [ref=f25e403] [cursor=pointer]:
+                - /url: /tools/sitemap
+            - listitem [ref=f25e404]:
+              - link "המגזין" [ref=f25e405] [cursor=pointer]:
+                - /url: /blogs/blog-post
+            - listitem [ref=f25e406]:
+              - link "הגדרות קבצי עוגיות (cookies)" [ref=f25e407] [cursor=pointer]:
+                - /url: /policies/#shopifyReshowConsentBanner
+            - listitem [ref=f25e408]:
+              - link "דרושים" [ref=f25e409] [cursor=pointer]:
+                - /url: /pages/%D7%93%D7%A8%D7%95%D7%A9%D7%99%D7%9D
+            - listitem [ref=f25e410]:
+              - link "אודות" [ref=f25e411] [cursor=pointer]:
+                - /url: /pages/about
+            - listitem [ref=f25e412]:
+              - link "תקנון הגרלה" [ref=f25e413] [cursor=pointer]:
+                - /url: /pages/2026-%D7%AA%D7%A7%D7%A0%D7%95%D7%9F-%D7%94%D7%92%D7%A8%D7%9C%D7%94
+  - generic [ref=f25e414]:
+    - generic:
+      - generic:
+        - generic [ref=f25e415]: Payment methods
+        - list [ref=f25e416]:
+          - listitem [ref=f25e417]:
+            - img "Paypal"
+          - listitem [ref=f25e418]:
+            - img "Visa"
+          - listitem [ref=f25e419]:
+            - img "Master"
+          - listitem [ref=f25e420]:
+            - img "Diners club"
+          - listitem [ref=f25e421]:
+            - img "KUALA"
+          - listitem [ref=f25e422]:
+            - img "KUALA"
+          - listitem [ref=f25e423]:
+            - img "KUALA"
+    - paragraph [ref=f25e426]:
+      - text: כל הזכויות שמורות ל-
+      - link "KUALA" [ref=f25e427] [cursor=pointer]:
+        - /url: /
+  - link "Chat on WhatsApp" [ref=f25e428] [cursor=pointer]:
+    - /url: https://api.whatsapp.com/send?phone=97237157575
