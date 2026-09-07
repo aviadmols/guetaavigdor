@@ -223,8 +223,9 @@
 	background: var(--gueta-ink);
 }
 
+/* The thumb travels toward the inline end: 36 - 16 - 2 - 2 = 16px. */
 .gueta-archive__compare-toggle input:checked ~ .gueta-archive__compare-track .gueta-archive__compare-thumb {
-	transform: translateX(calc(var(--gueta-slide) * -16px));
+	transform: translateX(calc(var(--gueta-slide) * 16px));
 }
 
 /* -------------------------------------------------------------------------

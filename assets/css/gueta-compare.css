@@ -73,9 +73,9 @@
 	background: var(--gueta-ink);
 }
 
-/* The thumb travels toward the inline end, in either direction. */
+/* The thumb travels toward the inline end: 32 - 14 - 2 - 2 = 14px. */
 .gueta-compare-switch__input:checked ~ .gueta-compare-switch__track .gueta-compare-switch__thumb {
-	transform: translateX(calc(var(--gueta-slide) * -14px));
+	transform: translateX(calc(var(--gueta-slide) * 14px));
 }
 
 .gueta-compare-switch__input:focus-visible ~ .gueta-compare-switch__track {
