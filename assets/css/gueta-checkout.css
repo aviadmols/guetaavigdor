@@ -477,7 +477,7 @@
 	border-radius: 10px;
 	cursor: pointer;
 	margin: 0;
-	padding: 0;
+	padding: 15px;
 	transition: border-color .2s ease, box-shadow .2s ease;
 }
 
@@ -494,11 +494,12 @@
 	align-items: center;
 	cursor: pointer;
 	display: flex;
-	font-size: 14px;
+	font-size: 13px;
+	font-weight: 500;
 	gap: 10px;
 	line-height: 1.45;
 	margin: 0;
-	padding: 13px 14px;
+	padding: 0;
 }
 
 .woocommerce-checkout #shipping_method input[type="radio"] {
