@@ -122,15 +122,10 @@
 .woocommerce-checkout h3,
 .woocommerce-checkout #order_review_heading {
 	color: var(--gueta-ink);
-	font-size: 20px;
+	font-size: 21px;
 	font-weight: 600;
 	letter-spacing: -.01em;
-	margin: 0 0 20px;
-}
-
-.woocommerce-checkout #customer_details h3 {
-	border-bottom: 1px solid var(--gueta-rule);
-	padding-bottom: 14px;
+	margin: 0 0 18px;
 }
 
 .woocommerce-checkout .woocommerce-billing-fields,
@@ -155,6 +150,7 @@
 	margin: 0;
 	min-width: 0;
 	padding: 0;
+	position: relative;
 }
 
 .woocommerce-checkout .form-row-wide,
@@ -171,7 +167,42 @@
 	display: none;
 }
 
-.woocommerce-checkout .form-row label {
+/* -------------------------------------------------------------------------
+ * Labels that sit in the box
+ *
+ * The label starts where the answer will go and rises to the top of the box
+ * once there is something to read, so an empty form is a column of plain
+ * questions rather than a column of labels with empty boxes under them, and
+ * a filled one still says what each answer was.
+ *
+ * :placeholder-shown is what decides, which is why every field is given a
+ * placeholder in PHP even when it has nothing to say.
+ * ---------------------------------------------------------------------- */
+
+.woocommerce-checkout form.checkout .form-row:has(input.input-text) > label,
+.woocommerce-checkout form.checkout .form-row:has(textarea) > label {
+	color: var(--gueta-soft);
+	font-size: 16px;
+	font-weight: 400;
+	inset-block-start: 19px;
+	inset-inline-start: 17px;
+	margin: 0;
+	pointer-events: none;
+	position: absolute;
+	transition: color .15s ease, font-size .15s ease, inset-block-start .15s ease;
+}
+
+.woocommerce-checkout form.checkout .form-row:has(input.input-text:focus) > label,
+.woocommerce-checkout form.checkout .form-row:has(input.input-text:not(:placeholder-shown)) > label,
+.woocommerce-checkout form.checkout .form-row:has(textarea:focus) > label,
+.woocommerce-checkout form.checkout .form-row:has(textarea:not(:placeholder-shown)) > label {
+	color: var(--gueta-muted);
+	font-size: 11px;
+	inset-block-start: 9px;
+}
+
+/* Anything else keeps a label of the ordinary kind. */
+.woocommerce-checkout .form-row:not(:has(input.input-text)):not(:has(textarea)) label {
 	color: var(--gueta-muted);
 	display: block;
 	font-size: 13px;
@@ -179,10 +210,13 @@
 	margin-bottom: 6px;
 }
 
-.woocommerce-checkout .required {
-	border: 0;
-	color: var(--gueta-accent);
-	text-decoration: none;
+/*
+ * The asterisk goes. Nearly every field is required, so it marked the rule
+ * rather than the exception; WooCommerce writes "optional" on the few that
+ * are not, which is the useful half of the same information.
+ */
+.woocommerce-checkout form.checkout .required {
+	display: none;
 }
 
 .woocommerce-checkout .optional {
@@ -202,7 +236,8 @@
 	font-size: 16px;
 	height: auto;
 	line-height: 1.4;
-	padding: 15px 16px;
+	min-height: 58px;
+	padding: 25px 16px 8px;
 	transition: border-color .2s ease;
 	width: 100%;
 }
@@ -217,10 +252,29 @@
 .woocommerce-checkout form.checkout textarea,
 .woocommerce-checkout form.checkout select {
 	background-color: var(--gueta-paper) !important;
+	border: 1px solid var(--gueta-rule) !important;
+	border-radius: 8px !important;
 }
 
+.woocommerce-checkout form.checkout input.input-text:focus,
+.woocommerce-checkout form.checkout textarea:focus,
+.woocommerce-checkout form.checkout select:focus {
+	border-color: var(--gueta-ink) !important;
+}
+
+/* The label paints over the field, whatever wraps the field. */
+.woocommerce-checkout form.checkout .form-row > label {
+	z-index: 1;
+}
+
+/* The hint waits until the label has moved out of its way. */
 .woocommerce-checkout .form-row input.input-text::placeholder,
 .woocommerce-checkout .form-row textarea::placeholder {
+	color: transparent;
+}
+
+.woocommerce-checkout .form-row input.input-text:focus::placeholder,
+.woocommerce-checkout .form-row textarea:focus::placeholder {
 	color: var(--gueta-soft);
 }
 
@@ -232,7 +286,8 @@
 }
 
 .woocommerce-checkout .form-row textarea {
-	min-height: 96px;
+	min-height: 108px;
+	padding-top: 28px;
 	resize: vertical;
 }
 
@@ -355,19 +410,30 @@
 	line-height: 1.5;
 }
 
+/*
+ * Fixed columns rather than letting the browser weigh the contents. Left to
+ * itself it gave the price two thirds and broke the product name one word to
+ * a line, which is what a long Hebrew name does in a narrow cell.
+ */
+.woocommerce-checkout .shop_table {
+	table-layout: fixed;
+}
+
+.woocommerce-checkout .shop_table th:first-child,
+.woocommerce-checkout .shop_table .product-name {
+	overflow-wrap: break-word;
+	padding-inline-end: 12px;
+	width: 58%;
+}
+
 .woocommerce-checkout .shop_table td:last-child,
 .woocommerce-checkout .shop_table th:last-child {
 	text-align: end;
-	white-space: nowrap;
-	width: 1% !important;
+	width: 42%;
 }
 
-/* The name takes what is left, which is most of it. */
-.woocommerce-checkout .shop_table .product-name,
-.woocommerce-checkout .shop_table th:first-child {
-	overflow-wrap: anywhere;
-	padding-inline-end: 12px;
-	width: auto !important;
+.woocommerce-checkout .shop_table .woocommerce-Price-amount {
+	white-space: nowrap;
 }
 
 .woocommerce-checkout .shop_table .order-total th,
@@ -376,6 +442,67 @@
 	font-size: 18px;
 	font-weight: 600;
 	padding-top: 16px;
+}
+
+/* -------------------------------------------------------------------------
+ * Shipping choices
+ *
+ * WooCommerce prints these as bare radio buttons inside a table cell. They
+ * are the one decision that changes the total, so each is a card, and the
+ * chosen one is drawn twice as firmly.
+ * ---------------------------------------------------------------------- */
+
+.woocommerce-checkout #shipping_method {
+	display: grid;
+	gap: 8px;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.woocommerce-checkout #shipping_method li {
+	background: var(--gueta-paper);
+	border: 1px solid var(--gueta-rule);
+	border-radius: 10px;
+	cursor: pointer;
+	margin: 0;
+	padding: 0;
+	transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.woocommerce-checkout #shipping_method li:hover {
+	border-color: var(--gueta-muted);
+}
+
+.woocommerce-checkout #shipping_method li:has(input:checked) {
+	border-color: var(--gueta-ink);
+	box-shadow: inset 0 0 0 1px var(--gueta-ink);
+}
+
+.woocommerce-checkout #shipping_method label {
+	align-items: center;
+	cursor: pointer;
+	display: flex;
+	font-size: 14px;
+	gap: 10px;
+	line-height: 1.45;
+	margin: 0;
+	padding: 13px 14px;
+}
+
+.woocommerce-checkout #shipping_method input[type="radio"] {
+	flex: none;
+	margin: 0;
+}
+
+.woocommerce-checkout #shipping_method .woocommerce-Price-amount {
+	font-weight: 600;
+	margin-inline-start: auto;
+	white-space: nowrap;
+}
+
+.woocommerce-checkout .shop_table .woocommerce-shipping-totals th {
+	vertical-align: top;
 }
 
 /* -------------------------------------------------------------------------
@@ -399,15 +526,21 @@
 .woocommerce-checkout #payment li.wc_payment_method {
 	background: var(--gueta-paper);
 	border: 1px solid var(--gueta-rule);
-	border-radius: 8px;
+	border-radius: 10px;
+	cursor: pointer;
 	list-style: none;
 	margin: 0;
-	padding: 14px 16px;
-	transition: border-color .2s ease;
+	padding: 16px 18px;
+	transition: border-color .2s ease, box-shadow .2s ease;
 }
 
 .woocommerce-checkout #payment li.wc_payment_method:hover {
+	border-color: var(--gueta-muted);
+}
+
+.woocommerce-checkout #payment li.wc_payment_method:has(input:checked) {
 	border-color: var(--gueta-ink);
+	box-shadow: inset 0 0 0 1px var(--gueta-ink);
 }
 
 .woocommerce-checkout #payment label {
@@ -496,24 +629,23 @@
  * ---------------------------------------------------------------------- */
 
 @media (max-width: 900px) {
-	.woocommerce-checkout form.checkout {
+	/* One column, on whichever element holds the two. */
+	.woocommerce-checkout .e-checkout__container,
+	.woocommerce-checkout form.checkout:not(:has(.e-checkout__container)) {
 		gap: 32px;
 		grid-template-columns: minmax(0, 1fr);
 	}
 
-	.woocommerce-checkout #customer_details,
-	.woocommerce-checkout #order_review,
-	.woocommerce-checkout #order_review_heading {
-		grid-column: 1;
-	}
-
-	.woocommerce-checkout #order_review_heading {
-		grid-row: auto;
-	}
-
-	.woocommerce-checkout #order_review {
-		grid-row: auto;
+	.woocommerce-checkout .e-checkout__column-end,
+	.woocommerce-checkout form.checkout:not(:has(.e-checkout__container)) #order_review {
 		position: static;
+	}
+
+	.woocommerce-checkout form.checkout:not(:has(.e-checkout__container)) #customer_details,
+	.woocommerce-checkout form.checkout:not(:has(.e-checkout__container)) #order_review,
+	.woocommerce-checkout form.checkout:not(:has(.e-checkout__container)) #order_review_heading {
+		grid-column: 1;
+		grid-row: auto;
 	}
 }
 

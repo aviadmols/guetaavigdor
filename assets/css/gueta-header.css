@@ -16,8 +16,6 @@
 	--gueta-rule: #e5e5e5;
 	--gueta-sand: #fafafa;
 	--gueta-accent: #b42318;
-	/* Only the success notice wears this. */
-	--gueta-good: #10794a;
 	/* The shop's own orange, used for calls to action. */
 	--gueta-accent-warm: #f0591d;
 	--gueta-bar-height: 96px;
@@ -1922,8 +1920,8 @@ body.gueta-has-cats .elementor > .e-con:first-child {
 	align-items: center;
 	background: var(--gueta-paper);
 	border: 1px solid var(--gueta-rule);
-	border-radius: 8px;
-	box-shadow: inset 3px 0 0 0 var(--gueta-soft);
+	border-radius: 10px;
+	box-shadow: 0 1px 3px rgb(0 0 0 / 5%);
 	color: var(--gueta-ink);
 	display: flex;
 	flex-wrap: wrap;
@@ -1935,26 +1933,9 @@ body.gueta-has-cats .elementor > .e-con:first-child {
 	padding: 15px 18px;
 }
 
-[dir="rtl"] .woocommerce-message,
-[dir="rtl"] .woocommerce-info,
-[dir="rtl"] .woocommerce-error {
-	box-shadow: inset -3px 0 0 0 var(--gueta-soft);
-}
-
-.woocommerce-message {
-	box-shadow: inset 3px 0 0 0 var(--gueta-good);
-}
-
-[dir="rtl"] .woocommerce-message {
-	box-shadow: inset -3px 0 0 0 var(--gueta-good);
-}
-
+/* Only a failure is worth colouring, and then on the rule, not a bar. */
 .woocommerce-error {
-	box-shadow: inset 3px 0 0 0 var(--gueta-accent);
-}
-
-[dir="rtl"] .woocommerce-error {
-	box-shadow: inset -3px 0 0 0 var(--gueta-accent);
+	border-color: var(--gueta-accent);
 }
 
 /* WooCommerce draws its own tick and cross in a pseudo element. */
@@ -1977,12 +1958,16 @@ body.gueta-has-cats .elementor > .e-con:first-child {
 	margin-top: 6px;
 }
 
-/* The action sits at the far end, and drops below on a narrow screen. */
+/*
+ * The action sits at the far end and drops below on a narrow screen. It is
+ * the next step rather than a footnote, so it wears the shop's orange, and
+ * the arrow leans the way the reader is going.
+ */
 .woocommerce-message .button,
 .woocommerce-info .button,
 .woocommerce-error .button {
 	align-items: center;
-	background: var(--gueta-ink);
+	background: var(--gueta-accent-warm);
 	border: 0;
 	border-radius: 8px;
 	color: var(--gueta-paper);
@@ -1990,19 +1975,32 @@ body.gueta-has-cats .elementor > .e-con:first-child {
 	flex: none;
 	font-size: 14px;
 	font-weight: 600;
+	gap: 8px;
 	margin-inline-start: auto;
-	min-height: 40px;
-	padding: 0 20px;
+	min-height: 44px;
+	padding: 0 22px;
 	text-decoration: none;
-	transition: background-color .25s ease;
+	transition: filter .2s ease;
 	white-space: nowrap;
+}
+
+.woocommerce-message .button::after,
+.woocommerce-info .button::after {
+	content: "90";
+	font-size: 15px;
+	line-height: 1;
+}
+
+[dir="ltr"] .woocommerce-message .button::after,
+[dir="ltr"] .woocommerce-info .button::after {
+	content: "92";
 }
 
 .woocommerce-message .button:hover,
 .woocommerce-info .button:hover,
 .woocommerce-error .button:hover {
-	background: var(--gueta-accent-warm);
 	color: var(--gueta-paper);
+	filter: brightness(.94);
 }
 
 @media (max-width: 560px) {
