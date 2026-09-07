@@ -190,24 +190,13 @@ function gueta_render_cart_lines() {
  */
 function gueta_render_cart_footer() {
 	$coupons = WC()->cart->get_applied_coupons();
-	$note    = (string) WC()->session->get( 'gueta_order_note', '' );
 	?>
 	<div class="gueta-drawer__footer">
 		<div class="gueta-cart-extras">
-			<button type="button" class="gueta-cart-extra" data-cart-panel="note" aria-expanded="false">
-				<span>הערות</span>
-				<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5 7 12l7 7"></path></svg>
-			</button>
 			<button type="button" class="gueta-cart-extra" data-cart-panel="coupon" aria-expanded="false">
 				<span>קופון</span>
 				<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5 7 12l7 7"></path></svg>
 			</button>
-		</div>
-
-		<div class="gueta-cart-section" data-cart-panel-body="note" hidden>
-			<label class="screen-reader-text" for="gueta-order-note">הערות להזמנה</label>
-			<textarea id="gueta-order-note" rows="3" placeholder="הערות להזמנה, למשל שעות מסירה מועדפות" data-cart-note><?php echo esc_textarea( $note ); ?></textarea>
-			<p class="gueta-cart-section__hint" data-cart-note-status>ההערה נשמרת ותצורף להזמנה.</p>
 		</div>
 
 		<div class="gueta-cart-section" data-cart-panel-body="coupon" hidden>
@@ -299,43 +288,6 @@ function gueta_ajax_cart_coupon() {
 }
 add_action( 'wp_ajax_gueta_cart_coupon', 'gueta_ajax_cart_coupon' );
 add_action( 'wp_ajax_nopriv_gueta_cart_coupon', 'gueta_ajax_cart_coupon' );
-
-/**
- * Keep the order note the shopper typed in the drawer.
- *
- * @return void
- */
-function gueta_ajax_cart_note() {
-	check_ajax_referer( 'gueta_header', 'nonce' );
-
-	if ( ! gueta_has_woocommerce() || ! WC()->session ) {
-		wp_send_json_error( [ 'message' => 'החנות אינה זמינה כרגע.' ], 400 );
-	}
-
-	$note = isset( $_POST['note'] ) ? sanitize_textarea_field( wp_unslash( $_POST['note'] ) ) : '';
-
-	WC()->session->set( 'gueta_order_note', $note );
-
-	wp_send_json_success( [ 'message' => $note ? 'ההערה נשמרה.' : '' ] );
-}
-add_action( 'wp_ajax_gueta_cart_note', 'gueta_ajax_cart_note' );
-add_action( 'wp_ajax_nopriv_gueta_cart_note', 'gueta_ajax_cart_note' );
-
-/**
- * Prefill the checkout's own note field with what the drawer collected.
- *
- * @param string $value Existing value.
- * @param string $input Field key.
- * @return string
- */
-function gueta_prefill_order_note( $value, $input ) {
-	if ( 'order_comments' !== $input || $value || ! WC()->session ) {
-		return $value;
-	}
-
-	return (string) WC()->session->get( 'gueta_order_note', '' );
-}
-add_filter( 'woocommerce_checkout_get_value', 'gueta_prefill_order_note', 10, 2 );
 
 /**
  * Shop URL, falling back to the site root before WooCommerce pages exist.

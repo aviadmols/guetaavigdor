@@ -1709,13 +1709,12 @@ body.gueta-has-cats .elementor > .e-con:first-child {
 }
 
 /* -------------------------------------------------------------------------
- * Cart drawer: notes and coupon
+ * Cart drawer: coupon
  * ---------------------------------------------------------------------- */
 
 .gueta-cart-extras {
 	display: grid;
 	gap: 10px;
-	grid-template-columns: 1fr 1fr;
 }
 
 .gueta-cart-extra {
@@ -1762,13 +1761,12 @@ body.gueta-has-cats .elementor > .e-con:first-child {
 	transform: scaleX(-1) rotate(90deg);
 }
 
-/* The collapsible notes and coupon sections (not the drawer's panel wrapper). */
+/* The collapsible coupon section (not the drawer's panel wrapper). */
 .gueta-cart-section {
 	display: grid;
 	gap: 8px;
 }
 
-.gueta-cart-section textarea,
 .gueta-cart-coupon-form input {
 	background: var(--gueta-paper);
 	border: 1px solid var(--gueta-rule);
@@ -1780,14 +1778,9 @@ body.gueta-has-cats .elementor > .e-con:first-child {
 	width: 100%;
 }
 
-.gueta-cart-section textarea:focus,
 .gueta-cart-coupon-form input:focus {
 	border-color: var(--gueta-ink);
 	outline: 0;
-}
-
-.gueta-cart-section textarea {
-	resize: vertical;
 }
 
 .gueta-cart-section__hint {

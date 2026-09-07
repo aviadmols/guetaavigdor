@@ -654,7 +654,7 @@
 		});
 
 		/* -----------------------------------------------------------------
-		 * Notes and coupon
+		 * Coupon
 		 * -------------------------------------------------------------- */
 
 		function panelFor(name) {
@@ -749,31 +749,6 @@
 					drawer.classList.remove('is-busy');
 					setStatus(drawer.querySelector('[data-cart-coupon-status]'), strings.error || '', true);
 				});
-		});
-
-		var noteTimer = null;
-
-		drawer.addEventListener('input', function (event) {
-			var note = event.target.closest('[data-cart-note]');
-
-			if (!note) {
-				return;
-			}
-
-			window.clearTimeout(noteTimer);
-			noteTimer = window.setTimeout(function () {
-				post('gueta_cart_note', { note: note.value })
-					.then(function (data) {
-						setStatus(
-							drawer.querySelector('[data-cart-note-status]'),
-							data && data.success && data.data.message ? data.data.message : 'ההערה נשמרת ותצורף להזמנה.',
-							false
-						);
-					})
-					.catch(function () {
-						setStatus(drawer.querySelector('[data-cart-note-status]'), strings.error || '', true);
-					});
-			}, 600);
 		});
 
 		if (window.jQuery) {
