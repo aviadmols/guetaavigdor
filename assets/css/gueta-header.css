@@ -7,6 +7,8 @@
  */
 
 :root {
+	/* Google Sans carries Hebrew and Latin in one family, at 400 to 700. */
+	--gueta-font: "Google Sans", Heebo, Arial, sans-serif;
 	--gueta-ink: #161616;
 	--gueta-paper: #ffffff;
 	--gueta-muted: #6d6a65;

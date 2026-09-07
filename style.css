@@ -16,6 +16,6 @@ Tags: flexible-header, custom-colors, custom-menu, custom-logo, editor-style, fe
 
 body {
 	color: #161616;
-	font-family: Heebo, Arial, sans-serif;
+	font-family: var(--gueta-font, "Google Sans", Heebo, Arial, sans-serif);
 	margin: 0;
 }

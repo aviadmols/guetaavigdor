@@ -16,6 +16,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 define( 'HELLO_ELEMENTOR_CHILD_VERSION', '2.1.0' );
 
+/**
+ * The site's typeface.
+ *
+ * Google Sans covers Hebrew and Latin in one family. The weights asked for
+ * are the ones the theme actually uses: 600 does most of the work, with 400,
+ * 500 and 700 around it. Italics are left out, as the design has none and
+ * Hebrew has no italic tradition to draw on.
+ */
+const GUETA_FONT_URL = 'https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=swap';
+
 require_once get_stylesheet_directory() . '/inc/gueta-header.php';
 require_once get_stylesheet_directory() . '/inc/gueta-search.php';
 require_once get_stylesheet_directory() . '/inc/gueta-search-index.php';
@@ -37,11 +47,15 @@ require_once get_stylesheet_directory() . '/inc/gueta-template.php';
  */
 function hello_elementor_child_scripts_styles() {
 
+	// No version string: the URL already names every weight it serves.
+	wp_enqueue_style( 'gueta-font', GUETA_FONT_URL, [], null );
+
 	wp_enqueue_style(
 		'hello-elementor-child-style',
 		get_stylesheet_directory_uri() . '/style.css',
 		[
 			'hello-elementor-theme-style',
+			'gueta-font',
 		],
 		HELLO_ELEMENTOR_CHILD_VERSION
 	);
@@ -301,3 +315,68 @@ function gueta_development_bridge_page() {
 	</div>
 	<?php
 }
+
+/**
+ * Open the connection to the font host while the page is still parsing, so
+ * the first paint does not wait on a fresh TLS handshake.
+ *
+ * @param array  $hints    URLs for this relation.
+ * @param string $relation Link relation.
+ * @return array
+ */
+function gueta_font_resource_hints( $hints, $relation ) {
+	if ( 'preconnect' === $relation ) {
+		$hints[] = [
+			'href'        => 'https://fonts.gstatic.com',
+			'crossorigin' => 'anonymous',
+		];
+	}
+
+	return $hints;
+}
+add_filter( 'wp_resource_hints', 'gueta_font_resource_hints', 10, 2 );
+
+/**
+ * Hold the typeface across pages built in Elementor.
+ *
+ * Elementor writes its global typography as `.elementor-kit-123 { font-family }`
+ * with that class sitting on the body element. A plain `body` rule loses to it
+ * on specificity no matter which stylesheet loads last, so every selector here
+ * is prefixed with `body[class]`, which outranks a single class by one and
+ * settles it.
+ *
+ * The force stops there on purpose. A font chosen for one particular widget in
+ * the editor carries more classes than this and still wins, which is what an
+ * author who set it would expect. Icon elements are left out entirely: they are
+ * fonts too, and renaming their family would turn the glyphs into letters.
+ *
+ * @return void
+ */
+function gueta_typography_override() {
+	wp_register_style( 'gueta-typography', false, [], HELLO_ELEMENTOR_CHILD_VERSION );
+	wp_enqueue_style( 'gueta-typography' );
+
+	$targets = [
+		'body[class]',
+		'body[class] button',
+		'body[class] input',
+		'body[class] select',
+		'body[class] optgroup',
+		'body[class] textarea',
+		'body[class] h1',
+		'body[class] h2',
+		'body[class] h3',
+		'body[class] h4',
+		'body[class] h5',
+		'body[class] h6',
+		'body[class] .elementor-heading-title',
+		'body[class] .elementor-button',
+		'body[class] .elementor-widget-text-editor',
+	];
+
+	wp_add_inline_style(
+		'gueta-typography',
+		implode( ',', $targets ) . '{font-family:var(--gueta-font,"Google Sans",Heebo,Arial,sans-serif)}'
+	);
+}
+add_action( 'wp_enqueue_scripts', 'gueta_typography_override', 100 );
