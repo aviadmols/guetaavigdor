@@ -180,6 +180,10 @@ function gueta_header_assets() {
 			'openCart'    => gueta_should_open_cart(),
 			'navCondense' => (bool) gueta_setting( 'nav_condense', 1 ),
 			'minChars'    => 2,
+			'search'      => [
+				// The static index the browser searches instead of the database.
+				'index' => gueta_search_index_url(),
+			],
 			'strings'  => [
 				'searching' => 'מחפשים…',
 				'error'     => 'משהו השתבש, נסו שוב.',

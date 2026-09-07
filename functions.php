@@ -18,6 +18,7 @@ define( 'HELLO_ELEMENTOR_CHILD_VERSION', '2.1.0' );
 
 require_once get_stylesheet_directory() . '/inc/gueta-header.php';
 require_once get_stylesheet_directory() . '/inc/gueta-search.php';
+require_once get_stylesheet_directory() . '/inc/gueta-search-index.php';
 require_once get_stylesheet_directory() . '/inc/gueta-cart.php';
 require_once get_stylesheet_directory() . '/inc/gueta-categories.php';
 require_once get_stylesheet_directory() . '/inc/gueta-product.php';

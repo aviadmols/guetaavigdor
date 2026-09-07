@@ -243,6 +243,447 @@
 		var searchOpen = header.querySelector('[data-search-open]');
 		var wrappers = header.querySelectorAll('[data-search]');
 
+		/* -----------------------------------------------------------------
+		 * The static index
+		 *
+		 * A JSON file built from the admin holds every product, category, tag
+		 * and article. It is fetched once, on the first sign that somebody is
+		 * about to search, and then queried in memory, so keystrokes never
+		 * reach the database. If the file is missing or fails to load, every
+		 * request falls back to the server endpoint that used to serve them.
+		 * -------------------------------------------------------------- */
+
+		var searchConfig = settings.search || {};
+		var index = null;
+		var indexRequest = null;
+		var indexBroken = false;
+
+		// Unicode property escapes are not everywhere yet; Hebrew and Latin
+		// cover what this catalogue is written in.
+		var punctuation = (function () {
+			try {
+				return new RegExp('[^\\p{L}\\p{N}]+', 'gu');
+			} catch (error) {
+				return /[^0-9a-z֐-׿]+/g;
+			}
+		}());
+
+		var marks = /[֑-ׇ]/g;
+		var quotes = /[׳״'"`]/g;
+
+		// A shopper types עץ and means עצים, so the five final letters fold
+		// into their ordinary forms on both sides of the comparison.
+		var finals = /[ךםןףץ]/g;
+		var folded = { 'ך': 'כ', 'ם': 'מ', 'ן': 'נ', 'ף': 'פ', 'ץ': 'צ' };
+
+		function normalize(text) {
+			return String(text == null ? '' : text)
+				.toLowerCase()
+				.replace(marks, '')
+				.replace(quotes, '')
+				.replace(finals, function (letter) {
+					return folded[letter];
+				})
+				.replace(punctuation, ' ')
+				.trim();
+		}
+
+		function esc(value) {
+			return String(value == null ? '' : value)
+				.replace(/&/g, '&amp;')
+				.replace(/</g, '&lt;')
+				.replace(/>/g, '&gt;')
+				.replace(/"/g, '&quot;');
+		}
+
+		function absolute(base, value) {
+			if (!value) {
+				return '';
+			}
+
+			if ('/' === value.charAt(0) || /^https?:/i.test(value) || 0 === value.indexOf('//')) {
+				return value;
+			}
+
+			return base + value;
+		}
+
+		function indexAvailable() {
+			return Boolean(searchConfig.index) && !indexBroken;
+		}
+
+		function indexReady() {
+			return null !== index;
+		}
+
+		/**
+		 * Normalise every row once, so a keystroke is a scan over strings that
+		 * are already lowercase and stripped of niqqud.
+		 */
+		function prepareIndex(raw) {
+			var products = [];
+			var i;
+
+			for (i = 0; i < raw.p.length; i++) {
+				var row = raw.p[i];
+
+				products.push({
+					title: row[0],
+					url: row[1],
+					thumb: row[2],
+					price: row[3],
+					regular: row[4],
+					max: row[5],
+					name: normalize(row[0]),
+					hay: normalize(row[0] + ' ' + (row[6] || '') + ' ' + (row[7] || ''))
+				});
+			}
+
+			function terms(rows) {
+				var out = [];
+
+				for (var j = 0; j < rows.length; j++) {
+					out.push({
+						name: rows[j][0],
+						url: rows[j][1],
+						count: rows[j][2] || 0,
+						path: rows[j][3] || '',
+						match: normalize(rows[j][0])
+					});
+				}
+
+				return out;
+			}
+
+			return {
+				home: raw.home || '/',
+				uploads: raw.up || '',
+				currency: raw.cur || null,
+				woo: Boolean(raw.woo),
+				limits: {
+					products: (raw.lim && raw.lim.p) || 6,
+					terms: (raw.lim && raw.lim.t) || 6,
+					articles: (raw.lim && raw.lim.a) || 3
+				},
+				products: products,
+				categories: terms(raw.c || []),
+				tags: terms(raw.t || []),
+				articles: terms(raw.a || [])
+			};
+		}
+
+		function loadIndex() {
+			if (index) {
+				return Promise.resolve(index);
+			}
+
+			if (indexRequest) {
+				return indexRequest;
+			}
+
+			if (!indexAvailable()) {
+				return Promise.reject(new Error('no index'));
+			}
+
+			indexRequest = fetch(searchConfig.index, { credentials: 'omit' })
+				.then(function (response) {
+					if (!response.ok) {
+						throw new Error('index ' + response.status);
+					}
+
+					return response.json();
+				})
+				.then(function (raw) {
+					index = prepareIndex(raw);
+
+					return index;
+				})
+				.catch(function (error) {
+					// One failure is enough; from here on the server answers.
+					indexBroken = true;
+					indexRequest = null;
+
+					throw error;
+				});
+
+			return indexRequest;
+		}
+
+		function warmIndex() {
+			if (indexAvailable() && !indexReady()) {
+				loadIndex().catch(function () {});
+			}
+		}
+
+		/**
+		 * How well one product answers the query. Lower is better, and a
+		 * negative result means it does not answer it at all.
+		 */
+		function rank(item, query, tokens) {
+			var i;
+
+			for (i = 0; i < tokens.length; i++) {
+				if (-1 === item.hay.indexOf(tokens[i])) {
+					return -1;
+				}
+			}
+
+			if (item.name === query) {
+				return 0;
+			}
+
+			if (0 === item.name.indexOf(query)) {
+				return 1;
+			}
+
+			if (-1 !== (' ' + item.name).indexOf(' ' + query)) {
+				return 2;
+			}
+
+			if (-1 !== item.name.indexOf(query)) {
+				return 3;
+			}
+
+			for (i = 0; i < tokens.length; i++) {
+				if (-1 === (' ' + item.name).indexOf(' ' + tokens[i])) {
+					// Matched through a category, a tag or the SKU.
+					return 5;
+				}
+			}
+
+			return 4;
+		}
+
+		function matchProducts(idx, query, tokens) {
+			var found = [];
+			var i;
+
+			for (i = 0; i < idx.products.length; i++) {
+				var score = rank(idx.products[i], query, tokens);
+
+				if (score >= 0) {
+					found.push({ item: idx.products[i], score: score });
+				}
+			}
+
+			found.sort(function (a, b) {
+				if (a.score !== b.score) {
+					return a.score - b.score;
+				}
+
+				return a.item.title.length - b.item.title.length;
+			});
+
+			return found;
+		}
+
+		function matchTerms(rows, query, limit) {
+			var found = [];
+			var i;
+
+			for (i = 0; i < rows.length; i++) {
+				if (-1 !== rows[i].match.indexOf(query)) {
+					found.push(rows[i]);
+				}
+			}
+
+			found.sort(function (a, b) {
+				return b.count - a.count;
+			});
+
+			return found.slice(0, limit);
+		}
+
+		function number(value) {
+			try {
+				return Number(value).toLocaleString('he-IL');
+			} catch (error) {
+				return String(value);
+			}
+		}
+
+		function formatPrice(currency, value) {
+			var amount = parseFloat(value);
+
+			if (!currency || !isFinite(amount)) {
+				return '';
+			}
+
+			var digits = 'number' === typeof currency.d ? currency.d : 2;
+			var parts = amount.toFixed(digits).split('.');
+
+			parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, currency.ts || '');
+
+			var text = parts[0];
+
+			if (parts.length > 1) {
+				var decimals = currency.trim ? parts[1].replace(/0+$/, '') : parts[1];
+
+				if (decimals) {
+					text += (currency.ds || '.') + decimals;
+				}
+			}
+
+			var symbol = '<span class="woocommerce-Price-currencySymbol">' + esc(currency.s || '') + '</span>';
+
+			return String(currency.f || '%1$s%2$s')
+				.replace('%1$s', symbol)
+				.replace('%2$s', text);
+		}
+
+		function priceHtml(currency, item) {
+			if (!item.price) {
+				return '';
+			}
+
+			var now = formatPrice(currency, item.price);
+
+			if (!now) {
+				return '';
+			}
+
+			if (item.regular) {
+				return '<del aria-hidden="true">' + formatPrice(currency, item.regular) + '</del> <ins>' + now + '</ins>';
+			}
+
+			if (item.max) {
+				return now + ' &ndash; ' + formatPrice(currency, item.max);
+			}
+
+			return now;
+		}
+
+		function renderProduct(idx, item) {
+			var thumb = absolute(idx.uploads, item.thumb);
+			var price = priceHtml(idx.currency, item);
+			var html = '<a class="gueta-suggest__product" href="' + esc(absolute(idx.home, item.url)) + '">'
+				+ '<span class="gueta-suggest__thumb">';
+
+			if (thumb) {
+				html += '<img src="' + esc(thumb) + '" alt="" loading="lazy" decoding="async">';
+			} else {
+				html += '<span class="gueta-suggest__thumb-empty" aria-hidden="true"></span>';
+			}
+
+			if (item.regular) {
+				html += '<span class="gueta-suggest__badge">מבצע</span>';
+			}
+
+			html += '</span><span class="gueta-suggest__body">'
+				+ '<span class="gueta-suggest__title">' + esc(item.title) + '</span>';
+
+			if (price) {
+				html += '<span class="gueta-suggest__price">' + price + '</span>';
+			}
+
+			return html + '</span></a>';
+		}
+
+		function renderTermGroup(idx, title, rows, withPath) {
+			if (!rows.length) {
+				return '';
+			}
+
+			var html = '<div class="gueta-suggest__group">'
+				+ '<p class="gueta-suggest__heading">' + esc(title) + '</p>'
+				+ '<ul class="gueta-suggest__list">';
+
+			for (var i = 0; i < rows.length; i++) {
+				html += '<li><a href="' + esc(absolute(idx.home, rows[i].url)) + '">'
+					+ '<span class="gueta-suggest__term">' + esc(rows[i].name) + '</span>';
+
+				if (withPath && rows[i].path) {
+					html += '<span class="gueta-suggest__path">' + esc(rows[i].path) + '</span>';
+				}
+
+				html += '<span class="gueta-suggest__count">' + esc(number(rows[i].count)) + '</span>'
+					+ '</a></li>';
+			}
+
+			return html + '</ul></div>';
+		}
+
+		function renderArticles(idx, rows) {
+			if (!rows.length) {
+				return '';
+			}
+
+			var html = '<div class="gueta-suggest__group">'
+				+ '<p class="gueta-suggest__heading">מידע ומאמרים</p>'
+				+ '<ul class="gueta-suggest__list">';
+
+			for (var i = 0; i < rows.length; i++) {
+				html += '<li><a href="' + esc(absolute(idx.home, rows[i].url)) + '">'
+					+ '<span class="gueta-suggest__term">' + esc(rows[i].name) + '</span>'
+					+ '</a></li>';
+			}
+
+			return html + '</ul></div>';
+		}
+
+		function resultsUrl(idx, term) {
+			return idx.home + '?s=' + encodeURIComponent(term) + (idx.woo ? '&post_type=product' : '');
+		}
+
+		/**
+		 * The same panel the server used to render, built from the index.
+		 */
+		function renderSuggestions(idx, rawTerm) {
+			var query = normalize(rawTerm);
+
+			if (!query) {
+				return '';
+			}
+
+			var tokens = query.split(' ');
+			var matches = matchProducts(idx, query, tokens);
+			var products = matches.slice(0, idx.limits.products);
+			var categories = matchTerms(idx.categories, query, idx.limits.terms);
+			var tags = matchTerms(idx.tags, query, idx.limits.terms);
+			var articles = matchTerms(idx.articles, query, idx.limits.articles);
+			var hasSide = categories.length || tags.length || articles.length;
+			var html = '<div class="gueta-suggest__layout' + (hasSide ? '' : ' is-single') + '">';
+			var i;
+
+			if (hasSide) {
+				html += '<aside class="gueta-suggest__side">'
+					+ renderTermGroup(idx, 'קטגוריות מתאימות', categories, true)
+					+ renderTermGroup(idx, 'תגיות', tags, false)
+					+ renderArticles(idx, articles)
+					+ '</aside>';
+			}
+
+			html += '<div class="gueta-suggest__main">';
+
+			if (products.length) {
+				html += '<p class="gueta-suggest__heading">' + (idx.woo ? 'מוצרים' : 'תוצאות') + '</p>'
+					+ '<div class="gueta-suggest__products">';
+
+				for (i = 0; i < products.length; i++) {
+					html += renderProduct(idx, products[i].item);
+				}
+
+				html += '</div>';
+			} else {
+				html += '<div class="gueta-suggest__empty">'
+					+ '<p class="gueta-suggest__empty-title">לא נמצאו תוצאות עבור &laquo;' + esc(rawTerm) + '&raquo;</p>'
+					+ '<p class="gueta-suggest__empty-text">נסו מילה אחרת, או עיינו בקטגוריות שלנו.</p>'
+					+ '</div>';
+			}
+
+			html += '</div></div>';
+
+			if (matches.length) {
+				html += '<a class="gueta-suggest__all" href="' + esc(resultsUrl(idx, rawTerm)) + '">'
+					+ '<span>הצג את כל ' + esc(number(matches.length)) + ' התוצאות</span>'
+					+ '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 5 7 12l7 7"></path></svg>'
+					+ '</a>';
+			}
+
+			return html;
+		}
+
+
 		Array.prototype.forEach.call(wrappers, function (wrapper) {
 			var input = wrapper.querySelector('[data-search-input]');
 			var results = wrapper.querySelector('[data-search-results]');
@@ -271,7 +712,42 @@
 				}
 			}
 
+			/**
+			 * Answer from the index when it is there, and from the server when
+			 * it is not.
+			 */
 			function request(term) {
+				if (!indexAvailable()) {
+					remoteRequest(term);
+					return;
+				}
+
+				if (!indexReady()) {
+					setBusy(true);
+				}
+
+				loadIndex()
+					.then(function (idx) {
+						setBusy(false);
+
+						if (term !== lastTerm) {
+							return;
+						}
+
+						var html = renderSuggestions(idx, term);
+
+						if (html) {
+							showPanel(html);
+						} else {
+							hidePanel();
+						}
+					})
+					.catch(function () {
+						remoteRequest(term);
+					});
+			}
+
+			function remoteRequest(term) {
 				if (controller) {
 					controller.abort();
 				}
@@ -340,15 +816,20 @@
 
 				timer = window.setTimeout(function () {
 					request(term);
-				}, 220);
+				}, indexReady() ? 60 : 220);
 			});
 
 			on(input, 'focus', function () {
+				warmIndex();
+
 				if (input.value.trim().length >= minChars && results.innerHTML) {
 					results.hidden = false;
 					input.setAttribute('aria-expanded', 'true');
 				}
 			});
+
+			// Reaching for the field is hint enough to fetch the index.
+			on(wrapper, 'pointerdown', warmIndex);
 
 			on(reset, 'click', function () {
 				input.value = '';

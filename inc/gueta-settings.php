@@ -274,6 +274,8 @@ function gueta_render_settings_page() {
 
 			<?php submit_button( 'שמירת ההגדרות', 'primary', 'gueta_settings_submit' ); ?>
 		</form>
+
+		<?php gueta_search_index_admin_section(); ?>
 	</div>
 
 	<script>
