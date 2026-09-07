@@ -355,3 +355,88 @@ function gueta_checkout_assets() {
 	);
 }
 add_action( 'wp_enqueue_scripts', 'gueta_checkout_assets', 29 );
+
+/* -------------------------------------------------------------------------
+ * The delivery choice, across the whole column
+ * ---------------------------------------------------------------------- */
+
+/**
+ * Let the delivery options use the full width of the summary.
+ *
+ * WooCommerce prints them in the right hand cell of a two column table, which
+ * on a narrow summary leaves them about a hundred and thirty pixels wide, and
+ * a Hebrew line like "משלוח עד הבית (עד 7 ימי עסקים)" breaks a word to a line.
+ * No amount of CSS fixes it: a table cell cannot outgrow its column, and
+ * taking the cells out of the table layout collapses them further.
+ *
+ * So the markup is changed rather than the styling. The row's two cells are
+ * merged into one that spans both columns, with the package name kept above
+ * the options as a heading. This rewrites WooCommerce's own output between the
+ * two actions that bracket it, which is lighter than copying a core template
+ * and going stale the next time it changes.
+ *
+ * @return void
+ */
+function gueta_shipping_row_open() {
+	if ( gueta_checkout_active() ) {
+		ob_start();
+	}
+}
+add_action( 'woocommerce_review_order_before_shipping', 'gueta_shipping_row_open', 5 );
+
+/**
+ * Close the buffer and merge the row's cells.
+ *
+ * @return void
+ */
+function gueta_shipping_row_close() {
+	if ( ! gueta_checkout_active() ) {
+		return;
+	}
+
+	$html = (string) ob_get_clean();
+
+	// One cell across both columns, the package name promoted to a heading.
+	$merged = preg_replace(
+		'#<th[^>]*>(.*?)</th>\s*<td([^>]*)>#is',
+		'<td colspan="2"$2><span class="gueta-shipping__title">$1</span>',
+		$html,
+		1,
+		$count
+	);
+
+	// If WooCommerce ever changes that shape, print what it gave us.
+	echo ( $count && $merged ) ? $merged : $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+}
+add_action( 'woocommerce_review_order_after_shipping', 'gueta_shipping_row_close', 50 );
+
+/**
+ * A placeholder that only repeats the label is replaced with a space.
+ *
+ * Elementor's checkout widget writes the label into the placeholder. With the
+ * label sitting inside the box, that shows the same words twice the moment the
+ * field is focused: once floated up, once behind the cursor.
+ *
+ * @param array $fields Checkout fields.
+ * @return array
+ */
+function gueta_drop_echoed_placeholders( $fields ) {
+	foreach ( $fields as $section => $rows ) {
+		if ( ! is_array( $rows ) ) {
+			continue;
+		}
+
+		foreach ( $rows as $key => $field ) {
+			if ( ! is_array( $field ) || empty( $field['placeholder'] ) || empty( $field['label'] ) ) {
+				continue;
+			}
+
+			if ( trim( (string) $field['placeholder'] ) === trim( (string) $field['label'] ) ) {
+				$fields[ $section ][ $key ]['placeholder'] = ' ';
+			}
+		}
+	}
+
+	return $fields;
+}
+add_filter( 'woocommerce_checkout_fields', 'gueta_drop_echoed_placeholders', 100 );

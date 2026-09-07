@@ -501,8 +501,22 @@
 	white-space: nowrap;
 }
 
-.woocommerce-checkout .shop_table .woocommerce-shipping-totals th {
-	vertical-align: top;
+/*
+ * The row's two cells are merged into one that spans the table, in PHP, so
+ * the cards get the full width of the summary. The package name comes
+ * along as a heading above them.
+ */
+.woocommerce-checkout .shop_table .woocommerce-shipping-totals td[colspan] {
+	text-align: start;
+	width: 100%;
+}
+
+.gueta-shipping__title {
+	color: var(--gueta-ink);
+	display: block;
+	font-size: 14px;
+	font-weight: 600;
+	margin-bottom: 10px;
 }
 
 /* -------------------------------------------------------------------------
