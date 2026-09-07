@@ -98,15 +98,14 @@ function gueta_blog_breadcrumb() {
 }
 
 /**
- * Author and date, the two things worth knowing before reading.
+ * When it was written. Who wrote it is deliberately left out: these are the
+ * shop's articles, not anybody's column.
  *
  * @return void
  */
 function gueta_blog_meta() {
 	?>
 	<p class="gueta-post__meta">
-		<span><?php echo esc_html( get_the_author() ); ?></span>
-		<span aria-hidden="true">•</span>
 		<time datetime="<?php echo esc_attr( get_the_date( 'c' ) ); ?>"><?php echo esc_html( get_the_date() ); ?></time>
 	</p>
 	<?php
@@ -141,8 +140,6 @@ function gueta_blog_card( $post_id = null ) {
 			<a href="<?php echo esc_url( $link ); ?>"><?php echo esc_html( get_the_title( $id ) ); ?></a>
 		</h2>
 		<p class="gueta-card-post__meta">
-			<span><?php echo esc_html( get_the_author_meta( 'display_name', (int) $post_id->post_author ) ); ?></span>
-			<span aria-hidden="true">•</span>
 			<time datetime="<?php echo esc_attr( get_the_date( 'c', $id ) ); ?>"><?php echo esc_html( get_the_date( '', $id ) ); ?></time>
 		</p>
 	</article>

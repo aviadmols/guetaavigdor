@@ -38,8 +38,6 @@ if ( ! $handled ) :
 							<a href="<?php echo esc_url( (string) get_permalink( $lead ) ); ?>"><?php echo esc_html( get_the_title( $lead ) ); ?></a>
 						</h1>
 						<p class="gueta-lead__meta">
-							<span><?php echo esc_html( get_the_author_meta( 'display_name', (int) $lead->post_author ) ); ?></span>
-							<span aria-hidden="true">•</span>
 							<time datetime="<?php echo esc_attr( get_the_date( 'c', $lead ) ); ?>"><?php echo esc_html( get_the_date( '', $lead ) ); ?></time>
 						</p>
 						<p class="gueta-lead__excerpt"><?php echo esc_html( wp_trim_words( (string) get_the_excerpt( $lead ), 34 ) ); ?></p>
