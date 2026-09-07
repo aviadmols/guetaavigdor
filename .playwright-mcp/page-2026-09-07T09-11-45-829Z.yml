@@ -1,0 +1,195 @@
+- generic [active] [ref=f37e1]:
+  - link "WhatsApp" [ref=f37e3] [cursor=pointer]:
+    - /url: https://api.whatsapp.com/send?phone=972509512625
+  - link "דילוג לתוכן" [ref=f37e6] [cursor=pointer]:
+    - /url: "#content"
+  - generic [ref=f37e7]:
+    - button "הודעה קודמת" [ref=f37e8] [cursor=pointer]
+    - generic [ref=f37e11]:
+      - paragraph [ref=f37e12]: משלוח מהיר לכל הארץ
+      - paragraph: ייעוץ מקצועי בטלפון לפני כל הזמנה
+      - paragraph: מאות מוצרים במלאי מיידי
+    - button "הודעה הבאה" [ref=f37e13] [cursor=pointer]
+  - banner [ref=f37e16]:
+    - generic [ref=f37e17]:
+      - link [ref=f37e19] [cursor=pointer]:
+        - /url: https://guetaavigdor.ussl.co/
+        - img "גואטה אביגדור" [ref=f37e20]
+      - search [ref=f37e23]:
+        - generic [ref=f37e24]: חיפוש באתר
+        - generic [ref=f37e25]:
+          - button "חיפוש" [ref=f37e26] [cursor=pointer]
+          - combobox "חיפוש באתר" [ref=f37e30]
+      - generic [ref=f37e31]:
+        - link "התחברות" [ref=f37e32] [cursor=pointer]:
+          - /url: https://guetaavigdor.ussl.co/%d7%94%d7%97%d7%a9%d7%91%d7%95%d7%9f-%d7%a9%d7%9c%d7%99/
+        - button "עגלת קניות" [ref=f37e36] [cursor=pointer]:
+          - generic [ref=f37e41]: "1"
+    - navigation "ניווט ראשי" [ref=f37e43]:
+      - list [ref=f37e44]:
+        - listitem [ref=f37e45]:
+          - link "כלי עבודה חשמליים" [ref=f37e46] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%9b%d7%9c%d7%99-%d7%a2%d7%91%d7%95%d7%93%d7%94/
+        - listitem [ref=f37e50]:
+          - link "מוצרי פרזול" [ref=f37e51] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%9e%d7%95%d7%a6%d7%a8%d7%99-%d7%a4%d7%a8%d7%96%d7%95%d7%9c/
+        - listitem [ref=f37e55]:
+          - link "כלי עבודה ידניים" [ref=f37e56] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%9b%d7%9c%d7%99-%d7%a2%d7%91%d7%95%d7%93%d7%94-%d7%99%d7%93%d7%a0%d7%99%d7%99%d7%9d/
+        - listitem [ref=f37e60]:
+          - link "מבצעים" [ref=f37e61] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/sale-2/
+        - listitem [ref=f37e63]:
+          - link "עצים" [ref=f37e64] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%a2%d7%a6%d7%99%d7%9d/
+        - listitem [ref=f37e68]:
+          - link "תחזוקה, ניקיון ושמנים" [ref=f37e69] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%aa%d7%97%d7%96%d7%95%d7%a7%d7%94-%d7%a0%d7%99%d7%a7%d7%99%d7%95%d7%9f-%d7%95%d7%a9%d7%9e%d7%a0%d7%99%d7%9d/
+        - listitem [ref=f37e71]:
+          - link "הדבקה ואטימה" [ref=f37e72] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%97%d7%95%d7%9e%d7%a8%d7%99-%d7%94%d7%93%d7%91%d7%a7%d7%94-%d7%95%d7%90%d7%98%d7%99%d7%9e%d7%94/
+        - listitem [ref=f37e76]:
+          - link "עשה זאת בעצמך" [ref=f37e77] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%99%d7%a6%d7%99%d7%a8%d7%94/
+        - listitem [ref=f37e81]:
+          - link "כל הקטגוריות" [ref=f37e82] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/catalog/
+  - article [ref=f37e84]:
+    - generic [ref=f37e86]:
+      - navigation "פירורי לחם" [ref=f37e87]:
+        - generic [ref=f37e89]:
+          - link "דף הבית" [ref=f37e91] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/
+          - text: » מחסן עצים
+      - heading "מחסן עצים" [level=1] [ref=f37e92]
+      - paragraph [ref=f37e93]:
+        - generic [ref=f37e94]: tomeronen
+        - generic [aria-hidden] [ref=f37e95]: •
+        - time [ref=f37e96]: 20 בדצמבר 2018
+    - figure [ref=f37e97]
+    - generic [ref=f37e99]:
+      - heading "חברת גואטה אביגדור בע\"מ מספקת שירות למחפשים מחסן עצים במודיעין" [level=2] [ref=f37e100]
+      - paragraph [ref=f37e101]: "לחברת גואטה אביגדור בע”מ מחסן עצים שמיקומו בראשון לציון הוא אך מספק שירות ומוצרים לעסקים ואנשים פרטיים מאזור המרכז. עסקים ואנשים פרטיים רבים מגיעים למחסן העצים של גואטה אביגדור מישובים רבים באזור המרכז כדוגמת: תל אביב, מודיעין, רחובות וישובים נוספים."
+      - paragraph [ref=f37e102]: חברת גואטה אביגדור הוקמה ב-1980 והיא מספקת עצים למגזר העסקי והפרטי וידועה בשירות המסור, היעיל והמקצועי שהיא מספקת לעסקים רבים באזור המרכז. מחסן העצים של גואטה אביגדור מכיל מגוון עשיר של סוגי עצים שונים ברמות גימור שונות המיועדים למטרות שונות. בין אם אתה מעוניין בעצים לדקים, פרגולות, סוככים, חיפויי עץ או גדרות, בגואטה אביגדור אתה תמצא את העץ המתאים באיכות גבוה ובמחיר משתלם.
+      - heading "צוות המומחים שלנו ישמח לסייע לך" [level=2] [ref=f37e103]
+      - paragraph [ref=f37e104]: "במחסן העצים שלנו תוכל להסתייע בצוות המומחים שלנו שישמח לייעץ לך על סוג העץ שמתאים לצרכים שלך, על חומרים וכלי עבודה שונים. צוות המומחים בחברה שלנו מורכב ממקצוענים בתחום שישמחו לתת לך שירות אדיב ומקצועי. בנוסף לעצים תוכל למצוא אצלנו ציוד רב ומגוון כגון:"
+      - list [ref=f37e105]:
+        - listitem [ref=f37e106]: סוככים מחומרים שונים
+        - listitem [ref=f37e107]:
+          - text: "גגות קלים מחומרים כגון: אונדולין, פוליגל, פחי"
+          - link "איסכורית" [ref=f37e108] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/product/%d7%a4%d7%97-%d7%90%d7%99%d7%a1%d7%9b%d7%95%d7%a8%d7%99%d7%aa/
+          - text: ", פנל מבודד,"
+          - link "סנטף" [ref=f37e109] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/product/%d7%a1%d7%a0%d7%98%d7%a3/
+          - text: ועוד.
+        - listitem [ref=f37e110]: חומרים שונים לבניית דקים
+        - listitem [ref=f37e111]: מגוון רחב של רעפים לגגות
+        - listitem [ref=f37e112]: ברגים ומסמרים
+        - listitem [ref=f37e113]: דשא סינטטי
+        - listitem [ref=f37e114]: חומרי הדבקה ואטימה
+        - listitem [ref=f37e115]:
+          - link "גלילי במבוק וגדרות במבוק" [ref=f37e116] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/product/%d7%92%d7%93%d7%a8-%d7%91%d7%9e%d7%91%d7%95%d7%a7/
+        - listitem [ref=f37e117]: נעליים ובגדי עבודה
+        - listitem [ref=f37e118]: מוצרי פרזול
+        - listitem [ref=f37e119]: מרזבים
+        - listitem [ref=f37e120]: ומוצרים רבים נוספים.
+        - listitem [ref=f37e121]: חומרי טיפוח וצבעים
+        - listitem [ref=f37e122]: כלי עבודה
+        - listitem [ref=f37e123]: כלי עבודה חשמליים
+        - listitem [ref=f37e124]:
+          - link "לחץ כאן למעבר אל קטלוג המוצרים שלנו" [ref=f37e125] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/catalog/
+        - listitem [ref=f37e126]:
+          - link "מוזמן להתרשם מדף הפרויקטים שלנו" [ref=f37e127] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/%d7%a4%d7%a8%d7%95%d7%99%d7%a7%d7%98%d7%99%d7%9d/
+        - listitem [ref=f37e128]:
+          - link "ואל תחמיץ את המבצעים שלנו" [ref=f37e129] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/product-category/%D7%9E%D7%91%D7%A6%D7%A2%D7%99%D7%9D/
+  - complementary [ref=f37e130]:
+    - generic [ref=f37e131]:
+      - heading "כתבות מומלצות" [level=2] [ref=f37e132]
+      - generic [ref=f37e133]:
+        - article [ref=f37e134]:
+          - link [aria-hidden] [ref=f37e135] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/%d7%9e%d7%97%d7%a1%d7%9f-%d7%a2%d7%a6%d7%99%d7%9d-%d7%91%d7%9e%d7%a8%d7%9b%d7%96/
+          - heading [level=2] [ref=f37e136]:
+            - link "מחסן עצים בתל אביב" [ref=f37e137] [cursor=pointer]:
+              - /url: https://guetaavigdor.ussl.co/%d7%9e%d7%97%d7%a1%d7%9f-%d7%a2%d7%a6%d7%99%d7%9d-%d7%91%d7%9e%d7%a8%d7%9b%d7%96/
+          - paragraph [ref=f37e138]:
+            - generic [ref=f37e139]: tomeronen
+            - generic [aria-hidden] [ref=f37e140]: •
+            - time [ref=f37e141]: 1 במאי 2018
+        - article [ref=f37e142]:
+          - link [aria-hidden] [ref=f37e143] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/6178-2/
+          - heading [level=2] [ref=f37e144]:
+            - link "התקנת סנטף לפרגולה" [ref=f37e145] [cursor=pointer]:
+              - /url: https://guetaavigdor.ussl.co/6178-2/
+          - paragraph [ref=f37e146]:
+            - generic [ref=f37e147]: tomeronen
+            - generic [aria-hidden] [ref=f37e148]: •
+            - time [ref=f37e149]: 3 בדצמבר 2018
+        - article [ref=f37e150]:
+          - link [aria-hidden] [ref=f37e151] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/%d7%a1%d7%95%d7%92%d7%99%d7%9d-%d7%a9%d7%95%d7%a0%d7%99%d7%9d-%d7%a9%d7%9c-%d7%a4%d7%a0%d7%9c%d7%99%d7%9d/
+          - heading [level=2] [ref=f37e152]:
+            - link "סוגים שונים של פנלים" [ref=f37e153] [cursor=pointer]:
+              - /url: https://guetaavigdor.ussl.co/%d7%a1%d7%95%d7%92%d7%99%d7%9d-%d7%a9%d7%95%d7%a0%d7%99%d7%9d-%d7%a9%d7%9c-%d7%a4%d7%a0%d7%9c%d7%99%d7%9d/
+          - paragraph [ref=f37e154]:
+            - generic [ref=f37e155]: tomeronen
+            - generic [aria-hidden] [ref=f37e156]: •
+            - time [ref=f37e157]: 26 ביולי 2018
+  - contentinfo [ref=f37e158]:
+    - generic [ref=f37e166]:
+      - generic [ref=f37e168]:
+        - paragraph [ref=f37e171]: גואטה אביגדור בע”מ.
+        - paragraph [ref=f37e174]: הינה חברה ישראלית הנמצאת בבעלות משפחתית מלאה ועוסקת בתחום העץ והאביזרים הנדרשים לצורך התקנה והקמה של גגות רעפים פרגולות ודקים למגזר העסקי והפרטי.
+        - generic [ref=f37e177]:
+          - link "דברו איתנו" [ref=f37e179] [cursor=pointer]:
+            - /url: https://api.whatsapp.com/send?phone=972509512625
+            - generic [aria-hidden] [ref=f37e180]: 
+          - heading [level=3] [ref=f37e182]:
+            - link "דברו איתנו" [ref=f37e183] [cursor=pointer]:
+              - /url: https://api.whatsapp.com/send?phone=972509512625
+      - generic [ref=f37e185]:
+        - paragraph [ref=f37e188]: קופצים?
+        - generic [ref=f37e190]:
+          - paragraph [ref=f37e191]: א-ה בין השעות 07:30 ועד 16:30יום ו’ בין השעות 07:30 עד 13:00
+          - paragraph [ref=f37e192]: רח׳ זאב שלנג 3 א.ת.ח ראשל״צ(מאחורי הסינמה סיטי)
+          - paragraph [ref=f37e193]:
+            - text: דברו איתנו. 050-9512625
+            - link "info@guetaavigdor.co.il" [ref=f37e194] [cursor=pointer]:
+              - /url: mailto:info@guetaavigdor.co.il
+      - generic [ref=f37e196]:
+        - paragraph [ref=f37e199]: סושיאלס.
+        - list [ref=f37e202]:
+          - listitem [ref=f37e203]:
+            - link [ref=f37e204] [cursor=pointer]:
+              - /url: https://www.tiktok.com/@guetawood
+              - generic [aria-hidden] [ref=f37e206]: 
+          - listitem [ref=f37e207]:
+            - link [ref=f37e208] [cursor=pointer]:
+              - /url: https://www.instagram.com/gueta_avigdor/
+              - generic [aria-hidden] [ref=f37e210]: 
+          - listitem [ref=f37e211]:
+            - link [ref=f37e212] [cursor=pointer]:
+              - /url: https://www.facebook.com/guetaavigdor/?locale=he_IL
+              - generic [aria-hidden] [ref=f37e214]: 
+        - paragraph [ref=f37e217]: מבצעים, מוצרים חדשים וטיפים מקצועיים.
+        - form "ניוזלטר" [ref=f37e220]:
+          - generic [ref=f37e221]:
+            - generic [ref=f37e222]:
+              - generic [ref=f37e223] [cursor=pointer]: אימייל
+              - textbox "אימייל" [ref=f37e224]
+            - button "שליחה" [ref=f37e226] [cursor=pointer]:
+              - generic [ref=f37e228]:
+                - generic [aria-hidden] [ref=f37e229]: 
+                - generic [ref=f37e230]: שליחה
+    - paragraph [ref=f37e237]:
+      - text: © 2026 כל הזכויות שמורות לגואטה אביגדור מחסן עצים | תקנון האתר | הצהרת נגישות | פרטיות | אתר
+      - link "tabuzzco" [ref=f37e238] [cursor=pointer]:
+        - /url: https://tabuzzco.com
+  - generic [ref=f37e239]: desktop
+  - status [ref=f37e240]
