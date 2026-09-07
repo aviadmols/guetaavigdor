@@ -22,35 +22,99 @@
 
 /* -------------------------------------------------------------------------
  * The two columns
+ *
+ * Where those columns live depends on who built the page. Elementor's checkout
+ * widget wraps the form in .e-checkout__container and puts the columns there,
+ * so the form itself holds exactly one child. A plain WooCommerce checkout has
+ * no container and the form holds the columns directly.
+ *
+ * Putting the grid on the form, as this first did, gave the single Elementor
+ * container the first track and left the second empty: half the page blank,
+ * with the whole checkout crushed into the other half. The grid goes on
+ * whichever element actually holds two children, and neither case is guessed.
  * ---------------------------------------------------------------------- */
 
-.woocommerce-checkout form.checkout {
+.woocommerce-checkout form.checkout:has(.e-checkout__container) {
+	display: block;
+}
+
+.woocommerce-checkout .e-checkout__container,
+.woocommerce-checkout form.checkout:not(:has(.e-checkout__container)) {
 	align-items: start;
 	display: grid;
-	gap: 48px;
-	grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+	gap: 56px;
+	grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
 }
 
-.woocommerce-checkout #customer_details {
-	grid-column: 1;
-}
-
-.woocommerce-checkout #order_review,
-.woocommerce-checkout #order_review_heading {
-	grid-column: 2;
-}
-
-.woocommerce-checkout #order_review_heading {
-	grid-row: 1;
-	margin: 0;
-}
-
+.woocommerce-checkout .e-checkout__column-start,
+.woocommerce-checkout .e-checkout__column-end,
+.woocommerce-checkout #customer_details,
 .woocommerce-checkout #order_review {
-	grid-row: 2;
+	min-width: 0;
+	width: 100%;
+}
+
+.woocommerce-checkout .e-checkout__column-end {
 	position: sticky;
 	top: 24px;
 }
 
+/*
+ * WooCommerce splits this into two columns of its own, forty seven percent
+ * each and floated, which made sense when billing and shipping stood side by
+ * side across a whole page. Inside a column that is already half the page it
+ * left every field a hundred and forty pixels wide, with the placeholders cut
+ * off mid word. The address forms stack instead.
+ */
+.woocommerce-checkout #customer_details.col2-set,
+.woocommerce-checkout #customer_details .col-1,
+.woocommerce-checkout #customer_details .col-2 {
+	float: none;
+	max-width: none;
+	min-width: 0;
+	padding: 0;
+	width: 100%;
+}
+
+.woocommerce-checkout #customer_details::after {
+	content: none;
+}
+
+/*
+ * The same forty seven percent applies to individual rows, and it beats a
+ * two class selector, so this one carries the form element to outrank it. The
+ * grid below decides which rows share a line.
+ */
+.woocommerce-checkout form.checkout .form-row,
+.woocommerce-checkout form.checkout .form-row-first,
+.woocommerce-checkout form.checkout .form-row-last,
+.woocommerce-checkout form.checkout .form-row-wide {
+	float: none;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+
+/* Only the plain checkout needs telling where its columns go. */
+.woocommerce-checkout form.checkout:not(:has(.e-checkout__container)) #customer_details {
+	grid-column: 1;
+}
+
+.woocommerce-checkout form.checkout:not(:has(.e-checkout__container)) #order_review,
+.woocommerce-checkout form.checkout:not(:has(.e-checkout__container)) #order_review_heading {
+	grid-column: 2;
+}
+
+.woocommerce-checkout form.checkout:not(:has(.e-checkout__container)) #order_review_heading {
+	grid-row: 1;
+	margin: 0;
+}
+
+.woocommerce-checkout form.checkout:not(:has(.e-checkout__container)) #order_review {
+	grid-row: 2;
+	position: sticky;
+	top: 24px;
+}
 /* -------------------------------------------------------------------------
  * Headings
  * ---------------------------------------------------------------------- */
@@ -83,7 +147,7 @@
 .woocommerce-checkout .woocommerce-shipping-fields__field-wrapper,
 .woocommerce-checkout .woocommerce-additional-fields__field-wrapper {
 	display: grid;
-	gap: 18px 16px;
+	gap: 20px 18px;
 	grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
@@ -135,12 +199,24 @@
 	border-radius: 8px;
 	color: var(--gueta-ink);
 	font-family: inherit;
-	font-size: 15px;
+	font-size: 16px;
 	height: auto;
 	line-height: 1.4;
-	padding: 13px 14px;
+	padding: 15px 16px;
 	transition: border-color .2s ease;
 	width: 100%;
+}
+
+/*
+ * The fields come out grey on this site, from a rule that does not appear in
+ * any stylesheet the page will enumerate, the same way the old brand font
+ * did. Force is what reaches it. Scoped to the checkout form, so nothing
+ * else on the site is affected.
+ */
+.woocommerce-checkout form.checkout input.input-text,
+.woocommerce-checkout form.checkout textarea,
+.woocommerce-checkout form.checkout select {
+	background-color: var(--gueta-paper) !important;
 }
 
 .woocommerce-checkout .form-row input.input-text::placeholder,
@@ -163,6 +239,30 @@
 .woocommerce-checkout .woocommerce-invalid input.input-text,
 .woocommerce-checkout .woocommerce-invalid select {
 	border-color: var(--gueta-accent);
+}
+
+/* The "deliver somewhere else" line, which WooCommerce leaves floating. */
+.woocommerce-checkout #ship-to-different-address {
+	border-top: 1px solid var(--gueta-rule);
+	font-size: 16px;
+	font-weight: 500;
+	margin: 4px 0 22px;
+	padding-top: 26px;
+}
+
+.woocommerce-checkout #ship-to-different-address label {
+	align-items: center;
+	color: var(--gueta-ink);
+	cursor: pointer;
+	display: flex;
+	gap: 10px;
+	margin: 0;
+}
+
+.woocommerce-checkout #ship-to-different-address input {
+	height: 17px;
+	margin: 0;
+	width: 17px;
 }
 
 /* -------------------------------------------------------------------------
@@ -259,6 +359,15 @@
 .woocommerce-checkout .shop_table th:last-child {
 	text-align: end;
 	white-space: nowrap;
+	width: 1% !important;
+}
+
+/* The name takes what is left, which is most of it. */
+.woocommerce-checkout .shop_table .product-name,
+.woocommerce-checkout .shop_table th:first-child {
+	overflow-wrap: anywhere;
+	padding-inline-end: 12px;
+	width: auto !important;
 }
 
 .woocommerce-checkout .shop_table .order-total th,
