@@ -36,6 +36,7 @@ require_once get_stylesheet_directory() . '/inc/gueta-buy.php';
 require_once get_stylesheet_directory() . '/inc/gueta-compare.php';
 require_once get_stylesheet_directory() . '/inc/gueta-archive.php';
 require_once get_stylesheet_directory() . '/inc/gueta-settings.php';
+require_once get_stylesheet_directory() . '/inc/gueta-font-migrate.php';
 require_once get_stylesheet_directory() . '/inc/gueta-template.php';
 
 /**
