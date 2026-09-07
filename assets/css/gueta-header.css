@@ -1873,3 +1873,79 @@ body.gueta-has-cats .elementor > .e-con:first-child {
 	stroke-width: 2;
 	width: 12px;
 }
+
+/* -------------------------------------------------------------------------
+ * Breadcrumbs
+ *
+ * Yoast prints the trail, an Elementor widget carries it, and the section
+ * around it was set to stick to the top as a black band with 20px white text.
+ * That is a banner, not a trail, and on a product page it competed with both
+ * the header and the sticky add to cart bar.
+ *
+ * The text rules stand on their own, so the trail reads quietly even in a
+ * browser without :has(). Only the rules that have to reach the section from
+ * the widget inside it need :has(), and those are the ones that undo the
+ * sticky and the black.
+ *
+ * !important throughout: the sticky is applied as an inline style by Elementor
+ * Pro at scroll time, and the section's own colours come from the editor,
+ * neither of which plain specificity can reach.
+ * ---------------------------------------------------------------------- */
+
+#breadcrumbs {
+	color: var(--gueta-soft) !important;
+	font-size: 13px !important;
+	font-weight: 400 !important;
+	letter-spacing: .01em;
+	line-height: 1.7 !important;
+	margin: 0 !important;
+}
+
+#breadcrumbs a {
+	color: var(--gueta-muted) !important;
+	text-decoration: none !important;
+	transition: color .25s ease;
+}
+
+#breadcrumbs a:hover {
+	color: var(--gueta-ink) !important;
+	text-decoration: underline !important;
+	text-underline-offset: 3px;
+}
+
+/* Where you actually are, a shade firmer than the path that led here. */
+#breadcrumbs .breadcrumb_last {
+	color: var(--gueta-ink) !important;
+	font-weight: 500 !important;
+}
+
+/* Undo the sticky, and the spacer Elementor leaves in its place. */
+:is(.elementor-section, .e-con).elementor-sticky:has(.elementor-widget-breadcrumbs) {
+	height: auto !important;
+	inset: auto !important;
+	position: static !important;
+	transform: none !important;
+	width: auto !important;
+}
+
+:is(.elementor-section, .e-con):has(.elementor-widget-breadcrumbs) + .elementor-sticky__spacer {
+	display: none !important;
+}
+
+/* Drop the black band and sit the trail on the page's own gutter. */
+:is(.elementor-section, .e-con):has(.elementor-widget-breadcrumbs) {
+	background-color: transparent !important;
+	background-image: none !important;
+	padding: 14px var(--gueta-gutter) !important;
+}
+
+:is(.elementor-section, .e-con):has(.elementor-widget-breadcrumbs) .elementor-container {
+	margin-inline: auto;
+	max-width: var(--gueta-max);
+}
+
+@media (max-width: 767px) {
+	#breadcrumbs {
+		font-size: 12px !important;
+	}
+}
