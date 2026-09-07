@@ -1,0 +1,443 @@
+/**
+ * Checkout.
+ *
+ * WooCommerce's own form is grey boxes on a white page, and next to the rest
+ * of this shop it looks like a different site. This puts it on the same
+ * tokens: the theme's rule and ink colours, the eight pixel radius the cart
+ * drawer uses, and the warm orange kept for the one button that costs money.
+ *
+ * Tokens come from gueta-header.css, which loads first.
+ */
+
+.woocommerce-checkout,
+.woocommerce-checkout * {
+	box-sizing: border-box;
+}
+
+.woocommerce-checkout .woocommerce {
+	margin-inline: auto;
+	max-width: var(--gueta-max);
+	padding: 0 var(--gueta-gutter) 72px;
+}
+
+/* -------------------------------------------------------------------------
+ * The two columns
+ * ---------------------------------------------------------------------- */
+
+.woocommerce-checkout form.checkout {
+	align-items: start;
+	display: grid;
+	gap: 48px;
+	grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+}
+
+.woocommerce-checkout #customer_details {
+	grid-column: 1;
+}
+
+.woocommerce-checkout #order_review,
+.woocommerce-checkout #order_review_heading {
+	grid-column: 2;
+}
+
+.woocommerce-checkout #order_review_heading {
+	grid-row: 1;
+	margin: 0;
+}
+
+.woocommerce-checkout #order_review {
+	grid-row: 2;
+	position: sticky;
+	top: 24px;
+}
+
+/* -------------------------------------------------------------------------
+ * Headings
+ * ---------------------------------------------------------------------- */
+
+.woocommerce-checkout h3,
+.woocommerce-checkout #order_review_heading {
+	color: var(--gueta-ink);
+	font-size: 20px;
+	font-weight: 600;
+	letter-spacing: -.01em;
+	margin: 0 0 20px;
+}
+
+.woocommerce-checkout #customer_details h3 {
+	border-bottom: 1px solid var(--gueta-rule);
+	padding-bottom: 14px;
+}
+
+.woocommerce-checkout .woocommerce-billing-fields,
+.woocommerce-checkout .woocommerce-shipping-fields,
+.woocommerce-checkout .woocommerce-additional-fields {
+	margin-bottom: 36px;
+}
+
+/* -------------------------------------------------------------------------
+ * Fields
+ * ---------------------------------------------------------------------- */
+
+.woocommerce-checkout .woocommerce-billing-fields__field-wrapper,
+.woocommerce-checkout .woocommerce-shipping-fields__field-wrapper,
+.woocommerce-checkout .woocommerce-additional-fields__field-wrapper {
+	display: grid;
+	gap: 18px 16px;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.woocommerce-checkout .form-row {
+	margin: 0;
+	min-width: 0;
+	padding: 0;
+}
+
+.woocommerce-checkout .form-row-wide,
+.woocommerce-checkout .form-row.notes,
+.woocommerce-checkout .create-account,
+.woocommerce-checkout .woocommerce-account-fields {
+	grid-column: 1 / -1;
+}
+
+/* The country row is kept for WooCommerce and hidden from the shopper. */
+.woocommerce-checkout .gueta-hidden-row,
+.woocommerce-checkout .form-row#billing_state_field:has(input[type="hidden"]),
+.woocommerce-checkout .form-row#shipping_state_field:has(input[type="hidden"]) {
+	display: none;
+}
+
+.woocommerce-checkout .form-row label {
+	color: var(--gueta-muted);
+	display: block;
+	font-size: 13px;
+	font-weight: 500;
+	margin-bottom: 6px;
+}
+
+.woocommerce-checkout .required {
+	border: 0;
+	color: var(--gueta-accent);
+	text-decoration: none;
+}
+
+.woocommerce-checkout .optional {
+	color: var(--gueta-soft);
+	font-weight: 400;
+}
+
+.woocommerce-checkout .form-row input.input-text,
+.woocommerce-checkout .form-row textarea,
+.woocommerce-checkout .form-row select,
+.woocommerce-checkout .select2-container .select2-selection--single {
+	background: var(--gueta-paper);
+	border: 1px solid var(--gueta-rule);
+	border-radius: 8px;
+	color: var(--gueta-ink);
+	font-family: inherit;
+	font-size: 15px;
+	height: auto;
+	line-height: 1.4;
+	padding: 13px 14px;
+	transition: border-color .2s ease;
+	width: 100%;
+}
+
+.woocommerce-checkout .form-row input.input-text::placeholder,
+.woocommerce-checkout .form-row textarea::placeholder {
+	color: var(--gueta-soft);
+}
+
+.woocommerce-checkout .form-row input.input-text:focus,
+.woocommerce-checkout .form-row textarea:focus,
+.woocommerce-checkout .form-row select:focus {
+	border-color: var(--gueta-ink);
+	outline: 0;
+}
+
+.woocommerce-checkout .form-row textarea {
+	min-height: 96px;
+	resize: vertical;
+}
+
+.woocommerce-checkout .woocommerce-invalid input.input-text,
+.woocommerce-checkout .woocommerce-invalid select {
+	border-color: var(--gueta-accent);
+}
+
+/* -------------------------------------------------------------------------
+ * The settlement field
+ * ---------------------------------------------------------------------- */
+
+.gueta-city {
+	position: relative;
+}
+
+.gueta-city__list {
+	background: var(--gueta-paper);
+	border: 1px solid var(--gueta-rule);
+	border-radius: 8px;
+	box-shadow: var(--gueta-shadow);
+	inset-block-start: calc(100% + 6px);
+	inset-inline: 0;
+	list-style: none;
+	margin: 0;
+	max-height: 264px;
+	overflow-y: auto;
+	padding: 6px;
+	position: absolute;
+	z-index: 70;
+}
+
+.gueta-city__list[hidden] {
+	display: none;
+}
+
+.gueta-city__option {
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 15px;
+	padding: 10px 12px;
+}
+
+.gueta-city__option.is-active,
+.gueta-city__option:hover {
+	background: var(--gueta-sand);
+}
+
+.gueta-city__note {
+	color: var(--gueta-accent);
+	font-size: 12px;
+	margin: 6px 0 0;
+}
+
+.gueta-city__note[hidden] {
+	display: none;
+}
+
+/* -------------------------------------------------------------------------
+ * The order, alongside
+ * ---------------------------------------------------------------------- */
+
+.woocommerce-checkout #order_review {
+	background: var(--gueta-sand);
+	border: 1px solid var(--gueta-rule);
+	border-radius: var(--gueta-radius);
+	padding: 24px;
+}
+
+.woocommerce-checkout .shop_table {
+	border: 0;
+	border-collapse: collapse;
+	margin: 0;
+	width: 100%;
+}
+
+.woocommerce-checkout .shop_table th,
+.woocommerce-checkout .shop_table td {
+	border: 0;
+	border-bottom: 1px solid var(--gueta-rule);
+	font-size: 14px;
+	padding: 12px 0;
+	text-align: start;
+}
+
+.woocommerce-checkout .shop_table thead th {
+	color: var(--gueta-muted);
+	font-size: 12px;
+	font-weight: 500;
+	letter-spacing: .04em;
+	padding-top: 0;
+}
+
+.woocommerce-checkout .shop_table .product-name {
+	color: var(--gueta-ink);
+	line-height: 1.5;
+}
+
+.woocommerce-checkout .shop_table td:last-child,
+.woocommerce-checkout .shop_table th:last-child {
+	text-align: end;
+	white-space: nowrap;
+}
+
+.woocommerce-checkout .shop_table .order-total th,
+.woocommerce-checkout .shop_table .order-total td {
+	border-bottom: 0;
+	font-size: 18px;
+	font-weight: 600;
+	padding-top: 16px;
+}
+
+/* -------------------------------------------------------------------------
+ * Payment
+ * ---------------------------------------------------------------------- */
+
+.woocommerce-checkout #payment {
+	background: none;
+	border-radius: 0;
+	margin-top: 20px;
+}
+
+.woocommerce-checkout #payment ul.payment_methods {
+	border: 0;
+	display: grid;
+	gap: 10px;
+	margin: 0;
+	padding: 0;
+}
+
+.woocommerce-checkout #payment li.wc_payment_method {
+	background: var(--gueta-paper);
+	border: 1px solid var(--gueta-rule);
+	border-radius: 8px;
+	list-style: none;
+	margin: 0;
+	padding: 14px 16px;
+	transition: border-color .2s ease;
+}
+
+.woocommerce-checkout #payment li.wc_payment_method:hover {
+	border-color: var(--gueta-ink);
+}
+
+.woocommerce-checkout #payment label {
+	align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	font-size: 15px;
+	font-weight: 500;
+	gap: 8px;
+}
+
+.woocommerce-checkout #payment .payment_box {
+	background: none;
+	color: var(--gueta-muted);
+	font-size: 13px;
+	line-height: 1.6;
+	margin: 10px 0 0;
+	padding: 0;
+}
+
+.woocommerce-checkout #payment .payment_box::before {
+	display: none;
+}
+
+.woocommerce-checkout .woocommerce-terms-and-conditions-wrapper {
+	font-size: 13px;
+	margin: 18px 0;
+}
+
+/* The one button that costs money wears the shop's orange. */
+.woocommerce-checkout #place_order {
+	background: var(--gueta-accent-warm);
+	border: 0;
+	border-radius: 8px;
+	color: var(--gueta-paper);
+	cursor: pointer;
+	font-family: inherit;
+	font-size: 17px;
+	font-weight: 600;
+	min-height: 56px;
+	padding: 0 24px;
+	transition: filter .2s ease;
+	width: 100%;
+}
+
+.woocommerce-checkout #place_order:hover {
+	filter: brightness(.94);
+}
+
+/* -------------------------------------------------------------------------
+ * Notices, coupon and the returning customer
+ * ---------------------------------------------------------------------- */
+
+.woocommerce-checkout .woocommerce-info,
+.woocommerce-checkout .woocommerce-error,
+.woocommerce-checkout .woocommerce-message {
+	background: var(--gueta-sand);
+	border: 1px solid var(--gueta-rule);
+	border-radius: 8px;
+	border-top-width: 1px;
+	color: var(--gueta-ink);
+	font-size: 14px;
+	line-height: 1.6;
+	list-style: none;
+	margin: 0 0 20px;
+	padding: 14px 16px;
+}
+
+.woocommerce-checkout .woocommerce-error {
+	border-color: var(--gueta-accent);
+}
+
+.woocommerce-checkout .woocommerce-info::before,
+.woocommerce-checkout .woocommerce-error::before,
+.woocommerce-checkout .woocommerce-message::before {
+	display: none;
+}
+
+.woocommerce-checkout .woocommerce-form-login,
+.woocommerce-checkout .checkout_coupon {
+	background: var(--gueta-paper);
+	border: 1px solid var(--gueta-rule);
+	border-radius: var(--gueta-radius);
+	margin: 0 0 24px;
+	padding: 22px;
+}
+
+.woocommerce-checkout .woocommerce-form-login .form-row,
+.woocommerce-checkout .checkout_coupon .form-row {
+	margin-bottom: 14px;
+}
+
+.woocommerce-checkout .button {
+	background: var(--gueta-ink);
+	border: 0;
+	border-radius: 8px;
+	color: var(--gueta-paper);
+	cursor: pointer;
+	font-family: inherit;
+	font-size: 15px;
+	font-weight: 600;
+	min-height: 48px;
+	padding: 0 22px;
+}
+
+/* -------------------------------------------------------------------------
+ * Narrow screens
+ * ---------------------------------------------------------------------- */
+
+@media (max-width: 900px) {
+	.woocommerce-checkout form.checkout {
+		gap: 32px;
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.woocommerce-checkout #customer_details,
+	.woocommerce-checkout #order_review,
+	.woocommerce-checkout #order_review_heading {
+		grid-column: 1;
+	}
+
+	.woocommerce-checkout #order_review_heading {
+		grid-row: auto;
+	}
+
+	.woocommerce-checkout #order_review {
+		grid-row: auto;
+		position: static;
+	}
+}
+
+@media (max-width: 600px) {
+	.woocommerce-checkout .woocommerce-billing-fields__field-wrapper,
+	.woocommerce-checkout .woocommerce-shipping-fields__field-wrapper {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.woocommerce-checkout .form-row-first,
+	.woocommerce-checkout .form-row-last {
+		grid-column: 1 / -1;
+	}
+}
