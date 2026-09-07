@@ -59,7 +59,6 @@ function gueta_address_fields( $fields ) {
 
 	if ( isset( $fields['address_1'] ) ) {
 		$fields['address_1']['label']       = 'רחוב';
-		$fields['address_1']['placeholder'] = 'שם הרחוב';
 		$fields['address_1']['priority']    = 60;
 		$fields['address_1']['class']       = [ 'form-row-first' ];
 		$fields['address_1']['autocomplete'] = 'address-line1';
@@ -69,7 +68,6 @@ function gueta_address_fields( $fields ) {
 	// the box is the honest way to ask, and the two are joined again on submit.
 	$fields['house_number'] = [
 		'label'        => 'מספר בית',
-		'placeholder'  => 'מספר',
 		'required'     => true,
 		'priority'     => 65,
 		'class'        => [ 'form-row-last' ],
@@ -78,7 +76,6 @@ function gueta_address_fields( $fields ) {
 
 	if ( isset( $fields['address_2'] ) ) {
 		$fields['address_2']['label']       = 'דירה, כניסה או קומה';
-		$fields['address_2']['placeholder'] = 'לא חובה';
 		$fields['address_2']['priority']    = 70;
 		$fields['address_2']['required']    = false;
 		$fields['address_2']['class']       = [ 'form-row-wide' ];
@@ -88,7 +85,6 @@ function gueta_address_fields( $fields ) {
 	// Israel Post has codes for everything and almost nobody knows theirs.
 	if ( isset( $fields['postcode'] ) ) {
 		$fields['postcode']['label']       = 'מיקוד';
-		$fields['postcode']['placeholder'] = 'לא חובה';
 		$fields['postcode']['priority']    = 80;
 		$fields['postcode']['required']    = false;
 		$fields['postcode']['class']       = [ 'form-row-first' ];
@@ -96,7 +92,6 @@ function gueta_address_fields( $fields ) {
 
 	if ( isset( $fields['company'] ) ) {
 		$fields['company']['label']       = 'שם חברה';
-		$fields['company']['placeholder'] = 'לא חובה';
 		$fields['company']['priority']    = 90;
 		$fields['company']['class']       = [ 'form-row-last' ];
 	}
@@ -140,14 +135,12 @@ function gueta_checkout_fields( $fields ) {
 
 	if ( isset( $fields['billing']['billing_phone'] ) ) {
 		$fields['billing']['billing_phone']['label']       = 'טלפון';
-		$fields['billing']['billing_phone']['placeholder'] = '050-0000000';
 		$fields['billing']['billing_phone']['priority']    = 30;
 		$fields['billing']['billing_phone']['class']       = [ 'form-row-first' ];
 	}
 
 	if ( isset( $fields['billing']['billing_email'] ) ) {
 		$fields['billing']['billing_email']['label']       = 'אימייל';
-		$fields['billing']['billing_email']['placeholder'] = 'לשליחת אישור ההזמנה';
 		$fields['billing']['billing_email']['priority']    = 40;
 		$fields['billing']['billing_email']['class']       = [ 'form-row-last' ];
 	}
@@ -170,9 +163,51 @@ function gueta_checkout_fields( $fields ) {
 		}
 	}
 
-	return $fields;
+	return gueta_checkout_placeholders( $fields );
 }
 add_filter( 'woocommerce_checkout_fields', 'gueta_checkout_fields', 20 );
+
+/**
+ * Give every field a placeholder, even an empty one.
+ *
+ * The labels sit inside the fields and rise out of the way once there is
+ * something to read, which the stylesheet works out from :placeholder-shown.
+ * A field with no placeholder attribute never matches that, so its label
+ * would stay put and sit on top of whatever was typed. One space is enough
+ * to make the browser answer the question.
+ *
+ * Where a field carries a real hint it is kept, and shows on focus under the
+ * label that has just moved up.
+ *
+ * @param array $fields Checkout fields.
+ * @return array
+ */
+function gueta_checkout_placeholders( $fields ) {
+	foreach ( $fields as $section => $rows ) {
+		if ( ! is_array( $rows ) ) {
+			continue;
+		}
+
+		foreach ( $rows as $key => $field ) {
+			if ( ! is_array( $field ) ) {
+				continue;
+			}
+
+			$type = isset( $field['type'] ) ? $field['type'] : 'text';
+
+			// A select is never empty, so it has no label to float.
+			if ( in_array( $type, [ 'hidden', 'checkbox', 'radio', 'select', 'country', 'state' ], true ) ) {
+				continue;
+			}
+
+			if ( empty( $field['placeholder'] ) ) {
+				$fields[ $section ][ $key ]['placeholder'] = ' ';
+			}
+		}
+	}
+
+	return $fields;
+}
 
 /* -------------------------------------------------------------------------
  * What arrives when the form is sent

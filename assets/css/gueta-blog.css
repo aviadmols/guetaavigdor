@@ -76,10 +76,14 @@
  * An article
  * ---------------------------------------------------------------------- */
 
-/* The heading sits under the picture, so the band opens beneath it. */
+/*
+ * The heading sits under the picture on the page's own white. The band it
+ * used to carry drew a line across the article that the article did not
+ * need, and the picture above it already says where the piece begins.
+ */
 .gueta-post__head {
-	background: var(--gueta-sand);
-	padding: 38px 0 42px;
+	background: var(--gueta-paper);
+	padding: 34px 0 6px;
 }
 
 .gueta-post__title {
