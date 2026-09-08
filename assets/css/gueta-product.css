@@ -1151,3 +1151,28 @@
 		padding: 0 12px;
 	}
 }
+
+/* -------------------------------------------------------------------------
+ * The card's own action button
+ *
+ * "לפרטים ורכישה" came in at 18px in a square box, which on a card two thirds
+ * of its old width wrapped onto two lines and made the card taller than the
+ * picture in it. At 14px it sits on one line, and the corner radius matches
+ * the buttons everywhere else in the shop.
+ *
+ * The card belongs to a third party widget, so these are its class names, and
+ * they are forced because its own sizes are written inline.
+ * ---------------------------------------------------------------------- */
+
+.product-card-action-btn {
+	border-radius: 8px !important;
+	min-height: 40px !important;
+	padding: 0 14px !important;
+}
+
+.product-card-action-btn,
+.product-card-action-btn span {
+	font-size: 14px !important;
+	font-weight: 600 !important;
+	line-height: 1.3 !important;
+}

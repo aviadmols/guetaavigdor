@@ -17,9 +17,17 @@
 	'use strict';
 
 	var settings = window.guetaCarousel || {};
-	var breakpoint = settings.breakpoint || 1024;
-	var perView = settings.perView || 1.5;
-	var gap = settings.gap || 12;
+
+	/*
+	 * These arrive as strings. wp_localize_script writes everything it is
+	 * given as text, and Swiper does arithmetic with them: handed "1.5" it
+	 * works out a total width of zero, decides the rail has nothing to
+	 * scroll, and locks it. The slides still look right, which is what makes
+	 * it a puzzle rather than an obvious fault, so they are read as numbers.
+	 */
+	var breakpoint = parseFloat(settings.breakpoint) || 1024;
+	var perView = parseFloat(settings.perView) || 1.5;
+	var gap = parseFloat(settings.gap) || 12;
 
 	function narrow() {
 		return window.matchMedia('(max-width: ' + breakpoint + 'px)').matches;
@@ -40,8 +48,8 @@
 
 		if (undefined === element.guetaOriginal) {
 			element.guetaOriginal = {
-				perView: swiper.params.slidesPerView,
-				gap: swiper.params.spaceBetween
+				perView: parseFloat(swiper.params.slidesPerView) || 1,
+				gap: parseFloat(swiper.params.spaceBetween) || 0
 			};
 		}
 

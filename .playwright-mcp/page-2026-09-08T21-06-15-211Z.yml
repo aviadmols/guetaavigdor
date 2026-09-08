@@ -1,0 +1,196 @@
+- generic [ref=f32e1]:
+  - link "WhatsApp" [ref=f32e3] [cursor=pointer]:
+    - /url: https://api.whatsapp.com/send?phone=972509512625
+  - link "דילוג לתוכן" [ref=f32e6] [cursor=pointer]:
+    - /url: "#content"
+  - generic [ref=f32e7]:
+    - button "הודעה קודמת" [ref=f32e8] [cursor=pointer]
+    - generic [ref=f32e11]:
+      - paragraph [ref=f32e12]: משלוח מהיר לכל הארץ
+      - paragraph: ייעוץ מקצועי בטלפון לפני כל הזמנה
+      - paragraph: מאות מוצרים במלאי מיידי
+    - button "הודעה הבאה" [ref=f32e13] [cursor=pointer]
+  - banner [ref=f32e16]:
+    - generic [ref=f32e17]:
+      - button "פתיחת תפריט" [ref=f32e19] [cursor=pointer]
+      - link [ref=f32e23] [cursor=pointer]:
+        - /url: https://guetaavigdor.ussl.co/
+        - img "גואטה אביגדור" [ref=f32e24]
+      - generic [ref=f32e25]:
+        - button "חיפוש" [ref=f32e26] [cursor=pointer]
+        - button "עגלת קניות" [ref=f32e30] [cursor=pointer]:
+          - generic [ref=f32e35]: "2"
+  - generic [ref=f32e36]:
+    - paragraph [ref=f32e43]:
+      - generic [ref=f32e44]:
+        - link "דף הבית" [ref=f32e46] [cursor=pointer]:
+          - /url: https://guetaavigdor.ussl.co/
+        - text: »
+        - link "המוצרים שלנו" [ref=f32e48] [cursor=pointer]:
+          - /url: https://guetaavigdor.ussl.co/catalog/
+        - text: »
+        - link "מוצרי פרזול" [ref=f32e50] [cursor=pointer]:
+          - /url: https://guetaavigdor.ussl.co/products/%d7%9e%d7%95%d7%a6%d7%a8%d7%99-%d7%a4%d7%a8%d7%96%d7%95%d7%9c/
+        - text: » ידית דלת קבועה
+    - generic [ref=f32e52]:
+      - generic [ref=f32e54]:
+        - heading "ידית דלת קבועה" [level=1] [ref=f32e57]
+        - paragraph [ref=f32e60]:
+          - generic [ref=f32e61]: ₪59.50
+        - generic [ref=f32e68]:
+          - generic [ref=f32e69]:
+            - button "הפחתת יחידה" [disabled] [ref=f32e70]: −
+            - generic [ref=f32e71]: כמות של ידית דלת קבועה
+            - spinbutton "כמות המוצר" [ref=f32e72]: "1"
+            - button "הוספת יחידה" [ref=f32e73] [cursor=pointer]: +
+          - button "הוספה לסל" [ref=f32e74] [cursor=pointer]
+        - generic [ref=f32e77]:
+          - generic [ref=f32e78]:
+            - generic [ref=f32e79]: מק"ט
+            - generic [ref=f32e80]: "18169"
+          - generic [ref=f32e81]:
+            - generic [ref=f32e82]: קטגוריות
+            - generic [ref=f32e83]:
+              - link "מוצרי פרזול" [ref=f32e84] [cursor=pointer]:
+                - /url: https://guetaavigdor.ussl.co/products/%d7%9e%d7%95%d7%a6%d7%a8%d7%99-%d7%a4%d7%a8%d7%96%d7%95%d7%9c/
+              - text: ","
+              - link "ידיות" [ref=f32e85] [cursor=pointer]:
+                - /url: https://guetaavigdor.ussl.co/products/%d7%9e%d7%95%d7%a6%d7%a8%d7%99-%d7%a4%d7%a8%d7%96%d7%95%d7%9c/%d7%99%d7%93%d7%99%d7%95%d7%aa/
+              - text: ","
+              - link "קישוטים" [ref=f32e86] [cursor=pointer]:
+                - /url: https://guetaavigdor.ussl.co/products/%d7%9e%d7%95%d7%a6%d7%a8%d7%99-%d7%a4%d7%a8%d7%96%d7%95%d7%9c/%d7%a7%d7%99%d7%a9%d7%95%d7%98%d7%99%d7%9d/
+        - group [ref=f32e90]:
+          - generic "תיאור" [ref=f32e91] [cursor=pointer]
+          - paragraph [ref=f32e95]:
+            - text: "ידית דלת קבועה צבע: שחור מחיר מבצע ! למעבר לאתר הספק"
+            - link "לחץ כאן" [ref=f32e96] [cursor=pointer]:
+              - /url: https://www.saiktiv.co.il/
+            - text: לרכישת ברגי עץ
+            - link "לחץ כאן" [ref=f32e97] [cursor=pointer]:
+              - /url: https://guetaavigdor.ussl.co/product/%d7%91%d7%95%d7%a8%d7%92-%d7%a1%d7%99%d7%91%d7%99%d7%aa-%d7%a9%d7%9c-%d7%9e%d7%99%d7%91%d7%a8%d7%92/
+      - button "הגדלת התמונה" [ref=f32e104] [cursor=pointer]:
+        - img "ידית דלת קבועה" [ref=f32e105]
+    - generic [ref=f32e117]:
+      - heading "בטוח יעניין אתכם" [level=2] [ref=f32e120]
+      - generic [ref=f32e125]:
+        - generic [ref=f32e126]:
+          - group "1 / 8" [ref=f32e127]:
+            - link "רגל עכביש לשולחן אוכל רגל עכביש לשולחן – רגל מתכת ייחודית לפינת אוכל ₪839.00" [ref=f32e129] [cursor=pointer]:
+              - /url: https://guetaavigdor.ussl.co/product/%d7%a8%d7%92%d7%9c-%d7%a2%d7%9b%d7%91%d7%99%d7%a9-%d7%9c%d7%a9%d7%95%d7%9c%d7%97%d7%9f-%d7%a8%d7%92%d7%9c-%d7%91%d7%a1%d7%99%d7%a1-%d7%99%d7%99%d7%97%d7%95%d7%93%d7%99%d7%aa-%d7%9c%d7%a4%d7%99%d7%a0/
+              - img "רגל עכביש לשולחן אוכל" [ref=f32e131]
+              - generic [ref=f32e132]:
+                - heading "רגל עכביש לשולחן – רגל מתכת ייחודית לפינת אוכל" [level=3] [ref=f32e133]
+                - generic [ref=f32e134]: ₪839.00
+          - group "2 / 8" [ref=f32e137]:
+            - link "וו נעילה שחור 152 מ\"מ ₪13.11" [ref=f32e139] [cursor=pointer]:
+              - /url: https://guetaavigdor.ussl.co/product/%d7%95%d7%95-%d7%a0%d7%a2%d7%99%d7%9c%d7%94-%d7%a9%d7%97%d7%95%d7%a8-152-%d7%9e%d7%9e/
+              - generic [ref=f32e141]:
+                - heading "וו נעילה שחור 152 מ\"מ" [level=3] [ref=f32e142]
+                - generic [ref=f32e143]: ₪13.11
+          - group "3 / 8" [ref=f32e146]:
+            - link "ידית מעוצבת לארון ₪13.11" [ref=f32e148] [cursor=pointer]:
+              - /url: https://guetaavigdor.ussl.co/product/%d7%99%d7%93%d7%99%d7%aa-%d7%9e%d7%a2%d7%95%d7%a6%d7%91%d7%aa-%d7%9c%d7%90%d7%a8%d7%95%d7%9f/
+              - generic [ref=f32e150]:
+                - heading "ידית מעוצבת לארון" [level=3] [ref=f32e151]
+                - generic [ref=f32e152]: ₪13.11
+          - group "4 / 8" [ref=f32e155]:
+            - 'link "מבצע גלגל גומי לפלטה גלגל גומי לפלטה במבחר גדלים עם או בלי מעצור טווח מחירים: ⁦₪15.13⁩ עד ⁦₪51.44⁩ מחיר ליחידה" [ref=f32e157] [cursor=pointer]':
+              - /url: https://guetaavigdor.ussl.co/product/%d7%92%d7%9c%d7%92%d7%9c-%d7%92%d7%95%d7%9e%d7%99-2/
+              - generic [ref=f32e158]:
+                - generic [ref=f32e159]: מבצע
+                - img "גלגל גומי לפלטה" [ref=f32e160]
+              - generic [ref=f32e161]:
+                - heading "גלגל גומי לפלטה במבחר גדלים עם או בלי מעצור" [level=3] [ref=f32e162]
+                - generic [ref=f32e163]:
+                  - generic [ref=f32e165]: ₪15.13
+                  - text: –
+                  - generic [ref=f32e167]: ₪51.44
+                  - generic [ref=f32e168]: "טווח מחירים: ⁦₪15.13⁩ עד ⁦₪51.44⁩"
+                - generic [ref=f32e169]: מחיר ליחידה
+          - group "5 / 8" [ref=f32e170]:
+            - link "תושבת כנף פנימית שחורה בגודל 95 מ\"מ – חיבור סמוי ומדויק תושבת כנף פנימית נמוכה 95 מ\"מ שחורה – דגם 105-017-B | פתרון קומפקטי לחיבור מדויק ₪27.00" [ref=f32e172] [cursor=pointer]:
+              - /url: https://guetaavigdor.ussl.co/product/%d7%aa%d7%95%d7%a9%d7%91%d7%aa-%d7%9b%d7%a0%d7%a3-%d7%a4%d7%a0%d7%99%d7%9e%d7%99%d7%aa-%d7%a0%d7%9e%d7%95%d7%9b%d7%94-95-%d7%9e%d7%9e-%d7%a9%d7%97%d7%95%d7%a8%d7%94-%d7%93%d7%92%d7%9d-105/
+              - img "תושבת כנף פנימית שחורה בגודל 95 מ\"מ – חיבור סמוי ומדויק" [ref=f32e174]
+              - generic [ref=f32e175]:
+                - heading "תושבת כנף פנימית נמוכה 95 מ\"מ שחורה – דגם 105-017-B | פתרון קומפקטי לחיבור מדויק" [level=3] [ref=f32e176]
+                - generic [ref=f32e177]: ₪27.00
+          - group "6 / 8" [ref=f32e180]:
+            - 'link "חוט ברזל מגולוון חוט ברזל מגולוון במבחר מידות ועוביים טווח מחירים: ⁦₪14.12⁩ עד ⁦₪15.13⁩ מחיר ליח''" [ref=f32e182] [cursor=pointer]':
+              - /url: https://guetaavigdor.ussl.co/product/%d7%97%d7%95%d7%98-%d7%91%d7%a8%d7%96%d7%9c-%d7%9e%d7%92%d7%95%d7%9c%d7%95%d7%95%d7%9f-%d7%91%d7%9c%d7%99%d7%a1%d7%98%d7%a8-5-5-%d7%9e%d7%9e-%d7%a2%d7%93-75-%d7%9e%d7%98%d7%a8/
+              - img "חוט ברזל מגולוון" [ref=f32e184]
+              - generic [ref=f32e185]:
+                - heading "חוט ברזל מגולוון במבחר מידות ועוביים" [level=3] [ref=f32e186]
+                - generic [ref=f32e187]:
+                  - generic [ref=f32e189]: ₪14.12
+                  - text: –
+                  - generic [ref=f32e191]: ₪15.13
+                  - generic [ref=f32e192]: "טווח מחירים: ⁦₪14.12⁩ עד ⁦₪15.13⁩"
+                - generic [ref=f32e193]: מחיר ליח'
+          - group "7 / 8" [ref=f32e194]:
+            - link "תושבת מתכווננת C-006 לחיבור עמוד עץ לרצפה – פתרון גובה מתכוונן תושבת מתכווננת לעמודי עץ – דגם C-006 | חיבור רצפתי גמיש לפרגולות ומבני עץ ₪16.00" [ref=f32e196] [cursor=pointer]:
+              - /url: https://guetaavigdor.ussl.co/product/%d7%aa%d7%95%d7%a9%d7%91%d7%aa-%d7%9e%d7%aa%d7%9b%d7%95%d7%95%d7%a0%d7%a0%d7%aa-%d7%9c%d7%a2%d7%9e%d7%95%d7%93%d7%99-%d7%a2%d7%a5-%d7%93%d7%92%d7%9d-c-006-%d7%97%d7%99%d7%91%d7%95%d7%a8/
+              - img "תושבת מתכווננת C-006 לחיבור עמוד עץ לרצפה – פתרון גובה מתכוונן" [ref=f32e198]
+              - generic [ref=f32e199]:
+                - heading "תושבת מתכווננת לעמודי עץ – דגם C-006 | חיבור רצפתי גמיש לפרגולות ומבני עץ" [level=3] [ref=f32e200]
+                - generic [ref=f32e201]: ₪16.00
+          - group "8 / 8" [ref=f32e204]:
+            - link "תושבת רצפה שחורה לעמודי עץ בגודל 95 מ\"מ – דגם C-005B, פתרון עיגון מקצועי לפרגולות וגדרות תושבת רצפה שחורה לעמודי עץ 95×95 מ\"מ – דגם C-005B ₪21.00" [ref=f32e206] [cursor=pointer]:
+              - /url: https://guetaavigdor.ussl.co/product/%d7%aa%d7%95%d7%a9%d7%91%d7%aa-%d7%a8%d7%a6%d7%a4%d7%94-95-%d7%a9%d7%97%d7%95%d7%a8%d7%94/
+              - img "תושבת רצפה שחורה לעמודי עץ בגודל 95 מ\"מ – דגם C-005B, פתרון עיגון מקצועי לפרגולות וגדרות" [ref=f32e208]
+              - generic [ref=f32e209]:
+                - heading "תושבת רצפה שחורה לעמודי עץ 95×95 מ\"מ – דגם C-005B" [level=3] [ref=f32e210]
+                - generic [ref=f32e211]: ₪21.00
+        - text: prev next
+  - contentinfo [ref=f32e214]:
+    - generic [ref=f32e222]:
+      - generic [ref=f32e224]:
+        - paragraph [ref=f32e227]: גואטה אביגדור בע”מ.
+        - paragraph [ref=f32e230]: הינה חברה ישראלית הנמצאת בבעלות משפחתית מלאה ועוסקת בתחום העץ והאביזרים הנדרשים לצורך התקנה והקמה של גגות רעפים פרגולות ודקים למגזר העסקי והפרטי.
+        - text: 
+      - generic [ref=f32e232]:
+        - paragraph [ref=f32e235]: קופצים?
+        - generic [ref=f32e237]:
+          - paragraph [ref=f32e238]: א-ה בין השעות 07:30 ועד 16:30יום ו’ בין השעות 07:30 עד 13:00
+          - paragraph [ref=f32e239]: רח׳ זאב שלנג 3 א.ת.ח ראשל״צ(מאחורי הסינמה סיטי)
+          - paragraph [ref=f32e240]:
+            - text: דברו איתנו. 050-9512625
+            - link "info@guetaavigdor.co.il" [ref=f32e241] [cursor=pointer]:
+              - /url: mailto:info@guetaavigdor.co.il
+      - generic [ref=f32e243]:
+        - paragraph [ref=f32e246]: סושיאלס.
+        - list [ref=f32e249]:
+          - listitem [ref=f32e250]:
+            - link [ref=f32e251] [cursor=pointer]:
+              - /url: https://www.tiktok.com/@guetawood
+              - generic [aria-hidden] [ref=f32e253]: 
+          - listitem [ref=f32e254]:
+            - link [ref=f32e255] [cursor=pointer]:
+              - /url: https://www.instagram.com/gueta_avigdor/
+              - generic [aria-hidden] [ref=f32e257]: 
+          - listitem [ref=f32e258]:
+            - link [ref=f32e259] [cursor=pointer]:
+              - /url: https://www.facebook.com/guetaavigdor/?locale=he_IL
+              - generic [aria-hidden] [ref=f32e261]: 
+        - paragraph [ref=f32e264]: מבצעים, מוצרים חדשים וטיפים מקצועיים.
+        - form "ניוזלטר" [ref=f32e267]:
+          - generic [ref=f32e268]:
+            - generic [ref=f32e269]:
+              - generic [ref=f32e270] [cursor=pointer]: אימייל
+              - textbox "אימייל" [ref=f32e271]
+            - button "שליחה" [ref=f32e273] [cursor=pointer]:
+              - generic [ref=f32e275]:
+                - generic [aria-hidden] [ref=f32e276]: 
+                - generic [ref=f32e277]: שליחה
+    - paragraph [ref=f32e284]:
+      - text: © 2026 כל הזכויות שמורות לגואטה אביגדור מחסן עצים | תקנון האתר | הצהרת נגישות | פרטיות | אתר
+      - link "tabuzzco" [ref=f32e285] [cursor=pointer]:
+        - /url: https://tabuzzco.com
+  - generic [ref=f32e287]:
+    - generic [ref=f32e288]:
+      - img "ידית דלת קבועה" [ref=f32e290]
+      - generic [ref=f32e291]:
+        - generic [ref=f32e292]: ידית דלת קבועה
+        - generic [ref=f32e293]: ₪59.50
+    - button "הוספה לסל" [ref=f32e295] [cursor=pointer]
+  - generic [ref=f32e296]: mobile
+  - status [ref=f32e297]
