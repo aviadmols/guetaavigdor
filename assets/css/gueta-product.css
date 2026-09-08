@@ -1017,3 +1017,53 @@
 		transition-duration: .01ms;
 	}
 }
+
+/* -------------------------------------------------------------------------
+ * The product page on a phone
+ *
+ * The template is built in Elementor, and its sections carry 100px of side
+ * padding written for a desktop screen with no narrower value behind it. On a
+ * 390px phone that left a 175px column: the gallery came out 155px square,
+ * the two columns never stacked, and the pictures sat below the buy box
+ * instead of above it.
+ *
+ * Everything here is scoped to the single product page and to narrow screens,
+ * and everything is forced, because these are Elementor's own inline values.
+ * ---------------------------------------------------------------------- */
+
+@media (max-width: 1024px) {
+	.single-product .elementor-section,
+	.single-product .e-con {
+		padding-inline: var(--gueta-gutter) !important;
+	}
+
+	.single-product .elementor-section {
+		padding-block: 14px !important;
+	}
+
+	.single-product .elementor-container {
+		max-width: 100% !important;
+	}
+
+	/* Columns stack and take the whole width rather than holding a desktop half. */
+	.single-product .elementor-column {
+		align-items: stretch !important;
+		width: 100% !important;
+	}
+
+	.single-product .elementor-column > .elementor-widget-wrap {
+		align-self: stretch !important;
+		flex: 1 1 100% !important;
+		min-width: 100% !important;
+		width: 100% !important;
+	}
+
+	/*
+	 * The pictures come first. They are in the same section as the title and
+	 * the buy box, in the column that follows them, so the column is moved
+	 * rather than the section.
+	 */
+	.single-product .elementor-container > .elementor-column:has(.gueta-gallery) {
+		order: -1;
+	}
+}

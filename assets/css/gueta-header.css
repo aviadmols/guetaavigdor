@@ -1448,6 +1448,11 @@ body.gueta-locked {
 		font-size: 13px;
 	}
 
+	/* A shorter strip, now that the wording in it is smaller. */
+	.gueta-announce__viewport {
+		min-height: 30px;
+	}
+
 	/*
 	 * The account icon comes off the bar. Signing in lives at the foot of
 	 * the menu drawer, where there is room to say what it is for.
