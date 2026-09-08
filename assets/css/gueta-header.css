@@ -113,7 +113,8 @@
 	z-index: 200;
 }
 
-.gueta-icon {
+.gueta-icon,
+.gueta-icon-button svg {
 	fill: none;
 	height: 21px;
 	stroke: currentColor;
@@ -1024,8 +1025,8 @@ body.gueta-locked {
 	padding: 0;
 }
 
-.gueta-mobile-nav__item {
-	border-bottom: 1px solid var(--gueta-rule);
+.gueta-mobile-nav__item + .gueta-mobile-nav__item {
+	border-top: 1px solid var(--gueta-rule);
 }
 
 .gueta-mobile-nav__toggle,
@@ -1037,19 +1038,30 @@ body.gueta-locked {
 	cursor: pointer;
 	display: flex;
 	font-family: inherit;
-	font-size: 16px;
+	font-size: 17px;
 	font-weight: 500;
 	justify-content: space-between;
-	padding: 15px 2px;
+	min-height: 54px;
+	padding: 14px 2px;
 	text-align: start;
 	text-decoration: none;
 	width: 100%;
 }
 
 .gueta-mobile-nav__toggle .gueta-icon {
-	height: 16px;
-	transition: transform .25s ease;
-	width: 16px;
+	color: var(--gueta-soft);
+	flex: none;
+	height: 18px;
+	transition: color .2s ease, transform .25s ease;
+	width: 18px;
+}
+
+.gueta-mobile-nav__toggle[aria-expanded="true"] {
+	color: var(--gueta-accent-warm);
+}
+
+.gueta-mobile-nav__toggle[aria-expanded="true"] .gueta-icon {
+	color: var(--gueta-accent-warm);
 }
 
 .gueta-mobile-nav__toggle[aria-expanded="true"] .gueta-icon {
@@ -1057,7 +1069,10 @@ body.gueta-locked {
 }
 
 .gueta-mobile-nav__panel {
-	padding: 0 2px 14px;
+	background: var(--gueta-sand);
+	border-radius: 10px;
+	margin: 0 0 14px;
+	padding: 4px 14px 12px;
 }
 
 .gueta-mobile-nav__panel[hidden] {
@@ -1069,7 +1084,7 @@ body.gueta-locked {
 	display: block;
 	font-size: 14px;
 	font-weight: 600;
-	padding: 4px 0 10px;
+	padding: 12px 0 8px;
 	text-decoration: underline;
 	text-underline-offset: 3px;
 }
@@ -1088,7 +1103,8 @@ body.gueta-locked {
 	color: var(--gueta-muted);
 	display: block;
 	font-size: 15px;
-	padding: 8px 0;
+	min-height: 42px;
+	padding: 10px 0;
 	text-decoration: none;
 }
 
@@ -1100,11 +1116,15 @@ body.gueta-locked {
 
 .gueta-mobile-nav__footer a {
 	align-items: center;
-	color: var(--gueta-ink);
+	background: var(--gueta-ink);
+	border-radius: 10px;
+	color: var(--gueta-paper);
 	display: flex;
-	font-size: 15px;
-	font-weight: 500;
+	font-size: 16px;
+	font-weight: 600;
 	gap: 10px;
+	justify-content: center;
+	min-height: 52px;
 	text-decoration: none;
 }
 
@@ -1421,7 +1441,19 @@ body.gueta-locked {
 
 	.gueta-brand__image,
 	.gueta-brand img {
-		max-height: 42px;
+		max-height: 26px;
+	}
+
+	.gueta-announce__item {
+		font-size: 13px;
+	}
+
+	/*
+	 * The account icon comes off the bar. Signing in lives at the foot of
+	 * the menu drawer, where there is room to say what it is for.
+	 */
+	.gueta-actions__account {
+		display: none;
 	}
 
 	.gueta-brand__text {

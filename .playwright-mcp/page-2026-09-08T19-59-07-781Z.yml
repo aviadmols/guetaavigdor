@@ -1,0 +1,268 @@
+- generic [active] [ref=e1]:
+  - link "WhatsApp" [ref=e3] [cursor=pointer]:
+    - /url: https://api.whatsapp.com/send?phone=972509512625
+  - link "דילוג לתוכן" [ref=e6] [cursor=pointer]:
+    - /url: "#content"
+  - generic [ref=e7]:
+    - button "הודעה קודמת" [ref=e8] [cursor=pointer]
+    - generic [ref=e11]:
+      - paragraph [ref=e12]: משלוח מהיר לכל הארץ
+      - paragraph: ייעוץ מקצועי בטלפון לפני כל הזמנה
+      - paragraph: מאות מוצרים במלאי מיידי
+    - button "הודעה הבאה" [ref=e13] [cursor=pointer]
+  - banner [ref=e16]:
+    - generic [ref=e17]:
+      - generic [ref=e18]:
+        - button "פתיחת תפריט" [ref=e19] [cursor=pointer]
+        - button "חיפוש" [ref=e22] [cursor=pointer]
+      - link [ref=e27] [cursor=pointer]:
+        - /url: https://guetaavigdor.ussl.co/
+        - img "גואטה אביגדור" [ref=e28]
+      - generic [ref=e29]:
+        - link "התחברות" [ref=e30] [cursor=pointer]:
+          - /url: https://guetaavigdor.ussl.co/%d7%94%d7%97%d7%a9%d7%91%d7%95%d7%9f-%d7%a9%d7%9c%d7%99/
+        - button "עגלת קניות" [ref=e34] [cursor=pointer]:
+          - generic [ref=e39]: "1"
+  - main [ref=e40]:
+    - generic [ref=e42]:
+      - generic [ref=e47]:
+        - paragraph [ref=e50]: גואטה אביגדור – מחסן עצים בע״מ
+        - heading "אנחנו כאן כדי לייעץ, לכוון ולעזור לכם לבחור נכון" [level=1] [ref=e53]
+        - paragraph [ref=e56]: מבחר עצים, חומרי בנייה וציוד משלים ללקוחות פרטיים ולעסקים בכל הארץ.
+        - link "צפו בקטלוג המוצרים" [ref=e60] [cursor=pointer]:
+          - /url: "#catalog"
+          - generic [ref=e61]:
+            - generic [aria-hidden] [ref=e63]: 
+            - generic [ref=e64]: צפו בקטלוג המוצרים
+      - generic [ref=e68]:
+        - generic [ref=e72]:
+          - heading "על מה אנחנו היום?" [level=2] [ref=e75]
+          - paragraph [ref=e78]: מגוון עצים, חומרי עבודה וציוד מקצועי עם ייעוץ מניסיון של עשרות שנים.
+        - generic [ref=e82]:
+          - link "עצים חץ" [ref=e83] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%a2%d7%a6%d7%99%d7%9d/
+            - generic [ref=e86]: עצים
+            - img "חץ" [ref=e87]
+          - link "פלטות חץ" [ref=e88] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%a2%d7%a6%d7%99%d7%9d/%d7%a4%d7%9c%d7%98%d7%95%d7%aa/
+            - generic [ref=e91]: פלטות
+            - img "חץ" [ref=e92]
+          - link "במבוק חץ" [ref=e93] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%91%d7%9e%d7%91%d7%95%d7%a7/
+            - generic [ref=e96]: במבוק
+            - img "חץ" [ref=e97]
+          - link "דקים חץ" [ref=e98] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%93%d7%a7-%d7%a1%d7%99%d7%a0%d7%98%d7%98%d7%99/
+            - generic [ref=e101]: דקים
+            - img "חץ" [ref=e102]
+          - link "דשא סינטטי חץ" [ref=e103] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%93%d7%a9%d7%90-%d7%a1%d7%99%d7%a0%d7%98%d7%98%d7%99/
+            - generic [ref=e106]: דשא סינטטי
+            - img "חץ" [ref=e107]
+          - link "פנל מבודד חץ" [ref=e108] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%92%d7%92%d7%95%d7%aa/%d7%a4%d7%a0%d7%9c-%d7%9e%d7%91%d7%95%d7%93%d7%93/
+            - generic [ref=e111]: פנל מבודד
+            - img "חץ" [ref=e112]
+          - link "טיפול במזיקים חץ" [ref=e113] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%98%d7%99%d7%a4%d7%95%d7%9c-%d7%91%d7%9e%d7%96%d7%99%d7%a7%d7%99%d7%9d/
+            - generic [ref=e116]: טיפול במזיקים
+            - img "חץ" [ref=e117]
+          - link "בטיחות חץ" [ref=e118] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%91%d7%98%d7%99%d7%97%d7%95%d7%aa/
+            - generic [ref=e121]: בטיחות
+            - img "חץ" [ref=e122]
+          - link "גינון חץ" [ref=e123] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%92%d7%99%d7%a0%d7%95%d7%9f/
+            - generic [ref=e126]: גינון
+            - img "חץ" [ref=e127]
+          - link "הדבקה ואטימה חץ" [ref=e128] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%97%d7%95%d7%9e%d7%a8%d7%99-%d7%94%d7%93%d7%91%d7%a7%d7%94-%d7%95%d7%90%d7%98%d7%99%d7%9e%d7%94/
+            - generic [ref=e131]: הדבקה ואטימה
+            - img "חץ" [ref=e132]
+          - link "ברגים ומסמרים חץ" [ref=e133] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%91%d7%a8%d7%92%d7%99%d7%9d-%d7%95%d7%9e%d7%a1%d7%9e%d7%a8%d7%99%d7%9d/
+            - generic [ref=e136]: ברגים ומסמרים
+            - img "חץ" [ref=e137]
+          - link "עשה זאת בעצמך חץ" [ref=e138] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%99%d7%a6%d7%99%d7%a8%d7%94/
+            - generic [ref=e141]: עשה זאת בעצמך
+            - img "חץ" [ref=e142]
+          - link "כלי עבודה חשמליים חץ" [ref=e143] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%9b%d7%9c%d7%99-%d7%a2%d7%91%d7%95%d7%93%d7%94/
+            - generic [ref=e146]: כלי עבודה חשמליים
+            - img "חץ" [ref=e147]
+          - link "מברשות צבע חץ" [ref=e148] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%9e%d7%91%d7%a8%d7%a9%d7%95%d7%aa-%d7%a6%d7%91%d7%a2/
+            - generic [ref=e151]: מברשות צבע
+            - img "חץ" [ref=e152]
+          - link "מוצרי פרזול חץ" [ref=e153] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%9e%d7%95%d7%a6%d7%a8%d7%99-%d7%a4%d7%a8%d7%96%d7%95%d7%9c/
+            - generic [ref=e156]: מוצרי פרזול
+            - img "חץ" [ref=e157]
+          - link "צבעים ולכות חץ" [ref=e158] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%a6%d7%91%d7%a2%d7%99%d7%9d-%d7%95%d7%9c%d7%9b%d7%95%d7%aa/
+            - generic [ref=e161]: צבעים ולכות
+            - img "חץ" [ref=e162]
+          - link "תחזוקה, ניקיון ושמנים חץ" [ref=e163] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%aa%d7%97%d7%96%d7%95%d7%a7%d7%94-%d7%a0%d7%99%d7%a7%d7%99%d7%95%d7%9f-%d7%95%d7%a9%d7%9e%d7%a0%d7%99%d7%9d/
+            - generic [ref=e166]: תחזוקה, ניקיון ושמנים
+            - img "חץ" [ref=e167]
+          - link "כלי עבודה ידניים חץ" [ref=e168] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%9b%d7%9c%d7%99-%d7%a2%d7%91%d7%95%d7%93%d7%94-%d7%99%d7%93%d7%a0%d7%99%d7%99%d7%9d/
+            - generic [ref=e171]: כלי עבודה ידניים
+            - img "חץ" [ref=e172]
+          - link "אביזרי חשמל חץ" [ref=e173] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%90%d7%91%d7%99%d7%96%d7%a8%d7%99-%d7%97%d7%a9%d7%9e%d7%9c/
+            - generic [ref=e176]: אביזרי חשמל
+            - img "חץ" [ref=e177]
+          - link "אביזרים לכלי עבודה חץ" [ref=e178] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%90%d7%91%d7%99%d7%96%d7%a8%d7%99%d7%9d-%d7%9c%d7%9b%d7%9c%d7%99-%d7%a2%d7%91%d7%95%d7%93%d7%94/
+            - generic [ref=e181]: אביזרים לכלי עבודה
+            - img "חץ" [ref=e182]
+          - link "סולמות חץ" [ref=e183] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%a1%d7%95%d7%9c%d7%9e%d7%95%d7%aa/
+            - generic [ref=e186]: סולמות
+            - img "חץ" [ref=e187]
+          - link "גגות חץ" [ref=e188] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%92%d7%92%d7%95%d7%aa/
+            - generic [ref=e191]: גגות
+            - img "חץ" [ref=e192]
+          - link "פחים ומרזבים חץ" [ref=e193] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%a4%d7%97%d7%99%d7%9d-%d7%95%d7%9e%d7%a8%d7%96%d7%91%d7%99%d7%9d/
+            - generic [ref=e196]: פחים ומרזבים
+            - img "חץ" [ref=e197]
+          - link "ג'יג חץ" [ref=e198] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%92%d7%99%d7%92/
+            - generic [ref=e201]: ג'יג
+            - img "חץ" [ref=e202]
+      - generic [ref=e214]:
+        - generic [ref=e215]:
+          - generic [ref=e216]: "\"ביקשתי לבנות גדר במבוק ללא ניסיון קודם. צוות המחסן ביקש סרטון של החצר, בנה עבורי הצעת מחיר משתלמת במיוחד והסביר לי בסבלנות כיצד לבצע את העבודה. התוצאה יצאה נהדרת, תודה!\""
+          - generic [ref=e217]: אלירן ב'
+        - generic [ref=e218]:
+          - generic [ref=e219] [cursor=pointer]
+          - generic [ref=e220] [cursor=pointer]
+          - generic [ref=e221] [cursor=pointer]
+          - generic [ref=e222] [cursor=pointer]
+          - generic [ref=e223] [cursor=pointer]
+          - generic [ref=e224] [cursor=pointer]
+          - generic [ref=e225] [cursor=pointer]
+      - generic [ref=e238]:
+        - img "Default Title" [ref=e240]
+        - img "Default Title" [ref=e242]
+        - img "Default Title" [ref=e244]
+        - img "Default Title" [ref=e246]
+        - img "Default Title" [ref=e248]
+        - img "Default Title" [ref=e250]
+        - img "Default Title" [ref=e252]
+        - img "Default Title" [ref=e254]
+        - img "Default Title" [ref=e256]
+        - img "Default Title" [ref=e258]
+        - img "Default Title" [ref=e260]
+        - img "Default Title" [ref=e262]
+        - img "Default Title" [ref=e264]
+        - img "Default Title" [ref=e266]
+        - img "Default Title" [ref=e268]
+        - img "Default Title" [ref=e270]
+        - img "Default Title" [ref=e272]
+        - img "Default Title" [ref=e274]
+        - img "Default Title" [ref=e276]
+        - img "Default Title" [ref=e278]
+        - img "Default Title" [ref=e280]
+        - img "Default Title" [ref=e282]
+        - img "Default Title" [ref=e284]
+        - img "Default Title" [ref=e286]
+        - img "Default Title" [ref=e288]
+        - img "Default Title" [ref=e290]
+        - img "Default Title" [ref=e292]
+        - img "Default Title" [ref=e294]
+        - img "Default Title" [ref=e296]
+        - img "Default Title" [ref=e298]
+        - img "Default Title" [ref=e300]
+        - img "Default Title" [ref=e302]
+        - img "Default Title" [ref=e304]
+        - img "Default Title" [ref=e306]
+        - img "Default Title" [ref=e308]
+        - img "Default Title" [ref=e310]
+        - img "Default Title" [ref=e312]
+        - img "Default Title" [ref=e314]
+        - img "Default Title" [ref=e316]
+        - img "Default Title" [ref=e318]
+        - img "Default Title" [ref=e320]
+        - img "Default Title" [ref=e322]
+        - img "Default Title" [ref=e324]
+        - img "Default Title" [ref=e326]
+        - img "Default Title" [ref=e328]
+        - img "Default Title" [ref=e330]
+        - img "Default Title" [ref=e332]
+        - img "Default Title" [ref=e334]
+        - img "Default Title" [ref=e336]
+        - img "Default Title" [ref=e338]
+        - img "Default Title" [ref=e340]
+        - img "Default Title" [ref=e342]
+        - img "Default Title" [ref=e344]
+        - img "Default Title" [ref=e346]
+        - img "Default Title" [ref=e348]
+        - img "Default Title" [ref=e350]
+        - img "Default Title" [ref=e352]
+        - img "Default Title" [ref=e354]
+        - img "Default Title" [ref=e356]
+        - img "Default Title" [ref=e358]
+        - img "Default Title" [ref=e360]
+        - img "Default Title" [ref=e362]
+        - img "Default Title" [ref=e364]
+        - img "Default Title" [ref=e366]
+        - img "Default Title" [ref=e368]
+        - img "Default Title" [ref=e370]
+        - img "Default Title" [ref=e372]
+        - img "Default Title" [ref=e374]
+        - img "Default Title" [ref=e376]
+        - img "Default Title" [ref=e378]
+        - img "Default Title" [ref=e380]
+        - img "Default Title" [ref=e382]
+  - contentinfo [ref=e383]:
+    - generic [ref=e391]:
+      - generic [ref=e393]:
+        - paragraph [ref=e396]: גואטה אביגדור בע”מ.
+        - paragraph [ref=e399]: הינה חברה ישראלית הנמצאת בבעלות משפחתית מלאה ועוסקת בתחום העץ והאביזרים הנדרשים לצורך התקנה והקמה של גגות רעפים פרגולות ודקים למגזר העסקי והפרטי.
+        - text: 
+      - generic [ref=e401]:
+        - paragraph [ref=e404]: קופצים?
+        - generic [ref=e406]:
+          - paragraph [ref=e407]: א-ה בין השעות 07:30 ועד 16:30יום ו’ בין השעות 07:30 עד 13:00
+          - paragraph [ref=e408]: רח׳ זאב שלנג 3 א.ת.ח ראשל״צ(מאחורי הסינמה סיטי)
+          - paragraph [ref=e409]:
+            - text: דברו איתנו. 050-9512625
+            - link "info@guetaavigdor.co.il" [ref=e410] [cursor=pointer]:
+              - /url: mailto:info@guetaavigdor.co.il
+      - generic [ref=e412]:
+        - paragraph [ref=e415]: סושיאלס.
+        - list [ref=e418]:
+          - listitem [ref=e419]:
+            - link [ref=e420] [cursor=pointer]:
+              - /url: https://www.tiktok.com/@guetawood
+              - generic [aria-hidden] [ref=e422]: 
+          - listitem [ref=e423]:
+            - link [ref=e424] [cursor=pointer]:
+              - /url: https://www.instagram.com/gueta_avigdor/
+              - generic [aria-hidden] [ref=e426]: 
+          - listitem [ref=e427]:
+            - link [ref=e428] [cursor=pointer]:
+              - /url: https://www.facebook.com/guetaavigdor/?locale=he_IL
+              - generic [aria-hidden] [ref=e430]: 
+        - paragraph [ref=e433]: מבצעים, מוצרים חדשים וטיפים מקצועיים.
+        - form "ניוזלטר" [ref=e436]:
+          - generic [ref=e437]:
+            - generic [ref=e438]:
+              - generic [ref=e439] [cursor=pointer]: אימייל
+              - textbox "אימייל" [ref=e440]
+            - button "שליחה" [ref=e442] [cursor=pointer]:
+              - generic [ref=e444]:
+                - generic [aria-hidden] [ref=e445]: 
+                - generic [ref=e446]: שליחה
+    - paragraph [ref=e453]:
+      - text: © 2026 כל הזכויות שמורות לגואטה אביגדור מחסן עצים | תקנון האתר | הצהרת נגישות | פרטיות | אתר
+      - link "tabuzzco" [ref=e454] [cursor=pointer]:
+        - /url: https://tabuzzco.com
+  - generic [ref=e455]: mobile
+  - status [ref=e456]

@@ -317,6 +317,10 @@ function gueta_render_announcement() {
 function gueta_render_actions() {
 	?>
 	<div class="gueta-header__actions">
+		<button type="button" class="gueta-icon-button gueta-header__search-toggle" aria-label="חיפוש" aria-expanded="false" data-search-open>
+			<?php echo gueta_icon( 'search' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+		</button>
+
 		<?php if ( gueta_has_woocommerce() ) : ?>
 			<a class="gueta-icon-button gueta-actions__account" href="<?php echo esc_url( (string) wc_get_page_permalink( 'myaccount' ) ); ?>" aria-label="<?php echo is_user_logged_in() ? 'החשבון שלי' : 'התחברות'; ?>">
 				<?php echo gueta_icon( 'user' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>

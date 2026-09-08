@@ -444,7 +444,7 @@ function gueta_drawer_panel_inner() {
 	<div class="gueta-drawer__head">
 		<h2 class="gueta-drawer__title" id="gueta-cart-title">העגלה שלך</h2>
 		<button type="button" class="gueta-icon-button" data-drawer-close aria-label="סגירת העגלה">
-			<svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"></path></svg>
+			<?php echo gueta_icon( 'close' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</button>
 	</div>
 	<?php echo gueta_cart_drawer_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
@@ -478,12 +478,40 @@ function gueta_flag_cart_addition() {
 add_action( 'woocommerce_add_to_cart', 'gueta_flag_cart_addition', 20 );
 
 /**
+ * Whether this page is being drawn inside Elementor's editor or its preview.
+ *
+ * @return bool
+ */
+function gueta_in_elementor_editor() {
+	if ( ! class_exists( 'ElementorPlugin' ) ) {
+		return false;
+	}
+
+	$elementor = ElementorPlugin::$instance;
+
+	if ( isset( $elementor->editor ) && $elementor->editor->is_edit_mode() ) {
+		return true;
+	}
+
+	return isset( $elementor->preview ) && $elementor->preview->is_preview_mode();
+}
+
+/**
  * Read and clear that flag.
  *
  * @return bool
  */
 function gueta_should_open_cart() {
 	if ( ! gueta_has_woocommerce() || ! WC()->session ) {
+		return false;
+	}
+
+	/*
+	 * Elementor loads the page into its editor and reloads it on every save.
+	 * Each of those reloads is a fresh page view, so a flag left by an add to
+	 * cart made the drawer spring open again and again over the canvas.
+	 */
+	if ( gueta_in_elementor_editor() ) {
 		return false;
 	}
 

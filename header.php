@@ -27,9 +27,6 @@
 			<button type="button" class="gueta-icon-button gueta-header__menu" aria-label="פתיחת תפריט" aria-expanded="false" data-menu-open>
 				<?php echo gueta_icon( 'menu' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			</button>
-			<button type="button" class="gueta-icon-button gueta-header__search-toggle" aria-label="חיפוש" aria-expanded="false" data-search-open>
-				<?php echo gueta_icon( 'search' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-			</button>
 		</div>
 
 		<div class="gueta-header__brand">
