@@ -4,3 +4,12 @@
 [    3022ms] [VERBOSE] [DOM] Multiple forms should be contained in their own form elements; break up complex forms into ones that represent a single action: (More info: https://goo.gl/9p2vKq) %o @ https://guetaavigdor.ussl.co/%d7%a7%d7%95%d7%a4%d7%94/:0
 [    3513ms] [LOG] cg apple pay v1.1.4 @ https://pps.creditguard.co.il/plugins/cgApplePay.js:0
 [    3517ms] [LOG] cg apple pay v1.1.4 @ https://pps.creditguard.co.il/plugins/cgApplePay.js:0
+[30352815ms] [LOG] JQMIGRATE: Migrate is installed, version 3.4.1 @ https://guetaavigdor.ussl.co/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1:1
+[30352820ms] [LOG] applePayOnIframe: cgAP does not exist, create a new script tag @ https://pps.creditguard.co.il/plugins/applePayOnIframe.js:3
+[30352822ms] [LOG] applePayOnIframe: cgAP does not exist, create a new script tag @ https://pps.creditguard.co.il/plugins/applePayOnIframe.js:3
+[30352945ms] [LOG] cg apple pay v1.1.4 @ https://pps.creditguard.co.il/plugins/cgApplePay.js:0
+[30352952ms] [LOG] cg apple pay v1.1.4 @ https://pps.creditguard.co.il/plugins/cgApplePay.js:0
+[30352983ms] [VERBOSE] [DOM] Multiple forms should be contained in their own form elements; break up complex forms into ones that represent a single action: (More info: https://goo.gl/9p2vKq) %o @ https://guetaavigdor.ussl.co/%D7%A7%D7%95%D7%A4%D7%94/:0
+[30375836ms] [LOG] JQMIGRATE: Migrate is installed, version 3.4.1 @ https://guetaavigdor.ussl.co/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1:1
+[30375870ms] [LOG] applePayOnIframe: cgAP does not exist, create a new script tag @ https://pps.creditguard.co.il/plugins/applePayOnIframe.js:3
+[30376178ms] [LOG] cg apple pay v1.1.4 @ https://pps.creditguard.co.il/plugins/cgApplePay.js:0
