@@ -1067,3 +1067,39 @@
 		order: -1;
 	}
 }
+
+/* -------------------------------------------------------------------------
+ * The product rail on a phone
+ *
+ * With one and a half cards on screen instead of one, each card has two
+ * thirds of the width it had, so the type and the padding inside it come down
+ * to match. Without this the wording stays at desktop size in a narrower box
+ * and wraps into a tower.
+ *
+ * The cards belong to a third party widget, so these are its class names.
+ * ---------------------------------------------------------------------- */
+
+@media (max-width: 1024px) {
+	.smart-products-swiper .smart-product-card {
+		padding: 10px;
+	}
+
+	.smart-products-swiper .smart-product-card .product-title,
+	.smart-products-swiper .smart-product-card h3,
+	.smart-products-swiper .smart-product-card h2 {
+		font-size: 13px;
+		line-height: 1.4;
+	}
+
+	.smart-products-swiper .smart-product-card .price,
+	.smart-products-swiper .smart-product-card .woocommerce-Price-amount {
+		font-size: 14px;
+	}
+
+	.smart-products-swiper .smart-product-card .button,
+	.smart-products-swiper .smart-product-card .add_to_cart_button {
+		font-size: 13px;
+		min-height: 40px;
+		padding: 0 12px;
+	}
+}

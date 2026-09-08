@@ -1,0 +1,198 @@
+- generic [ref=f29e1]:
+  - link "WhatsApp" [ref=f29e3] [cursor=pointer]:
+    - /url: https://api.whatsapp.com/send?phone=972509512625
+  - link "דילוג לתוכן" [ref=f29e6] [cursor=pointer]:
+    - /url: "#content"
+  - generic [ref=f29e7]:
+    - button "הודעה קודמת" [ref=f29e8] [cursor=pointer]
+    - generic [ref=f29e11]:
+      - paragraph [ref=f29e12]: משלוח מהיר לכל הארץ
+      - paragraph: ייעוץ מקצועי בטלפון לפני כל הזמנה
+      - paragraph: מאות מוצרים במלאי מיידי
+    - button "הודעה הבאה" [ref=f29e13] [cursor=pointer]
+  - banner [ref=f29e16]:
+    - generic [ref=f29e17]:
+      - button "פתיחת תפריט" [ref=f29e19] [cursor=pointer]
+      - link [ref=f29e23] [cursor=pointer]:
+        - /url: https://guetaavigdor.ussl.co/
+        - img "גואטה אביגדור" [ref=f29e24]
+      - generic [ref=f29e25]:
+        - button "חיפוש" [ref=f29e26] [cursor=pointer]
+        - button "עגלת קניות" [ref=f29e30] [cursor=pointer]:
+          - generic [ref=f29e35]: "1"
+  - generic [ref=f29e36]:
+    - paragraph [ref=f29e43]:
+      - generic [ref=f29e44]:
+        - link "דף הבית" [ref=f29e46] [cursor=pointer]:
+          - /url: https://guetaavigdor.ussl.co/
+        - text: »
+        - link "המוצרים שלנו" [ref=f29e48] [cursor=pointer]:
+          - /url: https://guetaavigdor.ussl.co/catalog/
+        - text: »
+        - link "מוצרי פרזול" [ref=f29e50] [cursor=pointer]:
+          - /url: https://guetaavigdor.ussl.co/products/%d7%9e%d7%95%d7%a6%d7%a8%d7%99-%d7%a4%d7%a8%d7%96%d7%95%d7%9c/
+        - text: » ידית דלת קבועה
+    - generic [ref=f29e52]:
+      - generic [ref=f29e54]:
+        - heading "ידית דלת קבועה" [level=1] [ref=f29e57]
+        - paragraph [ref=f29e60]:
+          - generic [ref=f29e61]: ₪59.50
+        - generic [ref=f29e68]:
+          - generic [ref=f29e69]:
+            - button "הפחתת יחידה" [disabled] [ref=f29e70]: −
+            - generic [ref=f29e71]: כמות של ידית דלת קבועה
+            - spinbutton "כמות המוצר" [ref=f29e72]: "1"
+            - button "הוספת יחידה" [ref=f29e73] [cursor=pointer]: +
+          - button "הוספה לסל" [ref=f29e74] [cursor=pointer]
+        - generic [ref=f29e77]:
+          - generic [ref=f29e78]:
+            - generic [ref=f29e79]: מק"ט
+            - generic [ref=f29e80]: "18169"
+          - generic [ref=f29e81]:
+            - generic [ref=f29e82]: קטגוריות
+            - generic [ref=f29e83]:
+              - link "מוצרי פרזול" [ref=f29e84] [cursor=pointer]:
+                - /url: https://guetaavigdor.ussl.co/products/%d7%9e%d7%95%d7%a6%d7%a8%d7%99-%d7%a4%d7%a8%d7%96%d7%95%d7%9c/
+              - text: ","
+              - link "ידיות" [ref=f29e85] [cursor=pointer]:
+                - /url: https://guetaavigdor.ussl.co/products/%d7%9e%d7%95%d7%a6%d7%a8%d7%99-%d7%a4%d7%a8%d7%96%d7%95%d7%9c/%d7%99%d7%93%d7%99%d7%95%d7%aa/
+              - text: ","
+              - link "קישוטים" [ref=f29e86] [cursor=pointer]:
+                - /url: https://guetaavigdor.ussl.co/products/%d7%9e%d7%95%d7%a6%d7%a8%d7%99-%d7%a4%d7%a8%d7%96%d7%95%d7%9c/%d7%a7%d7%99%d7%a9%d7%95%d7%98%d7%99%d7%9d/
+        - group [ref=f29e90]:
+          - generic "תיאור" [ref=f29e91] [cursor=pointer]
+          - paragraph [ref=f29e95]:
+            - text: "ידית דלת קבועה צבע: שחור מחיר מבצע ! למעבר לאתר הספק"
+            - link "לחץ כאן" [ref=f29e96] [cursor=pointer]:
+              - /url: https://www.saiktiv.co.il/
+            - text: לרכישת ברגי עץ
+            - link "לחץ כאן" [ref=f29e97] [cursor=pointer]:
+              - /url: https://guetaavigdor.ussl.co/product/%d7%91%d7%95%d7%a8%d7%92-%d7%a1%d7%99%d7%91%d7%99%d7%aa-%d7%a9%d7%9c-%d7%9e%d7%99%d7%91%d7%a8%d7%92/
+      - button "הגדלת התמונה" [ref=f29e104] [cursor=pointer]:
+        - img "ידית דלת קבועה" [ref=f29e105]
+    - generic [ref=f29e117]:
+      - heading "בטוח יעניין אתכם" [level=2] [ref=f29e120]
+      - generic [ref=f29e125]:
+        - generic [ref=f29e126]:
+          - group "1 / 8" [ref=f29e127]:
+            - link "תושבת כנף חיצונית צהובה 45×15 מ\"מ דגם B-029 תושבת כנף חיצונית 45×15 מ\"מ צהובה – דגם B-029 | חיבור צד מדויק לפרגולות ומבני עץ ₪18.00" [ref=f29e129] [cursor=pointer]:
+              - /url: https://guetaavigdor.ussl.co/product/%d7%aa%d7%95%d7%a9%d7%91%d7%aa-%d7%9b%d7%a0%d7%a3-%d7%97%d7%99%d7%a6%d7%95%d7%a0%d7%99%d7%aa-45x15-%d7%9e%d7%9e-%d7%a6%d7%94%d7%95%d7%91%d7%94-%d7%93%d7%92%d7%9d-b-029-%d7%97%d7%99/
+              - img "תושבת כנף חיצונית צהובה 45×15 מ\"מ דגם B-029" [ref=f29e131]
+              - generic [ref=f29e132]:
+                - heading "תושבת כנף חיצונית 45×15 מ\"מ צהובה – דגם B-029 | חיבור צד מדויק לפרגולות ומבני עץ" [level=3] [ref=f29e133]
+                - generic [ref=f29e134]: ₪18.00
+          - group "2 / 8" [ref=f29e137]:
+            - link "בריח מעוצב 75 מ\"מ בצבע שחור ₪25.21" [ref=f29e139] [cursor=pointer]:
+              - /url: https://guetaavigdor.ussl.co/product/%d7%91%d7%a8%d7%99%d7%97-%d7%9e%d7%a2%d7%95%d7%a6%d7%91-75-%d7%9e%d7%9e-%d7%91%d7%a6%d7%91%d7%a2-%d7%a9%d7%97%d7%95%d7%a8/
+              - generic [ref=f29e141]:
+                - heading "בריח מעוצב 75 מ\"מ בצבע שחור" [level=3] [ref=f29e142]
+                - generic [ref=f29e143]: ₪25.21
+          - group "3 / 8" [ref=f29e146]:
+            - link "תושבת רצפה צהובה C-009 לעמודי עץ בגודל 90×90 מ”מ – בסיס מתכתי לעיגון בטוח בפרויקטים חיצוניים תושבת רצפה לעמודי עץ 90 מ\"מ – דגם C-009 בצבע צהוב ₪17.15 מחיר ליחידה" [ref=f29e148] [cursor=pointer]:
+              - /url: https://guetaavigdor.ussl.co/product/%d7%aa%d7%95%d7%a9%d7%91%d7%aa-%d7%a8%d7%a6%d7%a4%d7%94-90-%d7%a6%d7%94%d7%95%d7%91%d7%94/
+              - img "תושבת רצפה צהובה C-009 לעמודי עץ בגודל 90×90 מ”מ – בסיס מתכתי לעיגון בטוח בפרויקטים חיצוניים" [ref=f29e150]
+              - generic [ref=f29e151]:
+                - heading "תושבת רצפה לעמודי עץ 90 מ\"מ – דגם C-009 בצבע צהוב" [level=3] [ref=f29e152]
+                - generic [ref=f29e153]: ₪17.15
+                - generic [ref=f29e156]: מחיר ליחידה
+          - group "4 / 8" [ref=f29e157]:
+            - link "בריח מסתובב שחור גדול ₪30.26" [ref=f29e159] [cursor=pointer]:
+              - /url: https://guetaavigdor.ussl.co/product/%d7%91%d7%a8%d7%99%d7%97-%d7%9e%d7%a1%d7%aa%d7%95%d7%91%d7%91-%d7%a9%d7%97%d7%95%d7%a8-%d7%92%d7%93%d7%95%d7%9c/
+              - generic [ref=f29e161]:
+                - heading "בריח מסתובב שחור גדול" [level=3] [ref=f29e162]
+                - generic [ref=f29e163]: ₪30.26
+          - group "5 / 8" [ref=f29e166]:
+            - link "תושבת תליה לפרגולה בצבע צהוב, דגם C D-040, מבנה אובלי עם חור מרכזי לחיבור אלמנטים תלויים תושבת תליה C לפרגולה דגם D-040 | חיבור בטיחותי ואסתטי לקורת עץ ₪17.00" [ref=f29e168] [cursor=pointer]:
+              - /url: https://guetaavigdor.ussl.co/product/%d7%aa%d7%95%d7%a9%d7%91%d7%aa-%d7%aa%d7%9c%d7%99%d7%94-c-%d7%9c%d7%a4%d7%a8%d7%92%d7%95%d7%9c%d7%94-%d7%93%d7%92%d7%9d-d-040-%d7%97%d7%99%d7%91%d7%95%d7%a8-%d7%91%d7%98%d7%99%d7%97%d7%95%d7%aa/
+              - img "תושבת תליה לפרגולה בצבע צהוב, דגם C D-040, מבנה אובלי עם חור מרכזי לחיבור אלמנטים תלויים" [ref=f29e170]
+              - generic [ref=f29e171]:
+                - heading "תושבת תליה C לפרגולה דגם D-040 | חיבור בטיחותי ואסתטי לקורת עץ" [level=3] [ref=f29e172]
+                - generic [ref=f29e173]: ₪17.00
+          - group "6 / 8" [ref=f29e176]:
+            - 'link "מבצע זוג רגלי X זוג רגלי X לשולחן אוכל / סלון בצבע שחור טווח מחירים: ⁦₪549.66⁩ עד ⁦₪749.00⁩ מחיר לזוג" [ref=f29e178] [cursor=pointer]':
+              - /url: https://guetaavigdor.ussl.co/product/%d7%a8%d7%92%d7%9c-x-%d7%9c%d7%a9%d7%95%d7%9c%d7%97%d7%9f-%d7%91%d7%9e%d7%91%d7%97%d7%a8-%d7%9e%d7%99%d7%93%d7%95%d7%aa/
+              - generic [ref=f29e179]:
+                - generic [ref=f29e180]: מבצע
+                - img "זוג רגלי X" [ref=f29e181]
+              - generic [ref=f29e182]:
+                - heading "זוג רגלי X לשולחן אוכל / סלון בצבע שחור" [level=3] [ref=f29e183]
+                - generic [ref=f29e184]:
+                  - generic [ref=f29e186]: ₪549.66
+                  - text: –
+                  - generic [ref=f29e188]: ₪749.00
+                  - generic [ref=f29e189]: "טווח מחירים: ⁦₪549.66⁩ עד ⁦₪749.00⁩"
+                - generic [ref=f29e190]: מחיר לזוג
+          - group "7 / 8" [ref=f29e191]:
+            - 'link "חוט ברזל מגולוון חוט ברזל מגולוון במבחר מידות ועוביים טווח מחירים: ⁦₪14.12⁩ עד ⁦₪15.13⁩ מחיר ליח''" [ref=f29e193] [cursor=pointer]':
+              - /url: https://guetaavigdor.ussl.co/product/%d7%97%d7%95%d7%98-%d7%91%d7%a8%d7%96%d7%9c-%d7%9e%d7%92%d7%95%d7%9c%d7%95%d7%95%d7%9f-%d7%91%d7%9c%d7%99%d7%a1%d7%98%d7%a8-5-5-%d7%9e%d7%9e-%d7%a2%d7%93-75-%d7%9e%d7%98%d7%a8/
+              - img "חוט ברזל מגולוון" [ref=f29e195]
+              - generic [ref=f29e196]:
+                - heading "חוט ברזל מגולוון במבחר מידות ועוביים" [level=3] [ref=f29e197]
+                - generic [ref=f29e198]:
+                  - generic [ref=f29e200]: ₪14.12
+                  - text: –
+                  - generic [ref=f29e202]: ₪15.13
+                  - generic [ref=f29e203]: "טווח מחירים: ⁦₪14.12⁩ עד ⁦₪15.13⁩"
+                - generic [ref=f29e204]: מחיר ליח'
+          - group "8 / 8" [ref=f29e205]:
+            - link "תושבת כנף חיצונית 45×10 מ\"מ B-008 בציפוי מגולוון תושבת כנף חיצונית 45×10 מ\"מ B-008 – פתרון עיגון אמין לפרויקטים מעץ ומתכת ₪15.13" [ref=f29e207] [cursor=pointer]:
+              - /url: https://guetaavigdor.ussl.co/product/%d7%aa%d7%95%d7%a9%d7%91%d7%aa-%d7%a7%d7%99%d7%a8-05-10-%d7%97%d7%99%d7%a6%d7%95%d7%a0%d7%99/
+              - img "תושבת כנף חיצונית 45×10 מ\"מ B-008 בציפוי מגולוון" [ref=f29e209]
+              - generic [ref=f29e210]:
+                - heading "תושבת כנף חיצונית 45×10 מ\"מ B-008 – פתרון עיגון אמין לפרויקטים מעץ ומתכת" [level=3] [ref=f29e211]
+                - generic [ref=f29e212]: ₪15.13
+        - button "Next slide" [ref=f29e215] [cursor=pointer]: prev
+        - button "Previous slide" [disabled]: next
+  - contentinfo [ref=f29e216]:
+    - generic [ref=f29e224]:
+      - generic [ref=f29e226]:
+        - paragraph [ref=f29e229]: גואטה אביגדור בע”מ.
+        - paragraph [ref=f29e232]: הינה חברה ישראלית הנמצאת בבעלות משפחתית מלאה ועוסקת בתחום העץ והאביזרים הנדרשים לצורך התקנה והקמה של גגות רעפים פרגולות ודקים למגזר העסקי והפרטי.
+        - text: 
+      - generic [ref=f29e234]:
+        - paragraph [ref=f29e237]: קופצים?
+        - generic [ref=f29e239]:
+          - paragraph [ref=f29e240]: א-ה בין השעות 07:30 ועד 16:30יום ו’ בין השעות 07:30 עד 13:00
+          - paragraph [ref=f29e241]: רח׳ זאב שלנג 3 א.ת.ח ראשל״צ(מאחורי הסינמה סיטי)
+          - paragraph [ref=f29e242]:
+            - text: דברו איתנו. 050-9512625
+            - link "info@guetaavigdor.co.il" [ref=f29e243] [cursor=pointer]:
+              - /url: mailto:info@guetaavigdor.co.il
+      - generic [ref=f29e245]:
+        - paragraph [ref=f29e248]: סושיאלס.
+        - list [ref=f29e251]:
+          - listitem [ref=f29e252]:
+            - link [ref=f29e253] [cursor=pointer]:
+              - /url: https://www.tiktok.com/@guetawood
+              - generic [aria-hidden] [ref=f29e255]: 
+          - listitem [ref=f29e256]:
+            - link [ref=f29e257] [cursor=pointer]:
+              - /url: https://www.instagram.com/gueta_avigdor/
+              - generic [aria-hidden] [ref=f29e259]: 
+          - listitem [ref=f29e260]:
+            - link [ref=f29e261] [cursor=pointer]:
+              - /url: https://www.facebook.com/guetaavigdor/?locale=he_IL
+              - generic [aria-hidden] [ref=f29e263]: 
+        - paragraph [ref=f29e266]: מבצעים, מוצרים חדשים וטיפים מקצועיים.
+        - form "ניוזלטר" [ref=f29e269]:
+          - generic [ref=f29e270]:
+            - generic [ref=f29e271]:
+              - generic [ref=f29e272] [cursor=pointer]: אימייל
+              - textbox "אימייל" [ref=f29e273]
+            - button "שליחה" [ref=f29e275] [cursor=pointer]:
+              - generic [ref=f29e277]:
+                - generic [aria-hidden] [ref=f29e278]: 
+                - generic [ref=f29e279]: שליחה
+    - paragraph [ref=f29e286]:
+      - text: © 2026 כל הזכויות שמורות לגואטה אביגדור מחסן עצים | תקנון האתר | הצהרת נגישות | פרטיות | אתר
+      - link "tabuzzco" [ref=f29e287] [cursor=pointer]:
+        - /url: https://tabuzzco.com
+  - generic [ref=f29e289]:
+    - generic [ref=f29e290]:
+      - img "ידית דלת קבועה" [ref=f29e292]
+      - generic [ref=f29e293]:
+        - generic [ref=f29e294]: ידית דלת קבועה
+        - generic [ref=f29e295]: ₪59.50
+    - button "הוספה לסל" [ref=f29e297] [cursor=pointer]
+  - generic [ref=f29e298]: mobile
+  - status [ref=f29e299]

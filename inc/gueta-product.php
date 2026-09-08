@@ -54,6 +54,25 @@ function gueta_product_assets() {
 		true
 	);
 
+	// The product rails come from a third party widget; this only resizes them.
+	wp_enqueue_script(
+		'gueta-carousel',
+		$uri . '/assets/js/gueta-carousel.js',
+		[],
+		gueta_asset_version( '/assets/js/gueta-carousel.js' ),
+		true
+	);
+
+	wp_localize_script(
+		'gueta-carousel',
+		'guetaCarousel',
+		[
+			'breakpoint' => 1024,
+			'perView'    => 1.5,
+			'gap'        => 12,
+		]
+	);
+
 	/*
 	 * WooCommerce enqueues its variation script from the add to cart template
 	 * itself, which on a listing page runs inside the quick view AJAX request:
