@@ -1,0 +1,14 @@
+[    3496ms] [LOG] JQMIGRATE: Migrate is installed, version 3.4.1 @ https://guetaavigdor.ussl.co/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1:1
+[    3505ms] [LOG] applePayOnIframe: cgAP does not exist, create a new script tag @ https://pps.creditguard.co.il/plugins/applePayOnIframe.js:3
+[    5949ms] [LOG] cg apple pay v1.1.4 @ https://pps.creditguard.co.il/plugins/cgApplePay.js:0
+[   69135ms] [LOG] JQMIGRATE: Migrate is installed, version 3.4.1 @ https://guetaavigdor.ussl.co/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1:1
+[   69144ms] [LOG] applePayOnIframe: cgAP does not exist, create a new script tag @ https://pps.creditguard.co.il/plugins/applePayOnIframe.js:3
+[   70533ms] [LOG] cg apple pay v1.1.4 @ https://pps.creditguard.co.il/plugins/cgApplePay.js:0
+[   71011ms] [WARNING] The powerPreference option is currently ignored when calling requestAdapter() on Windows. See https://crbug.com/369219127 @ :0
+[   79886ms] [LOG] JQMIGRATE: Migrate is installed, version 3.4.1 @ https://guetaavigdor.ussl.co/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1:1
+[   79895ms] [LOG] applePayOnIframe: cgAP does not exist, create a new script tag @ https://pps.creditguard.co.il/plugins/applePayOnIframe.js:3
+[   80804ms] [LOG] cg apple pay v1.1.4 @ https://pps.creditguard.co.il/plugins/cgApplePay.js:0
+[   81371ms] [LOG] %c%s color: inherit Yandex.Metrika counter is initialized @ https://mc.yandex.ru/metrika/tag.js:203
+[   88630ms] [LOG] JQMIGRATE: Migrate is installed, version 3.4.1 @ https://guetaavigdor.ussl.co/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1:1
+[   88636ms] [LOG] applePayOnIframe: cgAP does not exist, create a new script tag @ https://pps.creditguard.co.il/plugins/applePayOnIframe.js:3
+[   90063ms] [LOG] cg apple pay v1.1.4 @ https://pps.creditguard.co.il/plugins/cgApplePay.js:0

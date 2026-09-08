@@ -403,8 +403,30 @@
 	display: block;
 	height: auto;
 	max-height: var(--gueta-logo-height, 62px);
+	max-width: 100%;
 	object-fit: contain;
 	width: auto;
+}
+
+/*
+ * An SVG exported with only a viewBox carries no width or height of its own.
+ * With both width and height on auto the browser has nothing to resolve and
+ * lays the logo out at nothing at all, which is why it went missing from the
+ * header entirely rather than merely coming out the wrong size.
+ *
+ * Naming the width gives it something definite, and the ratio from the img
+ * attributes supplies the height. The max-height above still caps a tall
+ * logo, and a wide one like this shop's, at eight and a half to one, simply
+ * fits the space it is given.
+ *
+ * Raster logos are left alone. They know their own size, and a rule like
+ * this would stretch a small one until it blurred.
+ */
+.gueta-brand img[src$=".svg" i] {
+	height: auto;
+	max-height: var(--gueta-logo-height, 62px);
+	max-width: 100%;
+	width: 100%;
 }
 
 .gueta-brand__text {
