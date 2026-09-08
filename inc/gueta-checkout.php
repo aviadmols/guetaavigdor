@@ -5,8 +5,8 @@
  * WooCommerce ships an American address form: street first, then the postcode,
  * then the town, with the house number folded into the street line and a state
  * field nobody here fills in. Written out in Hebrew that reads backwards. This
- * puts the settlement first, gives the house number its own box, and lets the
- * postcode be optional, which it is, because most people do not know theirs.
+ * puts the settlement first, gives the house number a box of its own, and drops
+ * the postcode, which almost nobody here knows and no courier needs.
  *
  * The settlement is chosen from the government's list rather than typed. The
  * browser completes it from a local file so it answers instantly, and PHP
@@ -82,18 +82,18 @@ function gueta_address_fields( $fields ) {
 		$fields['address_2']['label_class'] = [];
 	}
 
-	// Israel Post has codes for everything and almost nobody knows theirs.
-	if ( isset( $fields['postcode'] ) ) {
-		$fields['postcode']['label']       = 'מיקוד';
-		$fields['postcode']['priority']    = 80;
-		$fields['postcode']['required']    = false;
-		$fields['postcode']['class']       = [ 'form-row-first' ];
-	}
+	/*
+	 * The postcode is gone. Israel Post has a code for every address and
+	 * almost nobody knows their own, so it was a box that got skipped, and a
+	 * courier here works from the street and the number anyway. It is unset
+	 * rather than hidden, so nothing is asked for and nothing is stored.
+	 */
+	unset( $fields['postcode'] );
 
 	if ( isset( $fields['company'] ) ) {
-		$fields['company']['label']       = 'שם חברה';
-		$fields['company']['priority']    = 90;
-		$fields['company']['class']       = [ 'form-row-last' ];
+		$fields['company']['label']    = 'שם חברה';
+		$fields['company']['priority'] = 90;
+		$fields['company']['class']    = [ 'form-row-wide' ];
 	}
 
 	if ( isset( $fields['country'] ) ) {
