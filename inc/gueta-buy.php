@@ -176,6 +176,8 @@ function gueta_buy_shortcode( $atts ) {
 		[
 			'product' => 0,
 			'price'   => 'auto',
+			// Add without leaving the page. Pass ajax="no" for the plain post.
+			'ajax'    => 'yes',
 		],
 		$atts,
 		'gueta_buy'
@@ -188,7 +190,15 @@ function gueta_buy_shortcode( $atts ) {
 		$product   = $candidate instanceof WC_Product ? $candidate : null;
 	}
 
-	return gueta_buy_box_html( $product, [ 'price' => $atts['price'] ] );
+	$plain = [ 'no', 'false', '0', 'off' ];
+
+	return gueta_buy_box_html(
+		$product,
+		[
+			'price' => $atts['price'],
+			'ajax'  => ! in_array( strtolower( trim( (string) $atts['ajax'] ) ), $plain, true ),
+		]
+	);
 }
 
 /**

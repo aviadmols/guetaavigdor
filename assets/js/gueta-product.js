@@ -712,6 +712,17 @@
 						result.cart_hash,
 						window.jQuery(button)
 					]);
+
+					/*
+					 * Say so on the button itself. The drawer opens too, but on a
+					 * phone it slides in from the edge and the thumb is still on
+					 * the button, so the button is where the eye already is.
+					 */
+					box.classList.add('is-added');
+					window.clearTimeout(box.guetaAddedTimer);
+					box.guetaAddedTimer = window.setTimeout(function () {
+						box.classList.remove('is-added');
+					}, 1800);
 				})
 				.catch(function () {
 					// Whatever went wrong, the ordinary post still works.
