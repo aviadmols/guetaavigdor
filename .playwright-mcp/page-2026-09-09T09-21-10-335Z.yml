@@ -1,0 +1,415 @@
+- generic [ref=f35e1]:
+  - link "WhatsApp" [ref=f35e3] [cursor=pointer]:
+    - /url: https://api.whatsapp.com/send?phone=972509512625
+  - link "דילוג לתוכן" [ref=f35e6] [cursor=pointer]:
+    - /url: "#content"
+  - generic [ref=f35e7]:
+    - button "הודעה קודמת" [ref=f35e8] [cursor=pointer]
+    - generic [ref=f35e11]:
+      - paragraph [ref=f35e12]: משלוח מהיר לכל הארץ
+      - paragraph: ייעוץ מקצועי בטלפון לפני כל הזמנה
+      - paragraph: מאות מוצרים במלאי מיידי
+    - button "הודעה הבאה" [ref=f35e13] [cursor=pointer]
+  - banner [ref=f35e16]:
+    - generic [ref=f35e17]:
+      - button "פתיחת תפריט" [ref=f35e19] [cursor=pointer]
+      - link [ref=f35e23] [cursor=pointer]:
+        - /url: https://guetaavigdor.ussl.co/
+        - img "גואטה אביגדור" [ref=f35e24]
+      - generic [ref=f35e25]:
+        - button "חיפוש" [ref=f35e26] [cursor=pointer]
+        - button "עגלת קניות" [ref=f35e30] [cursor=pointer]:
+          - generic [ref=f35e35]: "2"
+  - generic [ref=f35e36]:
+    - generic [ref=f35e43]:
+      - heading "עצים" [level=1] [ref=f35e48]
+      - link "מידע חשוב ←" [ref=f35e53] [cursor=pointer]:
+        - /url: "#important-field"
+        - generic [ref=f35e54]: מידע חשוב
+        - text: ←
+    - generic [ref=f35e62]:
+      - list [ref=f35e63]:
+        - listitem [ref=f35e64]:
+          - link "עץ אורן" [ref=f35e65] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%a2%d7%a6%d7%99%d7%9d/%d7%a2%d7%a5-%d7%90%d7%95%d7%a8%d7%9f/
+        - listitem [ref=f35e68]:
+          - link "פלטות" [ref=f35e69] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%a2%d7%a6%d7%99%d7%9d/%d7%a4%d7%9c%d7%98%d7%95%d7%aa/
+        - listitem [ref=f35e72]:
+          - link "איפאה טובקו" [ref=f35e73] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%a2%d7%a6%d7%99%d7%9d/%d7%90%d7%99%d7%a4%d7%90%d7%94-%d7%98%d7%95%d7%91%d7%a7%d7%95/
+        - listitem [ref=f35e76]:
+          - link "עצים לבניין" [ref=f35e77] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%a2%d7%a6%d7%99%d7%9d/%d7%a2%d7%a6%d7%99%d7%9d-%d7%9c%d7%91%d7%a0%d7%99%d7%99%d7%9f/
+        - listitem [ref=f35e80]:
+          - link "פלטות עץ אלון" [ref=f35e81] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%a2%d7%a6%d7%99%d7%9d/%d7%90%d7%9c%d7%95%d7%9f/
+        - listitem [ref=f35e84]:
+          - link "סוקופירה" [ref=f35e85] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%a2%d7%a6%d7%99%d7%9d/%d7%a1%d7%95%d7%a7%d7%95%d7%a4%d7%99%d7%a8%d7%94/
+        - listitem [ref=f35e88]:
+          - link "אגוז אפריקאי" [ref=f35e89] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%a2%d7%a6%d7%99%d7%9d/%d7%90%d7%92%d7%95%d7%96-%d7%90%d7%a4%d7%a8%d7%99%d7%a7%d7%90%d7%99/
+        - listitem [ref=f35e92]:
+          - link "טיק" [ref=f35e93] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%a2%d7%a6%d7%99%d7%9d/%d7%98%d7%99%d7%a7/
+        - listitem [ref=f35e96]:
+          - link "גראפה" [ref=f35e97] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%a2%d7%a6%d7%99%d7%9d/%d7%92%d7%a8%d7%90%d7%a4%d7%94/
+        - listitem [ref=f35e100]:
+          - link "ג'טובה" [ref=f35e101] [cursor=pointer]:
+            - /url: https://guetaavigdor.ussl.co/products/%d7%a2%d7%a6%d7%99%d7%9d/%d7%92%d7%98%d7%95%d7%91%d7%94/
+      - generic [ref=f35e103]:
+        - button "סינון" [ref=f35e104] [cursor=pointer]
+        - generic [ref=f35e108] [cursor=pointer]:
+          - checkbox "השוואה" [ref=f35e109]
+          - generic [ref=f35e110]: השוואה
+        - generic [ref=f35e113]: 106 פריטים
+        - generic [ref=f35e114]:
+          - generic [ref=f35e115]: מיון
+          - combobox "מיון" [ref=f35e116]:
+            - option "מיון ברירת מחדל" [selected]
+            - option "הנמכרים ביותר"
+            - option "החדשים ביותר"
+            - 'option "מחיר: מהנמוך לגבוה"'
+            - 'option "מחיר: מהגבוה לנמוך"'
+            - option "הדירוג הגבוה ביותר"
+      - generic [ref=f35e117]:
+        - complementary [ref=f35e118]:
+          - generic [ref=f35e119]:
+            - heading "סינון" [level=2] [ref=f35e120]
+            - button "סגירת הסינון" [ref=f35e121] [cursor=pointer]
+          - generic [ref=f35e124]:
+            - group [ref=f35e125]:
+              - generic "קטגוריות" [ref=f35e126] [cursor=pointer]
+              - generic [ref=f35e131]:
+                - generic [ref=f35e132] [cursor=pointer]:
+                  - checkbox "עץ אורן 68" [ref=f35e133]
+                  - generic [ref=f35e137]: עץ אורן
+                  - generic [ref=f35e138]: "68"
+                - generic [ref=f35e139] [cursor=pointer]:
+                  - checkbox "פלטות 15" [ref=f35e140]
+                  - generic [ref=f35e144]: פלטות
+                  - generic [ref=f35e145]: "15"
+                - generic [ref=f35e146] [cursor=pointer]:
+                  - checkbox "איפאה טובקו 7" [ref=f35e147]
+                  - generic [ref=f35e151]: איפאה טובקו
+                  - generic [ref=f35e152]: "7"
+                - generic [ref=f35e153] [cursor=pointer]:
+                  - checkbox "עצים לבניין 6" [ref=f35e154]
+                  - generic [ref=f35e158]: עצים לבניין
+                  - generic [ref=f35e159]: "6"
+                - generic [ref=f35e160] [cursor=pointer]:
+                  - checkbox "פלטות עץ אלון 4" [ref=f35e161]
+                  - generic [ref=f35e165]: פלטות עץ אלון
+                  - generic [ref=f35e166]: "4"
+                - generic [ref=f35e167] [cursor=pointer]:
+                  - checkbox "סוקופירה 2" [ref=f35e168]
+                  - generic [ref=f35e172]: סוקופירה
+                  - generic [ref=f35e173]: "2"
+                - generic [ref=f35e174] [cursor=pointer]:
+                  - checkbox "אגוז אפריקאי 2" [ref=f35e175]
+                  - generic [ref=f35e179]: אגוז אפריקאי
+                  - generic [ref=f35e180]: "2"
+                - generic [ref=f35e181] [cursor=pointer]:
+                  - checkbox "טיק 2" [ref=f35e182]
+                  - generic [ref=f35e186]: טיק
+                  - generic [ref=f35e187]: "2"
+                - generic [ref=f35e188] [cursor=pointer]:
+                  - checkbox "גראפה 2" [ref=f35e189]
+                  - generic [ref=f35e193]: גראפה
+                  - generic [ref=f35e194]: "2"
+                - generic [ref=f35e195] [cursor=pointer]:
+                  - checkbox "ג'טובה 2" [ref=f35e196]
+                  - generic [ref=f35e200]: ג'טובה
+                  - generic [ref=f35e201]: "2"
+            - group [ref=f35e202]:
+              - generic "מחיר" [ref=f35e203] [cursor=pointer]
+              - generic [ref=f35e208]:
+                - generic [ref=f35e209]:
+                  - generic [ref=f35e210]: מ־
+                  - spinbutton "מ־" [ref=f35e211]
+                - generic [ref=f35e212]:
+                  - generic [ref=f35e213]: עד
+                  - spinbutton "עד" [ref=f35e214]
+            - group [ref=f35e215]:
+              - generic "זמינות" [ref=f35e216] [cursor=pointer]
+              - generic [ref=f35e221]:
+                - generic [ref=f35e222] [cursor=pointer]:
+                  - checkbox "במלאי בלבד" [ref=f35e223]
+                  - generic [ref=f35e227]: במלאי בלבד
+                - generic [ref=f35e228] [cursor=pointer]:
+                  - checkbox "במבצע" [ref=f35e229]
+                  - generic [ref=f35e233]: במבצע
+            - group [ref=f35e234]:
+              - generic "אורך" [ref=f35e235] [cursor=pointer]
+            - group [ref=f35e240]:
+              - generic "מידות" [ref=f35e241] [cursor=pointer]
+            - group [ref=f35e246]:
+              - generic "עובי" [ref=f35e247] [cursor=pointer]
+            - group [ref=f35e252]:
+              - generic "צבע" [ref=f35e253] [cursor=pointer]
+          - generic [ref=f35e258]:
+            - button "ניקוי הסינון" [ref=f35e259] [cursor=pointer]
+            - button "הצגת התוצאות" [ref=f35e260] [cursor=pointer]
+        - generic [ref=f35e261]:
+          - generic [ref=f35e262]:
+            - article [ref=f35e263]:
+              - generic [ref=f35e264]:
+                - link "אורן פיני מוקצע מחוטא 42X42 מ\"מ (5X5)" [ref=f35e265] [cursor=pointer]:
+                  - /url: https://guetaavigdor.ussl.co/product/%d7%90%d7%95%d7%a8%d7%9f-%d7%a4%d7%99%d7%a0%d7%99-%d7%9e%d7%94%d7%95%d7%a7%d7%a6%d7%a2-%d7%9e%d7%97%d7%95%d7%98%d7%90-50x50/
+                  - img "אורן פיני מוקצע מחוטא 42X42 מ\"מ (5X5)" [ref=f35e266]
+                - generic [ref=f35e267]: 18% הנחה
+              - generic [ref=f35e269]:
+                - heading [level=3] [ref=f35e270]:
+                  - link "אורן פיני מוקצע מחוטא 42X42 מ\"מ (5X5)" [ref=f35e271] [cursor=pointer]:
+                    - /url: https://guetaavigdor.ussl.co/product/%d7%90%d7%95%d7%a8%d7%9f-%d7%a4%d7%99%d7%a0%d7%99-%d7%9e%d7%94%d7%95%d7%a7%d7%a6%d7%a2-%d7%9e%d7%97%d7%95%d7%98%d7%90-50x50/
+                - generic [ref=f35e272]:
+                  - deletion [aria-hidden] [ref=f35e273]:
+                    - generic [ref=f35e274]: ₪9.40
+                  - generic [ref=f35e275]: "המחיר המקורי היה: ₪9.40."
+                  - insertion [aria-hidden] [ref=f35e276]:
+                    - generic [ref=f35e277]: ₪7.70
+                  - generic [ref=f35e278]: "המחיר הנוכחי הוא: ₪7.70."
+              - button "לפרטים ורכישה" [ref=f35e279] [cursor=pointer]
+            - article [ref=f35e283]:
+              - link "איפאה טובקו 19X140 מ\"מ במבחר אורכים (ארוכים)" [ref=f35e285] [cursor=pointer]:
+                - /url: https://guetaavigdor.ussl.co/product/%d7%90%d7%99%d7%a4%d7%90%d7%94-%d7%98%d7%95%d7%91%d7%a7%d7%95-19x140-%d7%9e%d7%9e-%d7%91%d7%9e%d7%91%d7%97%d7%a8-%d7%90%d7%95%d7%a8%d7%9b%d7%99%d7%9d-%d7%90%d7%a8%d7%95%d7%9b%d7%99%d7%9d-%d7%94/
+                - img "איפאה טובקו 19X140 מ\"מ" [ref=f35e286]
+              - generic [ref=f35e287]:
+                - heading [level=3] [ref=f35e288]:
+                  - link "איפאה טובקו 19X140 מ\"מ במבחר אורכים (ארוכים)" [ref=f35e289] [cursor=pointer]:
+                    - /url: https://guetaavigdor.ussl.co/product/%d7%90%d7%99%d7%a4%d7%90%d7%94-%d7%98%d7%95%d7%91%d7%a7%d7%95-19x140-%d7%9e%d7%9e-%d7%91%d7%9e%d7%91%d7%97%d7%a8-%d7%90%d7%95%d7%a8%d7%9b%d7%99%d7%9d-%d7%90%d7%a8%d7%95%d7%9b%d7%99%d7%9d-%d7%94/
+                - generic [ref=f35e290]: ₪64.00
+              - button "לפרטים ורכישה" [ref=f35e292] [cursor=pointer]
+            - article [ref=f35e296]:
+              - generic [ref=f35e297]:
+                - link "איפאה טובקו 19X70 מ\"מ במבחר אורכים (ארוכים)" [ref=f35e298] [cursor=pointer]:
+                  - /url: https://guetaavigdor.ussl.co/product/%d7%90%d7%99%d7%a4%d7%90%d7%94-%d7%98%d7%95%d7%91%d7%a7%d7%95-19x70-%d7%9e%d7%9e-%d7%91%d7%9e%d7%91%d7%97%d7%a8-%d7%90%d7%95%d7%a8%d7%9b%d7%99%d7%9d-%d7%90%d7%a8%d7%95%d7%9b%d7%99%d7%9d/
+                  - img "עץ איפאה" [ref=f35e299]
+                - generic [ref=f35e300]: 22% הנחה
+              - generic [ref=f35e302]:
+                - heading [level=3] [ref=f35e303]:
+                  - link "איפאה טובקו 19X70 מ\"מ במבחר אורכים (ארוכים)" [ref=f35e304] [cursor=pointer]:
+                    - /url: https://guetaavigdor.ussl.co/product/%d7%90%d7%99%d7%a4%d7%90%d7%94-%d7%98%d7%95%d7%91%d7%a7%d7%95-19x70-%d7%9e%d7%9e-%d7%91%d7%9e%d7%91%d7%97%d7%a8-%d7%90%d7%95%d7%a8%d7%9b%d7%99%d7%9d-%d7%90%d7%a8%d7%95%d7%9b%d7%99%d7%9d/
+                - generic [ref=f35e305]:
+                  - deletion [aria-hidden] [ref=f35e306]:
+                    - generic [ref=f35e307]: ₪30.26
+                  - generic [ref=f35e308]: "המחיר המקורי היה: ₪30.26."
+                  - insertion [aria-hidden] [ref=f35e309]:
+                    - generic [ref=f35e310]: ₪23.60
+                  - generic [ref=f35e311]: "המחיר הנוכחי הוא: ₪23.60."
+              - button "לפרטים ורכישה" [ref=f35e312] [cursor=pointer]
+            - article [ref=f35e316]:
+              - generic [ref=f35e317]:
+                - link "איפאה טובקו 19X90 מ\"מ במבחר אורכים (בינוניים-ארוכים)" [ref=f35e318] [cursor=pointer]:
+                  - /url: https://guetaavigdor.ussl.co/product/%d7%90%d7%99%d7%a4%d7%90%d7%94-%d7%98%d7%95%d7%91%d7%a7%d7%95-19x90-%d7%9e%d7%9e-%d7%91%d7%9e%d7%91%d7%97%d7%a8-%d7%90%d7%95%d7%a8%d7%9b%d7%99%d7%9d-%d7%91%d7%99%d7%a0%d7%95%d7%a0%d7%99%d7%99%d7%9d/
+                  - img "דק איפאה" [ref=f35e319]
+                - generic [ref=f35e320]: 8% הנחה
+              - generic [ref=f35e322]:
+                - heading [level=3] [ref=f35e323]:
+                  - link "איפאה טובקו 19X90 מ\"מ במבחר אורכים (בינוניים-ארוכים)" [ref=f35e324] [cursor=pointer]:
+                    - /url: https://guetaavigdor.ussl.co/product/%d7%90%d7%99%d7%a4%d7%90%d7%94-%d7%98%d7%95%d7%91%d7%a7%d7%95-19x90-%d7%9e%d7%9e-%d7%91%d7%9e%d7%91%d7%97%d7%a8-%d7%90%d7%95%d7%a8%d7%9b%d7%99%d7%9d-%d7%91%d7%99%d7%a0%d7%95%d7%a0%d7%99%d7%99%d7%9d/
+                - generic [ref=f35e325]:
+                  - deletion [aria-hidden] [ref=f35e326]:
+                    - generic [ref=f35e327]: ₪42.50
+                  - generic [ref=f35e328]: "המחיר המקורי היה: ₪42.50."
+                  - insertion [aria-hidden] [ref=f35e329]:
+                    - generic [ref=f35e330]: ₪39.00
+                  - generic [ref=f35e331]: "המחיר הנוכחי הוא: ₪39.00."
+              - button "לפרטים ורכישה" [ref=f35e332] [cursor=pointer]
+            - article [ref=f35e336]:
+              - generic [ref=f35e337]:
+                - link "איפאה טובקו 19X90 מ\"מ במבחר אורכים (קצרים)" [ref=f35e338] [cursor=pointer]:
+                  - /url: https://guetaavigdor.ussl.co/product/%d7%90%d7%99%d7%a4%d7%90%d7%94-%d7%98%d7%95%d7%91%d7%a7%d7%95-19x70-%d7%9e%d7%9e-%d7%91%d7%9e%d7%91%d7%97%d7%a8-%d7%90%d7%95%d7%a8%d7%9b%d7%99%d7%9d-%d7%a7%d7%a6%d7%a8%d7%99%d7%9d/
+                  - img "עץ איפאה" [ref=f35e339]
+                - generic [ref=f35e340]: 7% הנחה
+              - generic [ref=f35e342]:
+                - heading [level=3] [ref=f35e343]:
+                  - link "איפאה טובקו 19X90 מ\"מ במבחר אורכים (קצרים)" [ref=f35e344] [cursor=pointer]:
+                    - /url: https://guetaavigdor.ussl.co/product/%d7%90%d7%99%d7%a4%d7%90%d7%94-%d7%98%d7%95%d7%91%d7%a7%d7%95-19x70-%d7%9e%d7%9e-%d7%91%d7%9e%d7%91%d7%97%d7%a8-%d7%90%d7%95%d7%a8%d7%9b%d7%99%d7%9d-%d7%a7%d7%a6%d7%a8%d7%99%d7%9d/
+                - generic [ref=f35e345]:
+                  - deletion [aria-hidden] [ref=f35e346]:
+                    - generic [ref=f35e347]: ₪42.00
+                  - generic [ref=f35e348]: "המחיר המקורי היה: ₪42.00."
+                  - insertion [aria-hidden] [ref=f35e349]:
+                    - generic [ref=f35e350]: ₪39.00
+                  - generic [ref=f35e351]: "המחיר הנוכחי הוא: ₪39.00."
+              - button "לפרטים ורכישה" [ref=f35e352] [cursor=pointer]
+            - article [ref=f35e356]:
+              - link "גראפה 19X140 מ\"מ במבחר אורכים (ארוכים)" [ref=f35e358] [cursor=pointer]:
+                - /url: https://guetaavigdor.ussl.co/product/%d7%92%d7%a8%d7%90%d7%a4%d7%94-19x140-%d7%9e%d7%9e-%d7%91%d7%9e%d7%91%d7%97%d7%a8-%d7%90%d7%95%d7%a8%d7%9b%d7%99%d7%9d-%d7%91%d7%99%d7%a0%d7%95%d7%a0%d7%99%d7%99%d7%9d-%d7%90%d7%a8%d7%95%d7%9b/
+                - img "דק גראפה 19x140 מ\"מ עץ חיצוני" [ref=f35e359]
+              - generic [ref=f35e360]:
+                - heading [level=3] [ref=f35e361]:
+                  - link "גראפה 19X140 מ\"מ במבחר אורכים (ארוכים)" [ref=f35e362] [cursor=pointer]:
+                    - /url: https://guetaavigdor.ussl.co/product/%d7%92%d7%a8%d7%90%d7%a4%d7%94-19x140-%d7%9e%d7%9e-%d7%91%d7%9e%d7%91%d7%97%d7%a8-%d7%90%d7%95%d7%a8%d7%9b%d7%99%d7%9d-%d7%91%d7%99%d7%a0%d7%95%d7%a0%d7%99%d7%99%d7%9d-%d7%90%d7%a8%d7%95%d7%9b/
+                - generic [ref=f35e363]: ₪38.00
+              - button "לפרטים ורכישה" [ref=f35e365] [cursor=pointer]
+            - article [ref=f35e369]:
+              - generic [ref=f35e370]:
+                - link "דק איפאה טובקו 19x140 מ\"מ אורכים קצרים – עץ פרימיום לדקים חיצוניים" [ref=f35e371] [cursor=pointer]:
+                  - /url: https://guetaavigdor.ussl.co/product/%d7%90%d7%99%d7%a4%d7%90%d7%94-%d7%98%d7%95%d7%91%d7%a7%d7%95-19x140-%d7%9e%d7%9e-%d7%91%d7%9e%d7%91%d7%97%d7%a8-%d7%90%d7%95%d7%a8%d7%9b%d7%99%d7%9d-%d7%a7%d7%a6%d7%a8%d7%99%d7%9d/
+                  - img "לוחות דק איפאה טובקו קצרים" [ref=f35e372]
+                - generic [ref=f35e373]: 7% הנחה
+              - generic [ref=f35e375]:
+                - heading [level=3] [ref=f35e376]:
+                  - link "דק איפאה טובקו 19x140 מ\"מ אורכים קצרים – עץ פרימיום לדקים חיצוניים" [ref=f35e377] [cursor=pointer]:
+                    - /url: https://guetaavigdor.ussl.co/product/%d7%90%d7%99%d7%a4%d7%90%d7%94-%d7%98%d7%95%d7%91%d7%a7%d7%95-19x140-%d7%9e%d7%9e-%d7%91%d7%9e%d7%91%d7%97%d7%a8-%d7%90%d7%95%d7%a8%d7%9b%d7%99%d7%9d-%d7%a7%d7%a6%d7%a8%d7%99%d7%9d/
+                - generic [ref=f35e378]:
+                  - deletion [aria-hidden] [ref=f35e379]:
+                    - generic [ref=f35e380]: ₪49.50
+                  - generic [ref=f35e381]: "המחיר המקורי היה: ₪49.50."
+                  - insertion [aria-hidden] [ref=f35e382]:
+                    - generic [ref=f35e383]: ₪46.00
+                  - generic [ref=f35e384]: "המחיר הנוכחי הוא: ₪46.00."
+              - button "לפרטים ורכישה" [ref=f35e385] [cursor=pointer]
+            - article [ref=f35e389]:
+              - generic [ref=f35e390]:
+                - link "דק איפאה טובקו 19X140 מ\"מ במבחר אורכים (בינוניים)" [ref=f35e391] [cursor=pointer]:
+                  - /url: https://guetaavigdor.ussl.co/product/%d7%93%d7%a7-%d7%90%d7%99%d7%a4%d7%90%d7%94-%d7%98%d7%95%d7%91%d7%a7%d7%95-19x140-%d7%9e%d7%9e-%d7%91%d7%9e%d7%91%d7%97%d7%a8-%d7%90%d7%95%d7%a8%d7%9b%d7%99%d7%9d-%d7%91%d7%99%d7%a0%d7%95%d7%a0%d7%99/
+                  - img "איפאה טובקו 19X140 (בינוני)" [ref=f35e392]
+                - generic [ref=f35e393]: 6% הנחה
+              - generic [ref=f35e395]:
+                - heading [level=3] [ref=f35e396]:
+                  - link "דק איפאה טובקו 19X140 מ\"מ במבחר אורכים (בינוניים)" [ref=f35e397] [cursor=pointer]:
+                    - /url: https://guetaavigdor.ussl.co/product/%d7%93%d7%a7-%d7%90%d7%99%d7%a4%d7%90%d7%94-%d7%98%d7%95%d7%91%d7%a7%d7%95-19x140-%d7%9e%d7%9e-%d7%91%d7%9e%d7%91%d7%97%d7%a8-%d7%90%d7%95%d7%a8%d7%9b%d7%99%d7%9d-%d7%91%d7%99%d7%a0%d7%95%d7%a0%d7%99/
+                - generic [ref=f35e398]:
+                  - deletion [aria-hidden] [ref=f35e399]:
+                    - generic [ref=f35e400]: ₪65.00
+                  - generic [ref=f35e401]: "המחיר המקורי היה: ₪65.00."
+                  - insertion [aria-hidden] [ref=f35e402]:
+                    - generic [ref=f35e403]: ₪61.40
+                  - generic [ref=f35e404]: "המחיר הנוכחי הוא: ₪61.40."
+              - button "לפרטים ורכישה" [ref=f35e405] [cursor=pointer]
+            - article [ref=f35e409]:
+              - generic [ref=f35e410]:
+                - link "דק איפאה טובקו 19X70 מ\"מ במבחר אורכים (בינוניים)" [ref=f35e411] [cursor=pointer]:
+                  - /url: https://guetaavigdor.ussl.co/product/%d7%90%d7%99%d7%a4%d7%90%d7%94-%d7%98%d7%95%d7%91%d7%a7%d7%95-19x70-%d7%9e%d7%9e-%d7%91%d7%9e%d7%91%d7%97%d7%a8-%d7%90%d7%95%d7%a8%d7%9b%d7%99%d7%9d-%d7%91%d7%99%d7%a0%d7%95%d7%a0%d7%99%d7%99%d7%9d/
+                  - img "דק איפאה טובקו" [ref=f35e412]
+                - generic [ref=f35e413]: 24% הנחה
+              - generic [ref=f35e415]:
+                - heading [level=3] [ref=f35e416]:
+                  - link "דק איפאה טובקו 19X70 מ\"מ במבחר אורכים (בינוניים)" [ref=f35e417] [cursor=pointer]:
+                    - /url: https://guetaavigdor.ussl.co/product/%d7%90%d7%99%d7%a4%d7%90%d7%94-%d7%98%d7%95%d7%91%d7%a7%d7%95-19x70-%d7%9e%d7%9e-%d7%91%d7%9e%d7%91%d7%97%d7%a8-%d7%90%d7%95%d7%a8%d7%9b%d7%99%d7%9d-%d7%91%d7%99%d7%a0%d7%95%d7%a0%d7%99%d7%99%d7%9d/
+                - generic [ref=f35e418]:
+                  - deletion [aria-hidden] [ref=f35e419]:
+                    - generic [ref=f35e420]: ₪28.74
+                  - generic [ref=f35e421]: "המחיר המקורי היה: ₪28.74."
+                  - insertion [aria-hidden] [ref=f35e422]:
+                    - generic [ref=f35e423]: ₪21.89
+                  - generic [ref=f35e424]: "המחיר הנוכחי הוא: ₪21.89."
+              - button "לפרטים ורכישה" [ref=f35e425] [cursor=pointer]
+            - article [ref=f35e429]:
+              - link "דק ג'טובה 19X140 מ\"מ במבחר אורכים (ארוכים)" [ref=f35e431] [cursor=pointer]:
+                - /url: https://guetaavigdor.ussl.co/product/%d7%93%d7%a7-%d7%92%d7%98%d7%95%d7%91%d7%94-19x140-%d7%9e%d7%9e-%d7%91%d7%9e%d7%91%d7%97%d7%a8-%d7%90%d7%95%d7%a8%d7%9b%d7%99%d7%9d-%d7%90%d7%a8%d7%95%d7%9b%d7%99%d7%9d/
+                - img "איפאה טובקו 19X140 (בינוני)" [ref=f35e432]
+              - generic [ref=f35e433]:
+                - heading [level=3] [ref=f35e434]:
+                  - link "דק ג'טובה 19X140 מ\"מ במבחר אורכים (ארוכים)" [ref=f35e435] [cursor=pointer]:
+                    - /url: https://guetaavigdor.ussl.co/product/%d7%93%d7%a7-%d7%92%d7%98%d7%95%d7%91%d7%94-19x140-%d7%9e%d7%9e-%d7%91%d7%9e%d7%91%d7%97%d7%a8-%d7%90%d7%95%d7%a8%d7%9b%d7%99%d7%9d-%d7%90%d7%a8%d7%95%d7%9b%d7%99%d7%9d/
+                - generic [ref=f35e436]: ₪35.40
+              - button "לפרטים ורכישה" [ref=f35e438] [cursor=pointer]
+            - article [ref=f35e442]:
+              - link "דק ג'טובה 19X140 מ\"מ במבחר אורכים (בינוניים)" [ref=f35e444] [cursor=pointer]:
+                - /url: https://guetaavigdor.ussl.co/product/%d7%93%d7%a7-%d7%92%d7%98%d7%95%d7%91%d7%94-19x140-%d7%9e%d7%9e-%d7%91%d7%9e%d7%91%d7%97%d7%a8-%d7%90%d7%95%d7%a8%d7%9b%d7%99%d7%9d-%d7%91%d7%99%d7%a0%d7%95%d7%a0/
+                - img "איפאה טובקו 19X140 (בינוני)" [ref=f35e445]
+              - generic [ref=f35e446]:
+                - heading [level=3] [ref=f35e447]:
+                  - link "דק ג'טובה 19X140 מ\"מ במבחר אורכים (בינוניים)" [ref=f35e448] [cursor=pointer]:
+                    - /url: https://guetaavigdor.ussl.co/product/%d7%93%d7%a7-%d7%92%d7%98%d7%95%d7%91%d7%94-19x140-%d7%9e%d7%9e-%d7%91%d7%9e%d7%91%d7%97%d7%a8-%d7%90%d7%95%d7%a8%d7%9b%d7%99%d7%9d-%d7%91%d7%99%d7%a0%d7%95%d7%a0/
+                - generic [ref=f35e449]: ₪35.40
+              - button "לפרטים ורכישה" [ref=f35e451] [cursor=pointer]
+            - article [ref=f35e455]:
+              - link "דק גראפה 19x140 מ\"מ – עץ יוקרתי לדקים חיצוניים במבחר אורכים (בינוניים)" [ref=f35e457] [cursor=pointer]:
+                - /url: https://guetaavigdor.ussl.co/product/%d7%92%d7%a8%d7%90%d7%a4%d7%94-19x140-%d7%9e%d7%9e-%d7%91%d7%9e%d7%91%d7%97%d7%a8-%d7%90%d7%95%d7%a8%d7%9b%d7%99%d7%9d-%d7%a7%d7%a6%d7%a8%d7%99%d7%9d/
+                - img "דק גראפה 19x140 מ\"מ עץ חיצוני" [ref=f35e458]
+              - generic [ref=f35e459]:
+                - heading [level=3] [ref=f35e460]:
+                  - link "דק גראפה 19x140 מ\"מ – עץ יוקרתי לדקים חיצוניים במבחר אורכים (בינוניים)" [ref=f35e461] [cursor=pointer]:
+                    - /url: https://guetaavigdor.ussl.co/product/%d7%92%d7%a8%d7%90%d7%a4%d7%94-19x140-%d7%9e%d7%9e-%d7%91%d7%9e%d7%91%d7%97%d7%a8-%d7%90%d7%95%d7%a8%d7%9b%d7%99%d7%9d-%d7%a7%d7%a6%d7%a8%d7%99%d7%9d/
+                - generic [ref=f35e462]: ₪38.00
+              - button "לפרטים ורכישה" [ref=f35e464] [cursor=pointer]
+          - button "הצגת מוצרים נוספים" [ref=f35e469] [cursor=pointer]
+    - generic [ref=f35e475]:
+      - heading "מידע חשוב" [level=2] [ref=f35e480]
+      - generic [ref=f35e485]:
+        - heading [level=3] [ref=f35e486]:
+          - strong [ref=f35e487]: ברוכים הבאים לאביגדור גואטה – מחסן עצים מקצועי המספק פתרונות עץ איכותיים לקבלנים ולפרטיים. אצלנו תמצאו עץ אורן, איפאה ולוחות לבנייה במחירי מחסן עצים סיטונאיים, עם אספקה מהירה ומלאי מעודכן ל-2026. צריכים עזרה בחישוב כמויות? אנחנו כאן לייעוץ!
+        - paragraph [ref=f35e488]: תוכלו להוסיף חיתוכים (בעלות של 1.5 ש"ח לחיתוך).
+        - heading [level=3] [ref=f35e489]:
+          - text: "מצורף סרטון הדרכה כיצד לעשות זאת בקלות:"
+          - strong [ref=f35e490]: "*כפוף למוצרים בקטגוריה זו בלבד"
+        - paragraph [ref=f35e491]:
+          - iframe [ref=f35e492]:
+            - generic [ref=f36e1]:
+              - generic "YouTube Video Player" [ref=f36e3]
+              - generic [ref=f36e5]:
+                - generic:
+                  - generic:
+                    - generic [ref=f36e6] [cursor=pointer]
+                    - button "Play video" [ref=f36e10] [cursor=pointer]
+                    - button "Hide player controls" [ref=f36e12] [cursor=pointer]
+                    - generic [ref=f36e14]:
+                      - generic [ref=f36e19]:
+                        - generic [ref=f36e20]:
+                          - link "@סרטון הדרכה מס׳ 1 - כיצד להוסיף חיתוכים להזמנת עצים באתר שלנו." [ref=f36e21] [cursor=pointer]:
+                            - /url: https://www.youtube.com/watch?v=XhTZ-lbUt5E
+                          - link "גואטה אביגדור - מחסן עצים" [ref=f36e22] [cursor=pointer]:
+                            - /url: /channel/UCGq3BZYSBSfqTKGIt7PyxZw
+                        - generic [ref=f36e24]:
+                          - button [ref=f36e25] [cursor=pointer]
+                          - generic [ref=f36e27]:
+                            - generic: גואטה אביגדור - מחסן עצים
+                            - generic: 14 subscribers
+                      - generic [ref=f36e28]:
+                        - button "Share" [ref=f36e31] [cursor=pointer]
+                        - link "Watch on YouTube" [ref=f36e42] [cursor=pointer]:
+                          - /url: https://www.youtube.com/watch?v=XhTZ-lbUt5E
+                          - generic [ref=f36e43]: Watch on
+  - contentinfo [ref=f35e493]:
+    - generic [ref=f35e501]:
+      - generic [ref=f35e503]:
+        - paragraph [ref=f35e506]: גואטה אביגדור בע”מ.
+        - paragraph [ref=f35e509]: הינה חברה ישראלית הנמצאת בבעלות משפחתית מלאה ועוסקת בתחום העץ והאביזרים הנדרשים לצורך התקנה והקמה של גגות רעפים פרגולות ודקים למגזר העסקי והפרטי.
+        - text: 
+      - generic [ref=f35e511]:
+        - paragraph [ref=f35e514]: קופצים?
+        - generic [ref=f35e516]:
+          - paragraph [ref=f35e517]: א-ה בין השעות 07:30 ועד 16:30יום ו’ בין השעות 07:30 עד 13:00
+          - paragraph [ref=f35e518]: רח׳ זאב שלנג 3 א.ת.ח ראשל״צ(מאחורי הסינמה סיטי)
+          - paragraph [ref=f35e519]:
+            - text: דברו איתנו. 050-9512625
+            - link "info@guetaavigdor.co.il" [ref=f35e520] [cursor=pointer]:
+              - /url: mailto:info@guetaavigdor.co.il
+      - generic [ref=f35e522]:
+        - paragraph [ref=f35e525]: סושיאלס.
+        - list [ref=f35e528]:
+          - listitem [ref=f35e529]:
+            - link [ref=f35e530] [cursor=pointer]:
+              - /url: https://www.tiktok.com/@guetawood
+              - generic [aria-hidden] [ref=f35e532]: 
+          - listitem [ref=f35e533]:
+            - link [ref=f35e534] [cursor=pointer]:
+              - /url: https://www.instagram.com/gueta_avigdor/
+              - generic [aria-hidden] [ref=f35e536]: 
+          - listitem [ref=f35e537]:
+            - link [ref=f35e538] [cursor=pointer]:
+              - /url: https://www.facebook.com/guetaavigdor/?locale=he_IL
+              - generic [aria-hidden] [ref=f35e540]: 
+        - paragraph [ref=f35e543]: מבצעים, מוצרים חדשים וטיפים מקצועיים.
+        - form "ניוזלטר" [ref=f35e546]:
+          - generic [ref=f35e547]:
+            - generic [ref=f35e548]:
+              - generic [ref=f35e549] [cursor=pointer]: אימייל
+              - textbox "אימייל" [ref=f35e550]
+            - button "שליחה" [ref=f35e552] [cursor=pointer]:
+              - generic [ref=f35e554]:
+                - generic [aria-hidden] [ref=f35e555]: 
+                - generic [ref=f35e556]: שליחה
+    - paragraph [ref=f35e563]:
+      - text: © 2026 כל הזכויות שמורות לגואטה אביגדור מחסן עצים | תקנון האתר | הצהרת נגישות | פרטיות | אתר
+      - link "tabuzzco" [ref=f35e564] [cursor=pointer]:
+        - /url: https://tabuzzco.com
+  - generic [ref=f35e565]: mobile
+  - status [ref=f35e566]

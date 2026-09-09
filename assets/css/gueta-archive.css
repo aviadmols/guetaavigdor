@@ -34,11 +34,22 @@
 	display: none;
 }
 
+/*
+ * The width was set on the link, but the list item around it is what the
+ * flex row actually lays out, and it had nothing to hold it open. So every
+ * chip collapsed to whatever its picture would allow, down to 32px, and the
+ * names broke over two and three lines.
+ */
+.gueta-archive__chips > li {
+	flex: 0 0 auto;
+}
+
 .gueta-archive__chip {
 	color: var(--gueta-ink);
 	display: block;
-	flex: 0 0 140px;
+	flex: none;
 	text-decoration: none;
+	width: 140px;
 }
 
 .gueta-archive__chip-media {
@@ -927,5 +938,37 @@
 	.gueta-archive__sidebar,
 	.gueta-quickview-modal__panel {
 		transition-duration: .01ms;
+	}
+}
+
+/* -------------------------------------------------------------------------
+ * The category chips on a phone
+ *
+ * Smaller pictures, smaller wording, and a name that stays on one line. A
+ * chip is a glance, and a two line name inside one reads as a paragraph.
+ * The chip grows with a long name rather than breaking it, and the row still
+ * scrolls sideways.
+ * ---------------------------------------------------------------------- */
+
+@media (max-width: 1024px) {
+	.gueta-archive__chips {
+		gap: 20px;
+		margin-bottom: 20px;
+	}
+
+	.gueta-archive__chip {
+		min-width: 84px;
+		width: auto;
+	}
+
+	.gueta-archive__chip-media {
+		margin-inline: auto;
+		width: 84px;
+	}
+
+	.gueta-archive__chip-name {
+		font-size: 12px;
+		padding-top: 8px;
+		white-space: nowrap;
 	}
 }
