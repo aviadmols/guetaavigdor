@@ -489,15 +489,22 @@ function gueta_variation_swatches( $html, $args ) {
 		return $html;
 	}
 
+	$stocked = gueta_stocked_values( $product, $attribute );
+
 	ob_start();
 	?>
 	<div class="gueta-swatches" data-swatches role="group">
-		<?php foreach ( $choices as $value => $label ) : ?>
+		<?php
+		foreach ( $choices as $value => $label ) :
+			$gone   = null !== $stocked && ! isset( $stocked[ sanitize_title( $value ) ] );
+			$picked = ! $gone && sanitize_title( $selected ) === sanitize_title( $value );
+			?>
 			<button
 				type="button"
-				class="gueta-swatch<?php echo sanitize_title( $selected ) === sanitize_title( $value ) ? ' is-selected' : ''; ?>"
+				class="gueta-swatch<?php echo $picked ? ' is-selected' : ''; ?>"
 				data-swatch="<?php echo esc_attr( $value ); ?>"
-				aria-pressed="<?php echo sanitize_title( $selected ) === sanitize_title( $value ) ? 'true' : 'false'; ?>"
+				aria-pressed="<?php echo $picked ? 'true' : 'false'; ?>"
+				<?php echo $gone ? 'data-swatch-soldout disabled title="אזל מהמלאי"' : ''; ?>
 			>
 				<?php echo esc_html( $label ); ?>
 			</button>
@@ -509,6 +516,70 @@ function gueta_variation_swatches( $html, $args ) {
 	return (string) ob_get_clean();
 }
 add_filter( 'woocommerce_dropdown_variation_attribute_options_html', 'gueta_variation_swatches', 20, 2 );
+
+/**
+ * Offer a sold out variation as unavailable rather than as a choice.
+ *
+ * WooCommerce lists a variation that is out of stock like any other, lets it
+ * be picked, and only then says it cannot be bought. Marked inactive, its
+ * option is disabled by variations.js instead, for the combination at hand,
+ * and the swatches mirror that.
+ *
+ * @param bool       $active    Whether the variation can be chosen.
+ * @param WC_Product $variation Variation.
+ * @return bool
+ */
+function gueta_variation_active_in_stock( $active, $variation ) {
+	if ( $active && $variation instanceof WC_Product && ! $variation->is_in_stock() ) {
+		return false;
+	}
+
+	return $active;
+}
+add_filter( 'woocommerce_variation_is_active', 'gueta_variation_active_in_stock', 10, 2 );
+
+/**
+ * The values of an attribute that some in stock variation still carries.
+ *
+ * A value outside this set is gone whatever else is chosen, so the swatches
+ * disable it in the markup itself. That holds before the variation script
+ * runs, and on a product with more variations than WooCommerce sends to the
+ * page, where the script has no stock to go on and leaves every option open.
+ *
+ * @param WC_Product $product   Product.
+ * @param string     $attribute Attribute name, as the dropdown was given it.
+ * @return array|null Sanitised values as keys, or null when none is gone.
+ */
+function gueta_stocked_values( $product, $attribute ) {
+	static $stocked = [];
+
+	if ( ! $product instanceof WC_Product_Variable ) {
+		return null;
+	}
+
+	$id = $product->get_id();
+
+	if ( ! isset( $stocked[ $id ] ) ) {
+		$stocked[ $id ] = [];
+
+		foreach ( $product->get_visible_children() as $child_id ) {
+			$variation = wc_get_product( $child_id );
+
+			if ( ! $variation instanceof WC_Product || ! $variation->is_in_stock() ) {
+				continue;
+			}
+
+			foreach ( $variation->get_attributes() as $name => $value ) {
+				$stocked[ $id ][ sanitize_title( $name ) ][ sanitize_title( $value ) ] = true;
+			}
+		}
+	}
+
+	$live = $stocked[ $id ][ sanitize_title( $attribute ) ] ?? [];
+
+	// An empty value is a variation for any value, which keeps them all.
+	return isset( $live[''] ) ? null : $live;
+}
 
 /* -------------------------------------------------------------------------
  * Reviews

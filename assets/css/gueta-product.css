@@ -1058,9 +1058,143 @@
 	}
 }
 
+/* -------------------------------------------------------------------------
+ * Sold out, and the form that waits for it
+ *
+ * The options stay, every one disabled, so what the product comes in is still
+ * there to read. What would buy it steps aside: WooCommerce's own line is
+ * repeated by the form's title, and a variable product's button and reset
+ * link have nothing left to act on.
+ * ---------------------------------------------------------------------- */
+
+.gueta-buy.is-soldout .gueta-buy__form .stock.out-of-stock,
+.gueta-buy.is-soldout .single_variation_wrap,
+.gueta-buy.is-soldout .reset_variations {
+	display: none !important;
+}
+
+.gueta-notify {
+	background: var(--gueta-sand);
+	border: 1.5px solid var(--gueta-rule);
+	border-radius: 8px;
+	display: grid;
+	gap: 12px;
+	margin: 0;
+	padding: 20px;
+	position: relative;
+}
+
+.gueta-notify__title {
+	color: var(--gueta-accent);
+	font-size: 15px;
+	font-weight: 700;
+	margin: 0;
+}
+
+.gueta-notify__text {
+	color: var(--gueta-muted);
+	font-size: 14px;
+	line-height: 1.6;
+	margin: -6px 0 4px;
+}
+
+.gueta-notify__row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.gueta-notify__label,
+.gueta-notify__trap {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+/* 16px, or iOS zooms the page in on focus. */
+.gueta-notify__email {
+	background: var(--gueta-paper) !important;
+	border: 1.5px solid var(--gueta-rule) !important;
+	border-radius: 8px !important;
+	color: var(--gueta-ink) !important;
+	flex: 1 1 220px;
+	font-family: inherit;
+	font-size: 16px !important;
+	min-height: 52px;
+	min-width: 0;
+	padding: 0 16px !important;
+	transition: border-color .4s ease;
+}
+
+.gueta-notify__email::placeholder {
+	color: var(--gueta-soft);
+}
+
+.gueta-notify__email:focus {
+	border-color: var(--gueta-ink) !important;
+	outline: 0;
+}
+
+.gueta-notify__submit {
+	background: var(--gueta-ink) !important;
+	border: 0 !important;
+	border-radius: 8px !important;
+	color: var(--gueta-paper) !important;
+	cursor: pointer;
+	flex: 1 1 150px;
+	font-family: inherit;
+	font-size: 16px !important;
+	font-weight: 700;
+	min-height: 52px;
+	padding: 0 24px !important;
+	transition: filter .4s ease, opacity .4s ease;
+}
+
+.gueta-notify__submit:hover,
+.gueta-notify__submit:focus {
+	filter: brightness(1.35);
+}
+
+.gueta-notify__submit:focus-visible {
+	outline: 2px solid var(--gueta-ink);
+	outline-offset: 2px;
+}
+
+.gueta-notify.is-sending .gueta-notify__submit {
+	cursor: progress;
+	opacity: .55;
+}
+
+.gueta-notify__message {
+	color: #1a7f37;
+	font-size: 14px;
+	font-weight: 500;
+	margin: 0;
+}
+
+.gueta-notify__message:empty {
+	display: none;
+}
+
+.gueta-notify__message.is-error {
+	color: var(--gueta-accent);
+}
+
+/* Signed up: only the confirmation is left to say. */
+.gueta-notify.is-done .gueta-notify__text,
+.gueta-notify.is-done .gueta-notify__row {
+	display: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
 	.gueta-swatch,
 	.gueta-qty,
+	.gueta-notify__email,
+	.gueta-notify__submit,
 	.gueta-buy .single_add_to_cart_button {
 		transition-duration: .01ms;
 	}

@@ -33,6 +33,7 @@ require_once get_stylesheet_directory() . '/inc/gueta-cart.php';
 require_once get_stylesheet_directory() . '/inc/gueta-categories.php';
 require_once get_stylesheet_directory() . '/inc/gueta-product.php';
 require_once get_stylesheet_directory() . '/inc/gueta-buy.php';
+require_once get_stylesheet_directory() . '/inc/gueta-stock-notify.php';
 require_once get_stylesheet_directory() . '/inc/gueta-compare.php';
 require_once get_stylesheet_directory() . '/inc/gueta-archive.php';
 require_once get_stylesheet_directory() . '/inc/gueta-settings.php';

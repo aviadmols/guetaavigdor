@@ -325,9 +325,17 @@
 
 			button.classList.toggle('is-selected', chosen);
 			button.setAttribute('aria-pressed', String(chosen));
-			button.disabled = Object.prototype.hasOwnProperty.call(available, value)
-				? !available[value]
-				: narrowed;
+
+			/*
+			 * A value the server found sold out in every combination stays
+			 * shut: on a product too big for WooCommerce to send its
+			 * variations to the page, the select never learns about stock.
+			 */
+			button.disabled = button.hasAttribute('data-swatch-soldout') || (
+				Object.prototype.hasOwnProperty.call(available, value)
+					? !available[value]
+					: narrowed
+			);
 		});
 	}
 
@@ -765,5 +773,68 @@
 			form.setAttribute('data-buy-variations', '1');
 			window.jQuery(form).wc_variation_form();
 		});
+	});
+}());
+
+/**
+ * Back in stock.
+ *
+ * A sold out product's buy box holds a form for an email address. It posts on
+ * its own without the script; this only keeps the page where it is and says
+ * how it went in place. Listening on the document covers quick view as well.
+ */
+(function () {
+	'use strict';
+
+	var failed = 'משהו השתבש. נסו שוב בעוד רגע.';
+
+	document.addEventListener('submit', function (event) {
+		var form = event.target;
+
+		if (!form.matches || !form.matches('form[data-notify]') || !window.fetch || !window.FormData) {
+			return;
+		}
+
+		event.preventDefault();
+
+		if (form.classList.contains('is-sending')) {
+			return;
+		}
+
+		var message = form.querySelector('[data-notify-message]');
+		var data = new FormData(form);
+
+		function say(text, ok) {
+			form.classList.remove('is-sending');
+
+			if (message) {
+				message.textContent = text;
+				message.classList.toggle('is-error', !ok);
+			}
+		}
+
+		data.append('gueta_js', '1');
+		form.classList.add('is-sending');
+
+		window.fetch(form.action, {
+			method: 'POST',
+			credentials: 'same-origin',
+			body: data
+		})
+			.then(function (response) {
+				return response.json();
+			})
+			.then(function (result) {
+				var ok = Boolean(result && result.success);
+
+				say((result && result.data && result.data.message) || failed, ok);
+
+				if (ok) {
+					form.classList.add('is-done');
+				}
+			})
+			.catch(function () {
+				say(failed, false);
+			});
 	});
 }());

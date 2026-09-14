@@ -124,17 +124,31 @@ function gueta_buy_box_html( $product = null, $args = [] ) {
 		return '';
 	}
 
+	/*
+	 * Nothing left to buy: a simple product out of stock, or a variable one
+	 * with every variation gone. Its options stay on show, all disabled, and
+	 * the form that would buy it gives way to one that waits for it.
+	 */
+	$sold_out = ! $product->is_in_stock();
+
 	ob_start();
 	?>
-	<div class="gueta-buy" data-buy data-price="<?php echo esc_attr( $args['price'] ); ?>"<?php echo $args['ajax'] ? ' data-buy-ajax' : ''; ?>>
+	<div class="gueta-buy<?php echo $sold_out ? ' is-soldout' : ''; ?>" data-buy data-price="<?php echo esc_attr( $args['price'] ); ?>"<?php echo $args['ajax'] ? ' data-buy-ajax' : ''; ?>>
 		<p class="gueta-buy__price" data-buy-price><?php echo wp_kses_post( $product->get_price_html() ); ?></p>
 
-		<div class="gueta-buy__form">
-			<?php echo $form; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-		</div>
+		<?php // A sold out simple product's template prints only its stock line, which the form below repeats. ?>
+		<?php if ( ! $sold_out || false !== strpos( $form, '<form' ) ) : ?>
+			<div class="gueta-buy__form">
+				<?php echo $form; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			</div>
+		<?php endif; ?>
 
-		<?php // Shown by the script while a variable product has nothing chosen. ?>
-		<p class="gueta-buy__hint" data-buy-hint hidden>בחרו אפשרות כדי להמשיך</p>
+		<?php if ( $sold_out ) : ?>
+			<?php echo gueta_notify_form_html( $product ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+		<?php else : ?>
+			<?php // Shown by the script while a variable product has nothing chosen. ?>
+			<p class="gueta-buy__hint" data-buy-hint hidden>בחרו אפשרות כדי להמשיך</p>
+		<?php endif; ?>
 
 		<?php
 		/*
