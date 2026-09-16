@@ -684,12 +684,34 @@
 				return;
 			}
 
+			// Product Add-Ons fields, such as the required length on timber.
+			var addons = [];
+
+			data.forEach(function (value, name) {
+				if (0 === name.indexOf('addon-')) {
+					addons.push([name, String(value)]);
+				}
+			});
+
+			// Add-Ons names its fields after the parent product, and checks them
+			// against whatever id reaches the cart, which on this path is the
+			// variation's: a variation with add-ons posts the form itself.
+			if (addons.length && chosen) {
+				return;
+			}
+
 			event.preventDefault();
 
 			var payload = new URLSearchParams();
 
 			payload.append('product_id', String(product));
 			payload.append('quantity', String(quantity));
+
+			// Never add-to-cart: WooCommerce acts on it in any request, this one
+			// included, and the product would go in twice.
+			addons.forEach(function (pair) {
+				payload.append(pair[0], pair[1]);
+			});
 
 			box.classList.add('is-adding');
 
