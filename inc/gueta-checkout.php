@@ -569,3 +569,16 @@ function gueta_drop_echoed_placeholders( $fields ) {
 	return $fields;
 }
 add_filter( 'woocommerce_checkout_fields', 'gueta_drop_echoed_placeholders', 100 );
+
+/**
+ * Start with "ship to a different address" unticked.
+ *
+ * The shop is set to ship to the shipping address, which has WooCommerce tick
+ * the box on arrival, and a second address a shopper never meant to fill in
+ * then decides the delivery price: the city typed above says Eilat, the one
+ * below still says Tel Aviv, and the truck is priced for Tel Aviv. The old shop
+ * started with the box unticked too.
+ *
+ * @return bool
+ */
+add_filter( 'woocommerce_ship_to_different_address_checked', '__return_false' );
