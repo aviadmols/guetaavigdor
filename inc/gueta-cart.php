@@ -426,6 +426,17 @@ function gueta_cart_panel_html() {
  * @return array
  */
 function gueta_cart_fragments( $fragments ) {
+	/*
+	 * An add to cart made without leaving the page puts the line in and asks
+	 * for these straight away, before anything has worked the cart's prices
+	 * out again. The line just added would show its product's bare price, 39
+	 * a metre rather than its length and its cuts, so the prices are worked
+	 * out first.
+	 */
+	if ( gueta_has_woocommerce() && WC()->cart && ! WC()->cart->is_empty() ) {
+		WC()->cart->calculate_totals();
+	}
+
 	$fragments['span.gueta-cart-count'] = gueta_cart_count_html();
 	$fragments['div.gueta-cart-panel']  = gueta_cart_panel_html();
 
