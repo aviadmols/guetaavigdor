@@ -44,6 +44,12 @@ require_once get_stylesheet_directory() . '/inc/gueta-blog.php';
 require_once get_stylesheet_directory() . '/inc/gueta-notices.php';
 require_once get_stylesheet_directory() . '/inc/gueta-template.php';
 
+// Both lean on WooCommerce throughout, so neither loads without it.
+if ( class_exists( 'WooCommerce' ) ) {
+	require_once get_stylesheet_directory() . '/inc/gueta-upsell.php';
+	require_once get_stylesheet_directory() . '/inc/gueta-banners.php';
+}
+
 /**
  * Load child theme scripts & styles.
  *

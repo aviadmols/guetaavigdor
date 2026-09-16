@@ -294,6 +294,12 @@ function gueta_render_archive( $atts = [] ) {
 		data-columns="<?php echo (int) $atts['columns']; ?>"
 		data-category="<?php echo esc_attr( $state['category'] ); ?>"
 	>
+		<?php
+		if ( function_exists( 'gueta_render_shop_banners' ) ) {
+			gueta_render_shop_banners();
+		}
+		?>
+
 		<?php gueta_render_archive_chips( $term ); ?>
 
 		<div class="gueta-archive__toolbar">

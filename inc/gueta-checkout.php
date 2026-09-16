@@ -410,6 +410,48 @@ function gueta_shipping_row_close() {
 }
 add_action( 'woocommerce_review_order_after_shipping', 'gueta_shipping_row_close', 50 );
 
+/* -------------------------------------------------------------------------
+ * A picture on each line of the order
+ * ---------------------------------------------------------------------- */
+
+/**
+ * Give each line of the order summary the product's picture, with the
+ * quantity on its corner, the way the cart drawer shows a line.
+ *
+ * Only the name passes through a filter, so the picture rides in front of it.
+ * The stylesheet lifts it out into the cell's padding, beside the name or
+ * above it depending on how wide the summary is, clear of the name and of any
+ * variation details WooCommerce prints underneath.
+ *
+ * @param string $name      Product name markup.
+ * @param array  $cart_item Cart item.
+ * @return string
+ */
+function gueta_review_item_picture( $name, $cart_item ) {
+	if ( ! gueta_checkout_active() || ! is_checkout() || empty( $cart_item['data'] ) || ! $cart_item['data'] instanceof WC_Product ) {
+		return $name;
+	}
+
+	return sprintf(
+		'<span class="gueta-review-item__media">%1$s<span class="gueta-review-item__qty">%2$s</span></span>%3$s',
+		$cart_item['data']->get_image( 'woocommerce_thumbnail', [ 'class' => 'gueta-review-item__image' ] ),
+		esc_html( number_format_i18n( absint( $cart_item['quantity'] ?? 0 ) ) ),
+		$name
+	);
+}
+add_filter( 'woocommerce_cart_item_name', 'gueta_review_item_picture', 20, 2 );
+
+/**
+ * Drop the "× 2" after the name, which the badge on the picture now says.
+ *
+ * @param string $quantity Quantity markup.
+ * @return string
+ */
+function gueta_review_item_quantity( $quantity ) {
+	return gueta_checkout_active() ? '' : $quantity;
+}
+add_filter( 'woocommerce_checkout_cart_item_quantity', 'gueta_review_item_quantity', 20 );
+
 /**
  * A placeholder that only repeats the label is replaced with a space.
  *

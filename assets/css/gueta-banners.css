@@ -1,0 +1,164 @@
+/**
+ * Shop banners, above the category chips.
+ *
+ * The archive already holds the page's width and gutters, so the slider just
+ * fills it. Tokens come from gueta-header.css, which loads first.
+ */
+
+.gueta-banners {
+	margin: 0 0 24px;
+	position: relative;
+}
+
+.gueta-banners__track {
+	border-radius: var(--gueta-radius);
+	display: flex;
+	overflow-x: auto;
+	overscroll-behavior-x: contain;
+	scroll-snap-type: x mandatory;
+	scrollbar-width: none;
+}
+
+.gueta-banners__track::-webkit-scrollbar {
+	display: none;
+}
+
+/*
+ * No scroll-snap-stop: always. Chrome holds scripted scrolls to it as well as
+ * swipes, so a jump across two slides, from the last back to the first or
+ * from a dot, stopped at the very next one and the slider never wrapped.
+ */
+.gueta-banners__slide {
+	display: block;
+	flex: 0 0 100%;
+	line-height: 0;
+	scroll-snap-align: start;
+}
+
+.gueta-banners__slide picture {
+	display: block;
+}
+
+/* Height comes from the width and height attributes, so nothing jumps on load. */
+.gueta-banners__image {
+	background: var(--gueta-sand);
+	display: block;
+	height: auto;
+	width: 100%;
+}
+
+.gueta-banners .gueta-banners__arrow,
+.gueta-banners .gueta-banners__arrow:hover,
+.gueta-banners .gueta-banners__arrow:focus {
+	background: rgb(255 255 255 / 92%);
+	border: 0;
+	color: var(--gueta-ink);
+}
+
+.gueta-banners .gueta-banners__arrow {
+	align-items: center;
+	border-radius: 50%;
+	box-shadow: var(--gueta-shadow);
+	cursor: pointer;
+	display: flex;
+	height: 40px;
+	/* Centred on the pictures, above the row of dots under them. */
+	inset-block-start: calc(50% - 20px - 10px);
+	justify-content: center;
+	padding: 0;
+	position: absolute;
+	transition: background-color .2s ease;
+	width: 40px;
+	z-index: 2;
+}
+
+.gueta-banners .gueta-banners__arrow:hover {
+	background: var(--gueta-paper);
+}
+
+.gueta-banners__arrow--prev {
+	inset-inline-start: 16px;
+}
+
+.gueta-banners__arrow--next {
+	inset-inline-end: 16px;
+}
+
+.gueta-banners__arrow svg {
+	fill: none;
+	height: 20px;
+	stroke: currentColor;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-width: 1.8;
+	width: 20px;
+}
+
+/*
+ * One chevron drawn pointing left. --gueta-slide is -1 in right to left, so
+ * "previous" turns to face its own edge in either direction, and "next" the
+ * other.
+ */
+.gueta-banners__arrow--prev svg {
+	transform: scaleX(var(--gueta-slide));
+}
+
+.gueta-banners__arrow--next svg {
+	transform: scaleX(calc(var(--gueta-slide) * -1));
+}
+
+.gueta-banners__dots {
+	display: flex;
+	gap: 6px;
+	justify-content: center;
+	margin-top: 12px;
+}
+
+.gueta-banners .gueta-banners__dot,
+.gueta-banners .gueta-banners__dot:hover,
+.gueta-banners .gueta-banners__dot:focus {
+	background: var(--gueta-rule);
+	border: 0;
+}
+
+.gueta-banners .gueta-banners__dot {
+	border-radius: 999px;
+	cursor: pointer;
+	height: 8px;
+	padding: 0;
+	transition: background-color .25s ease, width .25s ease;
+	width: 8px;
+}
+
+.gueta-banners .gueta-banners__dot.is-active {
+	background: var(--gueta-ink);
+	width: 22px;
+}
+
+.gueta-banners .gueta-banners__dot:focus-visible,
+.gueta-banners .gueta-banners__arrow:focus-visible {
+	outline: 2px solid var(--gueta-ink);
+	outline-offset: 2px;
+}
+
+@media (max-width: 767px) {
+	.gueta-banners {
+		margin-bottom: 20px;
+	}
+
+	/* A banner is short on a phone and the arrows would cover it. Swiping and
+	   the dots do the job there. */
+	.gueta-banners .gueta-banners__arrow {
+		display: none;
+	}
+
+	.gueta-banners__dots {
+		margin-top: 10px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.gueta-banners__track {
+		scroll-behavior: auto;
+	}
+}

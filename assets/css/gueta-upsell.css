@@ -1,0 +1,309 @@
+/**
+ * Upsell popup.
+ *
+ * A card in the bottom corner on the start side, which in Hebrew is the
+ * right. The other corner already belongs to the WhatsApp button. On a phone
+ * the card spans the width, so it rises above that button instead.
+ *
+ * It sits under the drawers, quick view and the comparison drawer, and over
+ * the two bars that can run along the bottom, which it also climbs above.
+ *
+ * Tokens come from gueta-header.css, which loads first.
+ */
+
+.gueta-upsell,
+.gueta-upsell *,
+.gueta-upsell *::before,
+.gueta-upsell *::after {
+	box-sizing: border-box;
+}
+
+.gueta-upsell {
+	bottom: 24px;
+	color: var(--gueta-ink);
+	font-family: var(--gueta-font);
+	inset-inline-start: 24px;
+	opacity: 0;
+	position: fixed;
+	transform: translateY(16px);
+	transition: opacity .35s ease, transform .35s ease, bottom .3s ease;
+	width: min(400px, calc(100vw - 48px));
+	z-index: 95;
+}
+
+.gueta-upsell[hidden],
+.gueta-upsell [hidden] {
+	display: none !important;
+}
+
+.gueta-upsell.is-open {
+	opacity: 1;
+	transform: none;
+}
+
+/* Clear of the sticky add to cart bar and the comparison bar. */
+body:has(.gueta-sticky-atc.is-visible) .gueta-upsell,
+body:has(.gueta-compare-bar.is-visible) .gueta-upsell {
+	bottom: 99px;
+}
+
+.gueta-upsell__card {
+	background: var(--gueta-paper);
+	border: 1px solid var(--gueta-rule);
+	border-radius: var(--gueta-radius);
+	box-shadow: 0 18px 48px rgb(0 0 0 / 14%);
+	padding: 16px;
+	position: relative;
+}
+
+.gueta-upsell svg {
+	fill: none;
+	height: 18px;
+	stroke: currentColor;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-width: 1.8;
+	width: 18px;
+}
+
+/*
+ * Every button here states its colours for hover and focus as well, or the
+ * parent theme paints them pink.
+ */
+.gueta-upsell .gueta-upsell__close,
+.gueta-upsell .gueta-upsell__arrow {
+	align-items: center;
+	background: none;
+	border: 0;
+	border-radius: 8px;
+	color: var(--gueta-muted);
+	cursor: pointer;
+	display: inline-flex;
+	height: 32px;
+	justify-content: center;
+	padding: 0;
+	transition: background-color .2s ease, color .2s ease;
+	width: 32px;
+}
+
+.gueta-upsell .gueta-upsell__close:hover,
+.gueta-upsell .gueta-upsell__close:focus-visible,
+.gueta-upsell .gueta-upsell__arrow:hover,
+.gueta-upsell .gueta-upsell__arrow:focus-visible {
+	background: var(--gueta-sand);
+	color: var(--gueta-ink);
+}
+
+.gueta-upsell .gueta-upsell__close {
+	inset-block-start: 6px;
+	inset-inline-end: 6px;
+	position: absolute;
+}
+
+.gueta-upsell__body {
+	align-items: center;
+	display: grid;
+	gap: 14px;
+	grid-template-columns: 96px minmax(0, 1fr);
+}
+
+.gueta-upsell.is-open .gueta-upsell__card.is-swapping .gueta-upsell__body {
+	animation: gueta-upsell-swap .3s ease;
+}
+
+@keyframes gueta-upsell-swap {
+	from {
+		opacity: .2;
+		transform: translateY(6px);
+	}
+
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+.gueta-upsell__media {
+	aspect-ratio: 1;
+	background: var(--gueta-sand);
+	border-radius: 8px;
+	display: block;
+	overflow: hidden;
+}
+
+.gueta-upsell__image {
+	display: block;
+	height: 100%;
+	object-fit: cover;
+	width: 100%;
+}
+
+/* Room at the top for the close button, whichever line comes first. */
+.gueta-upsell__text {
+	min-width: 0;
+	padding-inline-end: 24px;
+}
+
+.gueta-upsell__heading {
+	color: var(--gueta-muted);
+	font-size: 12px;
+	font-weight: 500;
+	line-height: 1.4;
+	margin: 0 0 4px;
+}
+
+.gueta-upsell .gueta-upsell__name {
+	-webkit-box-orient: vertical;
+	color: var(--gueta-ink);
+	display: -webkit-box;
+	font-size: 15px;
+	font-weight: 600;
+	-webkit-line-clamp: 2;
+	line-clamp: 2;
+	line-height: 1.35;
+	overflow: hidden;
+	text-decoration: none;
+}
+
+.gueta-upsell .gueta-upsell__name:hover {
+	color: var(--gueta-ink);
+	text-decoration: underline;
+}
+
+.gueta-upsell__price {
+	align-items: baseline;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0 8px;
+	margin: 6px 0 10px;
+}
+
+.gueta-upsell__now {
+	font-size: 15px;
+	font-weight: 600;
+}
+
+.gueta-upsell__was {
+	color: var(--gueta-soft);
+	font-size: 13px;
+}
+
+.gueta-upsell .gueta-upsell__add,
+.gueta-upsell .gueta-upsell__add:hover,
+.gueta-upsell .gueta-upsell__add:focus {
+	background: var(--gueta-accent-warm);
+	border: 1px solid var(--gueta-accent-warm);
+	border-radius: 8px;
+	color: var(--gueta-paper);
+}
+
+.gueta-upsell .gueta-upsell__add {
+	cursor: pointer;
+	font-family: inherit;
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1.2;
+	min-height: 40px;
+	padding: 0 18px;
+	transition: background-color .25s ease, border-color .25s ease, color .25s ease, filter .2s ease;
+}
+
+.gueta-upsell .gueta-upsell__add:hover:not(:disabled) {
+	filter: brightness(.94);
+}
+
+.gueta-upsell .gueta-upsell__add:focus-visible {
+	outline: 2px solid var(--gueta-ink);
+	outline-offset: 2px;
+}
+
+.gueta-upsell .gueta-upsell__add.is-adding {
+	cursor: progress;
+	opacity: .8;
+}
+
+.gueta-upsell .gueta-upsell__add.is-added {
+	background: var(--gueta-good, #10794a);
+	border-color: var(--gueta-good, #10794a);
+	cursor: default;
+}
+
+.gueta-upsell .gueta-upsell__add.is-error {
+	background: var(--gueta-paper);
+	border-color: var(--gueta-accent);
+	color: var(--gueta-accent);
+}
+
+.gueta-upsell__nav {
+	align-items: center;
+	border-top: 1px solid var(--gueta-rule);
+	display: flex;
+	justify-content: space-between;
+	margin-top: 14px;
+	padding-top: 10px;
+}
+
+/* The arrows are drawn for right to left. */
+.gueta-upsell[dir="ltr"] .gueta-upsell__arrow svg {
+	transform: scaleX(-1);
+}
+
+/* "2 / 5" and not "5 / 2", which is what a right to left line makes of it. */
+.gueta-upsell__counter {
+	color: var(--gueta-muted);
+	direction: ltr;
+	font-size: 12px;
+	unicode-bidi: isolate;
+}
+
+@media (max-width: 600px) {
+	.gueta-upsell {
+		/* Over the WhatsApp button, which is sixty pixels tall. */
+		bottom: 72px;
+		inset-inline: 12px;
+		width: auto;
+	}
+
+	body:has(.gueta-sticky-atc.is-visible) .gueta-upsell,
+	body:has(.gueta-compare-bar.is-visible) .gueta-upsell {
+		bottom: 87px;
+	}
+
+	.gueta-upsell__card {
+		padding: 14px;
+	}
+
+	.gueta-upsell__body {
+		gap: 12px;
+		grid-template-columns: 76px minmax(0, 1fr);
+	}
+
+	.gueta-upsell .gueta-upsell__name {
+		font-size: 14px;
+	}
+
+	.gueta-upsell__price {
+		margin: 4px 0 8px;
+	}
+
+	.gueta-upsell .gueta-upsell__add {
+		min-height: 38px;
+		width: 100%;
+	}
+
+	.gueta-upsell__nav {
+		margin-top: 10px;
+		padding-top: 6px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.gueta-upsell {
+		transform: none;
+		transition: opacity .2s ease;
+	}
+
+	.gueta-upsell.is-open .gueta-upsell__card.is-swapping .gueta-upsell__body {
+		animation: none;
+	}
+}

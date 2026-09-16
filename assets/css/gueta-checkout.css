@@ -443,6 +443,88 @@
 	width: 42%;
 }
 
+/*
+ * The picture on each line, from gueta_review_item_picture(), held in the
+ * cell's own padding so the name and any variation details wrap in the room
+ * that is left.
+ *
+ * Where it goes depends on how wide the summary is, not the screen. The
+ * summary is a narrow column on a desktop too: about 340 pixels of table at
+ * 1440, and about 230 on a phone. Beside the name, a picture in 230 pixels
+ * broke a product name into ten lines, so a narrow summary puts it above the
+ * name, and only a wider one sets it alongside.
+ */
+.woocommerce-checkout #order_review {
+	container-type: inline-size;
+}
+
+.woocommerce-checkout .shop_table .cart_item .product-name {
+	padding-top: 68px;
+	position: relative;
+}
+
+.gueta-review-item__media {
+	background: var(--gueta-sand);
+	border-radius: 8px;
+	height: 48px;
+	inset-block-start: 12px;
+	inset-inline-start: 0;
+	position: absolute;
+	width: 48px;
+}
+
+@container (min-width: 300px) {
+	.woocommerce-checkout .shop_table th:first-child,
+	.woocommerce-checkout .shop_table .product-name {
+		width: 62%;
+	}
+
+	.woocommerce-checkout .shop_table td:last-child,
+	.woocommerce-checkout .shop_table th:last-child {
+		width: 38%;
+	}
+
+	/* A table cell takes its height as a minimum, so a one line name still
+	   leaves the picture room. */
+	.woocommerce-checkout .shop_table .cart_item .product-name {
+		height: 80px;
+		padding-inline-start: 70px;
+		padding-top: 12px;
+	}
+
+	.gueta-review-item__media {
+		height: 56px;
+		inset-block-start: 50%;
+		transform: translateY(-50%);
+		width: 56px;
+	}
+}
+
+.woocommerce-checkout .gueta-review-item__image {
+	border-radius: 8px;
+	display: block;
+	height: 100%;
+	object-fit: cover;
+	width: 100%;
+}
+
+/* Drawn like the count on the header's cart button. */
+.gueta-review-item__qty {
+	background: var(--gueta-ink);
+	border-radius: 999px;
+	color: var(--gueta-paper);
+	font-size: 11px;
+	font-weight: 600;
+	height: 18px;
+	inset-block-start: -6px;
+	inset-inline-end: -6px;
+	line-height: 18px;
+	min-width: 18px;
+	padding: 0 4px;
+	position: absolute;
+	text-align: center;
+}
+
 .woocommerce-checkout .shop_table .woocommerce-Price-amount {
 	white-space: nowrap;
 }

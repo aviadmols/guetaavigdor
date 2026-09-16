@@ -1,0 +1,99 @@
+/**
+ * Upsell popups screen.
+ */
+
+.gueta-upsell-admin__grid {
+	align-items: start;
+	display: grid;
+	gap: 24px;
+	grid-template-columns: minmax(0, 1.2fr) minmax(340px, .8fr);
+	max-width: 1440px;
+}
+
+.gueta-upsell-admin__panel {
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	padding: 4px 24px 20px;
+}
+
+.gueta-upsell-admin [hidden] {
+	display: none !important;
+}
+
+.gueta-upsell-admin .form-table th {
+	width: 170px;
+}
+
+.gueta-upsell-admin .select2-container {
+	max-width: 640px;
+}
+
+.gueta-upsell-admin .select2-selection__choice {
+	cursor: grab;
+}
+
+.gueta-upsell-admin .select2-selection__choice:active {
+	cursor: grabbing;
+}
+
+.gueta-upsell-admin__list {
+	max-width: 640px;
+	min-height: 110px;
+	width: 100%;
+}
+
+.gueta-upsell-admin__sub {
+	font-weight: 600;
+	margin: 14px 0 6px;
+}
+
+.gueta-upsell-admin__cart-match,
+.gueta-upsell-admin__scope-products,
+.gueta-upsell-admin__scope-pages {
+	margin-top: 10px;
+}
+
+.gueta-upsell-admin__totals {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px 20px;
+	margin-top: 14px;
+}
+
+.gueta-upsell-admin__totals input {
+	width: 100px;
+}
+
+.gueta-upsell-admin__delay {
+	margin-inline-start: 12px;
+}
+
+.gueta-upsell-admin__delay input {
+	width: 64px;
+}
+
+.gueta-upsell-admin__count {
+	background: #f6f7f7;
+	border-radius: 4px;
+	margin: 14px 0 0;
+	padding: 10px 12px;
+}
+
+.gueta-upsell-admin tr.is-editing td {
+	background: #f0f6fc;
+}
+
+.gueta-upsell-admin__row-actions {
+	white-space: nowrap;
+}
+
+.gueta-upsell-admin__row-actions form {
+	display: inline;
+	margin-inline-start: 8px;
+}
+
+@media (max-width: 1100px) {
+	.gueta-upsell-admin__grid {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}

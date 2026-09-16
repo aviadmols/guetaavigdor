@@ -1,0 +1,110 @@
+/**
+ * Banners screen.
+ */
+
+.gueta-banners-admin [hidden] {
+	display: none !important;
+}
+
+.gueta-banner-rows {
+	display: grid;
+	gap: 14px;
+	max-width: 1080px;
+}
+
+.gueta-banner-row {
+	align-items: start;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	display: grid;
+	gap: 18px;
+	grid-template-columns: 24px minmax(0, 1fr) minmax(0, 1fr);
+	padding: 16px 18px;
+}
+
+.gueta-banner-row__handle {
+	color: #a7aaad;
+	cursor: grab;
+	font-size: 18px;
+	line-height: 1.6;
+	user-select: none;
+}
+
+.gueta-banner-row__handle:active {
+	cursor: grabbing;
+}
+
+.gueta-banner-row__media {
+	display: grid;
+	gap: 16px;
+}
+
+.gueta-banner-pick__label {
+	display: block;
+	font-weight: 600;
+	margin-bottom: 6px;
+}
+
+.gueta-banner-pick__preview {
+	background: #f6f7f7;
+	border: 1px dashed #c3c4c7;
+	border-radius: 4px;
+	margin-bottom: 8px;
+	padding: 6px;
+}
+
+.gueta-banner-pick__preview.is-empty {
+	min-height: 56px;
+}
+
+.gueta-banner-pick__preview img {
+	border-radius: 3px;
+	display: block;
+	height: auto;
+	max-height: 220px;
+	object-fit: contain;
+	width: 100%;
+}
+
+.gueta-banner-pick__clear {
+	margin-inline-start: 10px !important;
+}
+
+.gueta-banner-row__fields {
+	align-content: start;
+	display: grid;
+	gap: 12px;
+}
+
+.gueta-banner-row__fields label {
+	display: grid;
+	font-weight: 600;
+	gap: 4px;
+}
+
+.gueta-banner-row__fields input[type="url"],
+.gueta-banner-row__fields input[type="text"] {
+	font-weight: 400;
+	width: 100%;
+}
+
+.gueta-banner-row__fields .gueta-banner-row__toggle {
+	align-items: center;
+	display: flex;
+	gap: 6px;
+}
+
+.gueta-banner-row__remove {
+	justify-self: start;
+}
+
+@media (max-width: 782px) {
+	.gueta-banner-row {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.gueta-banner-row__handle {
+		display: none;
+	}
+}
