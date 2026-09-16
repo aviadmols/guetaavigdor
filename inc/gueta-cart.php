@@ -191,6 +191,29 @@ function gueta_render_empty_cart() {
 }
 
 /**
+ * What a line comes to, as a plain number, the way the drawer shows its sum.
+ *
+ * The drawer script scales it when the quantity changes and adds the lines up
+ * for the total, so a change shows before the cart has answered. It follows
+ * WC_Cart::get_product_subtotal(), with or without tax as the shop displays.
+ *
+ * @param WC_Product $product  Product on the line.
+ * @param int        $quantity Quantity.
+ * @return string
+ */
+function gueta_cart_line_total( $product, $quantity ) {
+	if ( $product->is_taxable() ) {
+		$total = WC()->cart->display_prices_including_tax()
+			? wc_get_price_including_tax( $product, [ 'qty' => $quantity ] )
+			: wc_get_price_excluding_tax( $product, [ 'qty' => $quantity ] );
+	} else {
+		$total = (float) $product->get_price() * (float) $quantity;
+	}
+
+	return wc_format_decimal( $total, wc_get_price_decimals() );
+}
+
+/**
  * Render the cart lines with quantity controls.
  *
  * @return void
@@ -208,7 +231,7 @@ function gueta_render_cart_lines() {
 
 			$permalink = $product->is_visible() ? $product->get_permalink( $cart_item ) : '';
 			?>
-			<li class="gueta-cart-line" data-cart-line="<?php echo esc_attr( $cart_item_key ); ?>">
+			<li class="gueta-cart-line" data-cart-line="<?php echo esc_attr( $cart_item_key ); ?>" data-line-total="<?php echo esc_attr( gueta_cart_line_total( $product, $cart_item['quantity'] ) ); ?>">
 				<span class="gueta-cart-line__media">
 					<?php echo wp_kses_post( $product->get_image( 'woocommerce_thumbnail' ) ); ?>
 				</span>
@@ -242,6 +265,7 @@ function gueta_render_cart_lines() {
 								value="<?php echo esc_attr( $cart_item['quantity'] ); ?>"
 								aria-label="כמות"
 								data-cart-qty
+								data-quantity="<?php echo esc_attr( $cart_item['quantity'] ); ?>"
 							>
 							<button type="button" class="gueta-cart-qty__button" data-cart-increase aria-label="הוספת כמות">+</button>
 						</div>
@@ -315,7 +339,7 @@ function gueta_render_cart_footer() {
 
 		<div class="gueta-cart-total">
 			<span>סה"כ</span>
-			<strong><?php echo wp_kses_post( WC()->cart->get_cart_subtotal() ); ?></strong>
+			<strong data-cart-subtotal><?php echo wp_kses_post( WC()->cart->get_cart_subtotal() ); ?></strong>
 		</div>
 		<p class="gueta-cart-note">מחיר המשלוח יחושב בהמשך</p>
 		<a class="gueta-button gueta-button--solid" href="<?php echo esc_url( wc_get_checkout_url() ); ?>">לתשלום</a>
@@ -387,6 +411,7 @@ function gueta_ajax_cart_coupon() {
 }
 add_action( 'wp_ajax_gueta_cart_coupon', 'gueta_ajax_cart_coupon' );
 add_action( 'wp_ajax_nopriv_gueta_cart_coupon', 'gueta_ajax_cart_coupon' );
+add_action( 'wc_ajax_gueta_cart_coupon', 'gueta_ajax_cart_coupon' );
 
 /**
  * Shop URL, falling back to the site root before WooCommerce pages exist.
@@ -414,11 +439,41 @@ function gueta_shop_url() {
  * @return string
  */
 function gueta_cart_panel_html() {
+	return '<div class="gueta-drawer__panel gueta-cart-panel" role="dialog" aria-modal="true" aria-labelledby="gueta-cart-title">'
+		. gueta_cart_panel_inner()
+		. '</div>';
+}
+
+/**
+ * The drawer's contents with the prices worked out, drawn once per state.
+ *
+ * An answer to the drawer carries the panel twice, once on its own and once
+ * among the cart fragments, and the second copy would draw every line again.
+ * The copy is kept for as long as the cart, its coupons and the shopper's
+ * signing in stay the same, which within one request they nearly always do.
+ *
+ * @return string
+ */
+function gueta_cart_panel_inner() {
+	static $kept = [
+		'state' => null,
+		'html'  => '',
+	];
+
 	gueta_cart_work_out_prices();
 
-	return '<div class="gueta-drawer__panel gueta-cart-panel" role="dialog" aria-modal="true" aria-labelledby="gueta-cart-title">'
-		. gueta_drawer_panel_inner()
-		. '</div>';
+	$state = gueta_has_woocommerce() && WC()->cart
+		? WC()->cart->get_cart_hash() . '|' . implode( ',', WC()->cart->get_applied_coupons() ) . '|' . (int) is_user_logged_in()
+		: '';
+
+	if ( $state !== $kept['state'] ) {
+		$kept = [
+			'state' => $state,
+			'html'  => gueta_drawer_panel_inner(),
+		];
+	}
+
+	return $kept['html'];
 }
 
 /**
@@ -430,13 +485,57 @@ function gueta_cart_panel_html() {
  * made without leaving the page asks for the drawer before anything has. Either
  * way a 4.20 metre board with two cuts showed the price of a single metre.
  *
+ * Working them out is the heaviest part of a cart request, delivery prices
+ * included, so it is skipped when nothing has changed since the last time in
+ * the same request, as after WooCommerce's own checkout refresh.
+ *
  * @return void
  */
 function gueta_cart_work_out_prices() {
-	if ( gueta_has_woocommerce() && WC()->cart && ! WC()->cart->is_empty() ) {
+	if ( gueta_has_woocommerce() && WC()->cart && ! WC()->cart->is_empty() && ! gueta_cart_prices_fresh() ) {
 		WC()->cart->calculate_totals();
 	}
 }
+
+/**
+ * Whether the cart's prices have been worked out since it last changed.
+ *
+ * @param bool|null $fresh New state, or null to read it.
+ * @return bool
+ */
+function gueta_cart_prices_fresh( $fresh = null ) {
+	static $state = false;
+
+	if ( null !== $fresh ) {
+		$state = (bool) $fresh;
+	}
+
+	return $state;
+}
+
+/**
+ * Mark the prices as worked out, after WooCommerce calculates the cart.
+ *
+ * @return void
+ */
+function gueta_cart_prices_now_fresh() {
+	gueta_cart_prices_fresh( true );
+}
+add_action( 'woocommerce_after_calculate_totals', 'gueta_cart_prices_now_fresh', 1000, 0 );
+
+/**
+ * Mark the prices as out of date, whenever the cart changes or is loaded.
+ *
+ * @return void
+ */
+function gueta_cart_prices_now_stale() {
+	gueta_cart_prices_fresh( false );
+}
+
+foreach ( [ 'woocommerce_cart_loaded_from_session', 'woocommerce_add_to_cart', 'woocommerce_cart_item_removed', 'woocommerce_after_cart_item_quantity_update', 'woocommerce_cart_item_restored', 'woocommerce_cart_emptied', 'woocommerce_applied_coupon', 'woocommerce_removed_coupon' ] as $gueta_cart_change ) {
+	add_action( $gueta_cart_change, 'gueta_cart_prices_now_stale', 1, 0 );
+}
+unset( $gueta_cart_change );
 
 /**
  * Count the same cut once: "3 × 139.67 ס"מ" rather than the length three times.
@@ -641,7 +740,80 @@ function gueta_should_open_cart() {
 }
 
 /**
- * Update a cart line from the drawer and return the refreshed markup.
+ * What every drawer request answers with.
+ *
+ * The drawer, the badge, the count, and WooCommerce's cart fragments with
+ * their hash, which the drawer script stores where WooCommerce's own script
+ * keeps them. Without them it would ask for the fragments again, and so would
+ * the next page, each a full request. The cart cookies are set here, while
+ * headers can still be sent, so the stored hash and the cookie agree.
+ *
+ * @return array
+ */
+function gueta_cart_answer() {
+	$panel = gueta_cart_panel_inner();
+	$mini  = '';
+
+	if ( function_exists( 'woocommerce_mini_cart' ) ) {
+		ob_start();
+		woocommerce_mini_cart();
+		$mini = (string) ob_get_clean();
+	}
+
+	gueta_cart_set_cookies();
+
+	return [
+		'panel'     => $panel,
+		'count'     => gueta_cart_count(),
+		'badge'     => gueta_cart_count_html(),
+		'fragments' => apply_filters( 'woocommerce_add_to_cart_fragments', [ 'div.widget_shopping_cart_content' => '<div class="widget_shopping_cart_content">' . $mini . '</div>' ] ),
+		'cart_hash' => WC()->cart->get_cart_hash(),
+	];
+}
+
+/**
+ * Set WooCommerce's two cart cookies for the cart as it now is.
+ *
+ * WooCommerce sets them on "wp", before an AJAX handler has changed anything,
+ * and again at shutdown, when a long answer has already sent the headers. Its
+ * own setter is on the cart's protected session object, so this does what
+ * WC_Cart_Session::set_cart_cookies() does, while headers can still be sent.
+ *
+ * @return void
+ */
+function gueta_cart_set_cookies() {
+	if ( headers_sent() || ! function_exists( 'wc_setcookie' ) ) {
+		return;
+	}
+
+	if ( ! WC()->cart->is_empty() ) {
+		$cookies = [
+			'woocommerce_items_in_cart' => '1',
+			'woocommerce_cart_hash'     => WC()->cart->get_cart_hash(),
+		];
+
+		foreach ( $cookies as $name => $value ) {
+			if ( ! isset( $_COOKIE[ $name ] ) || $_COOKIE[ $name ] !== $value ) {
+				wc_setcookie( $name, $value );
+				$_COOKIE[ $name ] = $value;
+			}
+		}
+	} elseif ( isset( $_COOKIE['woocommerce_items_in_cart'] ) ) {
+		wc_setcookie( 'woocommerce_items_in_cart', 0, time() - HOUR_IN_SECONDS );
+		wc_setcookie( 'woocommerce_cart_hash', '', time() - HOUR_IN_SECONDS );
+		unset( $_COOKIE['woocommerce_items_in_cart'], $_COOKIE['woocommerce_cart_hash'] );
+	}
+}
+
+/**
+ * Change cart lines from the drawer and return the refreshed markup.
+ *
+ * The drawer sends its changes together as "lines", a JSON object of cart
+ * item keys and quantities, a quantity of 0 removing the line. A single "key"
+ * and "quantity" still work, for a page loaded before this change. A line no
+ * longer in the cart is skipped rather than failing the rest, since another
+ * tab may have removed it; the answer shows the cart as it is. The totals are
+ * worked out once, after every change.
  *
  * @return void
  */
@@ -652,31 +824,39 @@ function gueta_ajax_cart_update() {
 		wp_send_json_error( [ 'message' => 'החנות אינה זמינה כרגע.' ], 400 );
 	}
 
-	$key      = isset( $_POST['key'] ) ? sanitize_text_field( wp_unslash( $_POST['key'] ) ) : '';
-	$quantity = isset( $_POST['quantity'] ) ? max( 0, (int) wp_unslash( $_POST['quantity'] ) ) : 0;
+	$lines = [];
 
-	if ( ! $key || ! WC()->cart->get_cart_item( $key ) ) {
-		wp_send_json_error( [ 'message' => 'המוצר כבר לא נמצא בעגלה.' ], 404 );
+	if ( isset( $_POST['lines'] ) ) {
+		$decoded = json_decode( wp_unslash( $_POST['lines'] ), true ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$lines   = is_array( $decoded ) ? $decoded : [];
+	} elseif ( isset( $_POST['key'] ) ) {
+		$lines = [ wp_unslash( $_POST['key'] ) => isset( $_POST['quantity'] ) ? wp_unslash( $_POST['quantity'] ) : 0 ]; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 	}
 
-	if ( 0 === $quantity ) {
-		WC()->cart->remove_cart_item( $key );
-	} else {
-		WC()->cart->set_quantity( $key, $quantity, true );
+	if ( ! $lines ) {
+		wp_send_json_error( [ 'message' => 'לא התבקש שינוי בעגלה.' ], 400 );
 	}
 
-	WC()->cart->calculate_totals();
+	foreach ( $lines as $key => $quantity ) {
+		$key      = sanitize_key( (string) $key );
+		$quantity = max( 0, (int) $quantity );
 
-	wp_send_json_success(
-		[
-			'panel' => gueta_drawer_panel_inner(),
-			'count' => gueta_cart_count(),
-			'badge' => gueta_cart_count_html(),
-		]
-	);
+		if ( ! $key || ! WC()->cart->get_cart_item( $key ) ) {
+			continue;
+		}
+
+		if ( 0 === $quantity ) {
+			WC()->cart->remove_cart_item( $key );
+		} else {
+			WC()->cart->set_quantity( $key, $quantity, false );
+		}
+	}
+
+	wp_send_json_success( gueta_cart_answer() );
 }
 add_action( 'wp_ajax_gueta_cart_update', 'gueta_ajax_cart_update' );
 add_action( 'wp_ajax_nopriv_gueta_cart_update', 'gueta_ajax_cart_update' );
+add_action( 'wc_ajax_gueta_cart_update', 'gueta_ajax_cart_update' );
 
 /**
  * Return the drawer contents, used when the drawer opens on a cached page.
@@ -686,13 +866,13 @@ add_action( 'wp_ajax_nopriv_gueta_cart_update', 'gueta_ajax_cart_update' );
 function gueta_ajax_cart_refresh() {
 	check_ajax_referer( 'gueta_header', 'nonce' );
 
-	wp_send_json_success(
-		[
-			'panel' => gueta_drawer_panel_inner(),
-			'count' => gueta_cart_count(),
-			'badge' => gueta_cart_count_html(),
-		]
-	);
+	if ( ! gueta_has_woocommerce() || ! WC()->cart ) {
+		wp_send_json_error( [ 'message' => 'החנות אינה זמינה כרגע.' ], 400 );
+	}
+
+	// With the prices worked out, which drawing the bare panel used to skip.
+	wp_send_json_success( gueta_cart_answer() );
 }
 add_action( 'wp_ajax_gueta_cart_refresh', 'gueta_ajax_cart_refresh' );
 add_action( 'wp_ajax_nopriv_gueta_cart_refresh', 'gueta_ajax_cart_refresh' );
+add_action( 'wc_ajax_gueta_cart_refresh', 'gueta_ajax_cart_refresh' );

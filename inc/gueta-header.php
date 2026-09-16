@@ -175,7 +175,17 @@ function gueta_header_assets() {
 		'guetaHeader',
 		[
 			'ajaxUrl'  => admin_url( 'admin-ajax.php' ),
+			// WooCommerce's lighter endpoint, which skips admin_init; the script fills in the action.
+			'wcAjaxUrl' => class_exists( 'WC_AJAX' ) ? WC_AJAX::get_endpoint( '%%endpoint%%' ) : '',
 			'nonce'    => wp_create_nonce( 'gueta_header' ),
+			// How a price is written, so the drawer can show a new sum before the cart answers.
+			'money'       => gueta_has_woocommerce() ? [
+				'decimals' => wc_get_price_decimals(),
+				'decimal'  => wc_get_price_decimal_separator(),
+				'thousand' => wc_get_price_thousand_separator(),
+				'format'   => get_woocommerce_price_format(),
+				'symbol'   => html_entity_decode( get_woocommerce_currency_symbol(), ENT_QUOTES, 'UTF-8' ),
+			] : null,
 			'hasWoo'      => gueta_has_woocommerce(),
 			'openCart'    => gueta_should_open_cart(),
 			'navCondense' => (bool) gueta_setting( 'nav_condense', 1 ),

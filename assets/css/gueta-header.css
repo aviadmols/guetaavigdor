@@ -1194,6 +1194,23 @@ body.gueta-locked {
 	grid-template-columns: 82px minmax(0, 1fr) 28px;
 }
 
+/*
+ * A line folds away the moment it is removed, before the cart has answered.
+ * The script pins its height first, so the fold runs from its real size, and
+ * the negative margin takes back the gap the list keeps between lines.
+ */
+.gueta-cart-line.is-removing {
+	margin-block-end: -18px;
+	opacity: 0;
+	overflow: hidden;
+	pointer-events: none;
+	transition: max-height .25s ease, opacity .2s ease, margin .25s ease;
+}
+
+.gueta-cart-line[hidden] {
+	display: none;
+}
+
 .gueta-cart-line__media {
 	background: var(--gueta-sand);
 	border-radius: 8px;
@@ -1559,6 +1576,33 @@ body.gueta-locked {
 
 .gueta-cart-total strong {
 	font-size: 19px;
+}
+
+/* A total worked out in the browser, until the cart confirms it. */
+.gueta-cart-total.is-updating strong {
+	animation: gueta-cart-confirming 1.2s ease-in-out infinite;
+}
+
+@keyframes gueta-cart-confirming {
+	50% {
+		opacity: .55;
+	}
+}
+
+/* The last line gone: nothing to total or pay for while the empty cart loads. */
+.gueta-drawer.is-emptying .gueta-drawer__footer {
+	display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.gueta-cart-line.is-removing {
+		transition: none;
+	}
+
+	.gueta-cart-total.is-updating strong {
+		animation: none;
+		opacity: .7;
+	}
 }
 
 .gueta-cart-note {

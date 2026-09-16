@@ -1004,8 +1004,14 @@
 			}
 		}
 
+		/*
+		 * WooCommerce's own AJAX endpoint where there is one. admin-ajax.php
+		 * runs everything hooked to admin_init first, which cost about a
+		 * tenth of a second a request here for nothing the cart needs.
+		 */
 		function post(action, extra) {
 			var payload = new URLSearchParams();
+			var url = settings.wcAjaxUrl ? settings.wcAjaxUrl.replace('%%endpoint%%', action) : settings.ajaxUrl;
 
 			payload.append('action', action);
 			payload.append('nonce', settings.nonce || '');
@@ -1014,7 +1020,7 @@
 				payload.append(key, extra[key]);
 			});
 
-			return fetch(settings.ajaxUrl, {
+			return fetch(url, {
 				method: 'POST',
 				credentials: 'same-origin',
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
@@ -1061,49 +1067,253 @@
 			}
 		});
 
-		function update(key, quantity) {
-			drawer.classList.add('is-busy');
+		/* -----------------------------------------------------------------
+		 * Quantities and removals
+		 *
+		 * Every request to the shop takes a second and a half or more before
+		 * the cart code even runs, so the drawer no longer waits for one. A
+		 * change shows at once: the line's sum, the total and the badge are
+		 * worked out here from the prices the lines carry, and a removed line
+		 * folds away. Changes are then sent together, after a short pause for
+		 * a run of presses on + or −, and never while one is on its way. When
+		 * the last answer is in, the drawer is replaced with what the cart
+		 * says, which settles anything worked out differently here, such as a
+		 * coupon. A failed request puts the cart's own drawer back.
+		 *
+		 * The answer also carries WooCommerce's cart fragments, which are
+		 * stored as its own script stores them. That saves the second request
+		 * this used to make to refresh them, and the one the next page would
+		 * make on finding them stale.
+		 * -------------------------------------------------------------- */
 
-			post('gueta_cart_update', { key: key, quantity: quantity })
+		var money = settings.money || null;
+		var changes = {};
+		var sending = false;
+		var sendTimer = 0;
+
+		function formatMoney(amount) {
+			if (!money) {
+				return '';
+			}
+
+			var decimals = Number(money.decimals) || 0;
+			var fixed = Math.abs(amount).toFixed(decimals).split('.');
+			var whole = fixed[0].replace(/\B(?=(\d{3})+(?!\d))/g, money.thousand || '');
+			var number = (amount < 0 ? '-' : '') + whole + (decimals ? (money.decimal || '.') + fixed[1] : '');
+			var symbol = document.createElement('span');
+
+			symbol.className = 'woocommerce-Price-currencySymbol';
+			symbol.textContent = money.symbol || '';
+
+			return '<span class="woocommerce-Price-amount amount"><bdi>'
+				+ String(money.format || '%1$s%2$s').replace('%1$s', symbol.outerHTML).replace('%2$s', number)
+				+ '</bdi></span>';
+		}
+
+		function liveLines() {
+			return Array.prototype.filter.call(drawer.querySelectorAll('[data-cart-line]'), function (line) {
+				return !line.classList.contains('is-removing');
+			});
+		}
+
+		// The total, the badge and the empty drawer, from what the lines now say.
+		function retotal() {
+			var lines = liveLines();
+			var sum = 0;
+			var count = 0;
+			var known = Boolean(money);
+
+			lines.forEach(function (line) {
+				var total = parseFloat(line.getAttribute('data-line-total'));
+				var input = line.querySelector('[data-cart-qty]');
+
+				if (isNaN(total)) {
+					known = false;
+				}
+
+				sum += total || 0;
+				count += input ? Math.max(0, parseInt(input.value, 10) || 0) : 0;
+			});
+
+			var total = drawer.querySelector('[data-cart-subtotal]');
+
+			if (total) {
+				if (known) {
+					total.innerHTML = formatMoney(sum);
+				}
+
+				total.closest('.gueta-cart-total').classList.add('is-updating');
+			}
+
+			var badge = header.querySelector('[data-cart-count]');
+
+			if (badge) {
+				badge.textContent = String(count);
+				badge.classList.toggle('is-empty', !count);
+			}
+
+			drawer.classList.toggle('is-emptying', !lines.length);
+		}
+
+		function setQuantity(line, quantity) {
+			var input = line.querySelector('[data-cart-qty]');
+			var before = input ? Math.max(1, parseInt(input.getAttribute('data-quantity') || input.value, 10) || 1) : 1;
+			var total = parseFloat(line.getAttribute('data-line-total'));
+
+			if (input) {
+				input.value = quantity;
+			}
+
+			if (!isNaN(total) && quantity > 0) {
+				// A line's sum is its unit price times the quantity, so scale it.
+				var next = total / before * quantity;
+				var price = line.querySelector('.gueta-cart-line__price');
+
+				line.setAttribute('data-line-total', String(next));
+
+				if (input) {
+					input.setAttribute('data-quantity', String(quantity));
+				}
+
+				if (price && money) {
+					price.innerHTML = formatMoney(next);
+				}
+			}
+		}
+
+		function foldAway(line) {
+			line.style.maxHeight = line.offsetHeight + 'px';
+			line.classList.add('is-removing');
+
+			window.requestAnimationFrame(function () {
+				window.requestAnimationFrame(function () {
+					line.style.maxHeight = '0px';
+				});
+			});
+
+			window.setTimeout(function () {
+				line.hidden = true;
+			}, 260);
+		}
+
+		function change(line, quantity, now) {
+			var key = line.getAttribute('data-cart-line');
+
+			if (!key) {
+				return;
+			}
+
+			changes[key] = quantity;
+
+			if (quantity > 0) {
+				setQuantity(line, quantity);
+			} else {
+				foldAway(line);
+			}
+
+			retotal();
+			schedule(now ? 0 : 350);
+		}
+
+		function schedule(delay) {
+			window.clearTimeout(sendTimer);
+			sendTimer = window.setTimeout(send, delay);
+		}
+
+		function storeFragments(fragments, hash) {
+			var params = window.wc_cart_fragments_params;
+
+			if (!params || !fragments || !hash) {
+				return;
+			}
+
+			try {
+				window.sessionStorage.setItem(params.fragment_name, JSON.stringify(fragments));
+				window.sessionStorage.setItem(params.cart_hash_key, hash);
+				window.localStorage.setItem(params.cart_hash_key, hash);
+
+				if (!window.sessionStorage.getItem('wc_cart_created')) {
+					window.sessionStorage.setItem('wc_cart_created', String(Date.now()));
+				}
+			} catch (error) {
+				// Storage can be unavailable; the next page then asks the cart instead.
+			}
+		}
+
+		function settle(data) {
+			replacePanel(data.panel);
+
+			var badge = header.querySelector('[data-cart-count]');
+
+			if (badge && data.badge) {
+				badge.outerHTML = data.badge;
+			}
+
+			drawer.classList.remove('is-emptying');
+			storeFragments(data.fragments, data.cart_hash);
+
+			// The checkout listens, so its summary follows a change made here.
+			document.dispatchEvent(new CustomEvent('gueta:cart-updated', { detail: { count: data.count } }));
+		}
+
+		function send() {
+			if (sending) {
+				return;
+			}
+
+			var batch = changes;
+
+			if (!Object.keys(batch).length) {
+				return;
+			}
+
+			changes = {};
+			sending = true;
+
+			post('gueta_cart_update', { lines: JSON.stringify(batch) })
 				.then(function (data) {
-					drawer.classList.remove('is-busy');
+					sending = false;
 
-					if (!data || !data.success) {
+					if (Object.keys(changes).length) {
+						// More came in meanwhile; this answer is already out of date.
+						schedule(0);
 						return;
 					}
 
-					replacePanel(data.data.panel);
-
-					var badge = header.querySelector('[data-cart-count]');
-
-					if (badge && data.data.badge) {
-						badge.outerHTML = data.data.badge;
+					if (data && data.data && data.data.panel) {
+						settle(data.data);
 					}
 
-					if (window.jQuery) {
-						// Let WooCommerce widgets refresh alongside the drawer.
-						window.jQuery(document.body).trigger('wc_fragment_refresh');
+					if (!data || !data.success) {
+						window.guetaNotices && window.guetaNotices.show('error', strings.error || '');
 					}
-
-					// The checkout listens, so its summary follows a change made here.
-					document.dispatchEvent(new CustomEvent('gueta:cart-updated', { detail: { count: data.data.count } }));
 				})
 				.catch(function () {
-					drawer.classList.remove('is-busy');
+					sending = false;
+
+					if (Object.keys(changes).length) {
+						schedule(0);
+						return;
+					}
+
+					// Put back what the cart really holds.
+					drawer.classList.remove('is-emptying');
+					refreshed = false;
+					refresh();
+					window.guetaNotices && window.guetaNotices.show('error', strings.error || '');
 				});
-		}
-
-		function lineKey(element) {
-			var line = element.closest('[data-cart-line]');
-
-			return line ? line.getAttribute('data-cart-line') : '';
 		}
 
 		drawer.addEventListener('click', function (event) {
 			var remove = event.target.closest('[data-cart-remove]');
 
 			if (remove) {
-				update(lineKey(remove), 0);
+				var gone = remove.closest('[data-cart-line]');
+
+				if (gone && !gone.classList.contains('is-removing')) {
+					change(gone, 0, true);
+				}
+
 				return;
 			}
 
@@ -1120,20 +1330,19 @@
 				return;
 			}
 
-			var next = parseInt(input.value, 10) || 0;
+			var next = Math.max(0, (parseInt(input.value, 10) || 0) + (step.hasAttribute('data-cart-increase') ? 1 : -1));
 
-			next += step.hasAttribute('data-cart-increase') ? 1 : -1;
-			next = Math.max(0, next);
-			input.value = next;
-
-			update(lineKey(step), next);
+			change(line, next, 0 === next);
 		});
 
 		drawer.addEventListener('change', function (event) {
 			var input = event.target.closest('[data-cart-qty]');
+			var line = input ? input.closest('[data-cart-line]') : null;
 
-			if (input) {
-				update(lineKey(input), Math.max(0, parseInt(input.value, 10) || 0));
+			if (line) {
+				var next = Math.max(0, parseInt(input.value, 10) || 0);
+
+				change(line, next, true);
 			}
 		});
 
