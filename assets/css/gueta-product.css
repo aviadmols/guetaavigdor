@@ -751,6 +751,54 @@
 	gap: 12px;
 }
 
+/*
+ * The length, for timber sold by the metre. It takes the whole row of the
+ * buying line, above the quantity and the button, in either kind of form.
+ */
+.gueta-buy .gueta-length {
+	display: grid;
+	flex: 1 1 100%;
+	gap: 8px;
+}
+
+.gueta-length__label {
+	color: var(--gueta-ink);
+	font-size: 14px;
+	font-weight: 600;
+}
+
+.gueta-length__required {
+	color: var(--gueta-accent);
+	text-decoration: none;
+}
+
+.gueta-length__select {
+	background: var(--gueta-paper);
+	border: 1.5px solid var(--gueta-rule);
+	border-radius: 8px;
+	color: var(--gueta-ink);
+	font-family: inherit;
+	font-size: 15px;
+	min-height: 48px;
+	padding: 11px 14px;
+	width: 100%;
+}
+
+.gueta-length__select:focus {
+	border-color: var(--gueta-ink);
+	outline: 0;
+}
+
+.gueta-length__total {
+	color: var(--gueta-muted);
+	font-size: 14px;
+	margin: 0;
+}
+
+.gueta-length__total[hidden] {
+	display: none;
+}
+
 /* The variation's price and stock are mirrored into the box's own. */
 .gueta-buy .woocommerce-variation-price,
 .gueta-buy .woocommerce-variation-availability {

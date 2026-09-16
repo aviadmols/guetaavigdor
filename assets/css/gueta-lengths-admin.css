@@ -1,0 +1,54 @@
+/**
+ * Product screen, lengths tab.
+ */
+
+.gueta-lengths-admin__body {
+	padding: 0 12px 12px;
+}
+
+.gueta-lengths-admin__intro {
+	color: #50575e;
+	margin: 12px 0;
+}
+
+.gueta-lengths-admin__table {
+	max-width: 720px;
+}
+
+.gueta-lengths-admin__table th,
+.gueta-lengths-admin__table td {
+	vertical-align: middle;
+}
+
+.gueta-lengths-admin__table input[type="text"],
+.gueta-lengths-admin__table input[type="number"] {
+	float: none;
+	margin: 0;
+	width: 100%;
+}
+
+.gueta-lengths-admin__handle {
+	color: #8c8f94;
+	cursor: move;
+	letter-spacing: -3px;
+	text-align: center;
+	width: 24px;
+}
+
+.gueta-lengths-admin__price {
+	color: #50575e;
+	white-space: nowrap;
+	width: 110px;
+}
+
+.gueta-lengths-admin__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin: 12px 0 4px;
+}
+
+.gueta-lengths-admin__row.ui-sortable-helper {
+	background: #fff;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, .15);
+}

@@ -799,6 +799,90 @@
 }());
 
 /**
+ * Length.
+ *
+ * Says what one unit comes to at the length chosen. A simple product's options
+ * carry that price from the server, worked out the way the cart will charge it;
+ * a variable product's are worked out here from the chosen variation's price.
+ * Listening on the document covers quick view as well.
+ */
+(function () {
+	'use strict';
+
+	function money(field, amount) {
+		var decimals = parseInt(field.getAttribute('data-decimals') || '2', 10);
+		var number = amount.toLocaleString('he-IL', {
+			minimumFractionDigits: decimals,
+			maximumFractionDigits: decimals
+		});
+
+		return (field.getAttribute('data-format') || '%1$s%2$s')
+			.replace('%1$s', field.getAttribute('data-symbol') || '')
+			.replace('%2$s', number)
+			.replace(/&nbsp;/g, ' ');
+	}
+
+	function show(field) {
+		var select = field.querySelector('.gueta-length__select');
+		var total = field.querySelector('[data-length-total]');
+
+		if (!select || !total) {
+			return;
+		}
+
+		var option = select.options[select.selectedIndex];
+		var price = NaN;
+
+		if (option && option.value) {
+			price = parseFloat(option.getAttribute('data-price') || '');
+
+			if (isNaN(price)) {
+				var base = parseFloat(field.getAttribute('data-variation-price') || '');
+
+				price = base * (1 + parseFloat(option.getAttribute('data-percent') || '0') / 100);
+			}
+		}
+
+		if (isNaN(price)) {
+			total.hidden = true;
+			total.textContent = '';
+			return;
+		}
+
+		total.textContent = option.textContent.trim() + ': ' + money(field, price) + ' ליחידה';
+		total.hidden = false;
+	}
+
+	document.addEventListener('change', function (event) {
+		if (event.target.matches && event.target.matches('.gueta-length__select')) {
+			show(event.target.closest('[data-length]'));
+		}
+	});
+
+	if (!window.jQuery) {
+		return;
+	}
+
+	window.jQuery(document.body).on('found_variation', 'form.variations_form', function (event, variation) {
+		var field = this.querySelector('[data-length]');
+
+		if (field && variation) {
+			field.setAttribute('data-variation-price', String(variation.display_price));
+			show(field);
+		}
+	});
+
+	window.jQuery(document.body).on('reset_data', 'form.variations_form', function () {
+		var field = this.querySelector('[data-length]');
+
+		if (field) {
+			field.removeAttribute('data-variation-price');
+			show(field);
+		}
+	});
+}());
+
+/**
  * Back in stock.
  *
  * A sold out product's buy box holds a form for an email address. It posts on
