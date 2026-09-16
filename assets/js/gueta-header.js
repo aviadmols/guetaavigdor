@@ -1363,6 +1363,17 @@
 
 			badgeBefore = null;
 
+			/*
+			 * The reason is WooCommerce's, kept in the session, so it is
+			 * fetched and shown as a toast, and the drawer steps aside for the
+			 * page where it can be put right.
+			 */
+			if (window.guetaNotices) {
+				drawers.close();
+				window.guetaNotices.fromServer(message || strings.addFailed);
+				return;
+			}
+
 			var cartBody = drawer.querySelector('[data-cart-body]');
 
 			if (cartBody) {

@@ -100,3 +100,86 @@ function gueta_cart_wording_plural( $translated, $single, $plural, $number, $dom
 	return gueta_cart_wording( $translated, $single, $domain );
 }
 add_filter( 'ngettext', 'gueta_cart_wording_plural', 20, 5 );
+
+/* -------------------------------------------------------------------------
+ * Toasts
+ *
+ * The notices themselves are lifted into toasts in the browser, by
+ * gueta-notices.js, so WooCommerce's own markup stays in the page for anyone
+ * without the script.
+ * ---------------------------------------------------------------------- */
+
+/**
+ * The toasts' script and styles, wherever WooCommerce may say something.
+ *
+ * @return void
+ */
+function gueta_notices_assets() {
+	if ( ! gueta_has_woocommerce() ) {
+		return;
+	}
+
+	$uri = get_stylesheet_directory_uri();
+
+	wp_enqueue_style(
+		'gueta-notices',
+		$uri . '/assets/css/gueta-notices.css',
+		[ 'gueta-header' ],
+		gueta_asset_version( '/assets/css/gueta-notices.css' )
+	);
+
+	wp_enqueue_script(
+		'gueta-notices',
+		$uri . '/assets/js/gueta-notices.js',
+		[],
+		gueta_asset_version( '/assets/js/gueta-notices.js' ),
+		true
+	);
+
+	wp_localize_script(
+		'gueta-notices',
+		'guetaNoticesSettings',
+		[
+			'endpoint' => class_exists( 'WC_AJAX' ) ? WC_AJAX::get_endpoint( 'gueta_notices' ) : '',
+			'close'    => 'סגירת ההודעה',
+			'titles'   => [
+				'error'   => 'שגיאה',
+				'success' => 'בוצע',
+				'info'    => 'לתשומת לבך',
+			],
+		]
+	);
+}
+add_action( 'wp_enqueue_scripts', 'gueta_notices_assets', 27 );
+
+/**
+ * Hand over, and clear, the notices a request left in the session.
+ *
+ * An add to cart made without leaving the page that WooCommerce turns down
+ * keeps its reason in the session, where it waited for the next page to show
+ * it, once for every attempt. The page asks for it at once instead, and it is
+ * shown as a toast there and nowhere later.
+ *
+ * @return void
+ */
+function gueta_ajax_notices() {
+	$list = [];
+
+	if ( function_exists( 'wc_get_notices' ) && WC()->session ) {
+		foreach ( wc_get_notices() as $type => $notices ) {
+			foreach ( (array) $notices as $notice ) {
+				$message = is_array( $notice ) ? ( $notice['notice'] ?? '' ) : $notice;
+
+				$list[] = [
+					'type' => in_array( $type, [ 'error', 'success' ], true ) ? $type : 'info',
+					'html' => wc_kses_notice( (string) $message ),
+				];
+			}
+		}
+
+		wc_clear_notices();
+	}
+
+	wp_send_json_success( $list );
+}
+add_action( 'wc_ajax_gueta_notices', 'gueta_ajax_notices' );

@@ -1,0 +1,237 @@
+/**
+ * Toasts: WooCommerce's notices, sliding in from the side.
+ * Tokens come from gueta-header.css, which is always loaded first.
+ */
+
+/* A notice the script has lifted into a toast leaves no gap where it was. */
+.gueta-notice-moved {
+	display: none !important;
+}
+
+.gueta-toasts {
+	display: grid;
+	gap: 10px;
+	inset-inline-end: 24px;
+	pointer-events: none;
+	position: fixed;
+	top: calc(var(--gueta-bar-height) + 16px);
+	width: min(380px, calc(100vw - 32px));
+	z-index: 300;
+}
+
+.gueta-toast {
+	--gueta-toast-color: #2e6fdb;
+
+	align-items: start;
+	background: var(--gueta-paper);
+	border: 1px solid var(--gueta-rule);
+	border-inline-start: 4px solid var(--gueta-toast-color);
+	border-radius: 12px;
+	box-shadow: 0 12px 32px rgb(0 0 0 / 14%), 0 2px 6px rgb(0 0 0 / 6%);
+	box-sizing: border-box;
+	color: var(--gueta-ink);
+	display: grid;
+	font-family: var(--gueta-font);
+	gap: 12px;
+	grid-template-columns: 30px minmax(0, 1fr) 26px;
+	opacity: 0;
+	overflow: hidden;
+	padding: 14px 14px 17px;
+	pointer-events: auto;
+	position: relative;
+	/* In from the edge it sits on: the left in Hebrew, the right in English. */
+	transform: translateX(calc(var(--gueta-slide) * 115%));
+	transition: transform .42s cubic-bezier(.2, .9, .25, 1.12), opacity .25s ease;
+}
+
+.gueta-toast *,
+.gueta-toast *::before,
+.gueta-toast *::after {
+	box-sizing: border-box;
+}
+
+.gueta-toast.is-in {
+	opacity: 1;
+	transform: none;
+}
+
+.gueta-toast.is-leaving {
+	opacity: 0;
+	transform: translateX(calc(var(--gueta-slide) * 115%));
+	transition-duration: .3s, .25s;
+	transition-timing-function: ease-in, ease;
+}
+
+/* Said again: a nudge, so the eye finds the card already there. */
+.gueta-toast.is-again {
+	animation: gueta-toast-nudge .45s ease;
+}
+
+.gueta-toast--error {
+	--gueta-toast-color: #d92d20;
+}
+
+.gueta-toast--success {
+	--gueta-toast-color: #12a150;
+}
+
+.gueta-toast--info {
+	--gueta-toast-color: #2e6fdb;
+}
+
+.gueta-toast__icon {
+	background: color-mix(in srgb, var(--gueta-toast-color) 14%, #fff);
+	border-radius: 50%;
+	color: var(--gueta-toast-color);
+	display: grid;
+	height: 30px;
+	place-items: center;
+	width: 30px;
+}
+
+.gueta-toast__icon svg {
+	fill: none;
+	height: 18px;
+	stroke: currentColor;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-width: 2.6;
+	width: 18px;
+}
+
+.gueta-toast__body {
+	display: grid;
+	gap: 3px;
+	min-width: 0;
+	padding-top: 4px;
+}
+
+.gueta-toast__title {
+	font-size: 14px;
+	font-weight: 700;
+	line-height: 1.3;
+	margin: 0;
+}
+
+.gueta-toast__text {
+	color: var(--gueta-muted);
+	font-size: 14px;
+	line-height: 1.5;
+	overflow-wrap: anywhere;
+}
+
+.gueta-toast__text p {
+	margin: 0;
+}
+
+.gueta-toast__text a {
+	color: var(--gueta-ink);
+	font-weight: 600;
+}
+
+/* WooCommerce's buttons in a notice, such as "go to checkout", as a plain link. */
+.gueta-toast__text .button {
+	background: none !important;
+	border: 0 !important;
+	color: var(--gueta-ink) !important;
+	display: inline;
+	float: none !important;
+	font-size: inherit !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	text-decoration: underline;
+}
+
+.gueta-toast__close {
+	background: none;
+	border: 0;
+	border-radius: 50%;
+	color: var(--gueta-soft);
+	cursor: pointer;
+	display: grid;
+	height: 26px;
+	padding: 0;
+	place-items: center;
+	transition: background-color .2s ease, color .2s ease;
+	width: 26px;
+}
+
+.gueta-toast__close:hover {
+	background: var(--gueta-sand);
+	color: var(--gueta-ink);
+}
+
+.gueta-toast__close svg {
+	fill: none;
+	height: 16px;
+	stroke: currentColor;
+	stroke-linecap: round;
+	stroke-width: 2;
+	width: 16px;
+}
+
+/* The time left, running out along the bottom edge. */
+.gueta-toast__timer {
+	animation: gueta-toast-timer linear forwards;
+	background: var(--gueta-toast-color);
+	bottom: 0;
+	height: 3px;
+	inset-inline: 0;
+	opacity: .35;
+	position: absolute;
+	transform-origin: var(--gueta-toast-origin, right);
+}
+
+[dir="ltr"] .gueta-toast__timer,
+html:not([dir="rtl"]) .gueta-toast__timer {
+	--gueta-toast-origin: left;
+}
+
+.gueta-toast.is-held .gueta-toast__timer {
+	animation-play-state: paused;
+}
+
+@keyframes gueta-toast-timer {
+	to {
+		transform: scaleX(0);
+	}
+}
+
+@keyframes gueta-toast-nudge {
+	30% {
+		transform: translateX(calc(var(--gueta-slide) * 6px));
+	}
+
+	60% {
+		transform: translateX(calc(var(--gueta-slide) * -3px));
+	}
+}
+
+/* On a phone the cards come down from under the header, the width of the screen. */
+@media (max-width: 600px) {
+	.gueta-toasts {
+		inset-inline: 12px;
+		top: calc(var(--gueta-bar-height) + 8px);
+		width: auto;
+	}
+
+	.gueta-toast {
+		transform: translateY(-24px);
+	}
+
+	.gueta-toast.is-leaving {
+		transform: translateY(-24px);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.gueta-toast,
+	.gueta-toast.is-leaving {
+		transform: none;
+		transition: opacity .2s ease;
+	}
+
+	.gueta-toast.is-again {
+		animation: none;
+	}
+}
