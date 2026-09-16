@@ -1325,6 +1325,73 @@ body.gueta-locked {
 	pointer-events: none;
 }
 
+/*
+ * A product on its way in. The drawer opens on the press with a line standing
+ * in for it, drawn like any other but for the note that it is being added,
+ * while what the cart already holds waits a moment in paler ink.
+ */
+.gueta-cart-line--pending {
+	animation: gueta-cart-in .28s ease-out;
+	grid-template-columns: 82px minmax(0, 1fr);
+}
+
+.gueta-drawer.is-adding .gueta-cart-line:not(.gueta-cart-line--pending),
+.gueta-drawer.is-adding .gueta-drawer__footer {
+	opacity: .55;
+	pointer-events: none;
+	transition: opacity .2s ease;
+}
+
+/* The empty cart's message would contradict the line above it. */
+.gueta-drawer.is-adding .gueta-cart-empty {
+	display: none;
+}
+
+.gueta-cart-pending__status {
+	align-items: center;
+	color: var(--gueta-muted);
+	display: inline-flex;
+	font-size: 13px;
+	gap: 8px;
+}
+
+.gueta-cart-pending__status::before {
+	animation: gueta-spin .7s linear infinite;
+	border: 2px solid currentColor;
+	border-radius: 50%;
+	border-top-color: transparent;
+	content: "";
+	flex: none;
+	height: 14px;
+	width: 14px;
+}
+
+.gueta-cart-error {
+	background: #fdecec;
+	border-radius: 8px;
+	color: #a61b1b;
+	font-size: 14px;
+	margin: 0 0 16px;
+	padding: 12px 14px;
+}
+
+@keyframes gueta-cart-in {
+	from {
+		opacity: 0;
+		transform: translateY(-8px);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.gueta-cart-line--pending {
+		animation: none;
+	}
+
+	.gueta-cart-pending__status::before {
+		animation-duration: 2s;
+	}
+}
+
 .gueta-cart-total {
 	align-items: baseline;
 	display: flex;

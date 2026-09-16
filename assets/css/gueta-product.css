@@ -1061,6 +1061,14 @@
 	filter: brightness(.93);
 }
 
+/*
+ * WooCommerce adds a "view cart" link beside the button once something is
+ * added. The drawer is already open by then, and the shop has no cart page.
+ */
+.gueta-buy .added_to_cart {
+	display: none;
+}
+
 /* The sum the press puts in the cart, set off from the words by a thin rule. */
 .gueta-buy__sum {
 	border-inline-start: 1px solid rgba(255, 255, 255, .45);

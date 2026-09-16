@@ -543,6 +543,7 @@
 		 */
 		var button = form.querySelector('.single_add_to_cart_button');
 		var variationPrice = NaN;
+		var variationImage = '';
 
 		function money(amount) {
 			var decimals = parseInt(box.getAttribute('data-decimals') || '2', 10);
@@ -669,6 +670,7 @@
 				setPrice(variation.price_html);
 
 				variationPrice = parseFloat(variation.display_price);
+				variationImage = variation.image ? (variation.image.thumb_src || variation.image.src || '') : '';
 				refreshTotal();
 
 				if (stock) {
@@ -705,6 +707,7 @@
 				setPrice('');
 
 				variationPrice = NaN;
+				variationImage = '';
 				refreshTotal();
 
 				if (stock) {
@@ -768,7 +771,9 @@
 				return;
 			}
 
-			// Product Add-Ons fields, such as the required length on timber.
+			// The length fields, named as Product Add-Ons named them. The theme
+			// reads them on the variation's product too, so a variation goes this
+			// way as well.
 			var addons = [];
 
 			data.forEach(function (value, name) {
@@ -777,14 +782,42 @@
 				}
 			});
 
-			// Add-Ons names its fields after the parent product, and checks them
-			// against whatever id reaches the cart, which on this path is the
-			// variation's: a variation with add-ons posts the form itself.
-			if (addons.length && chosen) {
-				return;
-			}
-
 			event.preventDefault();
+
+			/*
+			 * Open the drawer now, with the product standing in as a line, so
+			 * the press is answered at once and the cart fills in behind it.
+			 */
+			if (window.guetaCart) {
+				var unit = unitPrice();
+				var count = parseFloat(quantity) || 1;
+				var choices = [];
+
+				Array.prototype.forEach.call(form.querySelectorAll('.variations select, .gueta-length__select'), function (select) {
+					var option = select.options[select.selectedIndex];
+
+					if (!option || !option.value) {
+						return;
+					}
+
+					var label = select.id ? form.querySelector('label[for="' + select.id + '"]') : null;
+					var name = label ? label.textContent.replace(/\*/g, '').replace(/\s+/g, ' ').trim() : '';
+
+					choices.push((name ? name + ': ' : '') + option.textContent.trim());
+				});
+
+				if (count > 1) {
+					choices.push('כמות: ' + count);
+				}
+
+				window.guetaCart.adding({
+					name: box.getAttribute('data-name') || '',
+					image: variationImage || box.getAttribute('data-image') || '',
+					meta: choices.join(' · '),
+					price: isNaN(unit) ? '' : money(unit * count),
+					quantity: count
+				});
+			}
 
 			var payload = new URLSearchParams();
 
@@ -812,8 +845,18 @@
 					box.classList.remove('is-adding');
 
 					if (!result || result.error) {
-						if (result && result.product_url) {
+						var elsewhere = result && result.product_url
+							&& result.product_url.split('#')[0].split('?')[0] !== window.location.href.split('#')[0].split('?')[0];
+
+						// A product that needs choosing on its own page goes there.
+						if (elsewhere) {
 							window.location = result.product_url;
+							return;
+						}
+
+						// On its own page, the cart turned it down: say so where the eye is.
+						if (result && window.guetaCart) {
+							window.guetaCart.failed();
 							return;
 						}
 
@@ -826,6 +869,10 @@
 						result.cart_hash,
 						window.jQuery(button)
 					]);
+
+					if (window.guetaCart) {
+						window.guetaCart.added(result.fragments);
+					}
 
 					/*
 					 * Say so on the button itself. The drawer opens too, but on a

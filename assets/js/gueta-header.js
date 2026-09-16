@@ -1232,6 +1232,155 @@
 				});
 		});
 
+		/* -----------------------------------------------------------------
+		 * A product on its way in
+		 *
+		 * A buy box opens the drawer on the press rather than when the cart
+		 * answers, with a line standing in for the product: its picture, name,
+		 * choices, quantity and sum, marked as being added. When the cart
+		 * answers, WooCommerce swaps in the real drawer, which takes the line
+		 * with it. If the cart turns it down, the line goes and says why.
+		 * -------------------------------------------------------------- */
+
+		var badgeBefore = null;
+
+		function element(tag, className, text) {
+			var node = document.createElement(tag);
+
+			if (className) {
+				node.className = className;
+			}
+
+			if (text) {
+				node.textContent = text;
+			}
+
+			return node;
+		}
+
+		function clearPending() {
+			Array.prototype.forEach.call(drawer.querySelectorAll('[data-cart-pending], [data-cart-error]'), function (node) {
+				node.remove();
+			});
+		}
+
+		function adding(item) {
+			item = item || {};
+			refreshed = true;
+			clearPending();
+			openDrawer();
+			drawer.classList.add('is-adding');
+
+			var line = element('li', 'gueta-cart-line gueta-cart-line--pending');
+			var media = element('span', 'gueta-cart-line__media');
+			var body = element('div', 'gueta-cart-line__body');
+			var row = element('div', 'gueta-cart-line__row');
+
+			line.setAttribute('data-cart-pending', '');
+
+			if (item.image) {
+				var image = element('img');
+
+				image.src = item.image;
+				image.alt = '';
+				media.appendChild(image);
+			}
+
+			body.appendChild(element('p', 'gueta-cart-line__title', item.name || ''));
+
+			if (item.meta) {
+				body.appendChild(element('p', 'gueta-cart-line__meta', item.meta));
+			}
+
+			row.appendChild(element('span', 'gueta-cart-pending__status', strings.adding || 'מוסיף לעגלה…'));
+
+			if (item.price) {
+				row.appendChild(element('span', 'gueta-cart-line__price', item.price));
+			}
+
+			body.appendChild(row);
+			line.appendChild(media);
+			line.appendChild(body);
+
+			var cartBody = drawer.querySelector('[data-cart-body]');
+			var lines = drawer.querySelector('.gueta-cart-lines');
+
+			if (!lines && cartBody) {
+				lines = element('ul', 'gueta-cart-lines');
+				lines.setAttribute('data-cart-pending', '');
+				cartBody.insertBefore(lines, cartBody.firstChild);
+			}
+
+			if (lines) {
+				lines.insertBefore(line, lines.firstChild);
+			}
+
+			if (cartBody) {
+				cartBody.scrollTop = 0;
+			}
+
+			// The badge counts the product in at once; the cart's answer settles it.
+			var badge = header.querySelector('[data-cart-count]');
+
+			if (badge) {
+				badgeBefore = badge.outerHTML;
+
+				var count = parseInt(String(badge.textContent).replace(/[^\d]/g, ''), 10) || 0;
+
+				badge.textContent = String(count + Math.max(1, Math.round(parseFloat(item.quantity) || 1)));
+				badge.classList.remove('is-empty');
+			}
+		}
+
+		/*
+		 * WooCommerce's own add to cart script swaps the fragments in when it
+		 * hears added_to_cart. Where that script is not on the page, the line
+		 * standing in is still there, and the fragments go in from here.
+		 */
+		function added(fragments) {
+			if (drawer.querySelector('[data-cart-pending]')) {
+				Object.keys(fragments || {}).forEach(function (selector) {
+					Array.prototype.forEach.call(document.querySelectorAll(selector), function (node) {
+						node.outerHTML = fragments[selector];
+					});
+				});
+			}
+
+			clearPending();
+			drawer.classList.remove('is-adding');
+			badgeBefore = null;
+		}
+
+		function failed(message) {
+			clearPending();
+			drawer.classList.remove('is-adding');
+
+			var badge = header.querySelector('[data-cart-count]');
+
+			if (badge && badgeBefore) {
+				badge.outerHTML = badgeBefore;
+			}
+
+			badgeBefore = null;
+
+			var cartBody = drawer.querySelector('[data-cart-body]');
+
+			if (cartBody) {
+				var note = element('p', 'gueta-cart-error', message || strings.addFailed || 'לא הצלחנו להוסיף את המוצר לעגלה. נסו שוב.');
+
+				note.setAttribute('role', 'alert');
+				note.setAttribute('data-cart-error', '');
+				cartBody.insertBefore(note, cartBody.firstChild);
+			}
+		}
+
+		window.guetaCart = {
+			adding: adding,
+			added: added,
+			failed: failed,
+			open: openDrawer
+		};
+
 		if (window.jQuery) {
 			// WooCommerce announces AJAX add to cart on the body.
 			window.jQuery(document.body).on('added_to_cart', function () {

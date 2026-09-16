@@ -187,6 +187,8 @@ function gueta_header_assets() {
 			'strings'  => [
 				'searching' => 'מחפשים…',
 				'error'     => 'משהו השתבש, נסו שוב.',
+				'adding'    => 'מוסיף לעגלה…',
+				'addFailed' => 'לא הצלחנו להוסיף את המוצר לעגלה. נסו שוב.',
 			],
 		]
 	);

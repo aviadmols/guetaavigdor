@@ -140,7 +140,8 @@ function gueta_buy_box_html( $product = null, $args = [] ) {
 	 * chosen, and the script takes it from that.
 	 */
 	?>
-	<div class="gueta-buy<?php echo $sold_out ? ' is-soldout' : ''; ?>" data-buy data-price="<?php echo esc_attr( $args['price'] ); ?>"<?php echo $args['ajax'] ? ' data-buy-ajax' : ''; ?> data-unit="<?php echo esc_attr( $product->is_type( 'simple' ) ? (string) wc_get_price_to_display( $product ) : '' ); ?>" data-decimals="<?php echo esc_attr( (string) wc_get_price_decimals() ); ?>" data-format="<?php echo esc_attr( get_woocommerce_price_format() ); ?>" data-symbol="<?php echo esc_attr( html_entity_decode( get_woocommerce_currency_symbol(), ENT_QUOTES, 'UTF-8' ) ); ?>">
+	<?php // The name and picture the cart drawer shows for the product while it is on its way in. ?>
+	<div class="gueta-buy<?php echo $sold_out ? ' is-soldout' : ''; ?>" data-buy data-price="<?php echo esc_attr( $args['price'] ); ?>"<?php echo $args['ajax'] ? ' data-buy-ajax' : ''; ?> data-unit="<?php echo esc_attr( $product->is_type( 'simple' ) ? (string) wc_get_price_to_display( $product ) : '' ); ?>" data-decimals="<?php echo esc_attr( (string) wc_get_price_decimals() ); ?>" data-format="<?php echo esc_attr( get_woocommerce_price_format() ); ?>" data-symbol="<?php echo esc_attr( html_entity_decode( get_woocommerce_currency_symbol(), ENT_QUOTES, 'UTF-8' ) ); ?>" data-name="<?php echo esc_attr( $product->get_name() ); ?>" data-image="<?php echo esc_url( (string) wp_get_attachment_image_url( $product->get_image_id(), 'woocommerce_thumbnail' ) ); ?>">
 		<p class="gueta-buy__price" data-buy-price><?php echo wp_kses_post( $product->get_price_html() ); ?></p>
 
 		<?php // A sold out simple product's template prints only its stock line, which the form below repeats. ?>
@@ -263,7 +264,12 @@ function gueta_replace_add_to_cart_widget( $content, $widget ) {
 		return $content;
 	}
 
-	$html = gueta_buy_box_html( $product );
+	/*
+	 * Added without leaving the page: the drawer opens on the press and fills
+	 * in as the cart answers, rather than after a whole page has reloaded.
+	 * Without the script the form still posts in the ordinary way.
+	 */
+	$html = gueta_buy_box_html( $product, [ 'ajax' => true ] );
 
 	gueta_diag( 'buy_box', [ 'product' => $product->get_id(), 'rendered' => (int) (bool) $html ] );
 
