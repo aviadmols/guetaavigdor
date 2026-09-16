@@ -106,8 +106,14 @@ function gueta_length_field( $product ) {
  * @return array|null
  */
 function gueta_length_chosen( $field ) {
-	// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended
-	$value = isset( $_REQUEST[ $field['field'] ] ) ? sanitize_text_field( wp_unslash( $_REQUEST[ $field['field'] ] ) ) : '';
+	/*
+	 * Compared as sent, against the product's own option values, and never
+	 * stored or printed. sanitize_text_field() is no use here: it strips every
+	 * percent-encoded octet, which turned "2-17-%d7%9e%d7%98%d7%a8-1" into
+	 * "2-17--1", matched nothing, and kept every Hebrew length out of the cart.
+	 */
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	$value = isset( $_REQUEST[ $field['field'] ] ) && is_scalar( $_REQUEST[ $field['field'] ] ) ? (string) wp_unslash( $_REQUEST[ $field['field'] ] ) : '';
 
 	foreach ( $field['options'] as $option ) {
 		if ( '' !== $value && $option['value'] === $value ) {
