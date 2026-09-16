@@ -133,7 +133,14 @@ function gueta_buy_box_html( $product = null, $args = [] ) {
 
 	ob_start();
 	?>
-	<div class="gueta-buy<?php echo $sold_out ? ' is-soldout' : ''; ?>" data-buy data-price="<?php echo esc_attr( $args['price'] ); ?>"<?php echo $args['ajax'] ? ' data-buy-ajax' : ''; ?>>
+	<?php
+	/*
+	 * What one unit costs, and how the shop writes money, for the sum the
+	 * button shows. A variable product has no unit price until a variation is
+	 * chosen, and the script takes it from that.
+	 */
+	?>
+	<div class="gueta-buy<?php echo $sold_out ? ' is-soldout' : ''; ?>" data-buy data-price="<?php echo esc_attr( $args['price'] ); ?>"<?php echo $args['ajax'] ? ' data-buy-ajax' : ''; ?> data-unit="<?php echo esc_attr( $product->is_type( 'simple' ) ? (string) wc_get_price_to_display( $product ) : '' ); ?>" data-decimals="<?php echo esc_attr( (string) wc_get_price_decimals() ); ?>" data-format="<?php echo esc_attr( get_woocommerce_price_format() ); ?>" data-symbol="<?php echo esc_attr( html_entity_decode( get_woocommerce_currency_symbol(), ENT_QUOTES, 'UTF-8' ) ); ?>">
 		<p class="gueta-buy__price" data-buy-price><?php echo wp_kses_post( $product->get_price_html() ); ?></p>
 
 		<?php // A sold out simple product's template prints only its stock line, which the form below repeats. ?>

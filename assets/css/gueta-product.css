@@ -1039,6 +1039,15 @@
 	filter: brightness(.93);
 }
 
+/* The sum the press puts in the cart, set off from the words by a thin rule. */
+.gueta-buy__sum {
+	border-inline-start: 1px solid rgba(255, 255, 255, .45);
+	font-variant-numeric: tabular-nums;
+	padding-inline-start: 10px;
+	unicode-bidi: isolate;
+	white-space: nowrap;
+}
+
 .gueta-buy .single_add_to_cart_button.disabled,
 .gueta-buy .single_add_to_cart_button[disabled],
 .gueta-buy .single_add_to_cart_button.wc-variation-selection-needed {

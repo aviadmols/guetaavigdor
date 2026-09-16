@@ -535,6 +535,84 @@
 
 		refreshSteps();
 
+		/*
+		 * The button says what the press puts in the cart: one unit, at the
+		 * length chosen if the product has lengths, times the quantity. Until
+		 * that can be known, a required length unchosen or no variation yet, it
+		 * says only what it does.
+		 */
+		var button = form.querySelector('.single_add_to_cart_button');
+		var variationPrice = NaN;
+
+		function money(amount) {
+			var decimals = parseInt(box.getAttribute('data-decimals') || '2', 10);
+			var number = amount.toLocaleString('he-IL', {
+				minimumFractionDigits: decimals,
+				maximumFractionDigits: decimals
+			});
+
+			return (box.getAttribute('data-format') || '%1$s%2$s')
+				.replace('%1$s', box.getAttribute('data-symbol') || '')
+				.replace('%2$s', number)
+				.replace(/&nbsp;/g, ' ');
+		}
+
+		function unitPrice() {
+			var base = form.classList.contains('variations_form')
+				? variationPrice
+				: parseFloat(box.getAttribute('data-unit') || '');
+			var length = form.querySelector('.gueta-length__select');
+
+			if (!length) {
+				return base;
+			}
+
+			var option = length.options[length.selectedIndex];
+
+			if (!option || !option.value) {
+				return length.required ? NaN : base;
+			}
+
+			var priced = parseFloat(option.getAttribute('data-price') || '');
+
+			return isNaN(priced)
+				? base * (1 + parseFloat(option.getAttribute('data-percent') || '0') / 100)
+				: priced;
+		}
+
+		function refreshTotal() {
+			if (!button) {
+				return;
+			}
+
+			if (!button.hasAttribute('data-buy-label')) {
+				button.setAttribute('data-buy-label', button.textContent.trim());
+			}
+
+			var quantityInput = form.querySelector('input.qty, input[name="quantity"]');
+			var quantity = quantityInput ? parseFloat(quantityInput.value) : 1;
+			var unit = unitPrice();
+			var label = document.createElement('span');
+
+			label.className = 'gueta-buy__label';
+			label.textContent = button.getAttribute('data-buy-label');
+
+			button.textContent = '';
+			button.appendChild(label);
+
+			if (!isNaN(unit) && unit > 0 && quantity > 0) {
+				var sum = document.createElement('span');
+
+				sum.className = 'gueta-buy__sum';
+				sum.textContent = money(unit * quantity);
+				button.appendChild(sum);
+			}
+		}
+
+		form.addEventListener('change', refreshTotal);
+		form.addEventListener('input', refreshTotal);
+		refreshTotal();
+
 		form.addEventListener('click', function (event) {
 			var button = event.target.closest('[data-qty-step]');
 
@@ -590,6 +668,9 @@
 
 				setPrice(variation.price_html);
 
+				variationPrice = parseFloat(variation.display_price);
+				refreshTotal();
+
 				if (stock) {
 					stock.innerHTML = variation.availability_html || '';
 				}
@@ -622,6 +703,9 @@
 				});
 
 				setPrice('');
+
+				variationPrice = NaN;
+				refreshTotal();
 
 				if (stock) {
 					stock.innerHTML = '';
