@@ -352,14 +352,19 @@
 /**
  * Checkout: taking a line out of the order.
  *
- * The line goes through the cart drawer's own handler, then WooCommerce is
- * asked to redraw the summary, which brings the totals and the delivery
- * prices with it, and the drawer and the header count are refreshed from the
- * cart fragments. The last line out leaves nothing to check out, so the page
- * reloads and WooCommerce takes it from there.
+ * The row goes at once. Its key is put in the checkout form and WooCommerce
+ * is asked to refresh the summary; the refresh posts the form, the theme
+ * takes the line out before the totals are worked out, and the same answer
+ * brings the new totals, the delivery prices, the drawer and the header
+ * count. One request, where it used to take three.
  *
- * The drawer changes the same cart, so a change made there redraws the
- * summary too.
+ * Taking out the last line leaves nothing to check out, so that one goes
+ * through the drawer's handler and the page reloads for WooCommerce to show
+ * the empty cart. Should a refresh come back with no lines, as when two were
+ * removed together, the page reloads too.
+ *
+ * The drawer changes the same cart, so a change made there refreshes the
+ * summary as well.
  */
 (function () {
 	'use strict';
@@ -367,32 +372,71 @@
 	var settings = window.guetaCheckout || {};
 	var strings = settings.strings || {};
 
-	function redraw(count, fromDrawer) {
-		if (null !== count && undefined !== count && 0 === Number(count)) {
-			window.location.reload();
+	function rows() {
+		return Array.prototype.filter.call(
+			document.querySelectorAll('.woocommerce-checkout-review-order-table .cart_item'),
+			function (row) {
+				return !row.classList.contains('is-removing');
+			}
+		);
+	}
+
+	function hide(row) {
+		if (!row) {
 			return;
 		}
 
-		if (window.jQuery) {
-			window.jQuery(document.body).trigger('update_checkout');
+		row.classList.add('is-removing');
 
-			// The drawer refreshes its own fragments after a change made there.
-			if (!fromDrawer) {
-				window.jQuery(document.body).trigger('wc_fragment_refresh');
-			}
-		}
+		window.setTimeout(function () {
+			row.hidden = true;
+		}, 200);
 	}
 
-	function fail(button, row) {
-		button.disabled = false;
-
+	function restore(row, button) {
 		if (row) {
+			row.hidden = false;
 			row.classList.remove('is-removing');
+		}
+
+		if (button) {
+			button.disabled = false;
 		}
 
 		if (window.guetaNotices && strings.removeError) {
 			window.guetaNotices.show('error', strings.removeError);
 		}
+	}
+
+	// The last line: through the drawer's handler, then a fresh page.
+	function removeLast(key, row, button) {
+		var payload = new URLSearchParams();
+		var url = settings.wcAjaxUrl ? settings.wcAjaxUrl.replace('%%endpoint%%', 'gueta_cart_update') : settings.ajaxUrl;
+
+		payload.append('action', 'gueta_cart_update');
+		payload.append('nonce', settings.nonce || '');
+		payload.append('key', key);
+		payload.append('quantity', '0');
+
+		fetch(url, {
+			method: 'POST',
+			credentials: 'same-origin',
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+			body: payload.toString()
+		})
+			.then(function (response) {
+				return response.json();
+			})
+			.then(function (data) {
+				if (data && data.success) {
+					window.location.reload();
+				} else {
+					restore(row, button);
+				}
+			})
+			.catch(function () {
+				restore(row, button);
+			});
 	}
 
 	document.addEventListener('click', function (event) {
@@ -404,43 +448,58 @@
 
 		event.preventDefault();
 
+		var key = button.getAttribute('data-review-remove');
 		var row = button.closest('.cart_item');
-		var payload = new URLSearchParams();
+		var form = document.querySelector('form.checkout');
+		var last = rows().length <= 1;
 
 		button.disabled = true;
+		hide(row);
 
-		if (row) {
-			row.classList.add('is-removing');
+		if (last || !form || !window.jQuery) {
+			removeLast(key, row, button);
+			return;
 		}
 
-		payload.append('action', 'gueta_cart_update');
-		payload.append('nonce', settings.nonce || '');
-		payload.append('key', button.getAttribute('data-review-remove'));
-		payload.append('quantity', '0');
+		var field = document.createElement('input');
 
-		fetch(settings.ajaxUrl, {
-			method: 'POST',
-			credentials: 'same-origin',
-			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
-			body: payload.toString()
-		})
-			.then(function (response) {
-				return response.json();
-			})
-			.then(function (data) {
-				if (!data || !data.success) {
-					fail(button, row);
-					return;
-				}
+		field.type = 'hidden';
+		field.name = 'gueta_remove_cart_item[]';
+		field.value = key;
+		field.setAttribute('data-review-removal', '');
+		form.appendChild(field);
 
-				redraw(data.data.count);
-			})
-			.catch(function () {
-				fail(button, row);
-			});
+		window.jQuery(document.body).trigger('update_checkout');
 	});
 
+	if (window.jQuery) {
+		window.jQuery(document.body).on('updated_checkout', function () {
+			var sent = document.querySelectorAll('[data-review-removal]');
+
+			if (!sent.length) {
+				return;
+			}
+
+			Array.prototype.forEach.call(sent, function (field) {
+				field.parentNode.removeChild(field);
+			});
+
+			if (!document.querySelector('.woocommerce-checkout-review-order-table .cart_item')) {
+				window.location.reload();
+			}
+		});
+	}
+
 	document.addEventListener('gueta:cart-updated', function (event) {
-		redraw(event.detail ? event.detail.count : null, true);
+		var count = event.detail ? event.detail.count : null;
+
+		if (null !== count && undefined !== count && 0 === Number(count)) {
+			window.location.reload();
+			return;
+		}
+
+		if (window.jQuery) {
+			window.jQuery(document.body).trigger('update_checkout');
+		}
 	});
 }());

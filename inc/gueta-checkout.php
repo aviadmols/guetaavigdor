@@ -348,7 +348,8 @@ function gueta_checkout_assets() {
 		[
 			'cities'  => function_exists( 'gueta_cities_url' ) ? gueta_cities_url() : '',
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-			// The drawer's nonce, since removing a line goes through the drawer's own handler.
+			'wcAjaxUrl' => class_exists( 'WC_AJAX' ) ? WC_AJAX::get_endpoint( '%%endpoint%%' ) : '',
+			// The drawer's nonce, since taking out the last line goes through the drawer's own handler.
 			'nonce'   => wp_create_nonce( 'gueta_header' ),
 			'strings' => [
 				'noMatch'    => 'לא נמצא יישוב בשם הזה',
@@ -462,6 +463,78 @@ function gueta_review_item_picture( $name, $cart_item, $cart_item_key = '' ) {
 	);
 }
 add_filter( 'woocommerce_cart_item_name', 'gueta_review_item_picture', 20, 3 );
+
+/**
+ * Take a line out inside WooCommerce's own refresh of the summary.
+ *
+ * Removing a line used to be a request of its own, followed by the summary's
+ * refresh: two full requests, each well over a second and a half here. The
+ * checkout script now puts the line's key in the form as
+ * gueta_remove_cart_item[] and asks for the refresh, which posts the form and
+ * runs this before working out the totals, so one request does both. The
+ * refresh checks its own nonce, and a key that is not in this shopper's cart
+ * is ignored.
+ *
+ * @param string $posted The checkout form, URL encoded.
+ * @return void
+ */
+function gueta_review_remove_lines( $posted ) {
+	if ( ! gueta_has_woocommerce() || ! WC()->cart ) {
+		return;
+	}
+
+	parse_str( (string) $posted, $form );
+
+	if ( empty( $form['gueta_remove_cart_item'] ) ) {
+		return;
+	}
+
+	foreach ( (array) $form['gueta_remove_cart_item'] as $key ) {
+		$key = sanitize_key( (string) $key );
+
+		if ( $key && WC()->cart->get_cart_item( $key ) && WC()->cart->remove_cart_item( $key ) ) {
+			gueta_review_removed( true );
+		}
+	}
+}
+add_action( 'woocommerce_checkout_update_order_review', 'gueta_review_remove_lines', 5 );
+
+/**
+ * Whether this request took a line out of the summary.
+ *
+ * @param bool|null $removed True to record a removal, or null to read.
+ * @return bool
+ */
+function gueta_review_removed( $removed = null ) {
+	static $state = false;
+
+	if ( null !== $removed ) {
+		$state = (bool) $removed;
+	}
+
+	return $state;
+}
+
+/**
+ * Send the drawer and the badge back with the refreshed summary.
+ *
+ * WooCommerce's checkout script replaces every fragment it is given, so a
+ * line taken out of the summary leaves the drawer and the count in the header
+ * right in the same answer. The totals were just worked out for the summary,
+ * so drawing the drawer does not work them out again.
+ *
+ * @param array $fragments Checkout fragments.
+ * @return array
+ */
+function gueta_review_removal_fragments( $fragments ) {
+	if ( gueta_review_removed() && function_exists( 'gueta_cart_panel_html' ) ) {
+		$fragments['div.gueta-cart-panel']  = gueta_cart_panel_html();
+		$fragments['span.gueta-cart-count'] = gueta_cart_count_html();
+	}
+
+	return $fragments;
+}
+add_filter( 'woocommerce_update_order_review_fragments', 'gueta_review_removal_fragments' );
 
 /**
  * A variation by its product's name, when the list under it names every choice.
