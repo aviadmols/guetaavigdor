@@ -221,10 +221,15 @@ function gueta_render_cart_lines() {
 						<?php endif; ?>
 					</p>
 					<?php
-					$meta = wc_get_formatted_cart_item_data( $cart_item, true );
+					/*
+					 * The choices as label and value pairs, one to a line. The
+					 * flat form ran them together, since its line breaks were
+					 * only newlines in the text.
+					 */
+					$meta = wc_get_formatted_cart_item_data( $cart_item );
 					if ( $meta ) :
 						?>
-						<p class="gueta-cart-line__meta"><?php echo wp_kses_post( $meta ); ?></p>
+						<div class="gueta-cart-line__meta"><?php echo wp_kses_post( $meta ); ?></div>
 					<?php endif; ?>
 					<div class="gueta-cart-line__row">
 						<div class="gueta-cart-qty">

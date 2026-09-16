@@ -532,17 +532,20 @@ body.woocommerce-checkout .shop_table.woocommerce-checkout-review-order-table .c
 }
 
 /*
- * The options, on one quiet line under the name. WooCommerce floats each label
- * and value, which stacked "עובי:" and "10 מ"מ" on lines of their own.
+ * What was chosen, under the name, one pair to a line: the label quiet, the
+ * value in bold beside it, as the cart drawer shows them. WooCommerce floats
+ * each label and value, which stacked "עובי:" and "10 מ"מ" on lines of their
+ * own, and a cut list ran on as one paragraph.
  */
 .woocommerce-checkout .shop_table .cart_item dl.variation {
+	align-items: baseline;
 	color: var(--gueta-muted);
-	display: flex;
-	flex-wrap: wrap;
+	display: grid;
 	font-size: 13px;
-	gap: 0 4px;
-	line-height: 1.4;
-	margin: 2px 0 0;
+	gap: 2px 6px;
+	grid-template-columns: max-content minmax(0, 1fr);
+	line-height: 1.45;
+	margin: 4px 0 0;
 }
 
 .woocommerce-checkout .shop_table .cart_item dl.variation dt,
@@ -550,14 +553,20 @@ body.woocommerce-checkout .shop_table.woocommerce-checkout-review-order-table .c
 .woocommerce-checkout .shop_table .cart_item dl.variation p {
 	float: none;
 	font-style: normal;
-	font-weight: 400;
 	margin: 0;
 	padding: 0;
 }
 
-/* Several options wrap as pairs, not as loose words. */
-.woocommerce-checkout .shop_table .cart_item dl.variation dd {
-	margin-inline-end: 8px;
+.woocommerce-checkout .shop_table .cart_item dl.variation dt {
+	color: var(--gueta-muted);
+	font-weight: 400;
+}
+
+.woocommerce-checkout .shop_table .cart_item dl.variation dd,
+.woocommerce-checkout .shop_table .cart_item dl.variation dd p {
+	color: var(--gueta-ink);
+	font-weight: 600;
+	overflow-wrap: anywhere;
 }
 
 .gueta-review-item__price {

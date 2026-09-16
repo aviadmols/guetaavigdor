@@ -1234,6 +1234,42 @@ body.gueta-locked {
 	margin: 0;
 }
 
+/*
+ * What was chosen, one pair to a line: the label quiet, the value in bold
+ * beside it. "אורך קרש: 2.17 מטר", then the cuts, then what they add.
+ */
+.gueta-cart-line__meta dl.variation {
+	align-items: baseline;
+	display: grid;
+	gap: 2px 6px;
+	grid-template-columns: max-content minmax(0, 1fr);
+	line-height: 1.45;
+	margin: 0;
+}
+
+.gueta-cart-line__meta dl.variation dt,
+.gueta-cart-line__meta dl.variation dd {
+	float: none;
+	margin: 0;
+	padding: 0;
+}
+
+.gueta-cart-line__meta dl.variation dt {
+	color: var(--gueta-muted);
+	font-weight: 400;
+}
+
+.gueta-cart-line__meta dl.variation dd {
+	color: var(--gueta-ink);
+	font-weight: 600;
+	overflow-wrap: anywhere;
+}
+
+.gueta-cart-line__meta dl.variation dd .woocommerce-Price-amount {
+	font-weight: 600;
+	white-space: nowrap;
+}
+
 .gueta-cart-line__row {
 	align-items: center;
 	display: flex;
