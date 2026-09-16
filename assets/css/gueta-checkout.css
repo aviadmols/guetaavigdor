@@ -532,34 +532,48 @@ body.woocommerce-checkout .shop_table.woocommerce-checkout-review-order-table .c
 }
 
 /*
- * What was chosen, under the name, one pair to a line: the label quiet, the
- * value in bold beside it, as the cart drawer shows them. WooCommerce floats
- * each label and value, which stacked "עובי:" and "10 מ"מ" on lines of their
- * own, and a cut list ran on as one paragraph.
+ * What was chosen, under the name, as the same small table the cart drawer
+ * shows: one row a choice, the label quiet, the value in bold, a hairline
+ * between rows. WooCommerce floats each label and value, which stacked
+ * "עובי:" and "10 מ"מ" on lines of their own, and a cut list ran on as one
+ * paragraph.
  */
 .woocommerce-checkout .shop_table .cart_item dl.variation {
-	align-items: baseline;
+	background: var(--gueta-sand);
+	border: 1px solid var(--gueta-rule);
+	border-radius: 8px;
 	color: var(--gueta-muted);
 	display: grid;
 	font-size: 13px;
-	gap: 2px 6px;
 	grid-template-columns: max-content minmax(0, 1fr);
-	line-height: 1.45;
-	margin: 4px 0 0;
+	line-height: 1.4;
+	margin: 8px 0 0;
+	padding: 0 12px;
 }
 
 .woocommerce-checkout .shop_table .cart_item dl.variation dt,
-.woocommerce-checkout .shop_table .cart_item dl.variation dd,
-.woocommerce-checkout .shop_table .cart_item dl.variation p {
+.woocommerce-checkout .shop_table .cart_item dl.variation dd {
+	border-top: 1px solid var(--gueta-rule);
 	float: none;
 	font-style: normal;
 	margin: 0;
+	padding: 6px 0;
+}
+
+.woocommerce-checkout .shop_table .cart_item dl.variation p {
+	margin: 0;
 	padding: 0;
+}
+
+.woocommerce-checkout .shop_table .cart_item dl.variation dt:first-of-type,
+.woocommerce-checkout .shop_table .cart_item dl.variation dt:first-of-type + dd {
+	border-top: 0;
 }
 
 .woocommerce-checkout .shop_table .cart_item dl.variation dt {
 	color: var(--gueta-muted);
 	font-weight: 400;
+	padding-inline-end: 14px;
 }
 
 .woocommerce-checkout .shop_table .cart_item dl.variation dd,

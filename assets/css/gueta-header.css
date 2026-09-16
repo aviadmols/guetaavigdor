@@ -1226,7 +1226,7 @@ body.gueta-locked {
 
 .gueta-cart-line__meta {
 	color: var(--gueta-muted);
-	font-size: 12px;
+	font-size: 13px;
 	margin: 0;
 }
 
@@ -1235,28 +1235,39 @@ body.gueta-locked {
 }
 
 /*
- * What was chosen, one pair to a line: the label quiet, the value in bold
- * beside it. "אורך קרש: 2.17 מטר", then the cuts, then what they add.
+ * What was chosen, as a small table: one row a choice, the label quiet on
+ * one side, the value in bold on the other, a hairline between rows. As one
+ * run of text, "אורך קרש: 4.20 מטר חיתוכים: 139.67 ס"מ, ..." had to be read
+ * twice to tell where a label ended and its value began.
  */
 .gueta-cart-line__meta dl.variation {
-	align-items: baseline;
+	background: var(--gueta-sand);
+	border: 1px solid var(--gueta-rule);
+	border-radius: 8px;
 	display: grid;
-	gap: 2px 6px;
 	grid-template-columns: max-content minmax(0, 1fr);
-	line-height: 1.45;
+	line-height: 1.4;
 	margin: 0;
+	padding: 0 12px;
 }
 
 .gueta-cart-line__meta dl.variation dt,
 .gueta-cart-line__meta dl.variation dd {
+	border-top: 1px solid var(--gueta-rule);
 	float: none;
 	margin: 0;
-	padding: 0;
+	padding: 6px 0;
+}
+
+.gueta-cart-line__meta dl.variation dt:first-of-type,
+.gueta-cart-line__meta dl.variation dt:first-of-type + dd {
+	border-top: 0;
 }
 
 .gueta-cart-line__meta dl.variation dt {
 	color: var(--gueta-muted);
 	font-weight: 400;
+	padding-inline-end: 14px;
 }
 
 .gueta-cart-line__meta dl.variation dd {

@@ -414,10 +414,70 @@ function gueta_shop_url() {
  * @return string
  */
 function gueta_cart_panel_html() {
+	gueta_cart_work_out_prices();
+
 	return '<div class="gueta-drawer__panel gueta-cart-panel" role="dialog" aria-modal="true" aria-labelledby="gueta-cart-title">'
 		. gueta_drawer_panel_inner()
 		. '</div>';
 }
+
+/**
+ * Set every line's real price before the drawer prints it.
+ *
+ * A line costs its product's own price until the cart is calculated, which is
+ * where a length or a cut sets what it really comes to. An ordinary page load
+ * reuses the totals WooCommerce saved and never calculates, and an add to cart
+ * made without leaving the page asks for the drawer before anything has. Either
+ * way a 4.20 metre board with two cuts showed the price of a single metre.
+ *
+ * @return void
+ */
+function gueta_cart_work_out_prices() {
+	if ( gueta_has_woocommerce() && WC()->cart && ! WC()->cart->is_empty() ) {
+		WC()->cart->calculate_totals();
+	}
+}
+
+/**
+ * Count the same cut once: "3 × 139.67 ס"מ" rather than the length three times.
+ *
+ * The cutting plugin lists every piece, so a board cut into equal parts read
+ * as a run of identical numbers. A list with no repeats is left as it is, and
+ * so is the order line, which keeps the plugin's own text.
+ *
+ * @param array $item_data Label and value pairs shown under the line.
+ * @param array $cart_item Cart item.
+ * @return array
+ */
+function gueta_cart_group_cuts( $item_data, $cart_item ) {
+	if ( empty( $cart_item['gac_cutting'] ) ) {
+		return $item_data;
+	}
+
+	foreach ( $item_data as $index => $data ) {
+		if ( ! isset( $data['key'], $data['value'] ) || 'חיתוכים' !== $data['key'] || isset( $data['display'] ) ) {
+			continue;
+		}
+
+		$pieces = array_values( array_filter( array_map( 'trim', explode( ',', wp_specialchars_decode( wp_strip_all_tags( (string) $data['value'] ), ENT_QUOTES ) ) ), 'strlen' ) );
+		$counts = array_count_values( $pieces );
+
+		if ( count( $counts ) === count( $pieces ) ) {
+			continue;
+		}
+
+		$groups = [];
+
+		foreach ( $counts as $piece => $count ) {
+			$groups[] = $count > 1 ? sprintf( '%d × %s', $count, $piece ) : (string) $piece;
+		}
+
+		$item_data[ $index ]['value'] = esc_html( implode( ', ', $groups ) );
+	}
+
+	return $item_data;
+}
+add_filter( 'woocommerce_get_item_data', 'gueta_cart_group_cuts', 20, 2 );
 
 /**
  * Keep the badge and the drawer in sync with every WooCommerce cart change.
@@ -426,17 +486,6 @@ function gueta_cart_panel_html() {
  * @return array
  */
 function gueta_cart_fragments( $fragments ) {
-	/*
-	 * An add to cart made without leaving the page puts the line in and asks
-	 * for these straight away, before anything has worked the cart's prices
-	 * out again. The line just added would show its product's bare price, 39
-	 * a metre rather than its length and its cuts, so the prices are worked
-	 * out first.
-	 */
-	if ( gueta_has_woocommerce() && WC()->cart && ! WC()->cart->is_empty() ) {
-		WC()->cart->calculate_totals();
-	}
-
 	$fragments['span.gueta-cart-count'] = gueta_cart_count_html();
 	$fragments['div.gueta-cart-panel']  = gueta_cart_panel_html();
 
