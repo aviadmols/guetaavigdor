@@ -15,9 +15,10 @@
  *
  * The shopper sees the two apart. The truck keeps its own price, 350, as the
  * shipping method, and whatever the distance adds past that is a separate line
- * in the order summary, "תוספת מרחק להובלה", with the kilometres in its name.
- * The method's name says what the addition comes to, so it is known before the
- * truck is picked. On the order, the shipping line and the fee stay apart too.
+ * in the order summary, "תוספת מרחק לאילת (344 ק״מ)". Under the truck's card a
+ * short sum says the same before the truck is picked: the truck, the addition
+ * to the settlement, and the two together. On the order, the shipping line and
+ * the fee stay apart too.
  *
  * The price is worked out as soon as the city is chosen: the city field asks
  * the checkout to recalculate, and the rate and the fee are recalculated with it.
@@ -125,9 +126,9 @@ function gueta_delivery_is_truck( $rate ) {
  * What the distance adds to the truck's base price for a package.
  *
  * @param array $package Package.
- * @return array|null [ km, amount ], or null with nothing to add: pricing off,
- *                    no settlement chosen yet, one not on the list, or one
- *                    within the base kilometres.
+ * @return array|null [ km, amount, settlement ], or null with nothing to add:
+ *                    pricing off, no settlement chosen yet, one not on the
+ *                    list, or one within the base kilometres.
  */
 function gueta_delivery_extra( $package ) {
 	$settings = gueta_delivery_settings();
@@ -146,41 +147,85 @@ function gueta_delivery_extra( $package ) {
 
 	$extra = gueta_delivery_price( $km ) - $base;
 
-	return $extra > 0 ? [ $km, $extra ] : null;
+	// The settlement as the government spells it, for saying where the truck goes.
+	$name = function_exists( 'gueta_city_canonical' ) ? (string) gueta_city_canonical( $city ) : '';
+
+	return $extra > 0 ? [ $km, $extra, '' !== $name ? $name : trim( $city ) ] : null;
 }
 
 /**
- * Name the distance addition on the truck, so it is known before the truck is
- * picked. The method's own price stays as it is.
+ * The distance addition as words: "תוספת מרחק לאילת (344 ק״מ)".
+ *
+ * Hebrew gershayim rather than a straight quote, which the Store API sends out
+ * escaped.
+ *
+ * @param array $extra What gueta_delivery_extra() found.
+ * @return string
+ */
+function gueta_delivery_extra_label( $extra ) {
+	return sprintf( 'תוספת מרחק ל%s (%s ק״מ)', $extra[2], number_format_i18n( ceil( $extra[0] ) ) );
+}
+
+/**
+ * Keep the distance on the truck's rate, and so on the order's shipping line,
+ * where the shop can see it. The method's own name and price stay as they are.
  *
  * @param WC_Shipping_Rate[] $rates   Rates for the package.
  * @param array              $package Package.
  * @return WC_Shipping_Rate[]
  */
 function gueta_delivery_rates( $rates, $package ) {
-	$extra = gueta_delivery_extra( $package );
+	$city = isset( $package['destination']['city'] ) ? (string) $package['destination']['city'] : '';
+	$km   = gueta_delivery_km( $city );
+
+	if ( $km < 0 ) {
+		return $rates;
+	}
 
 	foreach ( $rates as $rate ) {
-		if ( ! $rate instanceof WC_Shipping_Rate || ! gueta_delivery_is_truck( $rate ) ) {
-			continue;
-		}
-
-		$city = isset( $package['destination']['city'] ) ? (string) $package['destination']['city'] : '';
-		$km   = gueta_delivery_km( $city );
-
-		if ( $km >= 0 ) {
-			// Kept on the order's shipping line, where the shop can see it.
-			$rate->add_meta_data( 'מרחק מהמחסן', sprintf( '%s ק"מ', number_format_i18n( ceil( $km ) ) ) );
-		}
-
-		if ( $extra ) {
-			$rate->set_label( sprintf( '%s + תוספת מרחק ₪%s', $rate->get_label(), number_format_i18n( $extra[1] ) ) );
+		if ( $rate instanceof WC_Shipping_Rate && gueta_delivery_is_truck( $rate ) ) {
+			$rate->add_meta_data( 'מרחק מהמחסן', sprintf( '%s ק״מ', number_format_i18n( ceil( $km ) ) ) );
 		}
 	}
 
 	return $rates;
 }
 add_filter( 'woocommerce_package_rates', 'gueta_delivery_rates', 20, 2 );
+
+/**
+ * Under the truck's card, what the truck comes to in all: its own price, the
+ * distance addition to the settlement, and the two together. Shown whether or
+ * not the truck is chosen, so the choice is made knowing it.
+ *
+ * @param WC_Shipping_Rate $rate  Rate.
+ * @param int              $index Package.
+ * @return void
+ */
+function gueta_delivery_rate_summary( $rate, $index ) {
+	if ( ! $rate instanceof WC_Shipping_Rate || ! gueta_delivery_is_truck( $rate ) || ! WC()->shipping() ) {
+		return;
+	}
+
+	$packages = WC()->shipping()->get_packages();
+	$extra    = isset( $packages[ $index ] ) ? gueta_delivery_extra( $packages[ $index ] ) : null;
+
+	if ( ! $extra ) {
+		return;
+	}
+
+	$base = (float) $rate->get_cost();
+	?>
+	<dl class="gueta-delivery-sum">
+		<dt>הובלה</dt>
+		<dd><?php echo wp_kses_post( wc_price( $base ) ); ?></dd>
+		<dt><?php echo esc_html( gueta_delivery_extra_label( $extra ) ); ?></dt>
+		<dd><?php echo wp_kses_post( wc_price( $extra[1] ) ); ?></dd>
+		<dt class="gueta-delivery-sum__total">סה״כ הובלה ל<?php echo esc_html( $extra[2] ); ?></dt>
+		<dd class="gueta-delivery-sum__total"><?php echo wp_kses_post( wc_price( $base + $extra[1] ) ); ?></dd>
+	</dl>
+	<?php
+}
+add_action( 'woocommerce_after_shipping_rate', 'gueta_delivery_rate_summary', 10, 2 );
 
 /**
  * Charge the distance addition as its own line, when the truck is the method
@@ -206,7 +251,7 @@ function gueta_delivery_fee( $cart ) {
 		$extra = gueta_delivery_extra( $packages[ $key ] );
 
 		if ( $extra ) {
-			$cart->add_fee( sprintf( 'תוספת מרחק להובלה (%s ק"מ)', number_format_i18n( ceil( $extra[0] ) ) ), $extra[1], false );
+			$cart->add_fee( gueta_delivery_extra_label( $extra ), $extra[1], false );
 		}
 	}
 }
