@@ -752,6 +752,28 @@
 }
 
 /*
+ * Under a price per metre, the least a length of it comes to. It sits on a
+ * line of its own wherever the product's price is shown on its page.
+ */
+.gueta-price-from {
+	color: var(--gueta-muted);
+	display: block;
+	font-size: .8em;
+	font-weight: 500;
+	margin-top: 2px;
+}
+
+.gueta-price-from .woocommerce-Price-amount {
+	color: var(--gueta-ink);
+	font-weight: 700;
+}
+
+/* The sticky bar keeps to one line. */
+.gueta-sticky-atc .gueta-price-from {
+	display: none;
+}
+
+/*
  * The length, for timber sold by the metre. It takes the whole row of the
  * buying line, above the quantity and the button, in either kind of form.
  */

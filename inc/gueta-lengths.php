@@ -138,6 +138,79 @@ function gueta_length_unit_price( $product, $percent ) {
 }
 
 /**
+ * The cheapest way to buy a product that has lengths.
+ *
+ * Usually the first option, though not always: one product lists 4.60 metres
+ * first and a shorter, cheaper length after it.
+ *
+ * @param WC_Product $product Product or variation. A variable product has no
+ *                            price of its own; ask of a variation.
+ * @return array|null label and price, or null when it has no lengths.
+ */
+function gueta_length_from( $product ) {
+	if ( ! $product instanceof WC_Product || $product->is_type( 'variable' ) ) {
+		return null;
+	}
+
+	$field = gueta_length_field( $product );
+
+	if ( ! $field || '' === (string) $product->get_price( 'edit' ) ) {
+		return null;
+	}
+
+	$best = null;
+
+	foreach ( $field['options'] as $option ) {
+		$price = gueta_length_unit_price( $product, $option['percent'] );
+
+		if ( null === $best || $price < $best['price'] ) {
+			$best = [
+				'label' => $option['label'],
+				'price' => $price,
+			];
+		}
+	}
+
+	return $best;
+}
+
+/**
+ * Under the price on a product's own page, what the least that can be bought
+ * comes to: "החל מ-₪84.63 ל-2.17 מטר" beside a price of 39 a metre.
+ *
+ * Only for the product the page is about, so the cards of related products
+ * keep their single line.
+ *
+ * @param string     $html    Price HTML.
+ * @param WC_Product $product Product.
+ * @return string
+ */
+function gueta_length_price_from( $html, $product ) {
+	if ( '' === $html || gueta_lengths_plugin_active() || ! $product instanceof WC_Product || ! function_exists( 'is_product' ) || ! is_product() ) {
+		return $html;
+	}
+
+	$owner = $product->is_type( 'variation' ) ? $product->get_parent_id() : $product->get_id();
+
+	if ( get_queried_object_id() !== $owner ) {
+		return $html;
+	}
+
+	$from = gueta_length_from( $product );
+
+	if ( ! $from ) {
+		return $html;
+	}
+
+	return $html . sprintf(
+		' <span class="gueta-price-from">החל מ-%s ל-%s</span>',
+		wc_price( $from['price'] ),
+		esc_html( $from['label'] )
+	);
+}
+add_filter( 'woocommerce_get_price_html', 'gueta_length_price_from', 20, 2 );
+
+/**
  * Money as plain text, as an order line's key shows it.
  *
  * @param float $amount Amount.

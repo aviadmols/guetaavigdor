@@ -8,9 +8,9 @@
  *   woocommerce_single_product_summary, which an Elementor Pro single product
  *   template never runs, so the page is given it here.
  * - Timber is priced per metre and bought by a length whose shortest option
- *   still adds to the price: 71 a metre, but 1.50 metres is the least on sale.
- *   The offer carries that first length, worked out as the Merchant feed does
- *   it, so the page and the feed agree.
+ *   still adds to the price: 39 a metre, but 2.17 metres, at 84.63, is the
+ *   least on sale. The offer carries the cheapest length at what the cart
+ *   charges for it, and the page says the same under its price.
  * - The feed links each variation as ?variant_id=, as the old theme did, and
  *   the page opens with that variation chosen, so its price is the one shown.
  *
@@ -76,67 +76,19 @@ function gueta_linked_variation_defaults( $defaults, $product ) {
 add_filter( 'woocommerce_product_get_default_attributes', 'gueta_linked_variation_defaults', 10, 2 );
 
 /**
- * The first option of a product's length add-on, as a price rule.
+ * The least a product can be bought for: its cheapest length, priced as the
+ * cart charges it, or its own price when it has no lengths.
  *
- * The same reading as the Merchant feed's: the first add-on whose name holds
- * "אורך", and its first option that has a label and a price.
- *
- * @param WC_Product $product Product or variation.
- * @return array|null [ price, price_type ]
- */
-function gueta_length_addon_rule( $product ) {
-	$owner  = $product->is_type( 'variation' ) ? $product->get_parent_id() : $product->get_id();
-	$addons = get_post_meta( $owner, '_product_addons', true );
-
-	if ( ! is_array( $addons ) ) {
-		return null;
-	}
-
-	foreach ( $addons as $addon ) {
-		$name = is_array( $addon ) && isset( $addon['name'] ) ? wp_strip_all_tags( html_entity_decode( (string) $addon['name'], ENT_QUOTES, 'UTF-8' ) ) : '';
-
-		if ( false === mb_strpos( $name, 'אורך' ) || empty( $addon['options'] ) || ! is_array( $addon['options'] ) ) {
-			continue;
-		}
-
-		foreach ( $addon['options'] as $option ) {
-			if ( ! is_array( $option ) || empty( $option['label'] ) || ! isset( $option['price'] ) ) {
-				continue;
-			}
-
-			$price = str_replace( ',', '.', (string) $option['price'] );
-
-			if ( '' === $price || ! is_numeric( $price ) ) {
-				continue;
-			}
-
-			return [
-				'price'      => (float) $price,
-				'price_type' => empty( $option['price_type'] ) ? 'flat_fee' : sanitize_key( $option['price_type'] ),
-			];
-		}
-	}
-
-	return null;
-}
-
-/**
- * The least a product can be bought for.
+ * The same figure the page shows as "החל מ-", so Google finds on the page the
+ * price it was given.
  *
  * @param WC_Product $product Product or variation.
  * @return float
  */
 function gueta_purchasable_price( $product ) {
-	$price = (float) $product->get_price();
-	$rule  = gueta_length_addon_rule( $product );
+	$from = function_exists( 'gueta_length_from' ) ? gueta_length_from( $product ) : null;
 
-	if ( $rule && $rule['price'] > 0 ) {
-		$price += 'percentage_based' === $rule['price_type'] ? $price * $rule['price'] / 100 : $rule['price'];
-	}
-
-	// Two places, as the feed writes it, since Merchant Center holds the two
-	// side by side; the shop shows one.
-	return round( $price, 2 );
+	return round( $from ? $from['price'] : (float) wc_get_price_to_display( $product ), 2 );
 }
 
 /**
