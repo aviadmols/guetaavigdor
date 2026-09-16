@@ -444,64 +444,63 @@
 }
 
 /*
- * The picture on each line, from gueta_review_item_picture(), held in the
- * cell's own padding so the name and any variation details wrap in the room
- * that is left.
+ * Each product, the way a cart draws a line: the picture with the quantity on
+ * its corner, and beside it the name, the options chosen and the price.
  *
- * Where it goes depends on how wide the summary is, not the screen. The
- * summary is a narrow column on a desktop too: about 340 pixels of table at
- * 1440, and about 230 on a phone. Beside the name, a picture in 230 pixels
- * broke a product name into ten lines, so a narrow summary puts it above the
- * name, and only a wider one sets it alongside.
+ * gueta_review_items_close() folds the price cell into the name cell, which
+ * then spans the table. The header row labelled those two columns, so it goes
+ * too. Where the rewrite did not happen, the colspan is missing, and the row
+ * keeps its two cells and its header.
+ *
+ * The summary is a narrow column even on a desktop, about 330 pixels of table
+ * at 1440 and 230 on a phone, so the price sits under the name. Only where the
+ * summary is wide, a single column on a tablet, does it move across from it.
  */
 .woocommerce-checkout #order_review {
 	container-type: inline-size;
 }
 
-.woocommerce-checkout .shop_table .cart_item .product-name {
-	padding-top: 68px;
+.woocommerce-checkout .shop_table:has(.cart_item .product-name[colspan]) thead {
+	display: none;
+}
+
+/*
+ * A table cell takes its height as a minimum, which keeps a one line name from
+ * clipping the picture.
+ *
+ * The long selector is for Elementor's checkout widget, which keeps forty
+ * pixels free at the end of this cell for the price column, with a rule of
+ * five classes and an element. Once the price lives in the cell, that space is
+ * a sixth of the line on a phone.
+ */
+body.woocommerce-checkout .shop_table.woocommerce-checkout-review-order-table .cart_item td.product-name {
+	font-style: normal;
+	height: 84px;
+	padding: 14px 0;
+	padding-inline-start: 70px;
 	position: relative;
+	vertical-align: middle;
+}
+
+body.woocommerce-checkout .shop_table.woocommerce-checkout-review-order-table .cart_item td.product-name[colspan] {
+	text-align: start;
+	width: 100%;
 }
 
 .gueta-review-item__media {
-	background: var(--gueta-sand);
-	border-radius: 8px;
-	height: 48px;
-	inset-block-start: 12px;
+	background: var(--gueta-paper);
+	border: 1px solid var(--gueta-rule);
+	border-radius: 10px;
+	height: 56px;
+	inset-block-start: 50%;
 	inset-inline-start: 0;
 	position: absolute;
-	width: 48px;
-}
-
-@container (min-width: 300px) {
-	.woocommerce-checkout .shop_table th:first-child,
-	.woocommerce-checkout .shop_table .product-name {
-		width: 62%;
-	}
-
-	.woocommerce-checkout .shop_table td:last-child,
-	.woocommerce-checkout .shop_table th:last-child {
-		width: 38%;
-	}
-
-	/* A table cell takes its height as a minimum, so a one line name still
-	   leaves the picture room. */
-	.woocommerce-checkout .shop_table .cart_item .product-name {
-		height: 80px;
-		padding-inline-start: 70px;
-		padding-top: 12px;
-	}
-
-	.gueta-review-item__media {
-		height: 56px;
-		inset-block-start: 50%;
-		transform: translateY(-50%);
-		width: 56px;
-	}
+	transform: translateY(-50%);
+	width: 56px;
 }
 
 .woocommerce-checkout .gueta-review-item__image {
-	border-radius: 8px;
+	border-radius: 9px;
 	display: block;
 	height: 100%;
 	object-fit: cover;
@@ -513,16 +512,88 @@
 	background: var(--gueta-ink);
 	border-radius: 999px;
 	color: var(--gueta-paper);
-	font-size: 11px;
+	font-size: 12px;
 	font-weight: 600;
-	height: 18px;
-	inset-block-start: -6px;
-	inset-inline-end: -6px;
-	line-height: 18px;
-	min-width: 18px;
-	padding: 0 4px;
+	height: 20px;
+	inset-block-start: -8px;
+	inset-inline-end: -8px;
+	line-height: 20px;
+	min-width: 20px;
+	padding: 0 6px;
 	position: absolute;
 	text-align: center;
+}
+
+.gueta-review-item__name {
+	color: var(--gueta-ink);
+	font-size: 15px;
+	font-weight: 500;
+	line-height: 1.4;
+}
+
+/*
+ * The options, on one quiet line under the name. WooCommerce floats each label
+ * and value, which stacked "עובי:" and "10 מ"מ" on lines of their own.
+ */
+.woocommerce-checkout .shop_table .cart_item dl.variation {
+	color: var(--gueta-muted);
+	display: flex;
+	flex-wrap: wrap;
+	font-size: 13px;
+	gap: 0 4px;
+	line-height: 1.4;
+	margin: 2px 0 0;
+}
+
+.woocommerce-checkout .shop_table .cart_item dl.variation dt,
+.woocommerce-checkout .shop_table .cart_item dl.variation dd,
+.woocommerce-checkout .shop_table .cart_item dl.variation p {
+	float: none;
+	font-style: normal;
+	font-weight: 400;
+	margin: 0;
+	padding: 0;
+}
+
+/* Several options wrap as pairs, not as loose words. */
+.woocommerce-checkout .shop_table .cart_item dl.variation dd {
+	margin-inline-end: 8px;
+}
+
+.gueta-review-item__price {
+	color: var(--gueta-ink);
+	display: block;
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1.4;
+	margin-top: 4px;
+}
+
+@container (min-width: 300px) {
+	body.woocommerce-checkout .shop_table.woocommerce-checkout-review-order-table .cart_item td.product-name {
+		height: 92px;
+		padding-inline-start: 80px;
+	}
+
+	.gueta-review-item__media {
+		height: 64px;
+		width: 64px;
+	}
+}
+
+@container (min-width: 440px) {
+	body.woocommerce-checkout .shop_table.woocommerce-checkout-review-order-table .cart_item td.product-name[colspan] {
+		padding-inline-end: 120px;
+	}
+
+	.gueta-review-item__price {
+		font-size: 15px;
+		inset-block-start: 50%;
+		inset-inline-end: 0;
+		margin: 0;
+		position: absolute;
+		transform: translateY(-50%);
+	}
 }
 
 .woocommerce-checkout .shop_table .woocommerce-Price-amount {

@@ -411,17 +411,20 @@ function gueta_shipping_row_close() {
 add_action( 'woocommerce_review_order_after_shipping', 'gueta_shipping_row_close', 50 );
 
 /* -------------------------------------------------------------------------
- * A picture on each line of the order
+ * Each product in the order, drawn the way a cart draws a line
+ *
+ * The picture with the quantity on its corner, then the name, what was chosen
+ * and the price. WooCommerce gives the product a table row of two cells, the
+ * name in one and the price in the other, and in a summary about three hundred
+ * pixels wide that left the name a column of three words to a line beside a
+ * price column that was mostly empty.
  * ---------------------------------------------------------------------- */
 
 /**
- * Give each line of the order summary the product's picture, with the
- * quantity on its corner, the way the cart drawer shows a line.
+ * The picture and the quantity, in front of the name.
  *
- * Only the name passes through a filter, so the picture rides in front of it.
- * The stylesheet lifts it out into the cell's padding, beside the name or
- * above it depending on how wide the summary is, clear of the name and of any
- * variation details WooCommerce prints underneath.
+ * Only the name passes through a filter, so the picture rides in with it. The
+ * stylesheet lifts it into the cell's padding, clear of the text.
  *
  * @param string $name      Product name markup.
  * @param array  $cart_item Cart item.
@@ -433,13 +436,97 @@ function gueta_review_item_picture( $name, $cart_item ) {
 	}
 
 	return sprintf(
-		'<span class="gueta-review-item__media">%1$s<span class="gueta-review-item__qty">%2$s</span></span>%3$s',
+		'<span class="gueta-review-item__media">%1$s<span class="gueta-review-item__qty">%2$s</span></span><span class="gueta-review-item__name">%3$s</span>',
 		$cart_item['data']->get_image( 'woocommerce_thumbnail', [ 'class' => 'gueta-review-item__image' ] ),
 		esc_html( number_format_i18n( absint( $cart_item['quantity'] ?? 0 ) ) ),
-		$name
+		gueta_review_item_name( $name, $cart_item )
 	);
 }
 add_filter( 'woocommerce_cart_item_name', 'gueta_review_item_picture', 20, 2 );
+
+/**
+ * A variation by its product's name, when the list under it names every choice.
+ *
+ * A variation's name is its product's with the options tacked on, "לביד
+ * סנדוויץ' ... - 10-ממ", and WooCommerce then lists the options again under
+ * it, "עובי: 10 מ"מ", unless it finds them in the name. Imported names spell
+ * them differently, so it rarely does, and the line said the thickness twice.
+ *
+ * WooCommerce's own test is repeated here: only when it would list every
+ * option does the name drop them. Otherwise the variation's name stays, so an
+ * option is never lost from the line.
+ *
+ * @param string $name      Product name.
+ * @param array  $cart_item Cart item.
+ * @return string
+ */
+function gueta_review_item_name( $name, $cart_item ) {
+	$product = $cart_item['data'];
+
+	if ( ! $product->is_type( 'variation' ) || empty( $cart_item['variation'] ) || ! is_array( $cart_item['variation'] ) ) {
+		return $name;
+	}
+
+	foreach ( $cart_item['variation'] as $key => $value ) {
+		$taxonomy = wc_attribute_taxonomy_name( str_replace( 'attribute_pa_', '', urldecode( $key ) ) );
+
+		if ( taxonomy_exists( $taxonomy ) ) {
+			$term  = get_term_by( 'slug', $value, $taxonomy );
+			$value = ( $term && ! is_wp_error( $term ) ) ? $term->name : $value;
+		}
+
+		if ( '' === $value || wc_is_attribute_in_product_name( $value, $product->get_name() ) ) {
+			return $name;
+		}
+	}
+
+	$parent = wc_get_product( $product->get_parent_id() );
+
+	return $parent ? $parent->get_name() : $name;
+}
+
+/**
+ * Hold the product rows while WooCommerce prints them.
+ *
+ * @return void
+ */
+function gueta_review_items_open() {
+	if ( gueta_checkout_active() ) {
+		ob_start();
+	}
+}
+add_action( 'woocommerce_review_order_before_cart_contents', 'gueta_review_items_open', 5 );
+
+/**
+ * Fold each row's price cell into its name cell, which then spans the table.
+ *
+ * The name gets the whole width beside the picture, and the price goes into
+ * the same cell after the name and the chosen options, where the stylesheet
+ * puts it under them, or across from them when the summary is wide. The same
+ * rewrite of WooCommerce's own output the delivery row gets below, for the
+ * same reason: no copied template to go stale.
+ *
+ * @return void
+ */
+function gueta_review_items_close() {
+	if ( ! gueta_checkout_active() ) {
+		return;
+	}
+
+	$html = (string) ob_get_clean();
+
+	$merged = preg_replace(
+		'#<td class="product-name"([^>]*)>(.*?)</td>\s*<td class="product-total"[^>]*>(.*?)</td>#s',
+		'<td class="product-name" colspan="2"$1>$2<span class="gueta-review-item__price">$3</span></td>',
+		$html,
+		-1,
+		$count
+	);
+
+	// If WooCommerce ever changes that shape, print what it gave us.
+	echo ( $count && $merged ) ? $merged : $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+}
+add_action( 'woocommerce_review_order_after_cart_contents', 'gueta_review_items_close', 50 );
 
 /**
  * Drop the "× 2" after the name, which the badge on the picture now says.
