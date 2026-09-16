@@ -31,8 +31,11 @@ const GUETA_DELIVERY_OPTION = 'gueta_delivery_pricing';
 /**
  * The pricing with its defaults.
  *
- * road_factor is 1 until the average ratio has been measured, which prices by
- * the straight line alone.
+ * road_factor was measured on 2026-09-16 with OSRM, from Rishon LeZion to 91
+ * settlements spread from ten to 270 kilometres away. Over the 78 more than
+ * thirty kilometres off, where the price starts to move, the road averages
+ * 1.28 times the straight line, with a median of 1.24: Jerusalem is 1.15 and
+ * Eilat 1.21, while villages reached by winding roads run past 1.5.
  *
  * @return array
  */
@@ -49,7 +52,7 @@ function gueta_delivery_settings() {
 			'mid_km'      => 60,
 			'mid_rate'    => 14,
 			'far_rate'    => 10,
-			'road_factor' => 1,
+			'road_factor' => 1.28,
 		]
 	);
 }
