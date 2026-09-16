@@ -13,8 +13,14 @@
  * price close to the kilometres the truck actually drives without a paid
  * routing service. Both the ratio and the prices are settings.
  *
+ * The shopper sees the two apart. The truck keeps its own price, 350, as the
+ * shipping method, and whatever the distance adds past that is a separate line
+ * in the order summary, "תוספת מרחק להובלה", with the kilometres in its name.
+ * The method's name says what the addition comes to, so it is known before the
+ * truck is picked. On the order, the shipping line and the fee stay apart too.
+ *
  * The price is worked out as soon as the city is chosen: the city field asks
- * the checkout to recalculate, and the rate below is recalculated with it.
+ * the checkout to recalculate, and the rate and the fee are recalculated with it.
  *
  * @package HelloElementorChild
  */
@@ -116,61 +122,95 @@ function gueta_delivery_is_truck( $rate ) {
 }
 
 /**
- * Price the truck by the distance to the chosen settlement.
+ * What the distance adds to the truck's base price for a package.
  *
- * The configured cost of the method stands for the base price, so the result
- * is that cost scaled by the distance price over the base price. Whether the
- * method's cost was entered with VAT or without, and whatever tax it carries,
- * the proportion holds, and the taxes are scaled with it.
- *
- * With no settlement chosen yet, or one not on the list, the rate is left at
- * its base price.
- *
- * @param WC_Shipping_Rate[] $rates   Rates for the package.
- * @param array              $package Package.
- * @return WC_Shipping_Rate[]
+ * @param array $package Package.
+ * @return array|null [ km, amount ], or null with nothing to add: pricing off,
+ *                    no settlement chosen yet, one not on the list, or one
+ *                    within the base kilometres.
  */
-function gueta_delivery_rates( $rates, $package ) {
+function gueta_delivery_extra( $package ) {
 	$settings = gueta_delivery_settings();
 	$base     = (float) $settings['base_price'];
 
 	if ( empty( $settings['enabled'] ) || $base <= 0 ) {
-		return $rates;
+		return null;
 	}
 
 	$city = isset( $package['destination']['city'] ) ? (string) $package['destination']['city'] : '';
 	$km   = gueta_delivery_km( $city );
 
 	if ( $km < 0 ) {
-		return $rates;
+		return null;
 	}
 
-	$ratio = gueta_delivery_price( $km ) / $base;
+	$extra = gueta_delivery_price( $km ) - $base;
+
+	return $extra > 0 ? [ $km, $extra ] : null;
+}
+
+/**
+ * Name the distance addition on the truck, so it is known before the truck is
+ * picked. The method's own price stays as it is.
+ *
+ * @param WC_Shipping_Rate[] $rates   Rates for the package.
+ * @param array              $package Package.
+ * @return WC_Shipping_Rate[]
+ */
+function gueta_delivery_rates( $rates, $package ) {
+	$extra = gueta_delivery_extra( $package );
 
 	foreach ( $rates as $rate ) {
 		if ( ! $rate instanceof WC_Shipping_Rate || ! gueta_delivery_is_truck( $rate ) ) {
 			continue;
 		}
 
-		$rate->set_cost( wc_format_decimal( (float) $rate->get_cost() * $ratio, wc_get_price_decimals() ) );
+		$city = isset( $package['destination']['city'] ) ? (string) $package['destination']['city'] : '';
+		$km   = gueta_delivery_km( $city );
 
-		$taxes = $rate->get_taxes();
-
-		if ( is_array( $taxes ) && $taxes ) {
-			foreach ( $taxes as $key => $tax ) {
-				$taxes[ $key ] = (float) $tax * $ratio;
-			}
-
-			$rate->set_taxes( $taxes );
+		if ( $km >= 0 ) {
+			// Kept on the order's shipping line, where the shop can see it.
+			$rate->add_meta_data( 'מרחק מהמחסן', sprintf( '%s ק"מ', number_format_i18n( ceil( $km ) ) ) );
 		}
 
-		// Kept on the order's shipping line, where the shop can see it.
-		$rate->add_meta_data( 'מרחק מהמחסן', sprintf( '%s ק"מ', number_format_i18n( ceil( $km ) ) ) );
+		if ( $extra ) {
+			$rate->set_label( sprintf( '%s + תוספת מרחק ₪%s', $rate->get_label(), number_format_i18n( $extra[1] ) ) );
+		}
 	}
 
 	return $rates;
 }
 add_filter( 'woocommerce_package_rates', 'gueta_delivery_rates', 20, 2 );
+
+/**
+ * Charge the distance addition as its own line, when the truck is the method
+ * chosen for a package.
+ *
+ * It carries no tax of its own, like the truck's price, which is set with VAT.
+ *
+ * @param WC_Cart $cart Cart.
+ * @return void
+ */
+function gueta_delivery_fee( $cart ) {
+	if ( ! $cart instanceof WC_Cart || ! function_exists( 'WC' ) || ! WC()->shipping() ) {
+		return;
+	}
+
+	$packages = WC()->shipping()->get_packages();
+
+	foreach ( $cart->get_shipping_methods() as $key => $rate ) {
+		if ( ! $rate instanceof WC_Shipping_Rate || ! gueta_delivery_is_truck( $rate ) || empty( $packages[ $key ] ) ) {
+			continue;
+		}
+
+		$extra = gueta_delivery_extra( $packages[ $key ] );
+
+		if ( $extra ) {
+			$cart->add_fee( sprintf( 'תוספת מרחק להובלה (%s ק"מ)', number_format_i18n( ceil( $extra[0] ) ) ), $extra[1], false );
+		}
+	}
+}
+add_action( 'woocommerce_cart_calculate_fees', 'gueta_delivery_fee' );
 
 /* -------------------------------------------------------------------------
  * The admin section
@@ -240,7 +280,8 @@ function gueta_delivery_admin_section() {
 	<p>
 		מחיר ההובלה נקבע לפי המרחק מהמחסן ליישוב שהלקוח בוחר בקופה, ומתעדכן ברגע שהיישוב נבחר.
 		המרחק הוא קו האוויר בין היישובים כפול היחס הממוצע בין מרחק בכביש לקו אוויר.
-		זה חל על שיטת המשלוח שבשמה "הובלה". מחיר השיטה עצמה נחשב כמחיר הבסיס.
+		זה חל על שיטת המשלוח שבשמה "הובלה". ההובלה נגבית במחיר השיטה, ומה שהמרחק מוסיף מעבר למחיר הבסיס מופיע בסיכום ההזמנה כשורה נפרדת, "תוספת מרחק להובלה".
+		מחיר הבסיס כאן צריך להיות זהה למחיר של שיטת ההובלה.
 	</p>
 
 	<?php if ( $saved ) : ?>
@@ -290,7 +331,9 @@ function gueta_delivery_admin_section() {
 					<th>יישוב</th>
 					<th>קו אוויר</th>
 					<th>מרחק מחושב</th>
-					<th>מחיר הובלה</th>
+					<th>הובלה</th>
+					<th>תוספת מרחק</th>
+					<th>סה"כ</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -302,13 +345,16 @@ function gueta_delivery_admin_section() {
 						continue;
 					}
 
-					$km = gueta_delivery_km( $city );
+					$km    = gueta_delivery_km( $city );
+					$total = gueta_delivery_price( $km );
 					?>
 					<tr>
 						<td><?php echo esc_html( $city ); ?></td>
 						<td><?php echo esc_html( number_format_i18n( $straight, 1 ) ); ?> ק"מ</td>
 						<td><?php echo esc_html( number_format_i18n( ceil( $km ) ) ); ?> ק"מ</td>
-						<td>₪<?php echo esc_html( number_format_i18n( gueta_delivery_price( $km ) ) ); ?></td>
+						<td>₪<?php echo esc_html( number_format_i18n( (float) $settings['base_price'] ) ); ?></td>
+						<td>₪<?php echo esc_html( number_format_i18n( max( 0, $total - (float) $settings['base_price'] ) ) ); ?></td>
+						<td>₪<?php echo esc_html( number_format_i18n( $total ) ); ?></td>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>
