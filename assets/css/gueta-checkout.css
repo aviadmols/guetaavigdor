@@ -765,6 +765,11 @@ body.woocommerce-checkout .gueta-review-item__remove:disabled {
 	padding: 0;
 }
 
+/* Room between the radio and the name of the method. */
+.woocommerce ul#shipping_method li label {
+	padding-right: 13px;
+}
+
 .woocommerce-checkout #shipping_method input[type="radio"] {
 	flex: none;
 	margin: 0;
@@ -976,6 +981,101 @@ body.woocommerce-checkout .gueta-review-item__remove:disabled {
 .woocommerce-checkout .woocommerce-form-login .form-row,
 .woocommerce-checkout .checkout_coupon .form-row {
 	margin-bottom: 14px;
+}
+
+/*
+ * Elementor's checkout widget draws its own coupon box: the button outlined
+ * in light blue at nine tenths of its column, the link turning light blue
+ * once pressed, and a field shorter than the ones above it. It now matches
+ * the rest of the checkout: the field as tall as the button beside it, a
+ * solid button in the site's ink, and the link keeping its orange. The
+ * widget's own rules are specific, so these are too, and the button states
+ * its colours for every state.
+ */
+.woocommerce-checkout .e-coupon-box .e-show-coupon-form,
+.woocommerce-checkout .e-coupon-box .e-show-coupon-form:hover,
+.woocommerce-checkout .e-coupon-box .e-show-coupon-form:focus {
+	color: var(--gueta-accent-warm);
+}
+
+.woocommerce-checkout .e-coupon-box .e-show-coupon-form:hover {
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.woocommerce-checkout .e-coupon-box .e-coupon-anchor-description {
+	color: var(--gueta-muted);
+	display: block;
+	font-size: 14px;
+	line-height: 1.4;
+	margin: 0 0 10px;
+}
+
+.woocommerce-checkout .e-coupon-box .form-row {
+	margin: 0;
+	padding: 0;
+}
+
+.woocommerce-checkout .e-coupon-box .coupon-container-grid {
+	align-items: stretch;
+	display: flex;
+	gap: 8px;
+}
+
+.woocommerce-checkout .e-coupon-box .coupon-col-1 {
+	flex: 1;
+	min-width: 0;
+}
+
+.woocommerce-checkout .e-coupon-box .coupon-col-2 {
+	display: flex;
+	flex: none;
+}
+
+body.woocommerce-checkout .e-coupon-box #coupon_code {
+	font-size: 15px;
+	height: 100%;
+	margin: 0;
+	min-height: 50px;
+	padding: 0 14px;
+	width: 100%;
+}
+
+body.woocommerce-checkout .e-coupon-box #coupon_code:focus {
+	border-color: var(--gueta-ink) !important;
+	outline: 0;
+}
+
+body.woocommerce-checkout .e-coupon-box button.e-apply-coupon,
+body.woocommerce-checkout .e-coupon-box button.e-apply-coupon:hover,
+body.woocommerce-checkout .e-coupon-box button.e-apply-coupon:focus {
+	background: var(--gueta-ink);
+	border: 0;
+	border-radius: 8px;
+	color: var(--gueta-paper);
+}
+
+body.woocommerce-checkout .e-coupon-box button.e-apply-coupon {
+	cursor: pointer;
+	font-family: inherit;
+	font-size: 15px;
+	font-weight: 600;
+	line-height: 1;
+	margin: 0;
+	min-height: 50px;
+	padding: 0 26px;
+	transition: background-color .2s ease;
+	white-space: nowrap;
+	width: auto;
+}
+
+body.woocommerce-checkout .e-coupon-box button.e-apply-coupon:hover {
+	background: #000;
+}
+
+body.woocommerce-checkout .e-coupon-box button.e-apply-coupon:focus-visible {
+	outline: 2px solid var(--gueta-ink);
+	outline-offset: 2px;
 }
 
 .woocommerce-checkout .button {
