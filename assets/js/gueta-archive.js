@@ -48,6 +48,82 @@
 	}
 
 	/* ---------------------------------------------------------------------
+	 * Sub category chips
+	 *
+	 * The arrows show only while there is more row to see on their side. A
+	 * press moves most of a view, leaving a chip of the last one in sight so
+	 * the eye keeps its place, or goes to the end when that is nearly all
+	 * that is left. In right to left scrollLeft runs from 0 down to negative
+	 * numbers, so position is read from its size and a step is mirrored.
+	 * ------------------------------------------------------------------ */
+
+	(function chips() {
+		var wrap = archive.querySelector('[data-chips]');
+		var list = wrap ? wrap.querySelector('[data-chips-list]') : null;
+
+		if (!list) {
+			return;
+		}
+
+		var prev = wrap.querySelector('[data-chips-step="-1"]');
+		var next = wrap.querySelector('[data-chips-step="1"]');
+		var rtl = 'rtl' === window.getComputedStyle(list).direction;
+		var frame = 0;
+
+		function update() {
+			frame = 0;
+
+			var travelled = Math.abs(list.scrollLeft);
+			var room = list.scrollWidth - list.clientWidth;
+
+			prev.hidden = travelled <= 1;
+			next.hidden = travelled >= room - 1;
+			wrap.classList.toggle('has-before', !prev.hidden);
+			wrap.classList.toggle('has-after', !next.hidden);
+		}
+
+		function schedule() {
+			if (!frame) {
+				frame = window.requestAnimationFrame(update);
+			}
+		}
+
+		wrap.addEventListener('click', function (event) {
+			var arrow = event.target.closest('[data-chips-step]');
+
+			if (!arrow) {
+				return;
+			}
+
+			var view = list.clientWidth;
+			var room = list.scrollWidth - view;
+			var target = Math.abs(list.scrollLeft) + Math.max(view * 0.8, 120) * Number(arrow.getAttribute('data-chips-step'));
+			var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+			// Close to an end, go all the way, rather than leave a sliver for one more press.
+			if (target > room - view * 0.2) {
+				target = room;
+			}
+
+			if (target < view * 0.2) {
+				target = 0;
+			}
+
+			list.scrollTo({ left: rtl ? -target : target, behavior: still ? 'auto' : 'smooth' });
+		});
+
+		list.addEventListener('scroll', schedule, { passive: true });
+		window.addEventListener('resize', schedule);
+		window.addEventListener('load', schedule);
+
+		if (document.fonts && document.fonts.ready) {
+			document.fonts.ready.then(schedule);
+		}
+
+		update();
+	}());
+
+	/* ---------------------------------------------------------------------
 	 * State
 	 * ------------------------------------------------------------------ */
 

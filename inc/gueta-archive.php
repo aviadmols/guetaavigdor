@@ -438,30 +438,45 @@ function gueta_render_archive_chips( $term ) {
 	}
 
 	$children = gueta_sort_terms_by_count( $children, 12 );
+	$list_id  = 'gueta-archive-chips-' . ( $term ? (int) $term->term_id : 0 );
+
+	/*
+	 * The row scrolls sideways with no scrollbar, which a mouse cannot do
+	 * without a wheel that tilts. The arrows stay hidden until the script
+	 * finds more chips than fit, and each one hides again at its own end.
+	 */
 	?>
-	<ul class="gueta-archive__chips">
-		<?php
-		foreach ( $children as $child ) :
-			$link = get_term_link( $child );
+	<div class="gueta-archive__chips-wrap" data-chips>
+		<button type="button" class="gueta-archive__chips-arrow gueta-archive__chips-arrow--prev" data-chips-step="-1" aria-controls="<?php echo esc_attr( $list_id ); ?>" aria-label="הקטגוריות הקודמות" hidden>
+			<?php echo gueta_icon( 'back' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+		</button>
+		<ul class="gueta-archive__chips" id="<?php echo esc_attr( $list_id ); ?>" data-chips-list>
+			<?php
+			foreach ( $children as $child ) :
+				$link = get_term_link( $child );
 
-			if ( is_wp_error( $link ) ) {
-				continue;
-			}
+				if ( is_wp_error( $link ) ) {
+					continue;
+				}
 
-			$thumbnail_id = (int) get_term_meta( $child->term_id, 'thumbnail_id', true );
-			?>
-			<li>
-				<a class="gueta-archive__chip" href="<?php echo esc_url( $link ); ?>">
-					<span class="gueta-archive__chip-media">
-						<?php if ( $thumbnail_id ) : ?>
-							<?php echo wp_get_attachment_image( $thumbnail_id, 'woocommerce_thumbnail', false, [ 'alt' => '', 'loading' => 'lazy' ] ); ?>
-						<?php endif; ?>
-					</span>
-					<span class="gueta-archive__chip-name"><?php echo esc_html( $child->name ); ?></span>
-				</a>
-			</li>
-		<?php endforeach; ?>
-	</ul>
+				$thumbnail_id = (int) get_term_meta( $child->term_id, 'thumbnail_id', true );
+				?>
+				<li>
+					<a class="gueta-archive__chip" href="<?php echo esc_url( $link ); ?>">
+						<span class="gueta-archive__chip-media">
+							<?php if ( $thumbnail_id ) : ?>
+								<?php echo wp_get_attachment_image( $thumbnail_id, 'woocommerce_thumbnail', false, [ 'alt' => '', 'loading' => 'lazy' ] ); ?>
+							<?php endif; ?>
+						</span>
+						<span class="gueta-archive__chip-name"><?php echo esc_html( $child->name ); ?></span>
+					</a>
+				</li>
+			<?php endforeach; ?>
+		</ul>
+		<button type="button" class="gueta-archive__chips-arrow gueta-archive__chips-arrow--next" data-chips-step="1" aria-controls="<?php echo esc_attr( $list_id ); ?>" aria-label="הקטגוריות הבאות" hidden>
+			<?php echo gueta_icon( 'back' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+		</button>
+	</div>
 	<?php
 }
 

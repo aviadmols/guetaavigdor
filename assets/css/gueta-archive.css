@@ -79,6 +79,120 @@
 	text-align: center;
 }
 
+/*
+ * Arrows over the two ends of the row. Where the chips have pictures they sit
+ * centred on the pictures rather than on picture and name together, and on a
+ * row of names alone on the names. They take no room of their own, so the
+ * row does not move when one appears. Every state states its colours, or the
+ * parent theme paints a pressed button pink and Elementor's Site Settings
+ * turn its chevron black.
+ */
+.gueta-archive__chips-wrap {
+	--gueta-chip-arrow: 40px;
+	--gueta-chip-media: 140px;
+	position: relative;
+}
+
+.gueta-archive .gueta-archive__chips-arrow,
+.gueta-archive .gueta-archive__chips-arrow:hover,
+.gueta-archive .gueta-archive__chips-arrow:focus {
+	background: rgb(255 255 255 / 94%);
+	border: 1px solid var(--gueta-rule);
+	color: var(--gueta-ink);
+}
+
+.gueta-archive .gueta-archive__chips-arrow {
+	align-items: center;
+	border-radius: 50%;
+	box-shadow: var(--gueta-shadow);
+	cursor: pointer;
+	display: flex;
+	height: var(--gueta-chip-arrow);
+	inset-block-start: calc(50% - var(--gueta-chip-arrow) / 2);
+	justify-content: center;
+	padding: 0;
+	position: absolute;
+	transition: background-color .2s ease;
+	width: var(--gueta-chip-arrow);
+	z-index: 2;
+}
+
+.gueta-archive .gueta-archive__chips-wrap:has(.gueta-archive__chip-media img) .gueta-archive__chips-arrow {
+	inset-block-start: calc(var(--gueta-chip-media) / 2 - var(--gueta-chip-arrow) / 2);
+}
+
+.gueta-archive .gueta-archive__chips-arrow[hidden] {
+	display: none;
+}
+
+/*
+ * The row fades out under an arrow, so a name is not cut off hard beneath
+ * it. The fade is on the list's box, not its content, so it stays at the
+ * edge while the chips pass under it.
+ */
+.gueta-archive__chips-wrap {
+	--gueta-chips-fade-end: 0px;
+	--gueta-chips-fade-start: 0px;
+	--gueta-chips-toward-end: to right;
+}
+
+[dir="rtl"] .gueta-archive__chips-wrap {
+	--gueta-chips-toward-end: to left;
+}
+
+.gueta-archive__chips-wrap.has-before {
+	--gueta-chips-fade-start: 72px;
+}
+
+.gueta-archive__chips-wrap.has-after {
+	--gueta-chips-fade-end: 72px;
+}
+
+.gueta-archive__chips-wrap:is(.has-before, .has-after) .gueta-archive__chips {
+	-webkit-mask-image: linear-gradient(var(--gueta-chips-toward-end), transparent 0, #000 var(--gueta-chips-fade-start), #000 calc(100% - var(--gueta-chips-fade-end)), transparent 100%);
+	mask-image: linear-gradient(var(--gueta-chips-toward-end), transparent 0, #000 var(--gueta-chips-fade-start), #000 calc(100% - var(--gueta-chips-fade-end)), transparent 100%);
+}
+
+.gueta-archive .gueta-archive__chips-arrow:hover {
+	background: var(--gueta-paper);
+}
+
+.gueta-archive .gueta-archive__chips-arrow:focus-visible {
+	outline: 2px solid var(--gueta-ink);
+	outline-offset: 2px;
+}
+
+.gueta-archive__chips-arrow--prev {
+	inset-inline-start: -8px;
+}
+
+.gueta-archive__chips-arrow--next {
+	inset-inline-end: -8px;
+}
+
+.gueta-archive__chips-arrow svg {
+	fill: none;
+	height: 20px;
+	stroke: currentColor;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-width: 1.8;
+	width: 20px;
+}
+
+/*
+ * One chevron drawn pointing left, as the banners use it. --gueta-slide is
+ * -1 in right to left, so "previous" faces its own edge in either direction
+ * and "next" the other.
+ */
+.gueta-archive__chips-arrow--prev svg {
+	transform: scaleX(var(--gueta-slide));
+}
+
+.gueta-archive__chips-arrow--next svg {
+	transform: scaleX(calc(var(--gueta-slide) * -1));
+}
+
 /* -------------------------------------------------------------------------
  * Toolbar
  * ---------------------------------------------------------------------- */
@@ -970,5 +1084,23 @@
 		font-size: 12px;
 		padding-top: 8px;
 		white-space: nowrap;
+	}
+
+	.gueta-archive__chips-wrap {
+		--gueta-chip-arrow: 34px;
+		--gueta-chip-media: 84px;
+	}
+
+	.gueta-archive__chips-arrow svg {
+		height: 17px;
+		width: 17px;
+	}
+
+	.gueta-archive__chips-arrow--prev {
+		inset-inline-start: -4px;
+	}
+
+	.gueta-archive__chips-arrow--next {
+		inset-inline-end: -4px;
 	}
 }
