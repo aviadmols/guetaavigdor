@@ -36,6 +36,7 @@ require_once get_stylesheet_directory() . '/inc/gueta-buy.php';
 require_once get_stylesheet_directory() . '/inc/gueta-pricing.php';
 require_once get_stylesheet_directory() . '/inc/gueta-lengths.php';
 require_once get_stylesheet_directory() . '/inc/gueta-product-schema.php';
+require_once get_stylesheet_directory() . '/inc/gueta-yoast-import.php';
 require_once get_stylesheet_directory() . '/inc/gueta-stock-notify.php';
 require_once get_stylesheet_directory() . '/inc/gueta-compare.php';
 require_once get_stylesheet_directory() . '/inc/gueta-archive.php';
