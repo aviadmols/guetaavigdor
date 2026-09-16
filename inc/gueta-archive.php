@@ -794,11 +794,23 @@ function gueta_render_archive_card( $product ) {
 		<div class="gueta-card__media">
 			<a class="gueta-card__link" href="<?php echo esc_url( $link ); ?>" aria-label="<?php echo esc_attr( $product->get_name() ); ?>">
 				<?php
+				/*
+				 * The product page's own picture, at its own proportions, not
+				 * the 300 pixel square. The square cut the ends off anything
+				 * long or tall, and a card runs 340 to 480 pixels wide, so it
+				 * was stretched soft as well. The srcset goes up to the
+				 * original, the browser takes the file the card and the screen
+				 * need, and "contain" fits it whole. "sizes" is only for a
+				 * browser that cannot measure the card itself: half the screen
+				 * in the two columns of a tablet or phone, a third of a desktop
+				 * grid otherwise.
+				 */
 				echo $product->get_image(
-					'woocommerce_thumbnail',
+					'woocommerce_single',
 					[
 						'class'   => 'gueta-card__image',
 						'loading' => 'lazy',
+						'sizes'   => '(max-width: 1024px) 50vw, 380px',
 					]
 				); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				?>
