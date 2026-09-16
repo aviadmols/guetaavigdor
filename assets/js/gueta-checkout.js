@@ -216,6 +216,20 @@
 			input.setAttribute('aria-expanded', 'true');
 		}
 
+		/*
+		 * The truck is priced by the distance to the settlement, so the order
+		 * summary is worked out again once one is set. WooCommerce only does
+		 * that by itself for a field that was typed into, and a pick from the
+		 * list, or a spelling put right on blur, may not count.
+		 */
+		function recalculate() {
+			input.dispatchEvent(new Event('change', { bubbles: true }));
+
+			if (window.jQuery) {
+				window.jQuery(document.body).trigger('update_checkout');
+			}
+		}
+
 		function choose(index) {
 			if (!matches[index]) {
 				return;
@@ -224,8 +238,7 @@
 			input.value = matches[index].name;
 			say('');
 			close();
-			// WooCommerce recalculates shipping from this.
-			input.dispatchEvent(new Event('change', { bubbles: true }));
+			recalculate();
 		}
 
 		function search() {
@@ -311,7 +324,7 @@
 					// Store the government's spelling, whatever was typed.
 					if (input.value !== hit.name) {
 						input.value = hit.name;
-						input.dispatchEvent(new Event('change', { bubbles: true }));
+						recalculate();
 					}
 
 					say('');

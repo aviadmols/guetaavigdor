@@ -280,6 +280,8 @@ function gueta_render_settings_page() {
 		<?php gueta_font_migrate_admin_section(); ?>
 
 		<?php gueta_cities_admin_section(); ?>
+
+		<?php gueta_delivery_admin_section(); ?>
 	</div>
 
 	<script>
