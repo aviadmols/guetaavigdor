@@ -76,6 +76,86 @@ function gueta_quantity_plus() {
 add_action( 'woocommerce_after_quantity_input_field', 'gueta_quantity_plus' );
 
 /**
+ * Whether Elementor has printed a product price widget on this page yet.
+ *
+ * The single product template puts one above the buy box. When it has, the
+ * box's own price would only repeat it, and the script used to hide that
+ * second price once the page had loaded, lifting everything under it.
+ *
+ * @param bool|null $state New state, or null to read it.
+ * @return bool
+ */
+function gueta_price_widget_rendered( $state = null ) {
+	static $rendered = false;
+
+	if ( null !== $state ) {
+		$rendered = (bool) $state;
+	}
+
+	return $rendered;
+}
+
+/**
+ * Note a price widget as Elementor prints it.
+ *
+ * @param string                 $content Rendered widget HTML.
+ * @param \Elementor\Widget_Base $widget  Widget.
+ * @return string
+ */
+function gueta_note_price_widget( $content, $widget ) {
+	if ( is_object( $widget ) && method_exists( $widget, 'get_name' ) && 'woocommerce-product-price' === $widget->get_name() && '' !== trim( (string) $content ) ) {
+		gueta_price_widget_rendered( true );
+	}
+
+	return $content;
+}
+add_filter( 'elementor/widget/render_content', 'gueta_note_price_widget', 5, 2 );
+
+/**
+ * The add to cart button as the script would leave it: its words in a label,
+ * and beside them the sum of one unit when that is known before anything is
+ * chosen, a simple product with no length to pick.
+ *
+ * @param string     $form    Add to cart form HTML.
+ * @param WC_Product $product Product.
+ * @return string
+ */
+function gueta_buy_button_html( $form, $product ) {
+	return (string) preg_replace_callback(
+		'#(<button\b[^>]*\bclass="[^"]*\bsingle_add_to_cart_button\b[^"]*"[^>]*)>(.*?)</button>#s',
+		static function ( $match ) use ( $product ) {
+			$label = trim( wp_strip_all_tags( $match[2] ) );
+
+			if ( '' === $label ) {
+				return $match[0];
+			}
+
+			$sum    = '';
+			$length = function_exists( 'gueta_length_field' ) ? gueta_length_field( $product ) : null;
+
+			if ( $product->is_type( 'simple' ) && ( ! $length || ! $length['required'] ) ) {
+				$unit = (float) wc_get_price_to_display( $product );
+
+				if ( $unit > 0 ) {
+					$money = html_entity_decode( wp_strip_all_tags( wc_price( $unit ) ), ENT_QUOTES, 'UTF-8' );
+					$sum   = '<span class="gueta-buy__sum">' . esc_html( str_replace( "\xC2\xA0", ' ', $money ) ) . '</span>';
+				}
+			}
+
+			return sprintf(
+				'%s data-buy-label="%s"><span class="gueta-buy__label">%s</span>%s</button>',
+				$match[1],
+				esc_attr( $label ),
+				esc_html( $label ),
+				$sum
+			);
+		},
+		$form,
+		1
+	);
+}
+
+/**
  * Render the buy box for a product.
  *
  * @param WC_Product|null $product Product; defaults to the one being viewed.
@@ -131,6 +211,16 @@ function gueta_buy_box_html( $product = null, $args = [] ) {
 	 */
 	$sold_out = ! $product->is_in_stock();
 
+	/*
+	 * Everything the script would change on arrival is printed already the way
+	 * it would leave it, so the box does not jump as the page settles: its own
+	 * price stays hidden when the page has shown a price above it, and the
+	 * button carries its label, and its sum where one is known before anything
+	 * is chosen.
+	 */
+	$own_hidden = 'off' === $args['price'] || ( 'auto' === $args['price'] && gueta_price_widget_rendered() );
+	$form       = gueta_buy_button_html( $form, $product );
+
 	ob_start();
 	?>
 	<?php
@@ -142,7 +232,7 @@ function gueta_buy_box_html( $product = null, $args = [] ) {
 	?>
 	<?php // The name and picture the cart drawer shows for the product while it is on its way in. ?>
 	<div class="gueta-buy<?php echo $sold_out ? ' is-soldout' : ''; ?>" data-buy data-price="<?php echo esc_attr( $args['price'] ); ?>"<?php echo $args['ajax'] ? ' data-buy-ajax' : ''; ?> data-unit="<?php echo esc_attr( $product->is_type( 'simple' ) ? (string) wc_get_price_to_display( $product ) : '' ); ?>" data-decimals="<?php echo esc_attr( (string) wc_get_price_decimals() ); ?>" data-format="<?php echo esc_attr( get_woocommerce_price_format() ); ?>" data-symbol="<?php echo esc_attr( html_entity_decode( get_woocommerce_currency_symbol(), ENT_QUOTES, 'UTF-8' ) ); ?>" data-name="<?php echo esc_attr( $product->get_name() ); ?>" data-image="<?php echo esc_url( (string) wp_get_attachment_image_url( $product->get_image_id(), 'woocommerce_thumbnail' ) ); ?>">
-		<p class="gueta-buy__price" data-buy-price><?php echo wp_kses_post( $product->get_price_html() ); ?></p>
+		<p class="gueta-buy__price" data-buy-price<?php echo $own_hidden ? ' hidden' : ''; ?>><?php echo wp_kses_post( $product->get_price_html() ); ?></p>
 
 		<?php // A sold out simple product's template prints only its stock line, which the form below repeats. ?>
 		<?php if ( ! $sold_out || false !== strpos( $form, '<form' ) ) : ?>
