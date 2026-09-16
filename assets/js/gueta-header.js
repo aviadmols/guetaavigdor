@@ -1476,3 +1476,73 @@
 	window.addEventListener('resize', sync);
 	sync();
 }());
+
+/**
+ * A line's details stay open when the drawer or the checkout is redrawn.
+ *
+ * Cart fragments and every quantity change replace the drawer whole, and
+ * WooCommerce rebuilds the checkout summary whenever an address changes, so
+ * a toggle somebody had just opened would snap shut. Each toggle carries a
+ * key, a hash of what it lists; an opened key is remembered, and a toggle with
+ * that key is opened again as soon as it reappears, without replaying the
+ * slide.
+ */
+(function () {
+	'use strict';
+
+	var open = {};
+	var count = 0;
+
+	document.addEventListener('toggle', function (event) {
+		var details = event.target;
+
+		if (!details.matches || !details.matches('details[data-details]')) {
+			return;
+		}
+
+		var key = details.getAttribute('data-details');
+
+		if (details.open && !open[key]) {
+			open[key] = true;
+			count++;
+		} else if (!details.open && open[key]) {
+			delete open[key];
+			count--;
+		}
+	}, true);
+
+	function reopen(details) {
+		if (details.open || !open[details.getAttribute('data-details')]) {
+			return;
+		}
+
+		details.classList.add('is-instant');
+		details.open = true;
+
+		window.requestAnimationFrame(function () {
+			window.requestAnimationFrame(function () {
+				details.classList.remove('is-instant');
+			});
+		});
+	}
+
+	new MutationObserver(function (records) {
+		if (!count) {
+			return;
+		}
+
+		records.forEach(function (record) {
+			Array.prototype.forEach.call(record.addedNodes, function (node) {
+				if (1 !== node.nodeType) {
+					return;
+				}
+
+				if (node.matches('details[data-details]')) {
+					reopen(node);
+				}
+
+				Array.prototype.forEach.call(node.querySelectorAll('details[data-details]'), reopen);
+			});
+		});
+	}).observe(document.body, { childList: true, subtree: true });
+}());

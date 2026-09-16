@@ -1281,6 +1281,117 @@ body.gueta-locked {
 	white-space: nowrap;
 }
 
+/*
+ * A line's details behind a toggle that starts closed, in the drawer and the
+ * checkout alike: "הצגת פרטים", how many there are, and a chevron that turns
+ * over when open. The chevron is two borders of a square turned a quarter,
+ * so it points the same way in either direction of text.
+ */
+.gueta-item-details {
+	margin: 0;
+}
+
+.gueta-item-details > summary {
+	align-items: center;
+	border-radius: 6px;
+	color: var(--gueta-muted);
+	cursor: pointer;
+	display: inline-flex;
+	font-size: 13px;
+	gap: 6px;
+	line-height: 1.4;
+	list-style: none;
+	padding: 2px 0;
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+.gueta-item-details > summary::-webkit-details-marker {
+	display: none;
+}
+
+.gueta-item-details > summary:hover,
+.gueta-item-details[open] > summary {
+	color: var(--gueta-ink);
+}
+
+.gueta-item-details > summary:focus-visible {
+	outline: 2px solid var(--gueta-ink);
+	outline-offset: 2px;
+}
+
+.gueta-item-details__hide,
+.gueta-item-details[open] .gueta-item-details__show {
+	display: none;
+}
+
+.gueta-item-details[open] .gueta-item-details__hide {
+	display: inline;
+}
+
+.gueta-item-details__count {
+	background: var(--gueta-sand);
+	border: 1px solid var(--gueta-rule);
+	border-radius: 999px;
+	color: var(--gueta-ink);
+	font-size: 11px;
+	font-weight: 600;
+	line-height: 16px;
+	min-width: 18px;
+	padding: 0 5px;
+	text-align: center;
+}
+
+.gueta-item-details__chevron {
+	border-bottom: 1.5px solid currentColor;
+	border-right: 1.5px solid currentColor;
+	display: inline-block;
+	height: 6px;
+	transform: translateY(-2px) rotate(45deg);
+	transition: transform .2s ease;
+	width: 6px;
+}
+
+.gueta-item-details[open] .gueta-item-details__chevron {
+	transform: translateY(1px) rotate(-135deg);
+}
+
+.gueta-item-details > dl.variation {
+	margin-top: 6px;
+}
+
+/*
+ * Where the browser can animate to a height of auto, the list slides open
+ * rather than appearing. is-instant is set by the header script when it
+ * reopens a toggle after a redraw, which should not replay the slide.
+ */
+@supports selector(::details-content) {
+	.gueta-item-details {
+		interpolate-size: allow-keywords;
+	}
+
+	.gueta-item-details::details-content {
+		block-size: 0;
+		overflow: hidden;
+		transition: block-size .25s ease, content-visibility .25s allow-discrete;
+	}
+
+	.gueta-item-details[open]::details-content {
+		block-size: auto;
+	}
+
+	.gueta-item-details.is-instant::details-content {
+		transition: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.gueta-item-details::details-content,
+	.gueta-item-details__chevron {
+		transition: none;
+	}
+}
+
 .gueta-cart-line__row {
 	align-items: center;
 	display: flex;

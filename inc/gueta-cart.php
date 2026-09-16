@@ -480,6 +480,57 @@ function gueta_cart_group_cuts( $item_data, $cart_item ) {
 add_filter( 'woocommerce_get_item_data', 'gueta_cart_group_cuts', 20, 2 );
 
 /**
+ * Fold what was chosen for a line into a toggle that starts closed.
+ *
+ * A board with its length, its cuts, their count and what they add took four
+ * rows under every line, and a cart of three such boards was mostly details.
+ * The drawer and the checkout both print them through WooCommerce's
+ * cart/cart-item-data.php, so the toggle is opened before that template and
+ * closed after it, and the list itself is left to WooCommerce.
+ *
+ * The key is a hash of what the toggle lists. The header script uses it to
+ * open a toggle again when the drawer or the checkout summary is redrawn.
+ * The chevron is drawn in CSS because the drawer passes this markup through
+ * wp_kses_post, which drops an SVG.
+ *
+ * @param string $template_name Template being loaded.
+ * @param string $template_path Template path.
+ * @param string $located       File found.
+ * @param array  $args          Template arguments.
+ * @return void
+ */
+function gueta_item_details_open( $template_name, $template_path, $located, $args ) {
+	if ( 'cart/cart-item-data.php' !== $template_name || empty( $args['item_data'] ) || ! is_array( $args['item_data'] ) ) {
+		return;
+	}
+
+	printf(
+		'<details class="gueta-item-details" data-details="%1$s"><summary class="gueta-item-details__toggle"><span class="gueta-item-details__show">הצגת פרטים</span><span class="gueta-item-details__hide">הסתרת פרטים</span><span class="gueta-item-details__count">%2$s</span><span class="gueta-item-details__chevron" aria-hidden="true"></span></summary>',
+		esc_attr( md5( (string) wp_json_encode( $args['item_data'] ) ) ),
+		esc_html( number_format_i18n( count( $args['item_data'] ) ) )
+	);
+}
+add_action( 'woocommerce_before_template_part', 'gueta_item_details_open', 10, 4 );
+
+/**
+ * Close the toggle opened around a line's details.
+ *
+ * @param string $template_name Template being loaded.
+ * @param string $template_path Template path.
+ * @param string $located       File found.
+ * @param array  $args          Template arguments.
+ * @return void
+ */
+function gueta_item_details_close( $template_name, $template_path, $located, $args ) {
+	if ( 'cart/cart-item-data.php' !== $template_name || empty( $args['item_data'] ) || ! is_array( $args['item_data'] ) ) {
+		return;
+	}
+
+	echo '</details>';
+}
+add_action( 'woocommerce_after_template_part', 'gueta_item_details_close', 10, 4 );
+
+/**
  * Keep the badge and the drawer in sync with every WooCommerce cart change.
  *
  * @param array $fragments Cart fragments.
