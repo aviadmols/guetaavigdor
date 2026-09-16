@@ -347,9 +347,13 @@ function gueta_checkout_assets() {
 		'guetaCheckout',
 		[
 			'cities'  => function_exists( 'gueta_cities_url' ) ? gueta_cities_url() : '',
+			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			// The drawer's nonce, since removing a line goes through the drawer's own handler.
+			'nonce'   => wp_create_nonce( 'gueta_header' ),
 			'strings' => [
-				'noMatch' => 'לא נמצא יישוב בשם הזה',
-				'pick'    => 'בחרו יישוב מהרשימה',
+				'noMatch'    => 'לא נמצא יישוב בשם הזה',
+				'pick'       => 'בחרו יישוב מהרשימה',
+				'removeError' => 'לא הצלחנו להסיר את המוצר. נסו שוב.',
 			],
 		]
 	);
@@ -424,25 +428,40 @@ add_action( 'woocommerce_review_order_after_shipping', 'gueta_shipping_row_close
  * The picture and the quantity, in front of the name.
  *
  * Only the name passes through a filter, so the picture rides in with it. The
- * stylesheet lifts it into the cell's padding, clear of the text.
+ * stylesheet lifts it into the cell's padding, clear of the text. The button
+ * that takes the line out of the order rides in the same way, and the
+ * stylesheet puts it in the cell's far corner, as the cart drawer has it.
  *
- * @param string $name      Product name markup.
- * @param array  $cart_item Cart item.
+ * @param string $name          Product name markup.
+ * @param array  $cart_item     Cart item.
+ * @param string $cart_item_key Cart item key.
  * @return string
  */
-function gueta_review_item_picture( $name, $cart_item ) {
+function gueta_review_item_picture( $name, $cart_item, $cart_item_key = '' ) {
 	if ( ! gueta_checkout_active() || ! is_checkout() || empty( $cart_item['data'] ) || ! $cart_item['data'] instanceof WC_Product ) {
 		return $name;
 	}
 
+	$item_name = gueta_review_item_name( $name, $cart_item );
+	$remove    = '';
+
+	if ( $cart_item_key ) {
+		$remove = sprintf(
+			'<button type="button" class="gueta-review-item__remove" data-review-remove="%1$s" aria-label="%2$s"><span class="gueta-review-item__remove-icon" aria-hidden="true"></span></button>',
+			esc_attr( $cart_item_key ),
+			esc_attr( sprintf( 'הסרת %s מההזמנה', wp_strip_all_tags( $item_name ) ) )
+		);
+	}
+
 	return sprintf(
-		'<span class="gueta-review-item__media">%1$s<span class="gueta-review-item__qty">%2$s</span></span><span class="gueta-review-item__name">%3$s</span>',
+		'<span class="gueta-review-item__media">%1$s<span class="gueta-review-item__qty">%2$s</span></span><span class="gueta-review-item__name">%3$s</span>%4$s',
 		$cart_item['data']->get_image( 'woocommerce_thumbnail', [ 'class' => 'gueta-review-item__image' ] ),
 		esc_html( number_format_i18n( absint( $cart_item['quantity'] ?? 0 ) ) ),
-		gueta_review_item_name( $name, $cart_item )
+		$item_name,
+		$remove
 	);
 }
-add_filter( 'woocommerce_cart_item_name', 'gueta_review_item_picture', 20, 2 );
+add_filter( 'woocommerce_cart_item_name', 'gueta_review_item_picture', 20, 3 );
 
 /**
  * A variation by its product's name, when the list under it names every choice.

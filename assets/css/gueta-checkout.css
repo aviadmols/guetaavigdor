@@ -592,6 +592,88 @@ body.woocommerce-checkout .shop_table.woocommerce-checkout-review-order-table .c
 	margin-top: 4px;
 }
 
+/*
+ * The × that takes a line out of the order, in the cell's far corner as in
+ * the cart drawer, with room kept for it so the name never runs underneath.
+ * Every state states its colours, or the parent theme and the Elementor kit
+ * repaint a pressed button. The row fades while the line is being removed.
+ */
+body.woocommerce-checkout .shop_table.woocommerce-checkout-review-order-table .cart_item td.product-name[colspan] {
+	padding-inline-end: 36px;
+}
+
+body.woocommerce-checkout .gueta-review-item__remove,
+body.woocommerce-checkout .gueta-review-item__remove:hover,
+body.woocommerce-checkout .gueta-review-item__remove:focus {
+	background: none;
+	border: 0;
+	color: var(--gueta-soft);
+}
+
+body.woocommerce-checkout .gueta-review-item__remove {
+	align-items: center;
+	border-radius: 50%;
+	cursor: pointer;
+	display: flex;
+	height: 28px;
+	inset-block-start: 10px;
+	inset-inline-end: 0;
+	justify-content: center;
+	min-height: 0;
+	padding: 0;
+	position: absolute;
+	transition: background-color .2s ease, color .2s ease;
+	width: 28px;
+}
+
+body.woocommerce-checkout .gueta-review-item__remove:hover,
+body.woocommerce-checkout .gueta-review-item__remove:focus-visible {
+	background: var(--gueta-sand);
+	color: var(--gueta-ink);
+}
+
+body.woocommerce-checkout .gueta-review-item__remove:focus-visible {
+	outline: 2px solid var(--gueta-ink);
+	outline-offset: 1px;
+}
+
+body.woocommerce-checkout .gueta-review-item__remove:disabled {
+	cursor: default;
+}
+
+.gueta-review-item__remove-icon {
+	display: block;
+	height: 12px;
+	position: relative;
+	width: 12px;
+}
+
+.gueta-review-item__remove-icon::before,
+.gueta-review-item__remove-icon::after {
+	background: currentColor;
+	border-radius: 1px;
+	content: "";
+	height: 1.5px;
+	inset-block-start: 50%;
+	inset-inline-start: 0;
+	position: absolute;
+	width: 100%;
+}
+
+.gueta-review-item__remove-icon::before {
+	transform: translateY(-50%) rotate(45deg);
+}
+
+.gueta-review-item__remove-icon::after {
+	transform: translateY(-50%) rotate(-45deg);
+}
+
+.woocommerce-checkout .cart_item.is-removing {
+	opacity: .45;
+	pointer-events: none;
+	transition: opacity .2s ease;
+}
+
 @container (min-width: 300px) {
 	body.woocommerce-checkout .shop_table.woocommerce-checkout-review-order-table .cart_item td.product-name {
 		height: 92px;
@@ -606,15 +688,20 @@ body.woocommerce-checkout .shop_table.woocommerce-checkout-review-order-table .c
 
 @container (min-width: 440px) {
 	body.woocommerce-checkout .shop_table.woocommerce-checkout-review-order-table .cart_item td.product-name[colspan] {
-		padding-inline-end: 120px;
+		padding-inline-end: 156px;
 	}
 
 	.gueta-review-item__price {
 		font-size: 15px;
 		inset-block-start: 50%;
-		inset-inline-end: 0;
+		inset-inline-end: 40px;
 		margin: 0;
 		position: absolute;
+		transform: translateY(-50%);
+	}
+
+	body.woocommerce-checkout .gueta-review-item__remove {
+		inset-block-start: 50%;
 		transform: translateY(-50%);
 	}
 }

@@ -348,3 +348,99 @@
 		window.jQuery(document.body).on('updated_checkout country_to_state_changed', scan);
 	}
 }());
+
+/**
+ * Checkout: taking a line out of the order.
+ *
+ * The line goes through the cart drawer's own handler, then WooCommerce is
+ * asked to redraw the summary, which brings the totals and the delivery
+ * prices with it, and the drawer and the header count are refreshed from the
+ * cart fragments. The last line out leaves nothing to check out, so the page
+ * reloads and WooCommerce takes it from there.
+ *
+ * The drawer changes the same cart, so a change made there redraws the
+ * summary too.
+ */
+(function () {
+	'use strict';
+
+	var settings = window.guetaCheckout || {};
+	var strings = settings.strings || {};
+
+	function redraw(count, fromDrawer) {
+		if (null !== count && undefined !== count && 0 === Number(count)) {
+			window.location.reload();
+			return;
+		}
+
+		if (window.jQuery) {
+			window.jQuery(document.body).trigger('update_checkout');
+
+			// The drawer refreshes its own fragments after a change made there.
+			if (!fromDrawer) {
+				window.jQuery(document.body).trigger('wc_fragment_refresh');
+			}
+		}
+	}
+
+	function fail(button, row) {
+		button.disabled = false;
+
+		if (row) {
+			row.classList.remove('is-removing');
+		}
+
+		if (window.guetaNotices && strings.removeError) {
+			window.guetaNotices.show('error', strings.removeError);
+		}
+	}
+
+	document.addEventListener('click', function (event) {
+		var button = event.target.closest('[data-review-remove]');
+
+		if (!button || button.disabled) {
+			return;
+		}
+
+		event.preventDefault();
+
+		var row = button.closest('.cart_item');
+		var payload = new URLSearchParams();
+
+		button.disabled = true;
+
+		if (row) {
+			row.classList.add('is-removing');
+		}
+
+		payload.append('action', 'gueta_cart_update');
+		payload.append('nonce', settings.nonce || '');
+		payload.append('key', button.getAttribute('data-review-remove'));
+		payload.append('quantity', '0');
+
+		fetch(settings.ajaxUrl, {
+			method: 'POST',
+			credentials: 'same-origin',
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+			body: payload.toString()
+		})
+			.then(function (response) {
+				return response.json();
+			})
+			.then(function (data) {
+				if (!data || !data.success) {
+					fail(button, row);
+					return;
+				}
+
+				redraw(data.data.count);
+			})
+			.catch(function () {
+				fail(button, row);
+			});
+	});
+
+	document.addEventListener('gueta:cart-updated', function (event) {
+		redraw(event.detail ? event.detail.count : null, true);
+	});
+}());

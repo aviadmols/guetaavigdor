@@ -1084,6 +1084,9 @@
 						// Let WooCommerce widgets refresh alongside the drawer.
 						window.jQuery(document.body).trigger('wc_fragment_refresh');
 					}
+
+					// The checkout listens, so its summary follows a change made here.
+					document.dispatchEvent(new CustomEvent('gueta:cart-updated', { detail: { count: data.data.count } }));
 				})
 				.catch(function () {
 					drawer.classList.remove('is-busy');
