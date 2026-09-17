@@ -538,11 +538,13 @@ foreach ( [ 'woocommerce_cart_loaded_from_session', 'woocommerce_add_to_cart', '
 unset( $gueta_cart_change );
 
 /**
- * Count the same cut once: "3 × 139.67 ס"מ" rather than the length three times.
+ * Count the same cut once: "139.67 ס"מ × 3" rather than the length three times.
  *
- * The cutting plugin lists every piece, so a board cut into equal parts read
- * as a run of identical numbers. A list with no repeats is left as it is, and
- * so is the order line, which keeps the plugin's own text.
+ * The cutting plugin listed every piece before its 1.5.0, so a board cut into
+ * equal parts read as a run of identical numbers. From 1.5.0 the plugin groups
+ * the cuts itself, in this same order of size then count, and a grouped list
+ * has no repeats and passes through unchanged. A list with no repeats is left
+ * as it is, and so is the order line, which keeps the plugin's own text.
  *
  * @param array $item_data Label and value pairs shown under the line.
  * @param array $cart_item Cart item.
@@ -568,7 +570,7 @@ function gueta_cart_group_cuts( $item_data, $cart_item ) {
 		$groups = [];
 
 		foreach ( $counts as $piece => $count ) {
-			$groups[] = $count > 1 ? sprintf( '%d × %s', $count, $piece ) : (string) $piece;
+			$groups[] = $count > 1 ? sprintf( '%s × %d', $piece, $count ) : (string) $piece;
 		}
 
 		$item_data[ $index ]['value'] = esc_html( implode( ', ', $groups ) );
