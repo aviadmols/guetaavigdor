@@ -168,6 +168,21 @@ function gueta_header_assets() {
 	if ( gueta_has_woocommerce() ) {
 		// Keeps the badge and the drawer accurate behind full page caching.
 		wp_enqueue_script( 'wc-cart-fragments' );
+
+		/*
+		 * A visitor with nothing in the cart has nothing to refresh, yet
+		 * WooCommerce's script asked the server for the cart on their first
+		 * page all the same: a full request, two seconds of server work, for
+		 * every new visitor. With no cart cookie and nothing stored, this
+		 * stores an empty cart in the form the script checks for, so it uses
+		 * that instead. The first add to cart sets the cookie and stores the
+		 * real cart, and from then on the script behaves as it always has.
+		 */
+		wp_add_inline_script(
+			'wc-cart-fragments',
+			"(function(){try{var p=window.wc_cart_fragments_params;if(!p||/(?:^|;\s*)woocommerce_(?:items_in_cart|cart_hash)=/.test(document.cookie)||sessionStorage.getItem(p.fragment_name)){return;}sessionStorage.setItem(p.fragment_name,JSON.stringify({'div.widget_shopping_cart_content':'<div class=\"widget_shopping_cart_content\"></div>'}));}catch(e){}}());",
+			'before'
+		);
 	}
 
 	wp_localize_script(
