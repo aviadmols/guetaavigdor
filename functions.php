@@ -50,6 +50,7 @@ require_once get_stylesheet_directory() . '/inc/gueta-delivery.php';
 require_once get_stylesheet_directory() . '/inc/gueta-checkout.php';
 require_once get_stylesheet_directory() . '/inc/gueta-blog.php';
 require_once get_stylesheet_directory() . '/inc/gueta-notices.php';
+require_once get_stylesheet_directory() . '/inc/gueta-emails.php';
 require_once get_stylesheet_directory() . '/inc/gueta-template.php';
 
 // Both lean on WooCommerce throughout, so neither loads without it.
