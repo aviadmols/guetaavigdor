@@ -326,6 +326,10 @@ foreach ( [
 	'wp_set_comment_status',
 	'update_option_' . GUETA_SETTINGS_OPTION,
 	'update_option_sidebars_widgets',
+	// A plugin updated, uploaded, switched on or off can change what a page prints.
+	'upgrader_process_complete',
+	'activated_plugin',
+	'deactivated_plugin',
 ] as $gueta_page_cache_hook ) {
 	add_action( $gueta_page_cache_hook, 'gueta_page_cache_purge_later', 99, 0 );
 }
