@@ -960,3 +960,81 @@ function gueta_product_shortcodes() {
 	add_shortcode( 'gueta_reviews', $capture( 'gueta_render_reviews' ) );
 }
 add_action( 'init', 'gueta_product_shortcodes' );
+
+/* -------------------------------------------------------------------------
+ * "בטוח יעניין אתכם"
+ *
+ * The carousel under a product is the smart_products shortcode, from a WPCode
+ * snippet kept in the database. It picks eight random products from the same
+ * categories with a WP_Query of its own, which knows nothing of stock, so it
+ * offered products that could not be bought. While that shortcode draws, its
+ * query leaves out what WooCommerce marks out of stock or hidden from the
+ * catalogue, as the shop's own listings do. The snippet stays as it is.
+ * ---------------------------------------------------------------------- */
+
+/**
+ * Watch the next product query, as the carousel starts to draw.
+ *
+ * @param false|string $output Short circuit value.
+ * @param string       $tag    Shortcode.
+ * @return false|string
+ */
+function gueta_smart_products_start( $output, $tag ) {
+	if ( 'smart_products' === $tag ) {
+		add_action( 'pre_get_posts', 'gueta_smart_products_in_stock' );
+	}
+
+	return $output;
+}
+add_filter( 'pre_do_shortcode_tag', 'gueta_smart_products_start', 10, 2 );
+
+/**
+ * Stop watching once the carousel has drawn, should its query not have run.
+ *
+ * @param string $output Shortcode output.
+ * @param string $tag    Shortcode.
+ * @return string
+ */
+function gueta_smart_products_end( $output, $tag ) {
+	if ( 'smart_products' === $tag ) {
+		remove_action( 'pre_get_posts', 'gueta_smart_products_in_stock' );
+	}
+
+	return $output;
+}
+add_filter( 'do_shortcode_tag', 'gueta_smart_products_end', 10, 2 );
+
+/**
+ * Leave products that are out of stock or hidden out of the carousel's query.
+ *
+ * It applies to the first product query only, the carousel's own, and takes
+ * itself off straight after, so nothing else on the page is touched.
+ *
+ * @param WP_Query $query Query.
+ * @return void
+ */
+function gueta_smart_products_in_stock( $query ) {
+	if ( 'product' !== $query->get( 'post_type' ) ) {
+		return;
+	}
+
+	remove_action( 'pre_get_posts', 'gueta_smart_products_in_stock' );
+
+	$tax_query = $query->get( 'tax_query' );
+	$tax_query = is_array( $tax_query ) ? $tax_query : [];
+
+	if ( isset( $tax_query['relation'] ) && 'OR' === strtoupper( (string) $tax_query['relation'] ) ) {
+		// An OR of the snippet's own conditions stays together, inside the AND.
+		$tax_query = [ $tax_query ];
+	}
+
+	$tax_query['relation'] = 'AND';
+	$tax_query[]           = [
+		'taxonomy' => 'product_visibility',
+		'field'    => 'name',
+		'terms'    => [ 'outofstock', 'exclude-from-catalog' ],
+		'operator' => 'NOT IN',
+	];
+
+	$query->set( 'tax_query', $tax_query );
+}
