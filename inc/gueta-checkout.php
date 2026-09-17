@@ -151,14 +151,15 @@ function gueta_checkout_fields( $fields ) {
 	}
 
 	// A shop that ships to one country should not ask which one.
-	$countries = WC()->countries ? WC()->countries->get_allowed_countries() : [];
+	$only_country = gueta_only_country();
 
-	if ( is_array( $countries ) && 1 === count( $countries ) ) {
+	if ( '' !== $only_country ) {
 		foreach ( [ 'billing', 'shipping' ] as $section ) {
 			if ( isset( $fields[ $section ][ $section . '_country' ] ) ) {
-				$fields[ $section ][ $section . '_country' ]['type']  = 'hidden';
-				$fields[ $section ][ $section . '_country' ]['label'] = '';
-				$fields[ $section ][ $section . '_country' ]['class'] = [ 'gueta-hidden-row' ];
+				$fields[ $section ][ $section . '_country' ]['type']    = 'hidden';
+				$fields[ $section ][ $section . '_country' ]['label']   = '';
+				$fields[ $section ][ $section . '_country' ]['class']   = [ 'gueta-hidden-row' ];
+				$fields[ $section ][ $section . '_country' ]['default'] = $only_country;
 			}
 		}
 	}
@@ -166,6 +167,94 @@ function gueta_checkout_fields( $fields ) {
 	return gueta_checkout_placeholders( $fields );
 }
 add_filter( 'woocommerce_checkout_fields', 'gueta_checkout_fields', 20 );
+
+/**
+ * The one country the shop sells to, or an empty string when it sells to more.
+ *
+ * @return string
+ */
+function gueta_only_country() {
+	if ( ! gueta_has_woocommerce() || ! WC()->countries ) {
+		return '';
+	}
+
+	$countries = WC()->countries->get_allowed_countries();
+
+	return is_array( $countries ) && 1 === count( $countries ) ? (string) key( $countries ) : '';
+}
+
+/**
+ * Where a shopper has no country yet, it is the one the shop sells to.
+ *
+ * The country field is hidden, since there is only one answer, and the shop
+ * has no default customer location, so a first visit reached the checkout
+ * with no country at all. The hidden field went out empty, WooCommerce does
+ * not price delivery to an address with no country, so no delivery choice
+ * appeared, and pressing order came back with "חיוב הוא שדה חובה": the hidden
+ * field's own error, with no label to name it, which reads as though the
+ * payment were missing. Returning customers had a country saved from an
+ * earlier order, which is why only some sessions went wrong.
+ *
+ * So the customer's country is read through here, and delivery is priced from
+ * the first render and after every refresh, which posts the hidden field. The
+ * field starts with the country, and what the form sends is filled in too, for
+ * a checkout left open from before this change.
+ *
+ * @param string|null $country The country held or posted, empty when none.
+ * @return string|null
+ */
+function gueta_customer_country( $country ) {
+	if ( '' !== (string) $country ) {
+		return $country;
+	}
+
+	$only_country = gueta_only_country();
+
+	return '' !== $only_country ? $only_country : $country;
+}
+add_filter( 'woocommerce_customer_get_billing_country', 'gueta_customer_country' );
+add_filter( 'woocommerce_customer_get_shipping_country', 'gueta_customer_country' );
+add_filter( 'default_checkout_billing_country', 'gueta_customer_country' );
+add_filter( 'default_checkout_shipping_country', 'gueta_customer_country' );
+
+/**
+ * Fill in the country on an order being placed, if the form sent it empty.
+ *
+ * @param array $data Posted checkout data.
+ * @return array
+ */
+function gueta_checkout_posted_country( $data ) {
+	foreach ( [ 'billing_country', 'shipping_country' ] as $key ) {
+		if ( array_key_exists( $key, $data ) ) {
+			$data[ $key ] = gueta_customer_country( $data[ $key ] );
+		}
+	}
+
+	return $data;
+}
+add_filter( 'woocommerce_checkout_posted_data', 'gueta_checkout_posted_country' );
+
+/**
+ * Name a missing field the way the form does: "טלפון הוא שדה חובה".
+ *
+ * WooCommerce puts the section in front of the field's name, and the billing
+ * section is "חיוב", a charge, so a shopper told "חיוב טלפון הוא שדה חובה"
+ * goes looking for something wrong with the payment. The billing fields are
+ * the address almost everyone fills in, so the field's own name is enough.
+ *
+ * @param string $translation Translated text.
+ * @param string $text        Original text.
+ * @param string $context     Context.
+ * @return string
+ */
+function gueta_checkout_validation_label( $translation, $text, $context ) {
+	if ( 'checkout-validation' === $context && 'Billing %s' === $text && gueta_checkout_active() ) {
+		return '%s';
+	}
+
+	return $translation;
+}
+add_filter( 'gettext_with_context_woocommerce', 'gueta_checkout_validation_label', 10, 3 );
 
 /**
  * Give every field a placeholder, even an empty one.
