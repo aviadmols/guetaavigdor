@@ -1720,6 +1720,20 @@ body.gueta-locked {
 		--gueta-gutter: clamp(20px, 3.4vw, 64px);
 		--gueta-bar-height: 80px;
 	}
+
+	/*
+	 * The mega menu holds three columns of links beside a picture, and on a
+	 * laptop the picture took a third of the row and pushed the columns into
+	 * each other. A narrower picture and smaller names keep the whole menu on
+	 * one screenful.
+	 */
+	.gueta-mega__banner {
+		width: min(340px, 22vw);
+	}
+
+	.gueta-mega__links a {
+		font-size: 12px;
+	}
 }
 
 @media (max-width: 1599px) {
