@@ -13,15 +13,20 @@
  * price close to the kilometres the truck actually drives without a paid
  * routing service. Both the ratio and the prices are settings.
  *
- * The shopper sees the two apart. The truck keeps its own price, 350, as the
- * shipping method, and whatever the distance adds past that is a separate line
- * in the order summary, "תוספת מרחק לאילת (344 ק״מ)". Under the truck's card a
- * short sum says the same before the truck is picked: the truck, the addition
- * to the settlement, and the two together. On the order, the shipping line and
- * the fee stay apart too.
+ * The shopper sees one price, with its parts spelled out where the price is
+ * shown. The distance is added to the truck's own price, so the shipping line
+ * reads what the truck costs to that settlement, and under the truck's card a
+ * short sum says how it is made up: the base price, the addition to the
+ * settlement, and the two together. Shown whether or not the truck is picked,
+ * so the choice is made knowing it.
+ *
+ * The addition used to be charged as a fee of its own, which meant the order
+ * summary printed it a second time under the totals, beneath the card that had
+ * just explained it, and WooCommerce leaves a template no way to pass a fee
+ * over.
  *
  * The price is worked out as soon as the city is chosen: the city field asks
- * the checkout to recalculate, and the rate and the fee are recalculated with it.
+ * the checkout to recalculate, and the truck is priced again with it.
  *
  * @package HelloElementorChild
  */
@@ -34,6 +39,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Option holding the pricing.
  */
 const GUETA_DELIVERY_OPTION = 'gueta_delivery_pricing';
+
+/**
+ * Raised whenever the truck comes to a different price, to retire the rates
+ * WooCommerce has put away in shoppers' sessions.
+ */
+const GUETA_DELIVERY_PRICING_VERSION = '2';
 
 /**
  * The pricing with its defaults.
@@ -167,8 +178,9 @@ function gueta_delivery_extra_label( $extra ) {
 }
 
 /**
- * Keep the distance on the truck's rate, and so on the order's shipping line,
- * where the shop can see it. The method's own name and price stay as they are.
+ * Charge the distance on the truck's own rate, and keep the kilometres on it
+ * too, so the order's shipping line says both what it cost and how far it
+ * went.
  *
  * @param WC_Shipping_Rate[] $rates   Rates for the package.
  * @param array              $package Package.
@@ -182,9 +194,28 @@ function gueta_delivery_rates( $rates, $package ) {
 		return $rates;
 	}
 
+	$extra = gueta_delivery_extra( $package );
+
 	foreach ( $rates as $rate ) {
-		if ( $rate instanceof WC_Shipping_Rate && gueta_delivery_is_truck( $rate ) ) {
-			$rate->add_meta_data( 'מרחק מהמחסן', sprintf( '%s ק״מ', number_format_i18n( ceil( $km ) ) ) );
+		if ( ! $rate instanceof WC_Shipping_Rate || ! gueta_delivery_is_truck( $rate ) ) {
+			continue;
+		}
+
+		/*
+		 * The kilometres are written on the rate as it is priced, so they also
+		 * say it has been: a rate that came through here once must not have the
+		 * distance added to it a second time.
+		 */
+		$carried = $rate->get_meta_data();
+
+		if ( is_array( $carried ) && isset( $carried['מרחק מהמחסן'] ) ) {
+			continue;
+		}
+
+		$rate->add_meta_data( 'מרחק מהמחסן', sprintf( '%s ק״מ', number_format_i18n( ceil( $km ) ) ) );
+
+		if ( $extra && function_exists( 'gueta_shipping_set_cost' ) ) {
+			gueta_shipping_set_cost( $rate, (float) $rate->get_cost() + $extra[1] );
 		}
 	}
 
@@ -213,49 +244,47 @@ function gueta_delivery_rate_summary( $rate, $index ) {
 		return;
 	}
 
-	$base = (float) $rate->get_cost();
+	$total = (float) $rate->get_cost();
+	$base  = $total - $extra[1];
+
+	// A rate worked out before the distance moved into it has nothing to take apart.
+	if ( $base <= 0 ) {
+		return;
+	}
 	?>
 	<dl class="gueta-delivery-sum">
-		<dt>הובלה</dt>
+		<dt>מחיר בסיס</dt>
 		<dd><?php echo wp_kses_post( wc_price( $base ) ); ?></dd>
 		<dt><?php echo esc_html( gueta_delivery_extra_label( $extra ) ); ?></dt>
 		<dd><?php echo wp_kses_post( wc_price( $extra[1] ) ); ?></dd>
 		<dt class="gueta-delivery-sum__total">סה״כ הובלה ל<?php echo esc_html( $extra[2] ); ?></dt>
-		<dd class="gueta-delivery-sum__total"><?php echo wp_kses_post( wc_price( $base + $extra[1] ) ); ?></dd>
+		<dd class="gueta-delivery-sum__total"><?php echo wp_kses_post( wc_price( $total ) ); ?></dd>
 	</dl>
 	<?php
 }
 add_action( 'woocommerce_after_shipping_rate', 'gueta_delivery_rate_summary', 10, 2 );
 
 /**
- * Charge the distance addition as its own line, when the truck is the method
- * chosen for a package.
+ * Price the truck afresh after a change to how it is priced.
  *
- * It carries no tax of its own, like the truck's price, which is set with VAT.
+ * WooCommerce keeps the rates it worked out in the shopper's session, under a
+ * hash of the package and its own shipping version, and hands them back
+ * without asking this file again. A cart left open from before the distance
+ * moved into the truck's price would have kept the price from then, while the
+ * addition is no longer charged beside it. Asking WooCommerce for a new
+ * shipping version, once, retires every rate stored anywhere.
  *
- * @param WC_Cart $cart Cart.
  * @return void
  */
-function gueta_delivery_fee( $cart ) {
-	if ( ! $cart instanceof WC_Cart || ! function_exists( 'WC' ) || ! WC()->shipping() ) {
+function gueta_delivery_retire_stored_rates() {
+	if ( ! class_exists( 'WC_Cache_Helper' ) || GUETA_DELIVERY_PRICING_VERSION === get_option( 'gueta_delivery_pricing_version' ) ) {
 		return;
 	}
 
-	$packages = WC()->shipping()->get_packages();
-
-	foreach ( $cart->get_shipping_methods() as $key => $rate ) {
-		if ( ! $rate instanceof WC_Shipping_Rate || ! gueta_delivery_is_truck( $rate ) || empty( $packages[ $key ] ) ) {
-			continue;
-		}
-
-		$extra = gueta_delivery_extra( $packages[ $key ] );
-
-		if ( $extra ) {
-			$cart->add_fee( gueta_delivery_extra_label( $extra ), $extra[1], false );
-		}
-	}
+	WC_Cache_Helper::get_transient_version( 'shipping', true );
+	update_option( 'gueta_delivery_pricing_version', GUETA_DELIVERY_PRICING_VERSION );
 }
-add_action( 'woocommerce_cart_calculate_fees', 'gueta_delivery_fee' );
+add_action( 'wp_loaded', 'gueta_delivery_retire_stored_rates' );
 
 /* -------------------------------------------------------------------------
  * The admin section
@@ -292,6 +321,16 @@ function gueta_delivery_save( $source ) {
 		],
 		false
 	);
+
+	/*
+	 * The distance is part of the truck's own price, and WooCommerce keeps
+	 * prices it has worked out in each shopper's session. Without this, a
+	 * shopper with a cart already open would go on being charged yesterday's
+	 * price.
+	 */
+	if ( class_exists( 'WC_Cache_Helper' ) ) {
+		WC_Cache_Helper::get_transient_version( 'shipping', true );
+	}
 }
 
 /**
