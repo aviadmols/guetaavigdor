@@ -1397,3 +1397,25 @@
 	font-weight: 600 !important;
 	line-height: 1.3 !important;
 }
+
+/* -------------------------------------------------------------------------
+ * Small laptops
+ *
+ * The product template pads its sections by 100px a side and holds the
+ * summary a further 100px from the gallery. On a 1280px screen that left the
+ * name, the price and everything needed to buy with 440px to sit in, so the
+ * name ran to three lines and the buying controls were pushed below the
+ * fold. Both follow the screen here, and the summary gains some 120px.
+ * ---------------------------------------------------------------------- */
+
+@media (min-width: 1025px) and (max-width: 1599px) {
+	.elementor-location-single .elementor-section.elementor-top-section:has(.elementor-widget-woocommerce-product-title),
+	.elementor-location-single .elementor-section.elementor-top-section:has(.elementor-widget-woocommerce-breadcrumb),
+	.elementor-location-single .elementor-section.elementor-top-section:has(.smart-product-card) {
+		padding-inline: var(--gueta-gutter);
+	}
+
+	.elementor-location-single .elementor-column:has(> .elementor-widget-wrap > .elementor-widget-woocommerce-product-title) > .elementor-widget-wrap {
+		margin-inline-end: clamp(20px, 2.5vw, 100px);
+	}
+}

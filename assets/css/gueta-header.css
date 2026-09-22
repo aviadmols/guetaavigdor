@@ -1701,6 +1701,56 @@ body.gueta-locked {
 }
 
 /* -------------------------------------------------------------------------
+ * Small laptops
+ *
+ * Between the tablet layout and a roomy desktop sit the screens most people
+ * work on: 1280, 1366 or 1440 across, and often only 720 or 768 tall. They
+ * were handed the widest layout the theme has. The nine categories need
+ * 1,235px and had 1,080 between the 100px gutters, so the row broke in two
+ * and the header stood 241px tall, a third of such a screen, before any of
+ * the page itself showed.
+ *
+ * So the gutters and the bar now follow the screen, and the navigation is
+ * set a little smaller with less air around each word. One row, and some
+ * seventy pixels handed back to the page.
+ * ---------------------------------------------------------------------- */
+
+@media (min-width: 1025px) and (max-width: 1599px) {
+	:root {
+		--gueta-gutter: clamp(20px, 3.4vw, 64px);
+		--gueta-bar-height: 80px;
+	}
+}
+
+@media (max-width: 1599px) {
+	.gueta-nav__list {
+		padding-inline: clamp(8px, 1.5vw, 24px);
+	}
+
+	.gueta-nav__link {
+		font-size: 14px;
+		gap: 4px;
+		padding: 0 clamp(6px, .75vw, 12px);
+	}
+
+	.gueta-nav__link .gueta-icon {
+		height: 12px;
+		width: 12px;
+	}
+}
+
+/* The narrowest laptops, where the row has to give up a little more. */
+@media (min-width: 1025px) and (max-width: 1199px) {
+	:root {
+		--gueta-nav-height: 44px;
+	}
+
+	.gueta-nav__link {
+		font-size: 13px;
+	}
+}
+
+/* -------------------------------------------------------------------------
  * Responsive
  * ---------------------------------------------------------------------- */
 

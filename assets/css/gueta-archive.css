@@ -917,6 +917,40 @@
 }
 
 /* -------------------------------------------------------------------------
+ * Small laptops
+ *
+ * The archive is placed by an Elementor template whose section pads the page
+ * by 100px a side, and the theme's own gutter was laid on top of that. The
+ * two together left the grid 540px of a 1280px screen: three cards 160px
+ * wide, with a fifth of the screen empty down each edge. The template's
+ * padding is dropped where the archive sits, so the theme's gutter, which
+ * the header and everything else line up with, spaces it alone.
+ * ---------------------------------------------------------------------- */
+
+@media (min-width: 1025px) {
+	.elementor-location-archive .elementor-section.elementor-top-section:has(.gueta-archive) {
+		padding-inline: 0;
+	}
+}
+
+@media (min-width: 1025px) and (max-width: 1599px) {
+	/* The band of breadcrumbs above keeps to the same smaller gutter. */
+	.elementor-location-archive .elementor-section.elementor-top-section:has(.elementor-widget-breadcrumbs),
+	.elementor-location-archive .elementor-section.elementor-top-section:has(.elementor-widget-woocommerce-breadcrumb) {
+		padding-inline: var(--gueta-gutter);
+	}
+
+	.gueta-archive__layout {
+		gap: 28px;
+		grid-template-columns: 250px minmax(0, 1fr);
+	}
+
+	.gueta-archive__grid {
+		gap: 32px 20px;
+	}
+}
+
+/* -------------------------------------------------------------------------
  * Responsive
  * ---------------------------------------------------------------------- */
 
