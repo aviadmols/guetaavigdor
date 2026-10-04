@@ -373,6 +373,8 @@ function gueta_render_settings_page() {
 			<?php submit_button( 'שמירת ההגדרות', 'primary', 'gueta_settings_submit' ); ?>
 		</form>
 
+		<?php gueta_smtp_admin_section(); ?>
+
 		<?php gueta_search_index_admin_section(); ?>
 
 		<?php gueta_font_migrate_admin_section(); ?>
