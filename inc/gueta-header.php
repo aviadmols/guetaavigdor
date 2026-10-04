@@ -22,7 +22,7 @@ const GUETA_NAV_MAX_COLUMNS = 7;
 /**
  * Bump to invalidate every cached navigation structure on deploy.
  */
-const GUETA_CACHE_VERSION = '2';
+const GUETA_CACHE_VERSION = '3';
 
 /* -------------------------------------------------------------------------
  * Theme setup
@@ -353,17 +353,76 @@ function gueta_menu_item_term( $menu_item ) {
 }
 
 /**
- * Build the navigation from the busiest top level product categories.
+ * Whether a category is the pots category, which leads the default menu.
+ *
+ * @param WP_Term $term Product category.
+ * @return bool
+ */
+function gueta_is_pots_category( $term ) {
+	return false !== mb_strpos( $term->name, 'עציצ' );
+}
+
+/**
+ * The default menu: pots first, then the busiest categories.
+ *
+ * @param WP_Term[] $terms Top level categories, busiest first.
+ * @return WP_Term[]
+ */
+function gueta_nav_default_terms( $terms ) {
+	$pots = array_filter( $terms, 'gueta_is_pots_category' );
+	$rest = array_diff_key( $terms, $pots );
+
+	return array_slice( array_merge( array_values( $pots ), array_values( $rest ) ), 0, GUETA_NAV_MAX_ITEMS );
+}
+
+/**
+ * The categories the menu shows, in order: the ones ticked in the theme
+ * settings, or the default menu until those are saved. A category created
+ * after the last save stays out of the menu until it is ticked.
+ *
+ * @param array|null $saved Menu settings, or null to read the stored ones.
+ * @return WP_Term[]
+ */
+function gueta_nav_category_terms( $saved = null ) {
+	$terms = gueta_top_categories();
+	$saved = null === $saved ? gueta_setting( 'nav_items', [] ) : $saved;
+
+	if ( ! $terms || ! is_array( $saved ) || ! $saved ) {
+		return $terms ? gueta_nav_default_terms( $terms ) : [];
+	}
+
+	$terms = array_values(
+		array_filter(
+			$terms,
+			static function ( $term ) use ( $saved ) {
+				return ! empty( $saved[ $term->term_id ]['include'] );
+			}
+		)
+	);
+
+	usort(
+		$terms,
+		static function ( $a, $b ) use ( $saved ) {
+			return (int) $saved[ $a->term_id ]['order'] <=> (int) $saved[ $b->term_id ]['order'];
+		}
+	);
+
+	return $terms;
+}
+
+/**
+ * Build the navigation from the product categories chosen in the theme settings.
  *
  * @return array
  */
 function gueta_nav_from_product_categories() {
-	$terms = gueta_top_categories( GUETA_NAV_MAX_ITEMS );
+	$terms = gueta_nav_category_terms();
 
 	if ( ! $terms ) {
 		return [];
 	}
 
+	$saved = gueta_setting( 'nav_items', [] );
 	$items = [];
 
 	foreach ( $terms as $term ) {
@@ -373,8 +432,10 @@ function gueta_nav_from_product_categories() {
 			continue;
 		}
 
+		$title = $saved[ $term->term_id ]['title'] ?? '';
+
 		$items[] = [
-			'title'     => $term->name,
+			'title'     => '' !== $title ? $title : $term->name,
 			'url'       => $link,
 			'highlight' => false,
 			'mega'      => gueta_category_mega( $term ),
