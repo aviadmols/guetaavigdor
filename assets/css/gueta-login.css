@@ -1,0 +1,174 @@
+/**
+ * The login step before the checkout.
+ *
+ * One narrow card in the middle of the page, on the same tokens as the cart
+ * drawer and the checkout. Tokens come from gueta-header.css, which loads first.
+ */
+
+.gueta-login,
+.gueta-login * {
+	box-sizing: border-box;
+}
+
+.gueta-login {
+	display: flex;
+	font-family: var(--gueta-font);
+	justify-content: center;
+	padding: clamp(32px, 8vw, 96px) var(--gueta-gutter) 96px;
+}
+
+.gueta-login__card {
+	background: var(--gueta-paper);
+	border: 1px solid var(--gueta-rule);
+	border-radius: var(--gueta-radius);
+	color: var(--gueta-ink);
+	max-width: 440px;
+	padding: clamp(24px, 5vw, 40px);
+	transition: opacity .25s ease;
+	width: 100%;
+}
+
+.gueta-login__card.is-busy {
+	opacity: .6;
+	pointer-events: none;
+}
+
+.gueta-login__title {
+	font-size: clamp(24px, 4vw, 30px);
+	font-weight: 700;
+	line-height: 1.2;
+	margin: 0 0 8px;
+}
+
+.gueta-login__lead {
+	color: var(--gueta-muted);
+	font-size: 15px;
+	line-height: 1.5;
+	margin: 0 0 28px;
+}
+
+.gueta-login__google {
+	display: flex;
+	justify-content: center;
+	min-height: 44px;
+}
+
+.gueta-login__or {
+	align-items: center;
+	color: var(--gueta-soft);
+	display: flex;
+	font-size: 13px;
+	gap: 12px;
+	margin: 24px 0;
+}
+
+.gueta-login__or::before,
+.gueta-login__or::after {
+	border-top: 1px solid var(--gueta-rule);
+	content: "";
+	flex: 1;
+}
+
+.gueta-login__or[hidden],
+.gueta-login__step[hidden],
+.gueta-login__google[hidden] {
+	display: none;
+}
+
+.gueta-login__step {
+	display: grid;
+	gap: 12px;
+}
+
+.gueta-login__label {
+	font-size: 14px;
+	font-weight: 600;
+}
+
+.gueta-login__input {
+	background: var(--gueta-paper);
+	border: 1px solid var(--gueta-rule);
+	border-radius: 8px;
+	color: var(--gueta-ink);
+	font: inherit;
+	font-size: 16px;
+	min-height: 48px;
+	padding: 0 14px;
+	text-align: left;
+	width: 100%;
+}
+
+.gueta-login__input:focus {
+	border-color: var(--gueta-ink);
+	outline: none;
+}
+
+.gueta-login__input--code {
+	font-size: 24px;
+	font-variant-numeric: tabular-nums;
+	letter-spacing: .4em;
+	text-align: center;
+}
+
+.gueta-login__sent {
+	color: var(--gueta-muted);
+	font-size: 14px;
+	line-height: 1.5;
+	margin: 0 0 4px;
+}
+
+.gueta-login__sent strong {
+	color: var(--gueta-ink);
+	unicode-bidi: isolate;
+}
+
+.gueta-login__links {
+	display: flex;
+	justify-content: space-between;
+	gap: 12px;
+}
+
+.gueta-login__link {
+	background: none;
+	border: 0;
+	color: var(--gueta-ink);
+	cursor: pointer;
+	font: inherit;
+	font-size: 14px;
+	padding: 4px 0;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.gueta-login__link:disabled {
+	color: var(--gueta-soft);
+	cursor: default;
+}
+
+.gueta-login__message {
+	color: var(--gueta-muted);
+	font-size: 14px;
+	line-height: 1.5;
+	margin: 16px 0 0;
+	min-height: 1.5em;
+}
+
+.gueta-login__message.is-error {
+	color: var(--gueta-accent);
+}
+
+.gueta-login__message a {
+	color: inherit;
+}
+
+.gueta-login__back {
+	border-top: 1px solid var(--gueta-rule);
+	font-size: 14px;
+	margin: 20px 0 0;
+	padding-top: 16px;
+	text-align: center;
+}
+
+.gueta-login__back a {
+	color: var(--gueta-muted);
+}

@@ -410,7 +410,7 @@ add_filter( 'woocommerce_checkout_posted_data', 'gueta_canonical_city', 20 );
  * @return void
  */
 function gueta_checkout_assets() {
-	if ( ! gueta_checkout_active() || ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
+	if ( ! gueta_checkout_active() || ! function_exists( 'is_checkout' ) || ! is_checkout() || gueta_login_gate_applies() ) {
 		return;
 	}
 

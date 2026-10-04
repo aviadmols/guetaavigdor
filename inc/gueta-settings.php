@@ -37,6 +37,9 @@ function gueta_settings() {
 			'cats_scope'   => 'front',
 			'cats_items'   => [],
 			'nav_condense' => 1,
+			'nav_items'    => [],
+			'login_required'   => 1,
+			'google_client_id' => '',
 		]
 	);
 
@@ -131,12 +134,16 @@ function gueta_render_settings_page() {
 			'cats_scope'   => 'front',
 			'cats_items'   => [],
 			'nav_condense' => 1,
+			'nav_items'    => [],
+			'login_required'   => 1,
+			'google_client_id' => '',
 		]
 	);
 
 	$logo_url  = $settings['logo_id'] ? wp_get_attachment_image_url( (int) $settings['logo_id'], 'medium' ) : '';
 	$terms     = gueta_has_woocommerce() ? gueta_top_categories() : [];
 	$items     = is_array( $settings['cats_items'] ) ? $settings['cats_items'] : [];
+	$nav_items = is_array( $settings['nav_items'] ) ? $settings['nav_items'] : [];
 	?>
 	<div class="wrap">
 		<h1>הגדרות תבנית</h1>
@@ -185,6 +192,97 @@ function gueta_render_settings_page() {
 							לקפל את שורת התפריט כשגוללים למטה
 						</label>
 						<p class="description">כשמכובה, שורת התפריט נשארת גלויה בכל הגלילה.</p>
+					</td>
+				</tr>
+			</table>
+
+			<h3>פריטי התפריט</h3>
+
+			<?php if ( ! empty( get_nav_menu_locations()['primary'] ) ) : ?>
+				<div class="notice notice-warning inline"><p>
+					לתפריט "Primary navigation" משויך כרגע תפריט וורדפרס, והוא זה שמוצג באתר במקום הטבלה הזו.
+					כדי שהטבלה תקבע את התפריט, יש לבטל את השיוך ב<a href="<?php echo esc_url( admin_url( 'nav-menus.php?action=locations' ) ); ?>">מראה ← תפריטים</a>.
+				</p></div>
+			<?php endif; ?>
+
+			<?php if ( ! $terms ) : ?>
+				<p>לא נמצאו קטגוריות מוצרים.</p>
+			<?php else : ?>
+				<p>בחרו אילו קטגוריות יופיעו בתפריט, באיזה סדר (המספר הקטן ראשון), ואם רוצים כותרת אחרת. תתי הקטגוריות נכנסות לתפריט הנפתח אוטומטית. קטגוריה חדשה לא תיכנס לתפריט עד שתסומן כאן.</p>
+				<table class="widefat striped" style="max-width:900px;">
+					<thead>
+						<tr>
+							<th style="width:70px;">להציג</th>
+							<th style="width:80px;">סדר</th>
+							<th>קטגוריה</th>
+							<th>כותרת מותאמת</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php
+						$nav_shown = gueta_nav_category_terms( $nav_items );
+						$nav_ids   = wp_list_pluck( $nav_shown, 'term_id' );
+						$nav_rows  = array_merge(
+							$nav_shown,
+							array_filter(
+								$terms,
+								static function ( $term ) use ( $nav_ids ) {
+									return ! in_array( $term->term_id, $nav_ids, true );
+								}
+							)
+						);
+
+						foreach ( $nav_rows as $index => $term ) :
+							$id    = (int) $term->term_id;
+							$item  = isset( $nav_items[ $id ] ) && is_array( $nav_items[ $id ] ) ? $nav_items[ $id ] : [];
+							$order = isset( $item['order'] ) ? (int) $item['order'] : ( $index + 1 ) * 10;
+							$title = isset( $item['title'] ) ? (string) $item['title'] : '';
+							?>
+							<tr>
+								<td>
+									<input type="checkbox" name="nav_items[<?php echo $id; ?>][include]" value="1" <?php checked( in_array( $id, $nav_ids, true ) ); ?>>
+								</td>
+								<td>
+									<input type="number" name="nav_items[<?php echo $id; ?>][order]" value="<?php echo $order; ?>" class="small-text" step="10">
+								</td>
+								<td>
+									<strong><?php echo esc_html( $term->name ); ?></strong>
+									<span style="color:#787c82;">(<?php echo esc_html( number_format_i18n( gueta_term_product_count( $term ) ) ); ?>)</span>
+								</td>
+								<td>
+									<input type="text" name="nav_items[<?php echo $id; ?>][title]" value="<?php echo esc_attr( $title ); ?>" class="regular-text" placeholder="<?php echo esc_attr( $term->name ); ?>">
+								</td>
+							</tr>
+						<?php endforeach; ?>
+					</tbody>
+				</table>
+			<?php endif; ?>
+
+			<hr>
+
+			<h2>התחברות לפני התשלום</h2>
+			<p>לקוח שלא מחובר ועובר לתשלום יתבקש להתחבר קודם: בקוד בן 6 ספרות שנשלח למייל, או עם חשבון Google. כתובת חדשה פותחת חשבון לקוח אוטומטית. חשבונות של צוות האתר מתחברים בדף ההתחברות הרגיל.</p>
+
+			<table class="form-table" role="presentation">
+				<tr>
+					<th scope="row">חובת התחברות</th>
+					<td>
+						<label>
+							<input type="checkbox" name="login_required" value="1" <?php checked( ! empty( $settings['login_required'] ) ); ?>>
+							לבקש התחברות לפני התשלום
+						</label>
+						<p class="description">כשמכובה, אפשר לשלם גם בלי חשבון, כמו קודם.</p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><label for="gueta-google-client-id">Google Client ID</label></th>
+					<td>
+						<input type="text" id="gueta-google-client-id" name="google_client_id" value="<?php echo esc_attr( $settings['google_client_id'] ); ?>" class="large-text code" dir="ltr" placeholder="1234567890-xxxx.apps.googleusercontent.com">
+						<p class="description">
+							בלי מזהה, הכפתור של Google לא יוצג ונשארת רק ההתחברות בקוד במייל.
+							יוצרים אותו ב-<a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener">Google Cloud Console</a>:
+							Create credentials ← OAuth client ID ← Web application, וב-Authorized JavaScript origins מוסיפים את <code><?php echo esc_html( wp_parse_url( home_url(), PHP_URL_SCHEME ) . '://' . wp_parse_url( home_url(), PHP_URL_HOST ) ); ?></code>.
+						</p>
 					</td>
 				</tr>
 			</table>
@@ -322,30 +420,42 @@ function gueta_render_settings_page() {
 }
 
 /**
+ * Sanitise a table of category rows: include, order and a custom title.
+ *
+ * @param mixed $rows Raw rows keyed by term id.
+ * @return array
+ */
+function gueta_sanitize_category_rows( $rows ) {
+	$items = [];
+
+	if ( ! is_array( $rows ) ) {
+		return $items;
+	}
+
+	foreach ( $rows as $term_id => $item ) {
+		$term_id = absint( $term_id );
+
+		if ( ! $term_id || ! is_array( $item ) ) {
+			continue;
+		}
+
+		$items[ $term_id ] = [
+			'include' => ! empty( $item['include'] ) ? 1 : 0,
+			'order'   => isset( $item['order'] ) ? (int) $item['order'] : 0,
+			'title'   => isset( $item['title'] ) ? sanitize_text_field( wp_unslash( $item['title'] ) ) : '',
+		];
+	}
+
+	return $items;
+}
+
+/**
  * Sanitise and store the submitted settings.
  *
  * @param array $source Raw form data.
  * @return void
  */
 function gueta_save_settings( $source ) {
-	$items = [];
-
-	if ( isset( $source['cats_items'] ) && is_array( $source['cats_items'] ) ) {
-		foreach ( $source['cats_items'] as $term_id => $item ) {
-			$term_id = absint( $term_id );
-
-			if ( ! $term_id || ! is_array( $item ) ) {
-				continue;
-			}
-
-			$items[ $term_id ] = [
-				'include' => ! empty( $item['include'] ) ? 1 : 0,
-				'order'   => isset( $item['order'] ) ? (int) $item['order'] : 0,
-				'title'   => isset( $item['title'] ) ? sanitize_text_field( wp_unslash( $item['title'] ) ) : '',
-			];
-		}
-	}
-
 	$scope = isset( $source['cats_scope'] ) ? sanitize_key( wp_unslash( $source['cats_scope'] ) ) : 'front';
 
 	update_option(
@@ -355,8 +465,11 @@ function gueta_save_settings( $source ) {
 			'logo_height'  => isset( $source['logo_height'] ) ? min( 160, max( 20, (int) $source['logo_height'] ) ) : 62,
 			'cats_enabled' => ! empty( $source['cats_enabled'] ) ? 1 : 0,
 			'cats_scope'   => in_array( $scope, [ 'front', 'all' ], true ) ? $scope : 'front',
-			'cats_items'   => $items,
+			'cats_items'   => gueta_sanitize_category_rows( $source['cats_items'] ?? [] ),
 			'nav_condense' => ! empty( $source['nav_condense'] ) ? 1 : 0,
+			'nav_items'    => gueta_sanitize_category_rows( $source['nav_items'] ?? [] ),
+			'login_required'   => ! empty( $source['login_required'] ) ? 1 : 0,
+			'google_client_id' => isset( $source['google_client_id'] ) ? sanitize_text_field( wp_unslash( $source['google_client_id'] ) ) : '',
 		]
 	);
 }
