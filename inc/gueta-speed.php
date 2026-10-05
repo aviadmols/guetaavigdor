@@ -320,3 +320,62 @@ function gueta_no_hello_header_footer() {
 	wp_dequeue_style( 'hello-elementor-header-footer' );
 }
 add_action( 'wp_enqueue_scripts', 'gueta_no_hello_header_footer', 100 );
+
+/* -------------------------------------------------------------------------
+ * The site's own addresses over https
+ *
+ * With the WordPress address still set to http while the site is served over
+ * https, WordPress wrote some of the site's own addresses as http, and the
+ * browser refused them on an https page: the Arbel Hagilda fonts, the arrow
+ * icons, and the search index, without which the search box finds nothing.
+ * The setting itself belongs in Settings → General; this keeps the pages
+ * whole until it is changed, and after.
+ * ---------------------------------------------------------------------- */
+
+/**
+ * Uploaded files over the scheme the page came in on.
+ *
+ * @param array $dirs Upload directory data.
+ * @return array
+ */
+function gueta_https_uploads( $dirs ) {
+	if ( is_ssl() ) {
+		$dirs['url']     = set_url_scheme( $dirs['url'], 'https' );
+		$dirs['baseurl'] = set_url_scheme( $dirs['baseurl'], 'https' );
+	}
+
+	return $dirs;
+}
+add_filter( 'upload_dir', 'gueta_https_uploads' );
+
+/**
+ * Rewrite the site's own http addresses in the page to https.
+ *
+ * @return void
+ */
+function gueta_https_own_links_start() {
+	if ( is_ssl() && ! is_admin() && ! wp_doing_ajax() && ! wp_is_json_request() ) {
+		ob_start( 'gueta_https_own_links' );
+	}
+}
+add_action( 'template_redirect', 'gueta_https_own_links_start', 0 );
+
+/**
+ * Output buffer callback for gueta_https_own_links_start().
+ *
+ * @param string $html Page.
+ * @return string
+ */
+function gueta_https_own_links( $html ) {
+	$host = wp_parse_url( home_url(), PHP_URL_HOST );
+
+	if ( ! $host ) {
+		return $html;
+	}
+
+	return str_replace(
+		[ 'http://' . $host, 'http:\/\/' . $host ],
+		[ 'https://' . $host, 'https:\/\/' . $host ],
+		$html
+	);
+}
