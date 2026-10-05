@@ -165,6 +165,8 @@ function gueta_render_product_gallery() {
 								'class'   => 'gueta-gallery__image',
 								'alt'     => esc_attr( $product->get_name() ),
 								'loading' => 0 === $index ? 'eager' : 'lazy',
+								// The first picture is the page's largest paint; ask for it ahead of the rest.
+								'fetchpriority' => 0 === $index ? 'high' : 'auto',
 							]
 						);
 						?>
@@ -876,6 +878,84 @@ function gueta_retarget_add_to_cart_data( $data, $post_id ) {
 	return $walk( $data );
 }
 add_filter( 'elementor/frontend/builder_content_data', 'gueta_retarget_add_to_cart_data', 10, 2 );
+
+/**
+ * Whether an element holds the product gallery: a shortcode widget whose
+ * shortcode is a gallery, at any depth.
+ *
+ * @param array $element Element.
+ * @return bool
+ */
+function gueta_element_has_gallery( $element ) {
+	if ( ! is_array( $element ) ) {
+		return false;
+	}
+
+	if ( 'widget' === ( $element['elType'] ?? '' ) && 'shortcode' === ( $element['widgetType'] ?? '' ) ) {
+		$shortcode = (string) ( $element['settings']['shortcode'] ?? '' );
+
+		if ( false !== stripos( $shortcode, 'gallery' ) ) {
+			return true;
+		}
+	}
+
+	foreach ( (array) ( $element['elements'] ?? [] ) as $child ) {
+		if ( gueta_element_has_gallery( $child ) ) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/**
+ * Put the gallery's column first in the product template's markup.
+ *
+ * The template has the title and the buy box in the first column and the
+ * pictures in the second, and on a phone CSS lifted the pictures above them.
+ * A phone draws the page as it arrives, though, so it drew the title and the
+ * buy box at the top, then met the pictures and pushed everything 380 pixels
+ * down: the whole of the page's layout shift. With the pictures first in the
+ * markup they are drawn first, where they stay.
+ *
+ * On a wide screen the section is marked to lay its columns out from the
+ * other side, so the pictures keep their place on the left, again from the
+ * first column drawn.
+ *
+ * @param array $data    Element tree.
+ * @param int   $post_id Document being rendered.
+ * @return array
+ */
+function gueta_gallery_column_first( $data, $post_id ) {
+	if ( ! is_array( $data ) || ! function_exists( 'is_product' ) || ! is_product() ) {
+		return $data;
+	}
+
+	foreach ( $data as &$section ) {
+		if ( ! is_array( $section ) || 'section' !== ( $section['elType'] ?? '' ) || empty( $section['elements'] ) || ! is_array( $section['elements'] ) ) {
+			continue;
+		}
+
+		$columns = $section['elements'];
+
+		foreach ( $columns as $index => $column ) {
+			if ( 0 === $index || 'column' !== ( $column['elType'] ?? '' ) || ! gueta_element_has_gallery( $column ) ) {
+				continue;
+			}
+
+			unset( $columns[ $index ] );
+			array_unshift( $columns, $column );
+
+			$section['elements']                 = array_values( $columns );
+			$section['settings']                 = isset( $section['settings'] ) && is_array( $section['settings'] ) ? $section['settings'] : [];
+			$section['settings']['css_classes'] = trim( ( $section['settings']['css_classes'] ?? '' ) . ' gueta-gallery-first' );
+			break;
+		}
+	}
+
+	return $data;
+}
+add_filter( 'elementor/frontend/builder_content_data', 'gueta_gallery_column_first', 20, 2 );
 
 /**
  * Record what the add to cart hooks saw, and print it as an HTML comment when

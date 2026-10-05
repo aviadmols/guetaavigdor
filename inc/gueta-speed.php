@@ -1,6 +1,6 @@
 <?php
 /**
- * The home page's two heaviest pieces, made lighter.
+ * Pages made lighter: the home page's two heaviest pieces, and the head.
  *
  * The category grid on the home page is a shortcode kept in the database, and
  * it painted every card with the photo's original file as a CSS background:
@@ -218,3 +218,67 @@ function gueta_delay_tracking_rewrite( $html ) {
 
 	return substr( $html, 0, $at ) . $loader . substr( $html, $at );
 }
+
+/* -------------------------------------------------------------------------
+ * Less in the head
+ *
+ * Every stylesheet and script in the head holds the first paint until it has
+ * arrived. On a product page over a phone's connection that was two and a
+ * half seconds, so what the page does not use goes, and what it uses late
+ * moves to the end of the page.
+ * ---------------------------------------------------------------------- */
+
+/**
+ * No emoji script. Every browser this shop sees draws emoji by itself; the
+ * script only checked that, on every page.
+ *
+ * @return void
+ */
+function gueta_no_emoji() {
+	remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+	remove_action( 'wp_print_styles', 'print_emoji_styles' );
+	remove_action( 'wp_enqueue_scripts', 'wp_enqueue_emoji_styles' );
+}
+add_action( 'init', 'gueta_no_emoji' );
+
+/**
+ * The block editor's stylesheets only where the content is made of blocks.
+ *
+ * The pages are built in Elementor and the products were written before the
+ * block editor, so on most pages these were 25 KB of rules for nothing, read
+ * before anything was drawn.
+ *
+ * @return void
+ */
+function gueta_block_styles_where_used() {
+	if ( is_admin() ) {
+		return;
+	}
+
+	$post = is_singular() ? get_queried_object() : null;
+
+	if ( $post instanceof WP_Post && has_blocks( $post ) ) {
+		return;
+	}
+
+	foreach ( [ 'wp-block-library', 'wp-block-library-theme', 'classic-theme-styles', 'global-styles' ] as $handle ) {
+		wp_dequeue_style( $handle );
+	}
+}
+add_action( 'wp_enqueue_scripts', 'gueta_block_styles_where_used', 100 );
+
+/**
+ * Underscore and wp-util to the end of the page. Only the variation form uses
+ * them, and it runs from the end of the page already; something asked for them
+ * early, and the head waited for them on every product.
+ *
+ * WordPress puts them back in the head by itself if a script there needs them.
+ *
+ * @return void
+ */
+function gueta_late_util_scripts() {
+	foreach ( [ 'underscore', 'wp-util' ] as $handle ) {
+		wp_scripts()->add_data( $handle, 'group', 1 );
+	}
+}
+add_action( 'wp_enqueue_scripts', 'gueta_late_util_scripts', 100 );

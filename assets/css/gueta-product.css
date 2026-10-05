@@ -1337,6 +1337,18 @@
 	}
 }
 
+/*
+ * The theme puts the gallery's column first in the markup, so a phone draws
+ * the pictures before the title and nothing is pushed down as the page
+ * arrives. On a wide screen the columns are laid out from the other side,
+ * which keeps the pictures on the left as the template has them.
+ */
+@media (min-width: 1025px) {
+	.single-product .gueta-gallery-first > .elementor-container {
+		flex-direction: row-reverse;
+	}
+}
+
 /* -------------------------------------------------------------------------
  * The product rail on a phone
  *
