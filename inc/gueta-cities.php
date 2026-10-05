@@ -198,6 +198,23 @@ function gueta_cities_by_key() {
 		}
 	}
 
+	/*
+	 * A place the government writes as two names joined by a dash goes by the
+	 * first one too: "תל אביב" is "תל אביב - יפו". Only where that first name
+	 * is not a settlement of its own.
+	 */
+	foreach ( gueta_cities_rows() as $row ) {
+		if ( ! isset( $row[0] ) || false === strpos( $row[0], '-' ) ) {
+			continue;
+		}
+
+		$short = gueta_city_key( strstr( $row[0], '-', true ) );
+
+		if ( '' !== $short && ! isset( $map[ $short ] ) ) {
+			$map[ $short ] = $row[0];
+		}
+	}
+
 	return $map;
 }
 

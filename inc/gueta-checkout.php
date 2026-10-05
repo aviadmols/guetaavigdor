@@ -343,6 +343,12 @@ function gueta_validate_city( $data, $errors ) {
 		return;
 	}
 
+	// A collected order has no address to check, and its fields are hidden:
+	// a city left in them by autofill must not stop the order.
+	if ( gueta_checkout_is_pickup() ) {
+		return;
+	}
+
 	// With nothing downloaded yet, a wrong answer is worse than no answer.
 	if ( ! gueta_cities_rows() ) {
 		return;

@@ -76,7 +76,9 @@
 						name: row[0],
 						english: row[1] || '',
 						key: fold(row[0]),
-						englishKey: fold(row[1] || '')
+						englishKey: fold(row[1] || ''),
+						// "תל אביב" for "תל אביב - יפו", as PHP accepts it.
+						shortKey: -1 !== row[0].indexOf('-') ? fold(row[0].split('-')[0]) : ''
 					};
 				});
 
@@ -132,8 +134,16 @@
 			return null;
 		}
 
-		for (var i = 0; i < cities.length; i++) {
+		var i;
+
+		for (i = 0; i < cities.length; i++) {
 			if (cities[i].key === needle || cities[i].englishKey === needle) {
+				return cities[i];
+			}
+		}
+
+		for (i = 0; i < cities.length; i++) {
+			if (cities[i].shortKey && cities[i].shortKey === needle) {
 				return cities[i];
 			}
 		}
