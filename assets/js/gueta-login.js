@@ -94,14 +94,24 @@
 			});
 	}
 
-	// The address is kept for the order and the shopper goes on unverified.
-	function continueAsGuest() {
+	/*
+	 * On to the checkout unverified. "המשך" needs the address, which goes on
+	 * the order the server opens for the cart; "המשך כאורח" goes on without
+	 * one, though an address already typed in is sent along.
+	 */
+	function continueAsGuest(needEmail) {
 		email = emailInput.value.trim();
 
-		if (!emailInput.checkValidity() || !email) {
+		var valid = !!email && emailInput.checkValidity();
+
+		if (needEmail && !valid) {
 			say(settings.strings.email, true);
 			emailInput.focus();
 			return;
+		}
+
+		if (!valid) {
+			email = '';
 		}
 
 		setBusy(emailStep, true);
@@ -136,7 +146,7 @@
 		}
 
 		if ('guest' === emailStep.getAttribute('data-login-mode')) {
-			continueAsGuest();
+			continueAsGuest(true);
 			return;
 		}
 
@@ -199,7 +209,7 @@
 	if (guestButton) {
 		guestButton.addEventListener('click', function () {
 			if (!busy) {
-				continueAsGuest();
+				continueAsGuest(false);
 			}
 		});
 	}

@@ -140,6 +140,25 @@
 	text-underline-offset: 3px;
 }
 
+/* Going on without an address: small, under the main button. */
+.gueta-login__guest {
+	background: none;
+	border: 0;
+	color: var(--gueta-muted);
+	cursor: pointer;
+	font: inherit;
+	font-size: 13px;
+	justify-self: center;
+	padding: 2px 8px;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.gueta-login__guest:hover {
+	color: var(--gueta-ink);
+}
+
+.gueta-login__guest:disabled,
 .gueta-login__link:disabled {
 	color: var(--gueta-soft);
 	cursor: default;

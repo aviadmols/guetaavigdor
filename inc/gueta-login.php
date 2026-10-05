@@ -98,6 +98,19 @@ function gueta_login_guest_email() {
 }
 
 /**
+ * Whether the shopper chose to go on as a guest, with an address or without.
+ *
+ * @return bool
+ */
+function gueta_login_is_guest() {
+	if ( ! function_exists( 'WC' ) || ! WC()->session ) {
+		return false;
+	}
+
+	return (bool) WC()->session->get( 'gueta_guest', false ) || '' !== gueta_login_guest_email();
+}
+
+/**
  * Whether this request is the checkout a guest must log in for. The thank you
  * page and the pay-for-order page are reached from an order already placed,
  * so they stay open.
@@ -105,7 +118,7 @@ function gueta_login_guest_email() {
  * @return bool
  */
 function gueta_login_gate_applies() {
-	if ( ! gueta_login_required() || is_user_logged_in() || gueta_login_guest_email() || ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
+	if ( ! gueta_login_required() || is_user_logged_in() || gueta_login_is_guest() || ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
 		return false;
 	}
 
@@ -147,7 +160,7 @@ add_action( 'template_redirect', 'gueta_login_gate', 20 );
  * @return bool
  */
 function gueta_login_popup_applies() {
-	if ( ! gueta_login_required() || is_user_logged_in() || gueta_login_guest_email() || is_admin() ) {
+	if ( ! gueta_login_required() || is_user_logged_in() || gueta_login_is_guest() || is_admin() ) {
 		return false;
 	}
 
@@ -183,12 +196,8 @@ function gueta_render_login_card( $in_popup = false ) {
 		<form class="gueta-login__step" data-login-step="email" data-login-mode="<?php echo $mail ? 'code' : 'guest'; ?>" novalidate>
 			<label class="gueta-login__label" for="gueta-login-email">כתובת מייל</label>
 			<input class="gueta-login__input" type="email" id="gueta-login-email" name="email" autocomplete="email" inputmode="email" dir="ltr" required>
-			<?php if ( $mail ) : ?>
-				<button type="submit" class="gueta-button gueta-button--solid">שליחת קוד אימות</button>
-				<button type="button" class="gueta-button gueta-button--ghost" data-login-guest>המשך כאורח</button>
-			<?php else : ?>
-				<button type="submit" class="gueta-button gueta-button--solid">המשך כאורח</button>
-			<?php endif; ?>
+			<button type="submit" class="gueta-button gueta-button--solid"><?php echo $mail ? 'שליחת קוד אימות' : 'המשך'; ?></button>
+			<button type="button" class="gueta-login__guest" data-login-guest>המשך כאורח</button>
 		</form>
 
 		<form class="gueta-login__step" data-login-step="code" novalidate hidden>
@@ -313,7 +322,7 @@ function gueta_ajax_login_state() {
 	wp_send_json_success(
 		[
 			'nonce'  => wp_create_nonce( 'gueta_login' ),
-			'needed' => gueta_login_required() && ! is_user_logged_in() && ! gueta_login_guest_email(),
+			'needed' => gueta_login_required() && ! is_user_logged_in() && ! gueta_login_is_guest(),
 		]
 	);
 }
@@ -485,9 +494,12 @@ add_action( 'wc_ajax_gueta_login_verify_code', 'gueta_ajax_login_verify_code' );
  * ---------------------------------------------------------------------- */
 
 /**
- * Keep the address in the cart session and send the shopper to the checkout
- * as a guest. The address fills the checkout's email field, and the order is
- * placed with it.
+ * Send the shopper to the checkout as a guest, with an address or without.
+ *
+ * With an address, it fills the checkout's email field and an order is opened
+ * at once, pending payment, so a shopper who leaves before paying is still on
+ * record with their cart and their address. WooCommerce takes that order up
+ * again when they pay; see gueta_login_pending_order().
  *
  * Nothing is verified here, so no account is opened or logged into: an
  * address typed in proves nothing about who typed it.
@@ -497,7 +509,8 @@ add_action( 'wc_ajax_gueta_login_verify_code', 'gueta_ajax_login_verify_code' );
 function gueta_ajax_login_guest() {
 	gueta_login_check_request();
 
-	$email = gueta_login_posted_email();
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing -- checked in gueta_login_check_request().
+	$email = isset( $_POST['email'] ) && '' !== trim( (string) wp_unslash( $_POST['email'] ) ) ? gueta_login_posted_email() : '';
 
 	if ( ! WC()->session ) {
 		wp_send_json_error( [ 'message' => 'משהו השתבש. נסו שוב בעוד רגע.' ], 500 );
@@ -505,15 +518,112 @@ function gueta_ajax_login_guest() {
 
 	// A guest's session lives only in memory until it is given a cookie.
 	WC()->session->set_customer_session_cookie( true );
-	WC()->session->set( 'gueta_guest_email', $email );
+	WC()->session->set( 'gueta_guest', true );
 
-	if ( WC()->customer ) {
-		WC()->customer->set_billing_email( $email );
-		WC()->customer->save();
+	if ( $email ) {
+		WC()->session->set( 'gueta_guest_email', $email );
+
+		if ( WC()->customer ) {
+			WC()->customer->set_billing_email( $email );
+			WC()->customer->save();
+		}
+
+		gueta_login_pending_order( $email );
 	}
+
+	/*
+	 * WooCommerce writes the session when the request shuts down, which can be
+	 * after the browser has the answer and has gone on to the checkout; that
+	 * page then still saw a stranger and showed the step again. Write it now.
+	 */
+	WC()->session->save_data();
 
 	wp_send_json_success( [ 'redirect' => wc_get_checkout_url() ] );
 }
+
+/**
+ * Open an order for the cart, pending payment, under the shopper's address.
+ *
+ * It is made the way the checkout makes one and left as the order awaiting
+ * payment, so placing the order at the checkout fills in this same order
+ * rather than adding a second. Should the cart change in between, WooCommerce
+ * opens a new order and gueta_login_drop_pending_order() bins this one.
+ *
+ * A failure here costs only the record, so it never stops the shopper.
+ *
+ * @param string $email Address.
+ * @return int Order ID, or 0.
+ */
+function gueta_login_pending_order( $email ) {
+	if ( ! WC()->cart || WC()->cart->is_empty() ) {
+		return 0;
+	}
+
+	$existing = wc_get_order( (int) WC()->session->get( 'order_awaiting_payment', 0 ) );
+
+	if ( $existing && $existing->has_status( 'pending' ) && $existing->get_meta( '_gueta_pending_from_login' ) ) {
+		$existing->set_billing_email( $email );
+		$existing->save();
+
+		return $existing->get_id();
+	}
+
+	try {
+		WC()->cart->calculate_totals();
+
+		$order_id = WC()->checkout()->create_order(
+			[
+				'billing_email'  => $email,
+				'payment_method' => '',
+			]
+		);
+	} catch ( Throwable $e ) {
+		return 0;
+	}
+
+	$order = is_wp_error( $order_id ) ? null : wc_get_order( $order_id );
+
+	if ( ! $order ) {
+		return 0;
+	}
+
+	$order->update_meta_data( '_gueta_pending_from_login', 1 );
+	$order->add_order_note( 'נפתחה כשהלקוח המשיך מחלון ההתחברות לתשלום. ממתינה לתשלום: אם לא תושלם, הלקוח נטש את הקנייה.' );
+	$order->save();
+
+	WC()->session->set( 'order_awaiting_payment', $order->get_id() );
+	WC()->session->set( 'gueta_pending_order', $order->get_id() );
+
+	return $order->get_id();
+}
+
+/**
+ * When the checkout opened a new order instead of taking up the pending one,
+ * bin the pending one, so the shop does not see the same purchase twice.
+ *
+ * @param int $order_id The order the checkout placed.
+ * @return void
+ */
+function gueta_login_drop_pending_order( $order_id ) {
+	if ( ! WC()->session ) {
+		return;
+	}
+
+	$pending_id = (int) WC()->session->get( 'gueta_pending_order', 0 );
+
+	WC()->session->set( 'gueta_pending_order', null );
+
+	if ( ! $pending_id || (int) $order_id === $pending_id ) {
+		return;
+	}
+
+	$pending = wc_get_order( $pending_id );
+
+	if ( $pending && $pending->has_status( 'pending' ) && $pending->get_meta( '_gueta_pending_from_login' ) ) {
+		$pending->delete( false );
+	}
+}
+add_action( 'woocommerce_checkout_order_processed', 'gueta_login_drop_pending_order' );
 add_action( 'wc_ajax_gueta_login_guest', 'gueta_ajax_login_guest' );
 
 /**
@@ -557,7 +667,7 @@ add_filter( 'woocommerce_checkout_posted_data', 'gueta_login_guest_posted_email'
  * @return bool
  */
 function gueta_login_guest_no_account( $required ) {
-	return ! is_user_logged_in() && gueta_login_guest_email() ? false : $required;
+	return ! is_user_logged_in() && gueta_login_is_guest() ? false : $required;
 }
 add_filter( 'woocommerce_checkout_registration_required', 'gueta_login_guest_no_account' );
 
@@ -697,7 +807,7 @@ function gueta_login_finish( $email, $names = [] ) {
  * @return void
  */
 function gueta_login_validate_checkout( $data, $errors ) {
-	if ( gueta_login_required() && ! is_user_logged_in() && ! gueta_login_guest_email() ) {
+	if ( gueta_login_required() && ! is_user_logged_in() && ! gueta_login_is_guest() ) {
 		$errors->add( 'gueta_login', 'יש להתחבר לפני ביצוע ההזמנה. רעננו את הדף כדי להתחבר.' );
 	}
 }
