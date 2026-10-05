@@ -594,9 +594,17 @@
 		confirm.type = 'button';
 
 		panel.appendChild(title);
-		panel.appendChild(text('p', 'gueta-pickup__lead', strings.lead));
+
+		if (strings.lead) {
+			panel.appendChild(text('p', 'gueta-pickup__lead', strings.lead));
+		}
+
 		panel.appendChild(rule);
-		panel.appendChild(text('p', 'gueta-pickup__after', strings.after));
+
+		if (strings.after) {
+			panel.appendChild(text('p', 'gueta-pickup__after', strings.after));
+		}
+
 		panel.appendChild(confirm);
 
 		dialog.appendChild(text('div', 'gueta-pickup__backdrop', ''));
