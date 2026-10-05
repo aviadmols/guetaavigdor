@@ -240,6 +240,11 @@ function gueta_header_nav() {
 
 	$items = gueta_nav_from_menu();
 
+	// The menu arranged in the theme settings' editor, once it has been saved.
+	if ( ! $items && function_exists( 'gueta_nav_tree_saved' ) && gueta_nav_tree_saved() ) {
+		$items = gueta_nav_from_tree( gueta_nav_tree_saved() );
+	}
+
 	if ( ! $items ) {
 		$items = gueta_nav_from_product_categories();
 	}

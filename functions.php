@@ -43,6 +43,7 @@ require_once get_stylesheet_directory() . '/inc/gueta-stock-notify.php';
 require_once get_stylesheet_directory() . '/inc/gueta-compare.php';
 require_once get_stylesheet_directory() . '/inc/gueta-archive.php';
 require_once get_stylesheet_directory() . '/inc/gueta-settings.php';
+require_once get_stylesheet_directory() . '/inc/gueta-nav-editor.php';
 require_once get_stylesheet_directory() . '/inc/gueta-page-cache.php';
 require_once get_stylesheet_directory() . '/inc/gueta-font-migrate.php';
 require_once get_stylesheet_directory() . '/inc/gueta-cities.php';

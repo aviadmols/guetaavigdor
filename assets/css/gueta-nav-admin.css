@@ -1,0 +1,236 @@
+/**
+ * The menu editor in the theme settings: three nested lists, each row with a
+ * drag handle, and each level a shade further in.
+ */
+
+.gueta-nav-editor {
+	max-width: 1000px;
+}
+
+.gueta-nav-editor__help {
+	color: #50575e;
+	font-size: 13px;
+	line-height: 1.6;
+	max-width: 760px;
+}
+
+.gueta-nav-editor__help .dashicons {
+	font-size: 16px;
+	height: 16px;
+	vertical-align: text-bottom;
+	width: 16px;
+}
+
+.gueta-nav-editor ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+/* Rows */
+
+.gnav-row {
+	align-items: center;
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 6px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	padding: 8px 10px;
+}
+
+.gnav-row--top {
+	border-color: #c3c4c7;
+	padding: 10px 12px;
+}
+
+.gnav-top {
+	margin-bottom: 8px;
+}
+
+.gnav-top.is-hidden > .gnav-row {
+	opacity: .55;
+}
+
+.gnav-handle {
+	color: #8c8f94;
+	cursor: grab;
+	flex: none;
+}
+
+.gnav-handle:active {
+	cursor: grabbing;
+}
+
+.gnav-toggle {
+	background: none;
+	border: 0;
+	color: #50575e;
+	cursor: pointer;
+	flex: none;
+	padding: 0;
+}
+
+.gnav-toggle .dashicons {
+	transition: transform .15s ease;
+}
+
+.gnav-top.is-open > .gnav-row .gnav-toggle .dashicons {
+	transform: rotate(-90deg);
+}
+
+.gnav-badge {
+	border-radius: 999px;
+	flex: none;
+	font-size: 11px;
+	line-height: 1;
+	padding: 4px 8px;
+}
+
+.gnav-badge.is-cat {
+	background: #e7f0fa;
+	color: #135e96;
+}
+
+.gnav-badge.is-link {
+	background: #fcf0e3;
+	color: #8a4b00;
+}
+
+.gnav-badge.is-none {
+	background: #f0f0f1;
+	color: #50575e;
+}
+
+.gnav-fields {
+	display: flex;
+	flex: 1 1 260px;
+	gap: 8px;
+	min-width: 0;
+}
+
+.gnav-fields input {
+	flex: 1 1 0;
+	min-width: 0;
+}
+
+.gnav-row--top .gnav-title {
+	font-weight: 600;
+}
+
+.gnav-check {
+	flex: none;
+	font-size: 12px;
+	white-space: nowrap;
+}
+
+.gnav-row .button-link.gnav-remove {
+	color: #b32d2e;
+	flex: none;
+	font-size: 12px;
+}
+
+/* The panel under a bar item */
+
+.gnav-body {
+	background: #f6f7f7;
+	border: 1px solid #dcdcde;
+	border-radius: 0 0 6px 6px;
+	border-top: 0;
+	margin-inline: 12px;
+	padding: 12px;
+}
+
+.gnav-mode {
+	color: #50575e;
+	font-size: 12px;
+	margin: 0 0 10px;
+}
+
+.gnav-top.is-auto .gnav-mode {
+	color: #135e96;
+}
+
+.gnav-columns {
+	display: grid;
+	gap: 10px;
+	grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+	min-height: 40px;
+}
+
+.gnav-col {
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 6px;
+	padding: 8px;
+}
+
+.gnav-col > .gnav-row {
+	border: 0;
+	border-bottom: 1px solid #f0f0f1;
+	border-radius: 0;
+	padding: 4px 2px 8px;
+}
+
+.gnav-items {
+	min-height: 28px;
+	padding: 6px 0;
+}
+
+.gnav-item {
+	margin-bottom: 4px;
+}
+
+.gnav-item > .gnav-row {
+	background: #fbfbfb;
+	padding: 5px 8px;
+}
+
+.gnav-item .gnav-fields {
+	flex-basis: 160px;
+}
+
+.gnav-add {
+	align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	margin-top: 6px;
+}
+
+.gnav-pick {
+	align-items: center;
+	display: inline-flex;
+	gap: 6px;
+}
+
+.gnav-picker {
+	max-width: 280px;
+}
+
+.gnav-warn {
+	color: #b32d2e;
+	font-size: 12px;
+	margin: 8px 0 0;
+}
+
+.gnav-placeholder {
+	background: #f0f6fc;
+	border: 1px dashed #72aee6;
+	border-radius: 6px;
+	margin-bottom: 6px;
+	visibility: visible !important;
+}
+
+.gueta-nav-editor__add {
+	align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-top: 12px;
+}
+
+.gueta-nav-editor__reset {
+	margin-inline-start: auto !important;
+}

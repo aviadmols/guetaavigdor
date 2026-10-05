@@ -28,6 +28,7 @@ function gueta_settings_defaults() {
 		'cats_items'       => [],
 		'nav_condense'     => 1,
 		'nav_items'        => [],
+		'nav_tree'         => [],
 		'login_required'   => 1,
 		'google_client_id' => '',
 	];
@@ -305,8 +306,6 @@ function gueta_settings_tab_general( $settings ) {
  * @return void
  */
 function gueta_settings_tab_menu( $settings ) {
-	$terms     = gueta_has_woocommerce() ? gueta_top_categories() : [];
-	$nav_items = is_array( $settings['nav_items'] ) ? $settings['nav_items'] : [];
 	?>
 	<h2>תפריט הניווט</h2>
 
@@ -327,63 +326,12 @@ function gueta_settings_tab_menu( $settings ) {
 
 	<?php if ( ! empty( get_nav_menu_locations()['primary'] ) ) : ?>
 		<div class="notice notice-warning inline"><p>
-			לתפריט "Primary navigation" משויך כרגע תפריט וורדפרס, והוא זה שמוצג באתר במקום הטבלה הזו.
-			כדי שהטבלה תקבע את התפריט, יש לבטל את השיוך ב<a href="<?php echo esc_url( admin_url( 'nav-menus.php?action=locations' ) ); ?>">מראה ← תפריטים</a>.
+			לתפריט "Primary navigation" משויך כרגע תפריט וורדפרס, והוא זה שמוצג באתר במקום העורך הזה.
+			כדי שהעורך כאן יקבע את התפריט, יש לבטל את השיוך ב<a href="<?php echo esc_url( admin_url( 'nav-menus.php?action=locations' ) ); ?>">מראה ← תפריטים</a>.
 		</p></div>
 	<?php endif; ?>
 
-	<?php if ( ! $terms ) : ?>
-		<p>לא נמצאו קטגוריות מוצרים.</p>
-	<?php else : ?>
-		<p>בחרו אילו קטגוריות יופיעו בתפריט, באיזה סדר (המספר הקטן ראשון), ואם רוצים כותרת אחרת. תתי הקטגוריות נכנסות לתפריט הנפתח אוטומטית. קטגוריה חדשה לא תיכנס לתפריט עד שתסומן כאן.</p>
-		<table class="widefat striped" style="max-width:900px;">
-			<thead>
-				<tr>
-					<th style="width:70px;">להציג</th>
-					<th style="width:80px;">סדר</th>
-					<th>קטגוריה</th>
-					<th>כותרת מותאמת</th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php
-				$nav_shown = gueta_nav_category_terms( $nav_items );
-				$nav_ids   = wp_list_pluck( $nav_shown, 'term_id' );
-				$nav_rows  = array_merge(
-					$nav_shown,
-					array_filter(
-						$terms,
-						static function ( $term ) use ( $nav_ids ) {
-							return ! in_array( $term->term_id, $nav_ids, true );
-						}
-					)
-				);
-
-				foreach ( $nav_rows as $index => $term ) :
-					$id    = (int) $term->term_id;
-					$item  = isset( $nav_items[ $id ] ) && is_array( $nav_items[ $id ] ) ? $nav_items[ $id ] : [];
-					$order = isset( $item['order'] ) ? (int) $item['order'] : ( $index + 1 ) * 10;
-					$title = isset( $item['title'] ) ? (string) $item['title'] : '';
-					?>
-					<tr>
-						<td>
-							<input type="checkbox" name="nav_items[<?php echo $id; ?>][include]" value="1" <?php checked( in_array( $id, $nav_ids, true ) ); ?>>
-						</td>
-						<td>
-							<input type="number" name="nav_items[<?php echo $id; ?>][order]" value="<?php echo $order; ?>" class="small-text" step="10">
-						</td>
-						<td>
-							<strong><?php echo esc_html( $term->name ); ?></strong>
-							<span style="color:#787c82;">(<?php echo esc_html( number_format_i18n( gueta_term_product_count( $term ) ) ); ?>)</span>
-						</td>
-						<td>
-							<input type="text" name="nav_items[<?php echo $id; ?>][title]" value="<?php echo esc_attr( $title ); ?>" class="regular-text" placeholder="<?php echo esc_attr( $term->name ); ?>">
-						</td>
-					</tr>
-				<?php endforeach; ?>
-			</tbody>
-		</table>
-	<?php endif; ?>
+	<?php gueta_nav_editor_render(); ?>
 	<?php
 }
 
@@ -566,8 +514,12 @@ function gueta_save_settings( $source, $tab ) {
 		case 'menu':
 			$changes = [
 				'nav_condense' => ! empty( $source['nav_condense'] ) ? 1 : 0,
-				'nav_items'    => gueta_sanitize_category_rows( $source['nav_items'] ?? [] ),
 			];
+
+			// Without the editor's script the field comes back empty; keep the saved menu then.
+			if ( isset( $source['nav_tree'] ) && '' !== trim( (string) $source['nav_tree'] ) ) {
+				$changes['nav_tree'] = gueta_sanitize_nav_tree( $source['nav_tree'] );
+			}
 			break;
 
 		case 'categories':
