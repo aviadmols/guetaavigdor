@@ -371,6 +371,69 @@ function gueta_validate_city( $data, $errors ) {
 }
 add_action( 'woocommerce_after_checkout_validation', 'gueta_validate_city', 10, 2 );
 
+/* -------------------------------------------------------------------------
+ * Collecting from the warehouse
+ *
+ * An order is packed before it can be collected, and shoppers who came
+ * straight from the checkout found nothing waiting. Choosing to collect opens
+ * a notice that has to be confirmed: come only once we say the order is ready.
+ * The confirmation rides in a hidden field, and PHP holds the order to it,
+ * because the notice can be skipped.
+ * ---------------------------------------------------------------------- */
+
+/**
+ * Whether the order is to be collected rather than delivered.
+ *
+ * @return bool
+ */
+function gueta_checkout_is_pickup() {
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing -- WooCommerce checked the checkout nonce.
+	$methods = isset( $_POST['shipping_method'] ) ? (array) wp_unslash( $_POST['shipping_method'] ) : [];
+
+	if ( ! $methods && function_exists( 'WC' ) && WC()->session ) {
+		$methods = (array) WC()->session->get( 'chosen_shipping_methods', [] );
+	}
+
+	foreach ( $methods as $method ) {
+		if ( preg_match( '/^(local_pickup|pickup_location)\b/', (string) $method ) ) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/**
+ * No collected order without the notice confirmed.
+ *
+ * @param array    $data   Posted data.
+ * @param WP_Error $errors Errors so far.
+ * @return void
+ */
+function gueta_validate_pickup( $data, $errors ) {
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing -- WooCommerce checked the checkout nonce.
+	if ( ! gueta_checkout_active() || ! gueta_checkout_is_pickup() || ! empty( $_POST['gueta_pickup_ack'] ) ) {
+		return;
+	}
+
+	$errors->add( 'gueta_pickup_ack', 'רגע לפני שמסיימים: צריך לאשר שלא מגיעים למחסן לפני שמקבלים מאיתנו הודעה שההזמנה מוכנה.' );
+}
+add_action( 'woocommerce_after_checkout_validation', 'gueta_validate_pickup', 10, 2 );
+
+/**
+ * A note on the order that the shopper confirmed, for when they come early.
+ *
+ * @param WC_Order $order Order.
+ * @return void
+ */
+function gueta_pickup_ack_note( $order ) {
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing -- WooCommerce checked the checkout nonce.
+	if ( gueta_checkout_active() && gueta_checkout_is_pickup() && ! empty( $_POST['gueta_pickup_ack'] ) ) {
+		$order->add_order_note( 'הלקוח אישר שלא יגיע למחסן לפני שיקבל הודעה שההזמנה מוכנה לאיסוף.' );
+	}
+}
+add_action( 'woocommerce_checkout_order_created', 'gueta_pickup_ack_note' );
+
 /**
  * Store the settlement the way the government spells it, whatever was typed.
  *
@@ -444,6 +507,13 @@ function gueta_checkout_assets() {
 				'noMatch'    => 'לא נמצא יישוב בשם הזה',
 				'pick'       => 'בחרו יישוב מהרשימה',
 				'removeError' => 'לא הצלחנו להסיר את המוצר. נסו שוב.',
+				'pickup'      => [
+					'title'   => 'איסוף עצמי? רגע לפני שיוצאים לדרך',
+					'lead'    => 'כל הזמנה נאספת ונארזת אצלנו במחסן לפני שהיא מוכנה לאיסוף, וזה לוקח קצת זמן.',
+					'rule'    => 'אין להגיע למחסן לפני שקיבלתם מאיתנו הודעה מפורשת שההזמנה מוכנה.',
+					'after'   => 'ברגע שהכול ארוז ומחכה לכם נשלח לכם הודעה, וכך לא תגיעו לחינם.',
+					'confirm' => 'הבנתי',
+				],
 			],
 		]
 	);

@@ -503,3 +503,132 @@
 		}
 	});
 }());
+
+/**
+ * Checkout: collecting from the warehouse.
+ *
+ * Placing an order that is to be collected first opens a notice that the
+ * order is packed before it can be collected, and that nobody should come
+ * before we say it is ready. Its one button confirms and carries on placing
+ * the order, on to the card payment. Confirming fills a hidden field the
+ * order is checked for in PHP, because the notice can be skipped.
+ */
+(function () {
+	'use strict';
+
+	var settings = window.guetaCheckout || {};
+	var strings = (settings.strings || {}).pickup;
+	var form = document.querySelector('form.checkout');
+
+	if (!strings || !form || !window.jQuery) {
+		return;
+	}
+
+	var field = document.createElement('input');
+
+	field.type = 'hidden';
+	field.name = 'gueta_pickup_ack';
+	field.value = '';
+	form.appendChild(field);
+
+	var dialog = null;
+
+	function isPickup() {
+		var inputs = form.querySelectorAll('input[name^="shipping_method"]');
+
+		for (var i = 0; i < inputs.length; i++) {
+			var input = inputs[i];
+			var chosen = 'radio' !== input.type || input.checked;
+
+			if (chosen && /^(local_pickup|pickup_location)\b/.test(input.value)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	function text(tag, className, value) {
+		var element = document.createElement(tag);
+
+		element.className = className;
+		element.textContent = value || '';
+
+		return element;
+	}
+
+	function close() {
+		dialog.hidden = true;
+		document.documentElement.classList.remove('gueta-pickup-open');
+	}
+
+	function build() {
+		dialog = document.createElement('div');
+		dialog.className = 'gueta-pickup';
+		dialog.hidden = true;
+
+		var panel = document.createElement('div');
+
+		panel.className = 'gueta-pickup__panel';
+		panel.setAttribute('role', 'alertdialog');
+		panel.setAttribute('aria-modal', 'true');
+		panel.setAttribute('aria-labelledby', 'gueta-pickup-title');
+		panel.setAttribute('aria-describedby', 'gueta-pickup-rule');
+
+		var title = text('h2', 'gueta-pickup__title', strings.title);
+		var rule = text('p', 'gueta-pickup__rule', strings.rule);
+		var confirm = text('button', 'gueta-pickup__confirm', strings.confirm);
+
+		title.id = 'gueta-pickup-title';
+		rule.id = 'gueta-pickup-rule';
+		confirm.type = 'button';
+
+		panel.appendChild(title);
+		panel.appendChild(text('p', 'gueta-pickup__lead', strings.lead));
+		panel.appendChild(rule);
+		panel.appendChild(text('p', 'gueta-pickup__after', strings.after));
+		panel.appendChild(confirm);
+
+		dialog.appendChild(text('div', 'gueta-pickup__backdrop', ''));
+		dialog.appendChild(panel);
+		document.body.appendChild(dialog);
+
+		confirm.addEventListener('click', function () {
+			field.value = '1';
+			close();
+
+			// On with placing the order, which leads to the card payment.
+			window.jQuery(form).trigger('submit');
+		});
+
+		dialog.addEventListener('keydown', function (event) {
+			if ('Escape' === event.key) {
+				close();
+			}
+
+			// The one button keeps the focus while the notice is up.
+			if ('Tab' === event.key) {
+				event.preventDefault();
+			}
+		});
+	}
+
+	function open() {
+		if (!dialog) {
+			build();
+		}
+
+		dialog.hidden = false;
+		document.documentElement.classList.add('gueta-pickup-open');
+		dialog.querySelector('.gueta-pickup__confirm').focus();
+	}
+
+	window.jQuery(form).on('checkout_place_order', function () {
+		if (isPickup() && '1' !== field.value) {
+			open();
+			return false;
+		}
+
+		return true;
+	});
+}());
