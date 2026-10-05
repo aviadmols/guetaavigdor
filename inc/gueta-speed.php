@@ -282,3 +282,41 @@ function gueta_late_util_scripts() {
 	}
 }
 add_action( 'wp_enqueue_scripts', 'gueta_late_util_scripts', 100 );
+
+/**
+ * Stylesheets the first screen does not need, loaded without holding it up.
+ *
+ * The login popup's styles are wanted only once a guest heads for the
+ * checkout, and Font Awesome draws only the social icons in the footer. Each
+ * is fetched as a print stylesheet, which never blocks drawing, and switched
+ * to all screens once it arrives.
+ *
+ * @param string $tag    Link tag.
+ * @param string $handle Style handle.
+ * @return string
+ */
+function gueta_late_styles( $tag, $handle ) {
+	if ( is_admin() || ! in_array( $handle, [ 'gueta-login', 'elementor-icons-shared-0', 'elementor-icons-fa-brands' ], true ) ) {
+		return $tag;
+	}
+
+	$late = preg_replace( "/media=(['\"])[^'\"]*\1/", "media='print' onload=\"this.media='all'\"", $tag, 1, $count );
+
+	if ( ! $count ) {
+		return $tag;
+	}
+
+	return $late . '<noscript>' . $tag . '</noscript>';
+}
+add_filter( 'style_loader_tag', 'gueta_late_styles', 10, 2 );
+
+/**
+ * Hello Elementor's own header and footer styles. The theme draws its own
+ * header and Elementor the footer, so nothing on the page uses them.
+ *
+ * @return void
+ */
+function gueta_no_hello_header_footer() {
+	wp_dequeue_style( 'hello-elementor-header-footer' );
+}
+add_action( 'wp_enqueue_scripts', 'gueta_no_hello_header_footer', 100 );
