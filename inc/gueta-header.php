@@ -225,8 +225,9 @@ add_action( 'wp_enqueue_scripts', 'gueta_header_assets', 25 );
  * ---------------------------------------------------------------------- */
 
 /**
- * Build the navigation tree, preferring an assigned menu and falling back to
- * the WooCommerce category tree so the header is useful without configuration.
+ * Build the navigation tree: the menu saved in the theme settings' editor, else
+ * an assigned WordPress menu, else the WooCommerce category tree, so the header
+ * is useful without configuration.
  *
  * @return array
  */
@@ -238,11 +239,19 @@ function gueta_header_nav() {
 		return $cached;
 	}
 
-	$items = gueta_nav_from_menu();
+	$items = [];
 
-	// The menu arranged in the theme settings' editor, once it has been saved.
-	if ( ! $items && function_exists( 'gueta_nav_tree_saved' ) && gueta_nav_tree_saved() ) {
+	/*
+	 * The menu arranged in the theme settings' editor, once it has been saved,
+	 * comes first: it is the one somebody arranged on purpose. A WordPress menu
+	 * left on the primary location from before used to win over it unseen.
+	 */
+	if ( function_exists( 'gueta_nav_tree_saved' ) && gueta_nav_tree_saved() ) {
 		$items = gueta_nav_from_tree( gueta_nav_tree_saved() );
+	}
+
+	if ( ! $items ) {
+		$items = gueta_nav_from_menu();
 	}
 
 	if ( ! $items ) {

@@ -326,8 +326,8 @@ function gueta_settings_tab_menu( $settings ) {
 
 	<?php if ( ! empty( get_nav_menu_locations()['primary'] ) ) : ?>
 		<div class="notice notice-warning inline"><p>
-			לתפריט "Primary navigation" משויך כרגע תפריט וורדפרס, והוא זה שמוצג באתר במקום העורך הזה.
-			כדי שהעורך כאן יקבע את התפריט, יש לבטל את השיוך ב<a href="<?php echo esc_url( admin_url( 'nav-menus.php?action=locations' ) ); ?>">מראה ← תפריטים</a>.
+			לתפריט "Primary navigation" משויך גם תפריט וורדפרס (<a href="<?php echo esc_url( admin_url( 'nav-menus.php?action=locations' ) ); ?>">מראה ← תפריטים</a>).
+			מרגע ששומרים כאן, האתר מציג את התפריט מהעורך הזה ולא אותו.
 		</p></div>
 	<?php endif; ?>
 
