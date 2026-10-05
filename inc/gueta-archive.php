@@ -81,6 +81,8 @@ function gueta_archive_state( $overrides = [] ) {
 
 		$raw = is_array( $source[ $key ] ) ? $source[ $key ] : explode( ',', (string) $source[ $key ] );
 
+		$raw = array_filter( $raw, 'is_scalar' );
+
 		return array_values( array_filter( array_map( 'sanitize_title', $raw ) ) );
 	};
 
@@ -898,7 +900,14 @@ function gueta_ajax_archive() {
 		wp_send_json_error( [ 'message' => 'החנות אינה זמינה כרגע.' ], 400 );
 	}
 
-	$payload = isset( $_POST['state'] ) ? json_decode( sanitize_textarea_field( wp_unslash( $_POST['state'] ) ), true ) : [];
+	/*
+	 * Decoded as it came, and each field cleaned by gueta_archive_state().
+	 * Cleaning the JSON as text first stripped every %xx from it, and a Hebrew
+	 * category slug is nothing but %xx: the category came out empty, and "load
+	 * more" brought the next page of the whole shop.
+	 */
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- every field is sanitised in gueta_archive_state().
+	$payload = isset( $_POST['state'] ) ? json_decode( wp_unslash( (string) $_POST['state'] ), true ) : [];
 	$state   = gueta_archive_state( is_array( $payload ) ? $payload : [] );
 	$query   = gueta_archive_query( $state );
 
