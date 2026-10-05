@@ -421,6 +421,38 @@ function gueta_validate_pickup( $data, $errors ) {
 add_action( 'woocommerce_after_checkout_validation', 'gueta_validate_pickup', 10, 2 );
 
 /**
+ * The address fields a collected order does without.
+ *
+ * @return string[]
+ */
+function gueta_pickup_address_fields() {
+	return [ 'billing_city', 'billing_address_1', 'billing_house_number', 'billing_address_2', 'billing_state' ];
+}
+
+/**
+ * Nobody is sent anything when the order is collected, so the address is not
+ * asked for. The browser hides the fields when collection is chosen, and this
+ * stops PHP requiring them, both on the page and when the order is placed.
+ *
+ * @param array $fields Checkout fields.
+ * @return array
+ */
+function gueta_pickup_address_optional( $fields ) {
+	if ( ! gueta_checkout_active() || ! gueta_checkout_is_pickup() ) {
+		return $fields;
+	}
+
+	foreach ( gueta_pickup_address_fields() as $key ) {
+		if ( isset( $fields['billing'][ $key ] ) ) {
+			$fields['billing'][ $key ]['required'] = false;
+		}
+	}
+
+	return $fields;
+}
+add_filter( 'woocommerce_checkout_fields', 'gueta_pickup_address_optional', 30 );
+
+/**
  * A note on the order that the shopper confirmed, for when they come early.
  *
  * @param WC_Order $order Order.
@@ -503,6 +535,8 @@ function gueta_checkout_assets() {
 			'wcAjaxUrl' => class_exists( 'WC_AJAX' ) ? WC_AJAX::get_endpoint( '%%endpoint%%' ) : '',
 			// The drawer's nonce, since taking out the last line goes through the drawer's own handler.
 			'nonce'   => wp_create_nonce( 'gueta_header' ),
+			// The address fields hidden while the order is to be collected.
+			'pickupFields' => gueta_pickup_address_fields(),
 			'strings' => [
 				'noMatch'    => 'לא נמצא יישוב בשם הזה',
 				'pick'       => 'בחרו יישוב מהרשימה',

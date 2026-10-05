@@ -623,6 +623,30 @@
 		dialog.querySelector('.gueta-pickup__confirm').focus();
 	}
 
+	/*
+	 * Nothing is sent to an order that is collected, so its address fields
+	 * step aside while collection is chosen. PHP stops requiring them too.
+	 */
+	function toggleAddress() {
+		var pickup = isPickup();
+
+		(settings.pickupFields || []).forEach(function (key) {
+			var row = document.getElementById(key + '_field');
+
+			if (row) {
+				row.hidden = pickup;
+			}
+		});
+	}
+
+	toggleAddress();
+	form.addEventListener('change', function (event) {
+		if (event.target.name && 0 === event.target.name.indexOf('shipping_method')) {
+			toggleAddress();
+		}
+	});
+	window.jQuery(document.body).on('updated_checkout', toggleAddress);
+
 	window.jQuery(form).on('checkout_place_order', function () {
 		if (isPickup() && '1' !== field.value) {
 			open();
