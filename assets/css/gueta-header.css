@@ -2409,3 +2409,16 @@ body.gueta-has-cats .elementor > .e-con:first-child {
 		width: 100%;
 	}
 }
+
+/* After every product price, wherever it is shown. */
+.gueta-price-vat {
+	color: var(--gueta-muted);
+	font-size: .7em;
+	font-weight: 500;
+	white-space: nowrap;
+}
+
+/* The sticky bar keeps to one line. */
+.gueta-sticky-atc .gueta-price-vat {
+	display: none;
+}

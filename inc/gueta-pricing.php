@@ -152,3 +152,23 @@ function gueta_sale_price_html( $html, $regular, $sale ) {
 	return (float) $sale === (float) $regular ? wc_price( $sale ) : $html;
 }
 add_filter( 'woocommerce_format_sale_price', 'gueta_sale_price_html', 20, 3 );
+
+/**
+ * Say that the price includes VAT, wherever a product's price is shown.
+ *
+ * Last of the price filters, so it closes the line after what the price buys
+ * and the least a length comes to. Not in the admin's product list, where the
+ * column is narrow and nobody needs telling.
+ *
+ * @param string     $html    Price HTML.
+ * @param WC_Product $product Product.
+ * @return string
+ */
+function gueta_price_vat_html( $html, $product ) {
+	if ( '' === $html || ( is_admin() && ! wp_doing_ajax() ) ) {
+		return $html;
+	}
+
+	return $html . ' <span class="gueta-price-vat">כולל מע״מ</span>';
+}
+add_filter( 'woocommerce_get_price_html', 'gueta_price_vat_html', 30, 2 );
