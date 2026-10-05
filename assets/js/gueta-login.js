@@ -1,5 +1,12 @@
 /**
- * The login step before the checkout: a code by email, or Google.
+ * The login step before the checkout: a code by email, Google, or going on as
+ * a guest with just an address. Without SMTP set up there is no code to send,
+ * and the email form takes the guest way by itself.
+ *
+ * On most pages the step is a popup. A guest who clicks through to the
+ * checkout, from the cart drawer, the cart page or anywhere else, stays where
+ * they are and the popup opens; once they are through, the browser goes on to
+ * the checkout. The checkout reached directly shows the same step as its page.
  *
  * Settings arrive in guetaLogin from gueta-login.php.
  */
@@ -13,6 +20,7 @@
 		return;
 	}
 
+	var modal = document.querySelector('[data-login-modal]');
 	var emailStep = root.querySelector('[data-login-step="email"]');
 	var codeStep = root.querySelector('[data-login-step="code"]');
 	var emailInput = emailStep.querySelector('input[name="email"]');
@@ -86,6 +94,31 @@
 			});
 	}
 
+	// The address is kept for the order and the shopper goes on unverified.
+	function continueAsGuest() {
+		email = emailInput.value.trim();
+
+		if (!emailInput.checkValidity() || !email) {
+			say(settings.strings.email, true);
+			emailInput.focus();
+			return;
+		}
+
+		setBusy(emailStep, true);
+		say(settings.strings.continuing);
+
+		post('gueta_login_guest', { email: email })
+			.then(function (result) {
+				if (!finish(result)) {
+					setBusy(emailStep, false);
+				}
+			})
+			.catch(function () {
+				setBusy(emailStep, false);
+				say(settings.strings.error, true);
+			});
+	}
+
 	function showCodeStep() {
 		address.textContent = email;
 		emailStep.hidden = true;
@@ -99,6 +132,11 @@
 		event.preventDefault();
 
 		if (busy) {
+			return;
+		}
+
+		if ('guest' === emailStep.getAttribute('data-login-mode')) {
+			continueAsGuest();
 			return;
 		}
 
@@ -156,6 +194,16 @@
 		}
 	});
 
+	var guestButton = emailStep.querySelector('[data-login-guest]');
+
+	if (guestButton) {
+		guestButton.addEventListener('click', function () {
+			if (!busy) {
+				continueAsGuest();
+			}
+		});
+	}
+
 	root.querySelector('[data-login-resend]').addEventListener('click', function () {
 		if (!busy) {
 			sendCode(codeStep, function () {
@@ -177,6 +225,12 @@
 	 * ------------------------------------------------------------------ */
 
 	var googleSlot = root.querySelector('[data-login-google]');
+	var googleStarted = false;
+
+	function hideGoogle() {
+		googleSlot.hidden = true;
+		root.querySelector('[data-login-or]').hidden = true;
+	}
 
 	function startGoogle() {
 		if (!window.google || !google.accounts || !google.accounts.id) {
@@ -216,18 +270,155 @@
 		return true;
 	}
 
-	if (settings.google && googleSlot) {
-		// Google's library loads async, so wait for it rather than assume it is
-		// there. If it never comes, say a blocker ate it, the email way stands alone.
+	// Google's library is fetched only once the step is on screen. If it never
+	// comes, say a blocker ate it, the email way stands alone.
+	function loadGoogle() {
+		if (googleStarted || !settings.google || !googleSlot) {
+			return;
+		}
+
+		googleStarted = true;
+
+		if (!window.google || !google.accounts) {
+			var script = document.createElement('script');
+
+			script.src = 'https://accounts.google.com/gsi/client';
+			script.async = true;
+			script.onerror = hideGoogle;
+			document.head.appendChild(script);
+		}
+
 		var tries = 0;
 		var timer = setInterval(function () {
 			if (startGoogle()) {
 				clearInterval(timer);
 			} else if (++tries > 80) {
 				clearInterval(timer);
-				googleSlot.hidden = true;
-				root.querySelector('[data-login-or]').hidden = true;
+				hideGoogle();
 			}
 		}, 100);
 	}
+
+	/* ---------------------------------------------------------------------
+	 * The popup
+	 * ------------------------------------------------------------------ */
+
+	if (!modal) {
+		// The checkout's own page: the step is already in view.
+		loadGoogle();
+		return;
+	}
+
+	var checkoutPath = new URL(settings.redirect, window.location.href).pathname.replace(/\/+$/, '');
+	var returnFocus = null;
+
+	function isCheckoutLink(link) {
+		if (!link || !link.href || '_blank' === link.target) {
+			return false;
+		}
+
+		try {
+			var url = new URL(link.href, window.location.href);
+
+			return url.origin === window.location.origin && url.pathname.replace(/\/+$/, '') === checkoutPath;
+		} catch (error) {
+			return false;
+		}
+	}
+
+	function openModal() {
+		returnFocus = document.activeElement;
+		modal.hidden = false;
+		document.documentElement.classList.add('gueta-login-open');
+
+		// One frame later, so the opening transition has a start to run from.
+		window.requestAnimationFrame(function () {
+			modal.classList.add('is-open');
+			emailInput.focus();
+		});
+
+		loadGoogle();
+	}
+
+	function closeModal() {
+		if (modal.hidden || busy) {
+			return;
+		}
+
+		modal.classList.remove('is-open');
+		document.documentElement.classList.remove('gueta-login-open');
+
+		window.setTimeout(function () {
+			if (!modal.classList.contains('is-open')) {
+				modal.hidden = true;
+			}
+		}, 300);
+
+		if (returnFocus && returnFocus.focus) {
+			returnFocus.focus();
+		}
+	}
+
+	/*
+	 * The page may be a stored copy, or older than the cart, and its nonce no
+	 * longer good: WooCommerce ties a guest's nonce to the cart session. Ask
+	 * for a fresh one, and learn whether the step is still needed at all;
+	 * someone who logged in in another tab just goes on.
+	 */
+	function refresh() {
+		return fetch(settings.endpoint.replace('%%endpoint%%', 'gueta_login_state'), {
+			credentials: 'same-origin',
+			cache: 'no-store'
+		})
+			.then(function (response) {
+				return response.json();
+			})
+			.then(function (result) {
+				if (result && result.success && result.data) {
+					settings.nonce = result.data.nonce || settings.nonce;
+					return false !== result.data.needed;
+				}
+
+				return true;
+			})
+			.catch(function () {
+				return true;
+			});
+	}
+
+	// Capture, so the popup opens before anything else acts on the click.
+	document.addEventListener('click', function (event) {
+		if (event.defaultPrevented || 0 !== event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+			return;
+		}
+
+		var link = event.target.closest('a[href]');
+
+		if (!isCheckoutLink(link)) {
+			return;
+		}
+
+		event.preventDefault();
+		event.stopPropagation();
+		settings.redirect = link.href;
+		openModal();
+
+		refresh().then(function (needed) {
+			if (!needed) {
+				window.location.href = settings.redirect;
+			}
+		});
+	}, true);
+
+	modal.addEventListener('click', function (event) {
+		if (event.target.closest('[data-login-close]')) {
+			closeModal();
+		}
+	});
+
+	document.addEventListener('keydown', function (event) {
+		if ('Escape' === event.key && !modal.hidden) {
+			closeModal();
+		}
+	});
 })();

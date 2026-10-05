@@ -172,3 +172,95 @@
 .gueta-login__back a {
 	color: var(--gueta-muted);
 }
+
+/* -------------------------------------------------------------------------
+ * The popup
+ *
+ * The same card, over the page a guest clicked through to the checkout from.
+ * Above the cart drawer, since the drawer's button is the usual way in.
+ * ---------------------------------------------------------------------- */
+
+.gueta-login-open {
+	overflow: hidden;
+}
+
+.gueta-login-modal,
+.gueta-login-modal * {
+	box-sizing: border-box;
+}
+
+.gueta-login-modal {
+	align-items: center;
+	display: flex;
+	font-family: var(--gueta-font);
+	inset: 0;
+	justify-content: center;
+	padding: 16px;
+	position: fixed;
+	transition: visibility 0s linear .3s;
+	visibility: hidden;
+	z-index: 150;
+}
+
+.gueta-login-modal[hidden] {
+	display: none;
+}
+
+.gueta-login-modal.is-open {
+	transition-delay: 0s;
+	visibility: visible;
+}
+
+.gueta-login-modal__backdrop {
+	background: rgb(15 15 15 / 45%);
+	inset: 0;
+	opacity: 0;
+	position: absolute;
+	transition: opacity .3s ease;
+}
+
+.gueta-login-modal.is-open .gueta-login-modal__backdrop {
+	opacity: 1;
+}
+
+.gueta-login-modal__panel {
+	background: var(--gueta-paper);
+	border-radius: var(--gueta-radius);
+	box-shadow: 0 32px 60px rgb(0 0 0 / 18%), 0 2px 10px rgb(0 0 0 / 6%);
+	max-height: calc(100vh - 32px);
+	max-width: 440px;
+	opacity: 0;
+	overflow-y: auto;
+	position: relative;
+	transform: translateY(12px);
+	transition: opacity .3s ease, transform .3s ease;
+	width: 100%;
+}
+
+.gueta-login-modal.is-open .gueta-login-modal__panel {
+	opacity: 1;
+	transform: none;
+}
+
+.gueta-login-modal .gueta-login__card {
+	border: 0;
+}
+
+.gueta-login-modal__close {
+	inset-block-start: 10px;
+	inset-inline-end: 10px;
+	position: absolute;
+	z-index: 1;
+}
+
+/* Room for the close button beside the title. */
+.gueta-login-modal .gueta-login__title {
+	padding-inline-end: 36px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.gueta-login-modal__panel,
+	.gueta-login-modal__backdrop {
+		transition: none;
+	}
+}
