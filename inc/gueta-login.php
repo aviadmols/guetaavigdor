@@ -541,55 +541,101 @@ function gueta_ajax_login_guest() {
 	wp_send_json_success( [ 'redirect' => wc_get_checkout_url() ] );
 }
 
-/**
- * Open an order for the cart, pending payment, under the shopper's address.
+/* -------------------------------------------------------------------------
+ * The order kept for the session
  *
- * It is made the way the checkout makes one and left as the order awaiting
- * payment, so placing the order at the checkout fills in this same order
- * rather than adding a second. Should the cart change in between, WooCommerce
- * opens a new order and gueta_login_drop_pending_order() bins this one.
+ * A guest who goes on with an address gets an order at once, pending
+ * payment, so a shopper who leaves before paying is still on record with
+ * their cart and their address. It is one order for the whole visit: as the
+ * cart changes it is brought up to date, and placing the order at the
+ * checkout fills in this same order rather than opening a second.
+ *
+ * WooCommerce takes up an order awaiting payment only while the cart's hash
+ * matches the one stored on it, and opens a new order otherwise. So before
+ * each update, and before the checkout places the order, the stored hash is
+ * set to the cart's, and WooCommerce rebuilds the same order from the cart.
+ * ---------------------------------------------------------------------- */
+
+/**
+ * The order kept for this session, while it can still be paid and changed.
+ *
+ * @return WC_Order|null
+ */
+function gueta_login_session_order() {
+	if ( ! function_exists( 'WC' ) || ! WC()->session ) {
+		return null;
+	}
+
+	$order = wc_get_order( (int) WC()->session->get( 'gueta_pending_order', 0 ) );
+
+	if ( ! $order || ! $order->get_meta( '_gueta_pending_from_login' ) || ! $order->has_status( [ 'pending', 'failed' ] ) ) {
+		return null;
+	}
+
+	return $order;
+}
+
+/**
+ * Write the cart into an order: WooCommerce's own checkout, run on the order
+ * awaiting payment, with the hash set so it is taken up rather than replaced.
  *
  * A failure here costs only the record, so it never stops the shopper.
  *
- * @param string $email Address.
+ * @param array         $data  Fields for the order.
+ * @param WC_Order|null $order The order to bring up to date, or null for a new one.
  * @return int Order ID, or 0.
  */
-function gueta_login_pending_order( $email ) {
+function gueta_login_write_order( $data, $order = null ) {
 	if ( ! WC()->cart || WC()->cart->is_empty() ) {
 		return 0;
-	}
-
-	$existing = wc_get_order( (int) WC()->session->get( 'order_awaiting_payment', 0 ) );
-
-	if ( $existing && $existing->has_status( 'pending' ) && $existing->get_meta( '_gueta_pending_from_login' ) ) {
-		$existing->set_billing_email( $email );
-		$existing->save();
-
-		return $existing->get_id();
 	}
 
 	try {
 		WC()->cart->calculate_totals();
 
-		$order_id = WC()->checkout()->create_order(
-			[
-				'billing_email'  => $email,
-				'payment_method' => '',
-			]
-		);
+		if ( $order ) {
+			$order->set_cart_hash( WC()->cart->get_cart_hash() );
+			$order->save();
+			WC()->session->set( 'order_awaiting_payment', $order->get_id() );
+		}
+
+		$order_id = WC()->checkout()->create_order( $data + [ 'payment_method' => '' ] );
 	} catch ( Throwable $e ) {
 		return 0;
 	}
 
-	$order = is_wp_error( $order_id ) ? null : wc_get_order( $order_id );
+	return is_wp_error( $order_id ) ? 0 : (int) $order_id;
+}
+
+/**
+ * Open the session's order under the shopper's address, or bring the one
+ * already open up to date with it.
+ *
+ * @param string $email Address.
+ * @return int Order ID, or 0.
+ */
+function gueta_login_pending_order( $email ) {
+	$existing = gueta_login_session_order();
+
+	$order_id = gueta_login_write_order(
+		[
+			'billing_email'  => $email,
+			'payment_method' => $existing ? $existing->get_payment_method() : '',
+		],
+		$existing
+	);
+
+	$order = $order_id ? wc_get_order( $order_id ) : null;
 
 	if ( ! $order ) {
 		return 0;
 	}
 
-	$order->update_meta_data( '_gueta_pending_from_login', 1 );
-	$order->add_order_note( 'נפתחה כשהלקוח המשיך מחלון ההתחברות לתשלום. ממתינה לתשלום: אם לא תושלם, הלקוח נטש את הקנייה.' );
-	$order->save();
+	if ( ! $existing ) {
+		$order->update_meta_data( '_gueta_pending_from_login', 1 );
+		$order->add_order_note( 'נפתחה כשהלקוח המשיך מחלון ההתחברות לתשלום. ממתינה לתשלום: אם לא תושלם, הלקוח נטש את הקנייה.' );
+		$order->save();
+	}
 
 	WC()->session->set( 'order_awaiting_payment', $order->get_id() );
 	WC()->session->set( 'gueta_pending_order', $order->get_id() );
@@ -598,30 +644,90 @@ function gueta_login_pending_order( $email ) {
 }
 
 /**
- * When the checkout opened a new order instead of taking up the pending one,
- * bin the pending one, so the shop does not see the same purchase twice.
+ * Note that the cart changed, for the session's order to follow once the
+ * request is done. Adding three items is one update, not three.
+ *
+ * @return void
+ */
+function gueta_login_cart_changed() {
+	$GLOBALS['gueta_login_cart_changed'] = true;
+}
+add_action( 'woocommerce_add_to_cart', 'gueta_login_cart_changed' );
+add_action( 'woocommerce_cart_item_removed', 'gueta_login_cart_changed' );
+add_action( 'woocommerce_cart_item_restored', 'gueta_login_cart_changed' );
+add_action( 'woocommerce_after_cart_item_quantity_update', 'gueta_login_cart_changed' );
+add_action( 'woocommerce_applied_coupon', 'gueta_login_cart_changed' );
+add_action( 'woocommerce_removed_coupon', 'gueta_login_cart_changed' );
+
+/**
+ * Bring the session's order up to date with the cart.
+ *
+ * At shutdown, ahead of WooCommerce writing the session. An emptied cart
+ * leaves the order as it was, the record of what was nearly bought.
+ *
+ * @return void
+ */
+function gueta_login_sync_order() {
+	if ( empty( $GLOBALS['gueta_login_cart_changed'] ) || is_user_logged_in() ) {
+		return;
+	}
+
+	$GLOBALS['gueta_login_cart_changed'] = false;
+
+	$order = gueta_login_session_order();
+
+	if ( $order ) {
+		gueta_login_write_order(
+			[
+				'billing_email'  => $order->get_billing_email(),
+				'payment_method' => $order->get_payment_method(),
+			],
+			$order
+		);
+	}
+}
+add_action( 'shutdown', 'gueta_login_sync_order', 5 );
+
+/**
+ * Before the checkout places the order, point it at the session's order, so
+ * whatever changed since, WooCommerce fills in that order and opens no other.
+ *
+ * The cart's hash carries its total, which the checkout works out again from
+ * the posted delivery choice. Validation runs after that and just before the
+ * order is placed, so the hash taken here is the one WooCommerce compares.
+ *
+ * @return void
+ */
+function gueta_login_resume_order() {
+	$order = gueta_login_session_order();
+
+	if ( ! $order || ! WC()->cart ) {
+		return;
+	}
+
+	$order->set_cart_hash( WC()->cart->get_cart_hash() );
+	$order->save();
+
+	WC()->session->set( 'order_awaiting_payment', $order->get_id() );
+}
+add_action( 'woocommerce_after_checkout_validation', 'gueta_login_resume_order', 999 );
+
+/**
+ * Should the checkout have opened another order all the same, bin the
+ * session's one, so the shop does not see the same purchase twice.
  *
  * @param int $order_id The order the checkout placed.
  * @return void
  */
 function gueta_login_drop_pending_order( $order_id ) {
-	if ( ! WC()->session ) {
+	$pending = gueta_login_session_order();
+
+	if ( ! $pending || (int) $order_id === $pending->get_id() ) {
 		return;
 	}
-
-	$pending_id = (int) WC()->session->get( 'gueta_pending_order', 0 );
 
 	WC()->session->set( 'gueta_pending_order', null );
-
-	if ( ! $pending_id || (int) $order_id === $pending_id ) {
-		return;
-	}
-
-	$pending = wc_get_order( $pending_id );
-
-	if ( $pending && $pending->has_status( 'pending' ) && $pending->get_meta( '_gueta_pending_from_login' ) ) {
-		$pending->delete( false );
-	}
+	$pending->delete( false );
 }
 add_action( 'woocommerce_checkout_order_processed', 'gueta_login_drop_pending_order' );
 add_action( 'wc_ajax_gueta_login_guest', 'gueta_ajax_login_guest' );
