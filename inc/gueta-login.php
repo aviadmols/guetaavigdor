@@ -14,9 +14,10 @@
  * cannot be skipped by posting the form directly.
  *
  * Either way, a shopper may instead go on as a guest with just an address,
- * which fills the checkout's email field and goes on the order. When the shop
- * has neither SMTP nor Google set up, that is the only way, and the step asks
- * for the address alone.
+ * which fills the checkout's email field and goes on the order. The theme
+ * settings choose whether the step sends a code at all: set to the address
+ * alone, or with no SMTP to send a code through, it asks for the address and
+ * goes on, as it did before codes.
  *
  * Staff accounts are left to the ordinary login page. A code in an inbox is as
  * strong as a password reset, which is fine for a customer and not what should
@@ -82,6 +83,18 @@ function gueta_login_mail_ready() {
 	$smtp = gueta_smtp_settings();
 
 	return ! empty( $smtp['enabled'] ) && '' !== trim( (string) $smtp['host'] );
+}
+
+/**
+ * Whether the step asks for a code sent by email, or for the address alone.
+ *
+ * The shop chooses in the theme settings. A code also needs SMTP, so without
+ * it the step asks for the address alone whatever the setting says.
+ *
+ * @return bool
+ */
+function gueta_login_use_code() {
+	return 'code' === gueta_setting( 'login_method', 'code' ) && gueta_login_mail_ready();
 }
 
 /**
@@ -176,7 +189,7 @@ function gueta_login_popup_applies() {
  */
 function gueta_render_login_card( $in_popup = false ) {
 	$google = gueta_login_google_client_id();
-	$mail   = gueta_login_mail_ready();
+	$mail   = gueta_login_use_code();
 	$verify = $mail || $google;
 	?>
 	<div class="gueta-login__card" data-gueta-login>
@@ -402,6 +415,10 @@ function gueta_login_posted_email() {
  */
 function gueta_ajax_login_send_code() {
 	gueta_login_check_request();
+
+	if ( ! gueta_login_use_code() ) {
+		wp_send_json_error( [ 'message' => 'ההתחברות בקוד כבויה. אפשר להמשיך עם כתובת המייל בלבד.' ], 400 );
+	}
 
 	$email = gueta_login_posted_email();
 	$user  = get_user_by( 'email', $email );

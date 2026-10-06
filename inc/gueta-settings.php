@@ -31,6 +31,7 @@ function gueta_settings_defaults() {
 		'nav_tree'         => [],
 		'login_required'   => 1,
 		'google_client_id' => '',
+		'login_method'     => 'code',
 	];
 }
 
@@ -455,6 +456,25 @@ function gueta_settings_tab_login( $settings ) {
 			</td>
 		</tr>
 		<tr>
+			<th scope="row">איך מתחברים</th>
+			<td>
+				<fieldset>
+					<label>
+						<input type="radio" name="login_method" value="code" <?php checked( 'code', $settings['login_method'] ); ?>>
+						קוד אימות במייל: הלקוח מקבל קוד בן 6 ספרות ומקליד אותו
+					</label>
+					<br>
+					<label>
+						<input type="radio" name="login_method" value="email" <?php checked( 'email', $settings['login_method'] ); ?>>
+						כתובת מייל בלבד: הלקוח מקליד מייל וממשיך לתשלום, בלי קוד
+					</label>
+				</fieldset>
+				<?php if ( 'code' === $settings['login_method'] && function_exists( 'gueta_login_mail_ready' ) && ! gueta_login_mail_ready() ) : ?>
+					<p class="description">כדי לשלוח קוד צריך להגדיר SMTP בלשונית "מיילים (SMTP)". עד אז מתבקשת כתובת מייל בלבד.</p>
+				<?php endif; ?>
+			</td>
+		</tr>
+		<tr>
 			<th scope="row"><label for="gueta-google-client-id">Google Client ID</label></th>
 			<td>
 				<input type="text" id="gueta-google-client-id" name="google_client_id" value="<?php echo esc_attr( $settings['google_client_id'] ); ?>" class="large-text code" dir="ltr" placeholder="1234567890-xxxx.apps.googleusercontent.com">
@@ -539,6 +559,7 @@ function gueta_save_settings( $source, $tab ) {
 			$changes = [
 				'login_required'   => ! empty( $source['login_required'] ) ? 1 : 0,
 				'google_client_id' => isset( $source['google_client_id'] ) ? sanitize_text_field( wp_unslash( $source['google_client_id'] ) ) : '',
+				'login_method'     => isset( $source['login_method'] ) && 'email' === $source['login_method'] ? 'email' : 'code',
 			];
 			break;
 
