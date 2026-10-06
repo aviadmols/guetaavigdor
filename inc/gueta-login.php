@@ -111,7 +111,70 @@ function gueta_login_guest_email() {
 }
 
 /**
+ * The cookie that remembers a guest's choice beside the cart session.
+ */
+const GUETA_LOGIN_GUEST_COOKIE = 'gueta_guest';
+
+/**
+ * The cookie's value for an address: the address and a signature, so it
+ * cannot be made up. An empty address is a guest who gave none.
+ *
+ * @param string $email Address, or an empty string.
+ * @return string
+ */
+function gueta_login_guest_cookie_value( $email ) {
+	return rawurlencode( $email ) . '|' . substr( hash_hmac( 'sha256', 'guest|' . $email, wp_salt( 'auth' ) ), 0, 32 );
+}
+
+/**
+ * Remember a guest's choice in the browser as well as in the session.
+ *
+ * @param string $email Address, or an empty string.
+ * @return void
+ */
+function gueta_login_remember_guest( $email ) {
+	if ( headers_sent() ) {
+		return;
+	}
+
+	// Until the browser closes, like the cart session itself.
+	wc_setcookie( GUETA_LOGIN_GUEST_COOKIE, gueta_login_guest_cookie_value( $email ), 0, is_ssl(), true );
+}
+
+/**
+ * The address a guest cookie vouches for, or null when there is none or it
+ * does not check out.
+ *
+ * @return string|null
+ */
+function gueta_login_guest_cookie() {
+	if ( empty( $_COOKIE[ GUETA_LOGIN_GUEST_COOKIE ] ) ) {
+		return null;
+	}
+
+	$parts = explode( '|', (string) wp_unslash( $_COOKIE[ GUETA_LOGIN_GUEST_COOKIE ] ), 2 ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- checked against its signature below.
+
+	if ( 2 !== count( $parts ) ) {
+		return null;
+	}
+
+	$email = rawurldecode( $parts[0] );
+
+	if ( ( '' !== $email && ! is_email( $email ) ) || ! hash_equals( gueta_login_guest_cookie_value( $email ), $parts[0] . '|' . $parts[1] ) ) {
+		return null;
+	}
+
+	return $email;
+}
+
+/**
  * Whether the shopper chose to go on as a guest, with an address or without.
+ *
+ * The session says so. The cookie set beside it says so too, for when the
+ * session lost it: two requests at once each write the whole session, and
+ * the one that started earlier but finished later wrote it back without the
+ * choice, so the shopper who had just given an address met the step again
+ * at the checkout. The cookie puts the choice back into the session.
  *
  * @return bool
  */
@@ -120,7 +183,27 @@ function gueta_login_is_guest() {
 		return false;
 	}
 
-	return (bool) WC()->session->get( 'gueta_guest', false ) || '' !== gueta_login_guest_email();
+	if ( (bool) WC()->session->get( 'gueta_guest', false ) || '' !== gueta_login_guest_email() ) {
+		return true;
+	}
+
+	$email = gueta_login_guest_cookie();
+
+	if ( null === $email ) {
+		return false;
+	}
+
+	if ( ! WC()->session->has_session() && ! headers_sent() ) {
+		WC()->session->set_customer_session_cookie( true );
+	}
+
+	WC()->session->set( 'gueta_guest', true );
+
+	if ( '' !== $email ) {
+		WC()->session->set( 'gueta_guest_email', $email );
+	}
+
+	return true;
 }
 
 /**
@@ -536,6 +619,7 @@ function gueta_ajax_login_guest() {
 	// A guest's session lives only in memory until it is given a cookie.
 	WC()->session->set_customer_session_cookie( true );
 	WC()->session->set( 'gueta_guest', true );
+	gueta_login_remember_guest( $email );
 
 	if ( $email ) {
 		WC()->session->set( 'gueta_guest_email', $email );
