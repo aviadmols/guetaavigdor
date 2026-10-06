@@ -32,6 +32,7 @@ require_once get_stylesheet_directory() . '/inc/gueta-search.php';
 require_once get_stylesheet_directory() . '/inc/gueta-search-index.php';
 require_once get_stylesheet_directory() . '/inc/gueta-search-vectors.php';
 require_once get_stylesheet_directory() . '/inc/gueta-search-stats.php';
+require_once get_stylesheet_directory() . '/inc/gueta-abandoned-cart.php';
 require_once get_stylesheet_directory() . '/inc/gueta-cart.php';
 require_once get_stylesheet_directory() . '/inc/gueta-categories.php';
 require_once get_stylesheet_directory() . '/inc/gueta-product.php';
