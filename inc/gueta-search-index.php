@@ -11,6 +11,11 @@
  * The file name carries a hash of its own contents, so a rebuild that changes
  * nothing keeps the same URL and the browser keeps its copy.
  *
+ * It is built once a day, and whenever the button on the settings screen is
+ * pressed; saving a product does not rebuild it. The browser and
+ * gueta-search-vectors.php both search it, so a misspelt word still finds
+ * its products.
+ *
  * @package HelloElementorChild
  */
 
@@ -37,6 +42,11 @@ const GUETA_SEARCH_INDEX_HOOK = 'gueta_search_index_rebuild';
  * Cron hook for the daily safety rebuild.
  */
 const GUETA_SEARCH_INDEX_DAILY = 'gueta_search_index_daily';
+
+/**
+ * The shape of a row. Raised when rows change, to build a new file at once.
+ */
+const GUETA_SEARCH_INDEX_FORMAT = 2;
 
 /**
  * Articles kept in the index.
@@ -194,7 +204,7 @@ function gueta_search_index_prices( $product ) {
 /**
  * Every searchable product, as compact rows.
  *
- * A row is [ title, url, thumbnail, price, was, max, sku, keywords ].
+ * A row is [ title, url, thumbnail, price, was, max, sku, keywords, id ].
  *
  * @param string $home    Site URL ending in a slash.
  * @param string $uploads Uploads URL ending in a slash.
@@ -298,6 +308,7 @@ function gueta_search_index_row( $post_id, $home, $uploads ) {
 		$prices[2],
 		$product ? gueta_plain_text( $product->get_sku() ) : '',
 		gueta_plain_text( implode( ' ', $keywords ) ),
+		(int) $post_id,
 	];
 }
 
@@ -483,6 +494,7 @@ function gueta_build_search_index() {
 			'products' => $count,
 			'terms'    => count( $payload['c'] ) + count( $payload['t'] ),
 			'bytes'    => strlen( $json ),
+			'format'   => GUETA_SEARCH_INDEX_FORMAT,
 		],
 		false
 	);
@@ -566,50 +578,6 @@ function gueta_queue_search_index_rebuild() {
 	wp_schedule_single_event( time() + max( 30, $delay ), GUETA_SEARCH_INDEX_HOOK );
 }
 
-/**
- * Queue a rebuild after a post is saved, ignoring revisions and autosaves.
- *
- * @param int $post_id Post id.
- * @return void
- */
-function gueta_queue_search_index_rebuild_on_save( $post_id ) {
-	if ( wp_is_post_revision( $post_id ) || wp_is_post_autosave( $post_id ) ) {
-		return;
-	}
-
-	gueta_queue_search_index_rebuild();
-}
-
-/**
- * Queue a rebuild only when the post that changed is one the index holds.
- * Orders, revisions and everything else leave it alone.
- *
- * @param int          $post_id Post id.
- * @param WP_Post|null $post    The post, when the hook passes one.
- * @return void
- */
-function gueta_queue_search_index_rebuild_for_post( $post_id, $post = null ) {
-	$type = $post instanceof WP_Post ? $post->post_type : get_post_type( $post_id );
-
-	if ( in_array( $type, [ 'product', 'post', 'page' ], true ) ) {
-		gueta_queue_search_index_rebuild();
-	}
-}
-
-add_action( 'save_post_product', 'gueta_queue_search_index_rebuild_on_save' );
-add_action( 'save_post_post', 'gueta_queue_search_index_rebuild_on_save' );
-add_action( 'save_post_page', 'gueta_queue_search_index_rebuild_on_save' );
-add_action( 'woocommerce_new_product', 'gueta_queue_search_index_rebuild' );
-add_action( 'trashed_post', 'gueta_queue_search_index_rebuild_for_post' );
-add_action( 'untrashed_post', 'gueta_queue_search_index_rebuild_for_post' );
-add_action( 'deleted_post', 'gueta_queue_search_index_rebuild_for_post', 10, 2 );
-add_action( 'created_product_cat', 'gueta_queue_search_index_rebuild' );
-add_action( 'edited_product_cat', 'gueta_queue_search_index_rebuild' );
-add_action( 'delete_product_cat', 'gueta_queue_search_index_rebuild' );
-add_action( 'created_product_tag', 'gueta_queue_search_index_rebuild' );
-add_action( 'edited_product_tag', 'gueta_queue_search_index_rebuild' );
-add_action( 'delete_product_tag', 'gueta_queue_search_index_rebuild' );
-
 add_action( GUETA_SEARCH_INDEX_HOOK, 'gueta_build_search_index' );
 add_action( GUETA_SEARCH_INDEX_DAILY, 'gueta_build_search_index' );
 
@@ -644,7 +612,7 @@ add_action( 'switch_theme', 'gueta_search_index_unschedule' );
 function gueta_search_index_bootstrap() {
 	$meta = gueta_search_index_meta();
 
-	if ( empty( $meta['file'] ) ) {
+	if ( empty( $meta['file'] ) || ( $meta['format'] ?? 1 ) < GUETA_SEARCH_INDEX_FORMAT ) {
 		gueta_queue_search_index_rebuild();
 	}
 }
@@ -683,8 +651,9 @@ function gueta_search_index_admin_section() {
 	<h2>אינדקס החיפוש</h2>
 	<p>
 		החיפוש בהדר קורא קובץ JSON אחד במקום לפנות למסד הנתונים בכל הקשה.
-		הקובץ נבנה מחדש אוטומטית כמה דקות אחרי שמירת מוצר, קטגוריה או מאמר, ופעם ביום כרשת ביטחון.
-		אחרי ייבוא מוצרים או עדכון מחירים בכמות גדולה, אפשר לדחוף בנייה מיידית מכאן.
+		הקובץ נבנה מחדש פעם ביום, או מיד בלחיצה על הכפתור כאן. שמירת מוצר לא בונה אותו מחדש,
+		ולכן אחרי הוספת מוצרים או עדכון מחירים כדאי ללחוץ על הכפתור כדי שהחיפוש יראה אותם מיד.
+		החיפוש מוצא מוצרים גם בשגיאות כתיב, בכתיב מלא או חסר, ביחיד או ברבים, וגם כשהמקלדת נשארה באנגלית.
 	</p>
 
 	<?php if ( $notice ) : ?>

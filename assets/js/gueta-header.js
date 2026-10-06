@@ -288,6 +288,210 @@
 				.trim();
 		}
 
+		/* -----------------------------------------------------------------
+		 * Finding a product however it is spelled
+		 *
+		 * Every word in the catalogue is a vector of its three letter pieces,
+		 * " מק", "מקי", "קיט"..., together with the pieces of how it sounds:
+		 * plural ending off, ו and י after the first letter off, and letters
+		 * that sound alike folded (ט ת, ק כ ח, ע א ה, ס ש). A word typed is
+		 * compared with every word in the catalogue by the angle between their
+		 * vectors, so "מקיטא" finds "מקיטה" and "איסקורית" finds "איסכורית".
+		 * A query typed with the keyboard left in English, "ncrdv", is also
+		 * read as the Hebrew keys it was meant for. No outside service is
+		 * asked: the vectors are worked out here, from the index file.
+		 * inc/gueta-search-vectors.php does the same for the results page,
+		 * and the two are kept in step.
+		 * -------------------------------------------------------------- */
+
+		var hebrewWord = /^[א-ת]+$/;
+		var prefixLetter = /^[והבלמשכ]/;
+		var alike = { 'ט': 'ת', 'ק': 'כ', 'ח': 'כ', 'ע': 'א', 'ס': 'ש', 'ה': 'א' };
+		var keyboard = {
+			e: 'ק', r: 'ר', t: 'א', y: 'ט', u: 'ו', i: 'נ', o: 'מ', p: 'פ',
+			a: 'ש', s: 'ד', d: 'ג', f: 'כ', g: 'ע', h: 'י', j: 'ח', k: 'ל', l: 'כ', ';': 'פ',
+			z: 'ז', x: 'ס', c: 'ב', v: 'ה', b: 'נ', n: 'מ', m: 'צ', ',': 'ת', '.': 'צ'
+		};
+
+		// A word however it is spelled: ברגים and בורג are both ברג.
+		function stem(word) {
+			if (!hebrewWord.test(word) || word.length < 3) {
+				return word;
+			}
+
+			var base = word.length > 4 ? word.replace(/(ימ|ות)$/, '') : word;
+
+			return base.charAt(0) + base.slice(1).replace(/[וי]/g, '');
+		}
+
+		// And how it sounds.
+		function sound(word) {
+			return stem(word).replace(/[טקחעסה]/g, function (letter) {
+				return alike[letter];
+			});
+		}
+
+		function pieces(word, out) {
+			var padded = ' ' + word + ' ';
+
+			for (var i = 0; i < padded.length - 2; i++) {
+				var piece = padded.substr(i, 3);
+
+				out[piece] = (out[piece] || 0) + 1;
+			}
+
+			return out;
+		}
+
+		function wordVector(word) {
+			var vector = pieces(word, {});
+			var heard = sound(word);
+			var length = 0;
+			var piece;
+
+			if (heard !== word) {
+				pieces('~' + heard, vector);
+			}
+
+			for (piece in vector) {
+				length += vector[piece] * vector[piece];
+			}
+
+			length = Math.sqrt(length) || 1;
+
+			for (piece in vector) {
+				vector[piece] /= length;
+			}
+
+			return vector;
+		}
+
+		function fromKeyboard(query) {
+			if (!/^[a-z;,. ]+$/.test(query) || !/[a-z]/.test(query)) {
+				return '';
+			}
+
+			return query.replace(/[a-z;,.]/g, function (key) {
+				return keyboard[key] || key;
+			});
+		}
+
+		/**
+		 * The catalogue's words, the products holding each, and a list from
+		 * each piece to the words that have it.
+		 */
+		function prepareWords(products) {
+			var list = [];
+			var holders = {};
+			var postings = {};
+			var i;
+
+			for (i = 0; i < products.length; i++) {
+				var own = products[i].hay.split(' ');
+
+				for (var j = 0; j < own.length; j++) {
+					var word = own[j];
+
+					if (!word) {
+						continue;
+					}
+
+					if (!Object.prototype.hasOwnProperty.call(holders, word)) {
+						holders[word] = [];
+						list.push(word);
+					}
+
+					if (holders[word][holders[word].length - 1] !== i) {
+						holders[word].push(i);
+					}
+				}
+			}
+
+			for (i = 0; i < list.length; i++) {
+				var vector = wordVector(list[i]);
+
+				for (var piece in vector) {
+					(postings[piece] || (postings[piece] = [])).push(i, vector[piece]);
+				}
+			}
+
+			return { list: list, holders: holders, postings: postings };
+		}
+
+		/**
+		 * The catalogue's words close to one typed word, each with how close,
+		 * 1 for the word itself. Only those near the best are kept, so a word
+		 * found as typed does not drag in its look-alikes.
+		 */
+		function closeWords(words, typed) {
+			var found = {};
+			var variants = [typed];
+			var best = 0;
+			var word;
+
+			// לעץ is עץ with "to" in front.
+			if (prefixLetter.test(typed) && typed.length > 3) {
+				variants.push(typed.slice(1));
+			}
+
+			variants.forEach(function (variant, position) {
+				var vector = wordVector(variant);
+				var scores = new Float64Array(words.list.length);
+				var base = stem(variant);
+				var i;
+
+				for (var piece in vector) {
+					var list = words.postings[piece];
+
+					if (!list) {
+						continue;
+					}
+
+					for (i = 0; i < list.length; i += 2) {
+						scores[list[i]] += vector[piece] * list[i + 1];
+					}
+				}
+
+				for (i = 0; i < words.list.length; i++) {
+					var candidate = words.list[i];
+					var score = scores[i];
+
+					if (candidate === variant) {
+						score = 1;
+					} else if (variant.length >= 2 && 0 === candidate.indexOf(variant)) {
+						// Still being typed.
+						score = Math.max(score, 0.9 - 0.02 * (candidate.length - variant.length));
+					} else if (variant.length >= 3 && stem(candidate) === base) {
+						score = Math.max(score, 0.85);
+					} else if (prefixLetter.test(candidate) && candidate.length > 3 && candidate.slice(1) === variant) {
+						score = Math.max(score, 0.85);
+					}
+
+					if (position) {
+						score *= 0.95;
+					}
+
+					if (score >= 0.45 && (found[candidate] || 0) < score) {
+						found[candidate] = score;
+					}
+				}
+			});
+
+			for (word in found) {
+				best = Math.max(best, found[word]);
+			}
+
+			var floor = Math.max(0.45, best * 0.8);
+
+			for (word in found) {
+				if (found[word] < floor) {
+					delete found[word];
+				}
+			}
+
+			return found;
+		}
+
 		function esc(value) {
 			return String(value == null ? '' : value)
 				.replace(/&/g, '&amp;')
@@ -327,6 +531,8 @@
 			for (i = 0; i < raw.p.length; i++) {
 				var row = raw.p[i];
 
+				var name = normalize(row[0]);
+
 				products.push({
 					title: row[0],
 					url: row[1],
@@ -334,7 +540,8 @@
 					price: row[3],
 					regular: row[4],
 					max: row[5],
-					name: normalize(row[0]),
+					name: name,
+					named: ' ' + name + ' ',
 					hay: normalize(row[0] + ' ' + (row[6] || '') + ' ' + (row[7] || ''))
 				});
 			}
@@ -366,6 +573,7 @@
 					articles: (raw.lim && raw.lim.a) || 3
 				},
 				products: products,
+				words: prepareWords(products),
 				categories: terms(raw.c || []),
 				tags: terms(raw.t || []),
 				articles: terms(raw.a || [])
@@ -454,21 +662,66 @@
 			return 4;
 		}
 
-		function matchProducts(idx, query, tokens) {
+		/**
+		 * Products for a query: those holding every word as typed first, in
+		 * the order rank() gives them, then those holding a close enough word
+		 * for each, the closest first. With three words or more, one may go
+		 * unmatched.
+		 */
+		function findProducts(idx, query) {
+			var tokens = query.split(' ');
+			var close = tokens.map(function (token) {
+				return closeWords(idx.words, token);
+			});
+			var count = idx.products.length;
+			var score = new Float64Array(count);
+			var hits = new Uint8Array(count);
+			var needed = tokens.length <= 2 ? tokens.length : tokens.length - 1;
 			var found = [];
 			var i;
 
-			for (i = 0; i < idx.products.length; i++) {
-				var score = rank(idx.products[i], query, tokens);
+			close.forEach(function (words) {
+				var best = {};
+				var at;
 
-				if (score >= 0) {
-					found.push({ item: idx.products[i], score: score });
+				for (var word in words) {
+					var holders = idx.words.holders[word] || [];
+
+					for (var j = 0; j < holders.length; j++) {
+						at = holders[j];
+
+						// A word in the name counts for more than one in a category or tag.
+						var value = words[word] * (-1 !== idx.products[at].named.indexOf(' ' + word + ' ') ? 1 : 0.7);
+
+						if (!best[at] || best[at] < value) {
+							best[at] = value;
+						}
+					}
 				}
+
+				for (at in best) {
+					score[at] += best[at];
+					hits[at]++;
+				}
+			});
+
+			for (i = 0; i < count; i++) {
+				var tier = rank(idx.products[i], query, tokens);
+
+				if (tier < 0 && hits[i] < needed) {
+					continue;
+				}
+
+				found.push({
+					item: idx.products[i],
+					score: (tier >= 0 ? 10 - tier : 0) + score[i] / tokens.length,
+					close: close
+				});
 			}
 
 			found.sort(function (a, b) {
 				if (a.score !== b.score) {
-					return a.score - b.score;
+					return b.score - a.score;
 				}
 
 				return a.item.title.length - b.item.title.length;
@@ -477,12 +730,45 @@
 			return found;
 		}
 
-		function matchTerms(rows, query, limit) {
+		function matchProducts(idx, query) {
+			var found = findProducts(idx, query);
+			var typed = fromKeyboard(query);
+
+			// Typed with the keyboard in English: keep whichever reading finds better.
+			if (typed) {
+				var hebrew = findProducts(idx, typed);
+
+				if (hebrew.length && (!found.length || hebrew[0].score > found[0].score)) {
+					return hebrew;
+				}
+			}
+
+			return found;
+		}
+
+		/**
+		 * Categories, tags and articles whose name holds the query as typed,
+		 * or a close word for at least half the words of it: "צבא לעץ" brings
+		 * up the paint category, which says nothing of wood.
+		 */
+		function matchTerms(rows, query, limit, close) {
 			var found = [];
 			var i;
 
+			function near(match) {
+				var own = match.split(' ');
+
+				var held = close.filter(function (words) {
+					return own.some(function (word) {
+						return Object.prototype.hasOwnProperty.call(words, word);
+					});
+				});
+
+				return held.length * 2 >= close.length;
+			}
+
 			for (i = 0; i < rows.length; i++) {
-				if (-1 !== rows[i].match.indexOf(query)) {
+				if (-1 !== rows[i].match.indexOf(query) || (close && close.length && near(rows[i].match))) {
 					found.push(rows[i]);
 				}
 			}
@@ -635,12 +921,12 @@
 				return '';
 			}
 
-			var tokens = query.split(' ');
-			var matches = matchProducts(idx, query, tokens);
+			var matches = matchProducts(idx, query);
+			var close = matches.length ? matches[0].close : null;
 			var products = matches.slice(0, idx.limits.products);
-			var categories = matchTerms(idx.categories, query, idx.limits.terms);
-			var tags = matchTerms(idx.tags, query, idx.limits.terms);
-			var articles = matchTerms(idx.articles, query, idx.limits.articles);
+			var categories = matchTerms(idx.categories, query, idx.limits.terms, close);
+			var tags = matchTerms(idx.tags, query, idx.limits.terms, close);
+			var articles = matchTerms(idx.articles, query, idx.limits.articles, close);
 			var hasSide = categories.length || tags.length || articles.length;
 			var html = '<div class="gueta-suggest__layout' + (hasSide ? '' : ' is-single') + '">';
 			var i;

@@ -23,6 +23,7 @@
 	var moreButton = archive.querySelector('[data-archive-more]');
 	var compareToggle = archive.querySelector('[data-archive-compare-toggle]');
 	var category = archive.getAttribute('data-category') || '';
+	var search = archive.getAttribute('data-search') || '';
 	var page = 1;
 	var pending = null;
 	var debounce = null;
@@ -129,6 +130,11 @@
 
 	function collect() {
 		var state = { category: category, sort: sortSelect ? sortSelect.value : 'menu_order', paged: page };
+
+		// A search results page keeps its search through filters and "load more".
+		if (search) {
+			state.q = search;
+		}
 		var groups = {};
 
 		Array.prototype.forEach.call(form.querySelectorAll('input[type="checkbox"]'), function (input) {
@@ -157,7 +163,7 @@
 		var total = 0;
 
 		Object.keys(state).forEach(function (key) {
-			if ('category' === key || 'sort' === key || 'paged' === key) {
+			if ('category' === key || 'sort' === key || 'paged' === key || 'q' === key) {
 				return;
 			}
 
@@ -170,8 +176,14 @@
 	function syncUrl(state) {
 		var params = new URLSearchParams();
 
+		// The search results page's own address, which the filters add to.
+		if (search) {
+			params.set('s', search);
+			params.set('post_type', 'product');
+		}
+
 		Object.keys(state).forEach(function (key) {
-			if ('category' === key || 'paged' === key) {
+			if ('category' === key || 'paged' === key || 'q' === key) {
 				return;
 			}
 

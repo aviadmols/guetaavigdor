@@ -102,7 +102,8 @@ function gueta_archive_state( $overrides = [] ) {
 		'max_price'  => $number( 'max_price' ),
 		'sort'       => in_array( $sort, $allowed_sort, true ) ? $sort : 'menu_order',
 		'page'       => isset( $source['paged'] ) ? max( 1, (int) $source['paged'] ) : 1,
-		'search'     => isset( $source['q'] ) ? sanitize_text_field( wp_unslash( $source['q'] ) ) : '',
+		// q from the grid's own requests, s on the search results page.
+		'search'     => isset( $source['q'] ) ? sanitize_text_field( wp_unslash( $source['q'] ) ) : ( isset( $source['s'] ) && is_scalar( $source['s'] ) ? sanitize_text_field( wp_unslash( $source['s'] ) ) : '' ),
 	];
 }
 
@@ -154,7 +155,16 @@ function gueta_archive_query( $state ) {
 		'meta_query'          => [], // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_meta_query
 	];
 
-	if ( $state['search'] ) {
+	/*
+	 * The products the header's suggestions found, in their order, misspelt or
+	 * not. WordPress's own search, which needs the words exactly as written,
+	 * only when there is no index to search.
+	 */
+	$found = $state['search'] && function_exists( 'gueta_search_vector_ids' ) ? gueta_search_vector_ids( $state['search'] ) : null;
+
+	if ( null !== $found ) {
+		$args['post__in'] = $found ? $found : [ 0 ];
+	} elseif ( $state['search'] ) {
 		$args['s'] = $state['search'];
 	}
 
@@ -189,7 +199,8 @@ function gueta_archive_query( $state ) {
 	}
 
 	if ( in_array( 'onsale', $state['stock'], true ) ) {
-		$args['post__in'] = array_merge( [ 0 ], wc_get_product_ids_on_sale() );
+		$on_sale          = array_merge( [ 0 ], wc_get_product_ids_on_sale() );
+		$args['post__in'] = isset( $args['post__in'] ) ? array_merge( [ 0 ], array_values( array_intersect( $args['post__in'], $on_sale ) ) ) : $on_sale;
 	}
 
 	if ( in_array( 'instock', $state['stock'], true ) ) {
@@ -236,7 +247,8 @@ function gueta_archive_query( $state ) {
 			$args['order']    = 'DESC';
 			break;
 		default:
-			$args['orderby'] = 'menu_order title';
+			// A search keeps its best matches first.
+			$args['orderby'] = null !== $found ? 'post__in' : 'menu_order title';
 			$args['order']   = 'ASC';
 	}
 
@@ -295,6 +307,7 @@ function gueta_render_archive( $atts = [] ) {
 		data-archive
 		data-columns="<?php echo (int) $atts['columns']; ?>"
 		data-category="<?php echo esc_attr( $state['category'] ); ?>"
+		data-search="<?php echo esc_attr( $state['search'] ); ?>"
 	>
 		<?php
 		if ( function_exists( 'gueta_render_shop_banners' ) ) {
