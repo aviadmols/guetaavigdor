@@ -816,6 +816,42 @@ function gueta_ac_order_paid( $order_id ) {
 add_action( 'woocommerce_order_status_processing', 'gueta_ac_order_paid' );
 add_action( 'woocommerce_order_status_completed', 'gueta_ac_order_paid' );
 
+/**
+ * A cart waiting for its email is closed the moment the same address, or the
+ * same account, places an order, from whatever device, so nothing goes out
+ * and the waiting list stays true. The check before sending stays as well.
+ *
+ * @param int $order_id Order id.
+ * @return void
+ */
+function gueta_ac_close_open_carts( $order_id ) {
+	$order = wc_get_order( $order_id );
+
+	if ( ! $order || ! gueta_ac_ready() ) {
+		return;
+	}
+
+	global $wpdb;
+
+	$table = gueta_ac_table();
+	$email = strtolower( (string) $order->get_billing_email() );
+	$user  = (int) $order->get_customer_id();
+
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	$wpdb->query(
+		$wpdb->prepare(
+			"UPDATE {$table} SET status = 'ordered', note = %s WHERE status = 'open' AND ( email = %s OR ( %d > 0 AND user_id = %d ) )",
+			sprintf( 'הזמין (#%s) לפני שהמייל נשלח', $order->get_order_number() ),
+			$email,
+			$user,
+			$user
+		)
+	);
+}
+add_action( 'woocommerce_order_status_processing', 'gueta_ac_close_open_carts' );
+add_action( 'woocommerce_order_status_completed', 'gueta_ac_close_open_carts' );
+add_action( 'woocommerce_order_status_on-hold', 'gueta_ac_close_open_carts' );
+
 /* -------------------------------------------------------------------------
  * The admin page
  * ---------------------------------------------------------------------- */
