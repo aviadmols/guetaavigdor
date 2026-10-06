@@ -359,11 +359,15 @@ function gueta_ac_stopped( $email ) {
 /**
  * Whether the shopper ordered since leaving the cart.
  *
+ * An order still waiting for payment does not count: the step before paying
+ * opens one under the guest's address the moment it is given
+ * (gueta-login.php), and that order is the very cart left behind.
+ *
  * @param object $row Cart row.
  * @return bool
  */
 function gueta_ac_ordered_since( $row ) {
-	$statuses = array_diff( array_keys( wc_get_order_statuses() ), [ 'wc-failed', 'wc-cancelled', 'wc-checkout-draft' ] );
+	$statuses = array_diff( array_keys( wc_get_order_statuses() ), [ 'wc-pending', 'wc-failed', 'wc-cancelled', 'wc-checkout-draft' ] );
 	$since    = strtotime( $row->updated_at . ' UTC' ) - HOUR_IN_SECONDS;
 	$args     = [
 		'limit'        => 1,
