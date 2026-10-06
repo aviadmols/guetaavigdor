@@ -123,7 +123,17 @@ const GUETA_LOGIN_GUEST_COOKIE = 'gueta_guest';
  * @return string
  */
 function gueta_login_guest_cookie_value( $email ) {
-	return rawurlencode( $email ) . '|' . substr( hash_hmac( 'sha256', 'guest|' . $email, wp_salt( 'auth' ) ), 0, 32 );
+	return rawurlencode( $email ) . '|' . gueta_login_guest_signature( $email );
+}
+
+/**
+ * The signature on a guest cookie for an address.
+ *
+ * @param string $email Address, or an empty string.
+ * @return string
+ */
+function gueta_login_guest_signature( $email ) {
+	return substr( hash_hmac( 'sha256', 'guest|' . $email, wp_salt( 'auth' ) ), 0, 32 );
 }
 
 /**
@@ -158,9 +168,10 @@ function gueta_login_guest_cookie() {
 		return null;
 	}
 
+	// PHP hands the cookie over already decoded, so the address is checked by its signature alone.
 	$email = rawurldecode( $parts[0] );
 
-	if ( ( '' !== $email && ! is_email( $email ) ) || ! hash_equals( gueta_login_guest_cookie_value( $email ), $parts[0] . '|' . $parts[1] ) ) {
+	if ( ( '' !== $email && ! is_email( $email ) ) || ! hash_equals( gueta_login_guest_signature( $email ), $parts[1] ) ) {
 		return null;
 	}
 
