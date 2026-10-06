@@ -1439,3 +1439,58 @@
 		margin-inline-end: clamp(20px, 2.5vw, 100px);
 	}
 }
+
+/*
+ * The cutting calculator's button: a border of the shop's orange running
+ * into violet and blue that turns slowly round it, the way buttons that open
+ * something AI-driven are drawn, with a soft glow of the same colours. The
+ * button inside stays white, or sand under the pointer.
+ *
+ * The plugin styles the button with !important on an id selector, so these
+ * rules start from body to outrank it. The turning needs @property, which
+ * every current browser has; one without it shows the border standing still.
+ */
+@property --gueta-ai-angle {
+	inherits: false;
+	initial-value: 0deg;
+	syntax: "<angle>";
+}
+
+body .gac-trigger-wrap button#gac-open-calculator.gac-open-calculator {
+	--gueta-ai-fill: var(--gueta-paper, #ffffff);
+	--gueta-ai-ring: conic-gradient(from var(--gueta-ai-angle), #f0591d, #ff9a5a, #8b5cf6, #3b82f6, #22c1c3, #f0591d);
+	animation: gueta-ai-turn 4s linear infinite, gueta-ai-glow 4s ease-in-out infinite;
+	background: linear-gradient(var(--gueta-ai-fill), var(--gueta-ai-fill)) padding-box, var(--gueta-ai-ring) border-box !important;
+	border: 2px solid transparent !important;
+	transition: box-shadow .3s ease, transform .2s ease !important;
+}
+
+body .gac-trigger-wrap button#gac-open-calculator.gac-open-calculator:hover {
+	--gueta-ai-fill: var(--gueta-sand, #fafafa);
+	background: linear-gradient(var(--gueta-ai-fill), var(--gueta-ai-fill)) padding-box, var(--gueta-ai-ring) border-box !important;
+	border-color: transparent !important;
+	transform: translateY(-1px);
+}
+
+@keyframes gueta-ai-turn {
+	to {
+		--gueta-ai-angle: 360deg;
+	}
+}
+
+@keyframes gueta-ai-glow {
+	0%,
+	100% {
+		box-shadow: 0 0 0 0 rgb(240 89 29 / 0%), 0 4px 14px -6px rgb(240 89 29 / 45%);
+	}
+
+	50% {
+		box-shadow: 0 0 0 3px rgb(139 92 246 / 10%), 0 6px 20px -6px rgb(59 130 246 / 45%);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	body .gac-trigger-wrap button#gac-open-calculator.gac-open-calculator {
+		animation: none;
+	}
+}
