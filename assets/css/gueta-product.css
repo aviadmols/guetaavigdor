@@ -752,24 +752,32 @@
 }
 
 /*
- * Under a price per metre, the least a length of it comes to. It sits on a
- * line of its own wherever the product's price is shown on its page.
+ * A product sold by length leads with what its shortest length costs, the
+ * price Google is given, and the price per metre follows on a smaller line
+ * of its own.
  */
-.gueta-price-from {
+.gueta-price-lead__for {
+	font-size: .7em;
+	font-weight: 500;
+}
+
+.gueta-price-per {
 	color: var(--gueta-muted);
 	display: block;
-	font-size: .8em;
+	font-size: .6em;
 	font-weight: 500;
 	margin-top: 2px;
 }
 
-.gueta-price-from .woocommerce-Price-amount {
-	color: var(--gueta-ink);
-	font-weight: 700;
+.gueta-price-per .woocommerce-Price-amount,
+.gueta-price-per .gueta-price-for {
+	color: inherit;
+	font-size: inherit;
+	font-weight: inherit;
 }
 
 /* The sticky bar keeps to one line. */
-.gueta-sticky-atc .gueta-price-from {
+.gueta-sticky-atc .gueta-price-per {
 	display: none;
 }
 

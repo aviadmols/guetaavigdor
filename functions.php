@@ -49,6 +49,7 @@ require_once get_stylesheet_directory() . '/inc/gueta-font-migrate.php';
 require_once get_stylesheet_directory() . '/inc/gueta-cities.php';
 require_once get_stylesheet_directory() . '/inc/gueta-shipping.php';
 require_once get_stylesheet_directory() . '/inc/gueta-delivery.php';
+require_once get_stylesheet_directory() . '/inc/gueta-merchant-feed.php';
 require_once get_stylesheet_directory() . '/inc/gueta-checkout.php';
 require_once get_stylesheet_directory() . '/inc/gueta-login.php';
 require_once get_stylesheet_directory() . '/inc/gueta-smtp.php';

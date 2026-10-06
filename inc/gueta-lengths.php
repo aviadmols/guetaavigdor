@@ -130,10 +130,13 @@ function gueta_length_chosen( $field ) {
  *
  * @param WC_Product $product Product or variation.
  * @param float      $percent Option's percentage.
+ * @param mixed      $raw     Stored price to start from; the current price
+ *                            when left out, the regular one for a sale's
+ *                            struck through figure.
  * @return float
  */
-function gueta_length_unit_price( $product, $percent ) {
-	$raw   = (float) $product->get_price( 'edit' );
+function gueta_length_unit_price( $product, $percent, $raw = null ) {
+	$raw   = (float) ( null === $raw ? $product->get_price( 'edit' ) : $raw );
 	$price = $raw * ( 1 + $percent / 100 );
 
 	if ( function_exists( 'gueta_pack_price' ) ) {
@@ -144,6 +147,22 @@ function gueta_length_unit_price( $product, $percent ) {
 }
 
 /**
+ * The metres in a length's label: 4.2 for "4.20 מטר".
+ *
+ * @param string $label Option label.
+ * @return float|null Null when the label names no length in metres.
+ */
+function gueta_length_metres( $label ) {
+	if ( ! preg_match( '/(\d+(?:[.,]\d+)?)\s*(?:מטר|מ[\'׳]|m\b)/u', (string) $label, $match ) ) {
+		return null;
+	}
+
+	$metres = (float) str_replace( ',', '.', $match[1] );
+
+	return $metres > 0 ? $metres : null;
+}
+
+/**
  * The cheapest way to buy a product that has lengths.
  *
  * Usually the first option, though not always: one product lists 4.60 metres
@@ -151,7 +170,9 @@ function gueta_length_unit_price( $product, $percent ) {
  *
  * @param WC_Product $product Product or variation. A variable product has no
  *                            price of its own; ask of a variation.
- * @return array|null label and price, or null when it has no lengths.
+ * @return array|null label, metres (null when the label has none), price, and
+ *                    regular, the same length at the regular price; or null
+ *                    when it has no lengths.
  */
 function gueta_length_from( $product ) {
 	if ( ! $product instanceof WC_Product || $product->is_type( 'variable' ) ) {
@@ -171,21 +192,30 @@ function gueta_length_from( $product ) {
 
 		if ( null === $best || $price < $best['price'] ) {
 			$best = [
-				'label' => $option['label'],
-				'price' => $price,
+				'label'   => $option['label'],
+				'metres'  => gueta_length_metres( $option['label'] ),
+				'price'   => $price,
+				'percent' => $option['percent'],
 			];
 		}
 	}
+
+	$regular = $product->is_on_sale( 'edit' ) ? $product->get_regular_price( 'edit' ) : '';
+
+	$best['regular'] = '' !== (string) $regular ? max( $best['price'], gueta_length_unit_price( $product, $best['percent'], $regular ) ) : $best['price'];
 
 	return $best;
 }
 
 /**
- * Under the price on a product's own page, what the least that can be bought
- * comes to: "החל מ-₪84.63 ל-2.17 מטר" beside a price of 39 a metre.
+ * On a product's own page, a product sold by length leads with what the least
+ * that can be bought comes to, the price Google is given for it: "₪54.60 ל-4.20
+ * מטר", struck through beside the regular price when on sale. The price per
+ * metre follows on a smaller line.
  *
  * Only for the product the page is about, so the cards of related products
- * keep their single line.
+ * keep their single line. A variable product leads with the variation its
+ * offer speaks for, and each variation, once chosen, with its own.
  *
  * @param string     $html    Price HTML.
  * @param WC_Product $product Product.
@@ -202,16 +232,25 @@ function gueta_length_price_from( $html, $product ) {
 		return $html;
 	}
 
-	$from = gueta_length_from( $product );
+	$priced = $product;
+
+	if ( $product->is_type( 'variable' ) ) {
+		$priced = function_exists( 'gueta_offer_variation' ) && gueta_length_field( $product ) ? gueta_offer_variation( $product ) : null;
+	}
+
+	$from = $priced ? gueta_length_from( $priced ) : null;
 
 	if ( ! $from ) {
 		return $html;
 	}
 
-	return $html . sprintf(
-		' <span class="gueta-price-from">החל מ-%s ל-%s</span>',
-		wc_price( $from['price'] ),
-		esc_html( $from['label'] )
+	$lead = $from['regular'] > $from['price'] ? wc_format_sale_price( $from['regular'], $from['price'] ) : wc_price( $from['price'] );
+
+	return sprintf(
+		'<span class="gueta-price-lead">%1$s <span class="gueta-price-lead__for">ל-%2$s</span></span> <span class="gueta-price-per">%3$s</span>',
+		$lead,
+		esc_html( $from['label'] ),
+		$html
 	);
 }
 add_filter( 'woocommerce_get_price_html', 'gueta_length_price_from', 20, 2 );

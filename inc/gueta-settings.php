@@ -195,6 +195,7 @@ function gueta_render_settings_page() {
 					break;
 				case 'tools':
 					gueta_search_index_admin_section();
+					gueta_merchant_feed_admin_section();
 					gueta_font_migrate_admin_section();
 					break;
 				default:
