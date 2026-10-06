@@ -6,7 +6,8 @@
  * without an order, gets one email: what is in it, and a 5% code that works
  * only on those products, only for that address, once, for seven days. The
  * email's button brings the cart back as it was, lengths and cuts included,
- * with the code already applied, and opens the cart.
+ * with the code already applied, and opens the checkout with the address in
+ * its email field.
  *
  * How it knows the shopper: checkout asks for a login or an email first
  * (gueta-login.php), so a signed-in customer's address, the guest's address,
@@ -602,7 +603,7 @@ function gueta_ac_email_html( $row, $code, $settings, $link, $stop ) {
 	<p style="text-align:center;margin:22px 0">
 		<a href="<?php echo esc_url( $link ); ?>" style="background:#161616;border-radius:8px;color:#ffffff;display:inline-block;font-weight:700;padding:14px 28px;text-decoration:none">להשלמת ההזמנה עם ההנחה</a>
 	</p>
-	<p style="text-align:center;color:#6d6a65;font-size:13px">הכפתור מחזיר את העגלה כמו שהשארתם אותה, והקוד כבר מוזן בה.</p>
+	<p style="text-align:center;color:#6d6a65;font-size:13px">הכפתור מחזיר את העגלה כמו שהשארתם אותה ומעביר לתשלום, עם ההנחה כבר מוזנת.</p>
 
 	<p style="text-align:center;color:#8a8781;font-size:12px;margin-top:24px">
 		לא רוצים לקבל תזכורות כאלה? <a href="<?php echo esc_url( $stop ); ?>" style="color:#8a8781">להסרה</a>
@@ -643,7 +644,7 @@ function gueta_ac_row_by_token( $token ) {
 }
 
 /**
- * Bring the cart back with the code on it, count the click, and open the cart.
+ * Bring the cart back with the code on it, count the click, and open the checkout.
  *
  * @return void
  */
@@ -689,14 +690,24 @@ function gueta_ac_restore() {
 		}
 	}
 
-	// A guest is let through to checkout under the address the email went to.
-	if ( ! is_user_logged_in() && ! $row->user_id && WC()->session ) {
+	/*
+	 * Straight on to the checkout under the address the email went to: past
+	 * the login step, with the address in the email field. The link came to
+	 * that inbox, which is all the step asks to know.
+	 */
+	if ( ! is_user_logged_in() && WC()->session ) {
 		WC()->session->set( 'gueta_guest', true );
 		WC()->session->set( 'gueta_guest_email', $row->email );
+
+		if ( function_exists( 'gueta_login_remember_guest' ) ) {
+			gueta_login_remember_guest( $row->email );
+		}
 	}
 
-	if ( WC()->customer && ! WC()->customer->get_billing_email() ) {
+	// The code is for this address only, so the address goes in before the code.
+	if ( WC()->customer && ( ! is_user_logged_in() || ! WC()->customer->get_billing_email() ) ) {
 		WC()->customer->set_billing_email( $row->email );
+		WC()->customer->save();
 	}
 
 	wc_clear_notices();
@@ -706,7 +717,8 @@ function gueta_ac_restore() {
 	}
 
 	WC()->session->set( 'gueta_ac_restored', (int) $row->id );
-	wp_safe_redirect( wc_get_cart_url() );
+	WC()->session->save_data();
+	wp_safe_redirect( wc_get_checkout_url() );
 	exit;
 }
 add_action( 'template_redirect', 'gueta_ac_restore', 1 );
