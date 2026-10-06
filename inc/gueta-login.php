@@ -98,6 +98,16 @@ function gueta_login_use_code() {
 }
 
 /**
+ * Whether the step checks who the shopper is, by a code or by Google. Asking
+ * for the address alone checks nothing.
+ *
+ * @return bool
+ */
+function gueta_login_verifies() {
+	return gueta_login_use_code() || '' !== gueta_login_google_client_id();
+}
+
+/**
  * The address a guest gave at the login step, kept in their cart session.
  *
  * @return string
@@ -225,6 +235,17 @@ function gueta_login_is_guest() {
  * @return bool
  */
 function gueta_login_gate_applies() {
+	/*
+	 * Asking for the address alone, the checkout is never held back: the
+	 * popup on the way there asks for it, and the checkout's own email field
+	 * takes it from anyone who came another way. The page in its place only
+	 * met shoppers who had just given their address, when the session had not
+	 * yet caught up.
+	 */
+	if ( ! gueta_login_verifies() ) {
+		return false;
+	}
+
 	if ( ! gueta_login_required() || is_user_logged_in() || gueta_login_is_guest() || ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
 		return false;
 	}
@@ -885,7 +906,7 @@ add_filter( 'woocommerce_checkout_posted_data', 'gueta_login_guest_posted_email'
  * @return bool
  */
 function gueta_login_guest_no_account( $required ) {
-	return ! is_user_logged_in() && gueta_login_is_guest() ? false : $required;
+	return ! is_user_logged_in() && ( gueta_login_is_guest() || ( gueta_login_required() && ! gueta_login_verifies() ) ) ? false : $required;
 }
 add_filter( 'woocommerce_checkout_registration_required', 'gueta_login_guest_no_account' );
 
@@ -1025,7 +1046,7 @@ function gueta_login_finish( $email, $names = [] ) {
  * @return void
  */
 function gueta_login_validate_checkout( $data, $errors ) {
-	if ( gueta_login_required() && ! is_user_logged_in() && ! gueta_login_is_guest() ) {
+	if ( gueta_login_required() && gueta_login_verifies() && ! is_user_logged_in() && ! gueta_login_is_guest() ) {
 		$errors->add( 'gueta_login', 'יש להתחבר לפני ביצוע ההזמנה. רעננו את הדף כדי להתחבר.' );
 	}
 }
