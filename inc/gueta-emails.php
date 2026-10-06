@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * The shop's details for the foot of every email.
  *
- * @return array{name:string,address:string,phone:string,whatsapp:string,email:string,hours:string,url:string}
+ * @return array{name:string,address:string,phone:string,whatsapp:string,email:string,url:string}
  */
 function gueta_email_store_details() {
 	return apply_filters(
@@ -34,8 +34,6 @@ function gueta_email_store_details() {
 			'phone'    => '050-9512625',
 			'whatsapp' => '972509512625',
 			'email'    => 'info@guetaavigdor.co.il',
-			// In words, since a range like 07:30–16:30 is shown back to front in right to left text.
-			'hours'    => 'א׳–ה׳ 07:30 עד 16:30 · ו׳ 07:30 עד 13:00',
 			'url'      => home_url( '/' ),
 		]
 	);

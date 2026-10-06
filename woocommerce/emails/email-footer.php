@@ -5,8 +5,8 @@
  * This template can be overridden by copying it to yourtheme/woocommerce/emails/email-footer.php.
  *
  * Gueta: the theme's copy. The foot of every email names the shop and says how
- * to reach it: the address, the phone and WhatsApp, the email address and the
- * opening hours, with a link to the site. The footer text from WooCommerce's
+ * to reach it: the address, the phone and WhatsApp and the email address, with
+ * a link to the site. The footer text from WooCommerce's
  * email settings follows in small print, so that setting still shows. The
  * details are in gueta_email_store_details().
  *
@@ -60,7 +60,6 @@ $store = function_exists( 'gueta_email_store_details' ) ? gueta_email_store_deta
 																	<?php endif; ?>
 																	&nbsp;·&nbsp; <a href="<?php echo esc_url( 'mailto:' . $store['email'] ); ?>"><?php echo esc_html( $store['email'] ); ?></a>
 																</p>
-																<p><?php echo esc_html( $store['hours'] ); ?></p>
 																<div class="gueta-email-legal">
 															<?php endif; ?>
 															<?php
