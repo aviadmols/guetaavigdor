@@ -831,3 +831,26 @@ add_filter( 'woocommerce_checkout_fields', 'gueta_drop_echoed_placeholders', 100
  * @return bool
  */
 add_filter( 'woocommerce_ship_to_different_address_checked', '__return_false' );
+
+/**
+ * An unpaid order waits a day before WooCommerce cancels it.
+ *
+ * WooCommerce cancels an order left pending payment once the "hold stock"
+ * minutes pass, an hour by default, and a shopper who left the card payment
+ * to finish later, or rang to pay by phone, found the order cancelled. The
+ * hold stays as it is, since it also keeps the stock for shoppers in the
+ * middle of paying; the cancelling waits until the order is a day old.
+ * WooCommerce checks again every hold period, so it goes soon after.
+ *
+ * @param bool     $cancel Whether WooCommerce means to cancel it.
+ * @param WC_Order $order  Order.
+ * @return bool
+ */
+function gueta_cancel_unpaid_after_a_day( $cancel, $order ) {
+	if ( ! $cancel || ! $order instanceof WC_Order || ! $order->get_date_created() ) {
+		return $cancel;
+	}
+
+	return time() - $order->get_date_created()->getTimestamp() >= DAY_IN_SECONDS;
+}
+add_filter( 'woocommerce_cancel_unpaid_order', 'gueta_cancel_unpaid_after_a_day', 10, 2 );
