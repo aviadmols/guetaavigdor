@@ -468,3 +468,52 @@ function gueta_frame_plain_emails( $args ) {
 	return $args;
 }
 add_filter( 'wp_mail', 'gueta_frame_plain_emails', 20 );
+
+/**
+ * An Israeli phone number in its local form: +972 54-123-4567 is 054-1234567.
+ *
+ * Every phone number in every email the site sends, whoever wrote it there:
+ * the customer's own on an order, the admin's new order email, a plugin's
+ * message. A number keeps whatever form it was given in, and a checkout or a
+ * plugin may have kept it as +972. A number inside an address, such as the
+ * WhatsApp link in the footer, which needs the country code, is left alone,
+ * and so is one that runs into other digits.
+ *
+ * @param string $text Email body or text.
+ * @return string
+ */
+function gueta_email_local_phones( $text ) {
+	return (string) preg_replace_callback(
+		'/(?<![\w\/=.+%])(?:\+|00)?972((?:[\s\-.()]*\d){8,10})(?!\d)/',
+		static function ( $match ) {
+			$digits = ltrim( preg_replace( '/\D/', '', $match[1] ), '0' );
+
+			// Mobile and 07 numbers have a two digit prefix; a landline a one digit area code.
+			if ( 9 === strlen( $digits ) && in_array( $digits[0], [ '5', '7' ], true ) ) {
+				return '0' . substr( $digits, 0, 2 ) . '-' . substr( $digits, 2 );
+			}
+
+			if ( 8 === strlen( $digits ) && in_array( $digits[0], [ '2', '3', '4', '8', '9' ], true ) ) {
+				return '0' . $digits[0] . '-' . substr( $digits, 1 );
+			}
+
+			return $match[0];
+		},
+		$text
+	);
+}
+
+/**
+ * Local phone numbers in every email, as it leaves.
+ *
+ * @param array $args wp_mail arguments.
+ * @return array
+ */
+function gueta_email_local_phones_in_mail( $args ) {
+	if ( ! empty( $args['message'] ) && is_string( $args['message'] ) ) {
+		$args['message'] = gueta_email_local_phones( $args['message'] );
+	}
+
+	return $args;
+}
+add_filter( 'wp_mail', 'gueta_email_local_phones_in_mail', 30 );
