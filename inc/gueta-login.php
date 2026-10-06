@@ -117,7 +117,29 @@ function gueta_login_guest_email() {
 		return '';
 	}
 
-	return (string) WC()->session->get( 'gueta_guest_email', '' );
+	$email = (string) WC()->session->get( 'gueta_guest_email', '' );
+
+	if ( '' !== $email || ! function_exists( 'gueta_login_guest_cookie' ) ) {
+		return $email;
+	}
+
+	/*
+	 * The checkout that opens straight after the popup can read the session
+	 * before the popup's request has written it, and showed an empty email
+	 * field until a reload. The cookie set beside it has the address already.
+	 */
+	$email = (string) gueta_login_guest_cookie();
+
+	if ( '' !== $email ) {
+		if ( ! WC()->session->has_session() && ! headers_sent() ) {
+			WC()->session->set_customer_session_cookie( true );
+		}
+
+		WC()->session->set( 'gueta_guest', true );
+		WC()->session->set( 'gueta_guest_email', $email );
+	}
+
+	return $email;
 }
 
 /**
