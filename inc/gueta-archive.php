@@ -308,6 +308,7 @@ function gueta_render_archive( $atts = [] ) {
 		data-columns="<?php echo (int) $atts['columns']; ?>"
 		data-category="<?php echo esc_attr( $state['category'] ); ?>"
 		data-search="<?php echo esc_attr( $state['search'] ); ?>"
+		data-search-total="<?php echo (int) $query->found_posts; ?>"
 	>
 		<?php
 		if ( function_exists( 'gueta_render_shop_banners' ) ) {

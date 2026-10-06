@@ -123,7 +123,8 @@ function gueta_settings_tabs() {
 		'general'    => 'כללי',
 		'menu'       => 'תפריט',
 		'categories' => 'רצועת קטגוריות',
-		'login'      => 'התחברות ומיילים',
+		'login'      => 'התחברות',
+		'mail'       => 'מיילים (SMTP)',
 		'delivery'   => 'משלוחים',
 		'tools'      => 'כלים',
 	];
@@ -187,6 +188,8 @@ function gueta_render_settings_page() {
 					break;
 				case 'login':
 					gueta_settings_form( $tab, 'gueta_settings_tab_login', $settings );
+					break;
+				case 'mail':
 					gueta_smtp_admin_section();
 					break;
 				case 'delivery':

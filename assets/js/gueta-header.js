@@ -492,6 +492,68 @@
 			return found;
 		}
 
+		/* -----------------------------------------------------------------
+		 * Search statistics
+		 *
+		 * What was searched and what was clicked goes to admin-ajax, for the
+		 * report in the admin (inc/gueta-search-stats.php). A tab keeps one
+		 * random id in sessionStorage, shared with the results page, so a
+		 * query and the click it led to are counted together. Nothing else
+		 * about the shopper is sent.
+		 * -------------------------------------------------------------- */
+
+		function statSession() {
+			var id = '';
+
+			try {
+				id = window.sessionStorage.getItem('gueta_search_session') || '';
+			} catch (error) {
+				id = '';
+			}
+
+			if (!/^[a-z0-9]{16}$/.test(id)) {
+				id = '';
+
+				while (id.length < 16) {
+					id += Math.random().toString(36).slice(2);
+				}
+
+				id = id.slice(0, 16);
+
+				try {
+					window.sessionStorage.setItem('gueta_search_session', id);
+				} catch (error) {
+					// A private window: the id lasts as long as this page.
+				}
+			}
+
+			return id;
+		}
+
+		function sendStat(fields) {
+			if (!settings.ajaxUrl) {
+				return;
+			}
+
+			var body = new FormData();
+
+			body.append('action', 'gueta_search_log');
+			body.append('s', statSession());
+
+			Object.keys(fields).forEach(function (key) {
+				if (null != fields[key]) {
+					body.append(key, String(fields[key]));
+				}
+			});
+
+			// sendBeacon survives the page leaving, which a click on a result is about to do.
+			if (!(navigator.sendBeacon && navigator.sendBeacon(settings.ajaxUrl, body))) {
+				fetch(settings.ajaxUrl, { method: 'POST', body: body, credentials: 'same-origin', keepalive: true }).catch(function () {});
+			}
+		}
+
+		var lastCount = null;
+
 		function esc(value) {
 			return String(value == null ? '' : value)
 				.replace(/&/g, '&amp;')
@@ -540,6 +602,7 @@
 					price: row[3],
 					regular: row[4],
 					max: row[5],
+					id: row[8] || 0,
 					name: name,
 					named: ' ' + name + ' ',
 					hay: normalize(row[0] + ' ' + (row[6] || '') + ' ' + (row[7] || ''))
@@ -839,10 +902,11 @@
 			return now;
 		}
 
-		function renderProduct(idx, item) {
+		function renderProduct(idx, item, place) {
 			var thumb = absolute(idx.uploads, item.thumb);
 			var price = priceHtml(idx.currency, item);
-			var html = '<a class="gueta-suggest__product" href="' + esc(absolute(idx.home, item.url)) + '">'
+			var html = '<a class="gueta-suggest__product" href="' + esc(absolute(idx.home, item.url)) + '"'
+				+ ' data-gs="product" data-gs-id="' + esc(item.id) + '" data-gs-pos="' + place + '" data-gs-label="' + esc(item.title) + '">'
 				+ '<span class="gueta-suggest__thumb">';
 
 			if (thumb) {
@@ -865,7 +929,7 @@
 			return html + '</span></a>';
 		}
 
-		function renderTermGroup(idx, title, rows, withPath) {
+		function renderTermGroup(idx, title, rows, withPath, kind) {
 			if (!rows.length) {
 				return '';
 			}
@@ -875,7 +939,7 @@
 				+ '<ul class="gueta-suggest__list">';
 
 			for (var i = 0; i < rows.length; i++) {
-				html += '<li><a href="' + esc(absolute(idx.home, rows[i].url)) + '">'
+				html += '<li><a href="' + esc(absolute(idx.home, rows[i].url)) + '" data-gs="' + kind + '" data-gs-pos="' + (i + 1) + '" data-gs-label="' + esc(rows[i].name) + '">'
 					+ '<span class="gueta-suggest__term">' + esc(rows[i].name) + '</span>';
 
 				if (withPath && rows[i].path) {
@@ -899,7 +963,7 @@
 				+ '<ul class="gueta-suggest__list">';
 
 			for (var i = 0; i < rows.length; i++) {
-				html += '<li><a href="' + esc(absolute(idx.home, rows[i].url)) + '">'
+				html += '<li><a href="' + esc(absolute(idx.home, rows[i].url)) + '" data-gs="article" data-gs-pos="' + (i + 1) + '" data-gs-label="' + esc(rows[i].name) + '">'
 					+ '<span class="gueta-suggest__term">' + esc(rows[i].name) + '</span>'
 					+ '</a></li>';
 			}
@@ -923,6 +987,8 @@
 
 			var matches = matchProducts(idx, query);
 			var close = matches.length ? matches[0].close : null;
+
+			lastCount = matches.length;
 			var products = matches.slice(0, idx.limits.products);
 			var categories = matchTerms(idx.categories, query, idx.limits.terms, close);
 			var tags = matchTerms(idx.tags, query, idx.limits.terms, close);
@@ -933,8 +999,8 @@
 
 			if (hasSide) {
 				html += '<aside class="gueta-suggest__side">'
-					+ renderTermGroup(idx, 'קטגוריות מתאימות', categories, true)
-					+ renderTermGroup(idx, 'תגיות', tags, false)
+					+ renderTermGroup(idx, 'קטגוריות מתאימות', categories, true, 'category')
+					+ renderTermGroup(idx, 'תגיות', tags, false, 'tag')
 					+ renderArticles(idx, articles)
 					+ '</aside>';
 			}
@@ -946,7 +1012,7 @@
 					+ '<div class="gueta-suggest__products">';
 
 				for (i = 0; i < products.length; i++) {
-					html += renderProduct(idx, products[i].item);
+					html += renderProduct(idx, products[i].item, i + 1);
 				}
 
 				html += '</div>';
@@ -960,7 +1026,7 @@
 			html += '</div></div>';
 
 			if (matches.length) {
-				html += '<a class="gueta-suggest__all" href="' + esc(resultsUrl(idx, rawTerm)) + '">'
+				html += '<a class="gueta-suggest__all" href="' + esc(resultsUrl(idx, rawTerm)) + '" data-gs="all">'
 					+ '<span>הצג את כל ' + esc(number(matches.length)) + ' התוצאות</span>'
 					+ '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 5 7 12l7 7"></path></svg>'
 					+ '</a>';
@@ -979,6 +1045,46 @@
 			var timer = null;
 			var controller = null;
 			var lastTerm = '';
+			var statTimer = null;
+			var pending = null;
+
+			// The search shown is counted once the shopper stops for two seconds.
+			function countLater(term) {
+				window.clearTimeout(statTimer);
+				pending = null === lastCount ? null : { q: term, n: lastCount };
+
+				if (pending) {
+					statTimer = window.setTimeout(countNow, 2000);
+				}
+			}
+
+			function countNow() {
+				window.clearTimeout(statTimer);
+
+				if (pending) {
+					sendStat({ e: 'search', src: 'suggest', q: pending.q, n: pending.n });
+					pending = null;
+				}
+			}
+
+			on(results, 'click', function (event) {
+				var link = event.target.closest ? event.target.closest('[data-gs]') : null;
+
+				if (!link || !lastTerm) {
+					return;
+				}
+
+				countNow();
+				sendStat({
+					e: 'click',
+					src: 'suggest',
+					q: lastTerm,
+					t: link.getAttribute('data-gs'),
+					id: link.getAttribute('data-gs-id') || 0,
+					pos: link.getAttribute('data-gs-pos') || 0,
+					label: link.getAttribute('data-gs-label') || ''
+				});
+			});
 
 			function hidePanel() {
 				results.hidden = true;
@@ -1024,6 +1130,7 @@
 
 						if (html) {
 							showPanel(html);
+							countLater(term);
 						} else {
 							hidePanel();
 						}
@@ -1089,6 +1196,8 @@
 				}
 
 				window.clearTimeout(timer);
+				window.clearTimeout(statTimer);
+				pending = null;
 
 				if (term.length < minChars) {
 					if (controller) {

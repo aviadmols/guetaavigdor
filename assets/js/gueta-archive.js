@@ -24,6 +24,80 @@
 	var compareToggle = archive.querySelector('[data-archive-compare-toggle]');
 	var category = archive.getAttribute('data-category') || '';
 	var search = archive.getAttribute('data-search') || '';
+
+	/*
+	 * Search statistics: the results page counts as a search, and a click on
+	 * a product in it as a click from the search. The same tab id as the
+	 * header's suggestions, from sessionStorage, so the two are one search.
+	 */
+	function statSession() {
+		var id = '';
+
+		try {
+			id = window.sessionStorage.getItem('gueta_search_session') || '';
+		} catch (error) {
+			id = '';
+		}
+
+		if (!/^[a-z0-9]{16}$/.test(id)) {
+			id = '';
+
+			while (id.length < 16) {
+				id += Math.random().toString(36).slice(2);
+			}
+
+			id = id.slice(0, 16);
+
+			try {
+				window.sessionStorage.setItem('gueta_search_session', id);
+			} catch (error) {
+				// A private window: the id lasts as long as this page.
+			}
+		}
+
+		return id;
+	}
+
+	function sendStat(fields) {
+		var url = (window.guetaHeader || {}).ajaxUrl;
+
+		if (!search || !url) {
+			return;
+		}
+
+		var body = new FormData();
+
+		body.append('action', 'gueta_search_log');
+		body.append('s', statSession());
+		body.append('src', 'page');
+		body.append('q', search);
+
+		Object.keys(fields).forEach(function (key) {
+			body.append(key, String(fields[key]));
+		});
+
+		if (!(navigator.sendBeacon && navigator.sendBeacon(url, body))) {
+			fetch(url, { method: 'POST', body: body, credentials: 'same-origin', keepalive: true }).catch(function () {});
+		}
+	}
+
+	sendStat({ e: 'search', n: Number(archive.getAttribute('data-search-total')) || 0 });
+
+	// A product opened from the results, and its place among them.
+	if (search && grid) {
+		grid.addEventListener('click', function (event) {
+			var link = event.target.closest ? event.target.closest('a[href]') : null;
+			var card = link ? link.closest('[data-product]') : null;
+
+			if (!card) {
+				return;
+			}
+
+			var cards = Array.prototype.slice.call(grid.querySelectorAll('[data-product]'));
+
+			sendStat({ e: 'click', t: 'product', id: card.getAttribute('data-product'), pos: cards.indexOf(card) + 1 });
+		});
+	}
 	var page = 1;
 	var pending = null;
 	var debounce = null;
