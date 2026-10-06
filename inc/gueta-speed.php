@@ -379,3 +379,40 @@ function gueta_https_own_links( $html ) {
 		$html
 	);
 }
+
+/**
+ * Never fetch the checkout, the cart or the account ahead of a click.
+ *
+ * WordPress asks the browser to fetch a link's page the moment it is pressed
+ * ("conservative" speculative loading). Pressing "לתשלום" in the cart drawer
+ * fetched the checkout before the login popup had taken the shopper's
+ * address, and once the address was given the browser showed that early copy:
+ * the login page, or an empty email field, until a reload. These pages change
+ * with the shopper's session, so they are always fetched when they are opened.
+ *
+ * @param string[] $paths Paths excluded already.
+ * @return string[]
+ */
+function gueta_no_speculative_session_pages( $paths ) {
+	if ( ! function_exists( 'wc_get_page_id' ) ) {
+		return $paths;
+	}
+
+	foreach ( [ 'checkout', 'cart', 'myaccount' ] as $page ) {
+		$url = get_permalink( wc_get_page_id( $page ) );
+
+		if ( ! $url ) {
+			continue;
+		}
+
+		$path = (string) wp_parse_url( $url, PHP_URL_PATH );
+
+		// A Hebrew slug may be written with its escapes in either case.
+		foreach ( array_unique( [ $path, strtolower( $path ), strtoupper( $path ), rawurldecode( $path ) ] ) as $form ) {
+			$paths[] = rtrim( $form, '/' ) . '/*';
+		}
+	}
+
+	return array_values( array_unique( $paths ) );
+}
+add_filter( 'wp_speculation_rules_href_exclude_paths', 'gueta_no_speculative_session_pages' );
