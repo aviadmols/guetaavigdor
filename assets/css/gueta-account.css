@@ -1,0 +1,710 @@
+/**
+ * The customer's account.
+ *
+ * A menu down the side with an icon for each page, and the page beside it:
+ * the overview's cards, the orders with their status in colour, the addresses
+ * and the forms on the checkout's fields and buttons. On a phone the menu is
+ * a row to scroll above the page. Signed out, the login and sign up forms sit
+ * side by side as two cards.
+ *
+ * Tokens come from gueta-header.css, which loads first.
+ */
+
+.woocommerce-account .site-main {
+	margin-inline: auto;
+	max-width: 1280px;
+	padding: 32px var(--gueta-gutter) 80px;
+}
+
+.woocommerce-account .page-header {
+	margin-bottom: 28px;
+}
+
+.woocommerce-account .page-header .entry-title {
+	color: var(--gueta-ink);
+	font-size: clamp(30px, 4vw, 44px);
+	font-weight: 700;
+	line-height: 1.15;
+	margin: 0;
+}
+
+.woocommerce-account .page-content,
+.woocommerce-account .page-content * {
+	box-sizing: border-box;
+}
+
+.woocommerce-account .page-content {
+	color: var(--gueta-ink);
+	font-size: 16px;
+	line-height: 1.6;
+}
+
+.woocommerce-account .page-content a {
+	color: var(--gueta-ink);
+}
+
+/* -------------------------------------------------------------------------
+ * The layout: menu and page
+ * ---------------------------------------------------------------------- */
+
+.woocommerce-account.logged-in .page-content > .woocommerce {
+	align-items: start;
+	display: grid;
+	gap: 24px 48px;
+	grid-template-columns: 260px minmax(0, 1fr);
+}
+
+.woocommerce-account.logged-in .page-content > .woocommerce > .woocommerce-notices-wrapper {
+	grid-column: 1 / -1;
+}
+
+.woocommerce-account .woocommerce-MyAccount-navigation,
+.woocommerce-account .woocommerce-MyAccount-content {
+	float: none;
+	margin: 0;
+	min-width: 0;
+	width: auto;
+}
+
+/* -------------------------------------------------------------------------
+ * The menu
+ * ---------------------------------------------------------------------- */
+
+.woocommerce-MyAccount-navigation {
+	position: sticky;
+	top: 24px;
+}
+
+.woocommerce-MyAccount-navigation ul {
+	background: var(--gueta-sand);
+	border: 1px solid var(--gueta-rule);
+	border-radius: var(--gueta-radius);
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	list-style: none;
+	margin: 0;
+	padding: 8px;
+}
+
+.woocommerce-MyAccount-navigation li {
+	margin: 0;
+	padding: 0;
+}
+
+.woocommerce-MyAccount-navigation a {
+	align-items: center;
+	border-radius: 8px;
+	color: var(--gueta-ink);
+	display: flex;
+	font-size: 15px;
+	font-weight: 500;
+	gap: 12px;
+	padding: 11px 14px;
+	text-decoration: none;
+	transition: background-color .2s ease, color .2s ease;
+}
+
+.woocommerce-MyAccount-navigation a:hover {
+	background: var(--gueta-paper);
+}
+
+.woocommerce-MyAccount-navigation li.is-active a {
+	background: var(--gueta-ink);
+	color: var(--gueta-paper);
+}
+
+.woocommerce-MyAccount-navigation a:focus-visible {
+	outline: 2px solid var(--gueta-ink);
+	outline-offset: 2px;
+}
+
+.woocommerce-MyAccount-navigation-link--customer-logout {
+	border-top: 1px solid var(--gueta-rule);
+	margin-top: 6px !important;
+	padding-top: 6px !important;
+}
+
+.woocommerce-MyAccount-navigation-link--customer-logout a {
+	color: var(--gueta-muted);
+}
+
+.gueta-account-icon {
+	fill: none;
+	flex: 0 0 auto;
+	height: 20px;
+	stroke: currentColor;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-width: 1.6;
+	width: 20px;
+}
+
+/* -------------------------------------------------------------------------
+ * The page
+ * ---------------------------------------------------------------------- */
+
+.woocommerce-MyAccount-content > :first-child {
+	margin-top: 0;
+}
+
+.woocommerce-MyAccount-content h2,
+.woocommerce-MyAccount-content h3 {
+	color: var(--gueta-ink);
+	font-weight: 700;
+	line-height: 1.25;
+}
+
+.woocommerce-MyAccount-content h2 {
+	font-size: 24px;
+	margin: 0 0 16px;
+}
+
+.woocommerce-MyAccount-content h3 {
+	font-size: 18px;
+	margin: 0 0 12px;
+}
+
+.woocommerce-MyAccount-content p {
+	margin: 0 0 12px;
+}
+
+.woocommerce-MyAccount-content mark {
+	background: transparent;
+	color: var(--gueta-ink);
+	font-weight: 600;
+}
+
+/* The overview */
+
+.gueta-account-hello {
+	margin-bottom: 24px;
+}
+
+.gueta-account-hello h2 {
+	font-size: 28px;
+	margin-bottom: 6px;
+}
+
+.gueta-account-hello p,
+.gueta-account-muted {
+	color: var(--gueta-muted);
+}
+
+.gueta-account-cards {
+	display: grid;
+	gap: 16px;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.gueta-account-card {
+	background: var(--gueta-paper);
+	border: 1px solid var(--gueta-rule);
+	border-radius: var(--gueta-radius);
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	padding: 22px 24px;
+}
+
+.gueta-account-card--wide {
+	grid-column: 1 / -1;
+}
+
+.gueta-account-card h3 {
+	color: var(--gueta-muted);
+	font-size: 13px;
+	font-weight: 600;
+	letter-spacing: .02em;
+	margin: 0 0 4px;
+}
+
+.gueta-account-card p {
+	margin: 0;
+}
+
+/* An address in Latin letters reads left to right, but sits on the card's right edge with the rest. */
+.gueta-account-card [dir="ltr"] {
+	text-align: end;
+}
+
+.gueta-account-card address {
+	font-style: normal;
+	line-height: 1.6;
+}
+
+.gueta-account-figure {
+	font-size: 34px;
+	font-variant-numeric: tabular-nums;
+	font-weight: 700;
+	line-height: 1.1;
+}
+
+.gueta-account-last {
+	align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px 24px;
+	justify-content: space-between;
+}
+
+.gueta-account-last__number {
+	font-size: 20px;
+	font-weight: 700;
+}
+
+.gueta-account-link {
+	font-size: 14px;
+	font-weight: 600;
+	margin-top: auto;
+	padding-top: 10px;
+	text-underline-offset: 3px;
+}
+
+/* A status in its colour */
+
+.gueta-status,
+.woocommerce-orders-table__cell-order-status {
+	--gueta-status: #4b5563;
+	--gueta-status-bg: #f1f2f4;
+}
+
+.gueta-status {
+	background: var(--gueta-status-bg);
+	border-radius: 999px;
+	color: var(--gueta-status);
+	display: inline-block;
+	font-size: 13px;
+	font-weight: 600;
+	line-height: 1;
+	padding: 8px 12px;
+	white-space: nowrap;
+}
+
+.gueta-status--processing,
+.woocommerce-orders-table__row--status-processing .woocommerce-orders-table__cell-order-status {
+	--gueta-status: #1d4ed8;
+	--gueta-status-bg: #e8effd;
+}
+
+.gueta-status--completed,
+.woocommerce-orders-table__row--status-completed .woocommerce-orders-table__cell-order-status {
+	--gueta-status: #0f7a3d;
+	--gueta-status-bg: #e6f4ec;
+}
+
+.gueta-status--on-hold,
+.woocommerce-orders-table__row--status-on-hold .woocommerce-orders-table__cell-order-status {
+	--gueta-status: #92560a;
+	--gueta-status-bg: #fdf1dc;
+}
+
+.gueta-status--cancelled,
+.gueta-status--failed,
+.woocommerce-orders-table__row--status-cancelled .woocommerce-orders-table__cell-order-status,
+.woocommerce-orders-table__row--status-failed .woocommerce-orders-table__cell-order-status {
+	--gueta-status: var(--gueta-accent);
+	--gueta-status-bg: #fdecea;
+}
+
+.woocommerce-orders-table__cell-order-status {
+	color: var(--gueta-status) !important;
+	font-weight: 600;
+}
+
+/* -------------------------------------------------------------------------
+ * Tables: the orders, an order's lines
+ * ---------------------------------------------------------------------- */
+
+.woocommerce-account .woocommerce table.shop_table {
+	border: 1px solid var(--gueta-rule);
+	border-collapse: separate;
+	border-radius: var(--gueta-radius);
+	border-spacing: 0;
+	margin: 0 0 24px;
+	overflow: hidden;
+	width: 100%;
+}
+
+.woocommerce-account .woocommerce table.shop_table th,
+.woocommerce-account .woocommerce table.shop_table td {
+	border: 0;
+	border-top: 1px solid var(--gueta-rule);
+	padding: 14px 16px;
+	text-align: start;
+	vertical-align: middle;
+}
+
+.woocommerce-account .woocommerce table.shop_table thead th {
+	background: var(--gueta-sand);
+	border-top: 0;
+	color: var(--gueta-muted);
+	font-size: 13px;
+	font-weight: 600;
+}
+
+.woocommerce-account .woocommerce table.shop_table tfoot th {
+	font-weight: 600;
+}
+
+.woocommerce-orders-table__cell-order-number a {
+	font-weight: 700;
+	text-decoration: none;
+}
+
+.woocommerce-orders-table__cell-order-actions {
+	text-align: end !important;
+}
+
+/* -------------------------------------------------------------------------
+ * Buttons and fields
+ * ---------------------------------------------------------------------- */
+
+.woocommerce-account .woocommerce .button,
+.woocommerce-account .woocommerce button.button,
+.woocommerce-account .woocommerce a.button {
+	align-items: center;
+	background: var(--gueta-ink);
+	border: 1px solid var(--gueta-ink);
+	border-radius: 8px;
+	color: var(--gueta-paper);
+	display: inline-flex;
+	font-size: 14px;
+	font-weight: 600;
+	justify-content: center;
+	line-height: 1.2;
+	min-height: 44px;
+	padding: 0 18px;
+	text-decoration: none;
+	transition: background-color .2s ease, color .2s ease;
+}
+
+.woocommerce-account .woocommerce .button:hover {
+	background: #000;
+	color: var(--gueta-paper);
+}
+
+/* A row's own buttons, "view" beside an order, are the quieter kind. */
+.woocommerce-account .woocommerce table.shop_table .button {
+	background: transparent;
+	color: var(--gueta-ink);
+	margin: 2px;
+	min-height: 38px;
+}
+
+.woocommerce-account .woocommerce table.shop_table .button:hover {
+	background: var(--gueta-sand);
+}
+
+.woocommerce-account .woocommerce form .form-row {
+	margin: 0 0 16px;
+	padding: 0;
+}
+
+.woocommerce-account .woocommerce form .form-row label {
+	color: var(--gueta-ink);
+	display: block;
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1.4;
+	margin-bottom: 6px;
+}
+
+.woocommerce-account .woocommerce form .input-text,
+.woocommerce-account .woocommerce form select,
+.woocommerce-account .woocommerce form textarea {
+	background: var(--gueta-paper);
+	border: 1px solid #d4d4d4;
+	border-radius: 8px;
+	color: var(--gueta-ink);
+	font: inherit;
+	font-size: 16px;
+	min-height: 48px;
+	padding: 10px 14px;
+	transition: border-color .2s ease, box-shadow .2s ease;
+	width: 100%;
+}
+
+.woocommerce-account .woocommerce form .input-text:focus,
+.woocommerce-account .woocommerce form select:focus,
+.woocommerce-account .woocommerce form textarea:focus {
+	border-color: var(--gueta-ink);
+	box-shadow: 0 0 0 3px rgb(22 22 22 / 8%);
+	outline: none;
+}
+
+.woocommerce-account .woocommerce form .required {
+	color: var(--gueta-accent);
+	text-decoration: none;
+}
+
+.woocommerce-account .woocommerce fieldset {
+	border: 1px solid var(--gueta-rule);
+	border-radius: var(--gueta-radius);
+	margin: 24px 0;
+	padding: 20px 22px 6px;
+}
+
+.woocommerce-account .woocommerce fieldset legend {
+	font-weight: 700;
+	padding-inline: 6px;
+}
+
+.woocommerce-account .woocommerce form .form-row-first,
+.woocommerce-account .woocommerce form .form-row-last {
+	width: calc(50% - 8px);
+}
+
+.woocommerce-account .woocommerce form .form-row-first {
+	float: right;
+}
+
+.woocommerce-account .woocommerce form .form-row-last {
+	float: left;
+}
+
+.woocommerce-account .woocommerce form .clear {
+	clear: both;
+}
+
+.woocommerce-account .woocommerce em,
+.woocommerce-account .woocommerce .description {
+	color: var(--gueta-muted);
+	font-size: 13px;
+}
+
+/* -------------------------------------------------------------------------
+ * Addresses
+ * ---------------------------------------------------------------------- */
+
+.woocommerce-account .woocommerce-Addresses {
+	display: grid;
+	gap: 16px;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	margin-top: 16px;
+}
+
+.woocommerce-account .woocommerce-Addresses::before,
+.woocommerce-account .woocommerce-Addresses::after {
+	content: none;
+}
+
+.woocommerce-account .woocommerce-Address {
+	border: 1px solid var(--gueta-rule);
+	border-radius: var(--gueta-radius);
+	float: none !important;
+	padding: 22px 24px;
+	width: auto !important;
+}
+
+.woocommerce-account .woocommerce-Address-title {
+	align-items: baseline;
+	display: flex;
+	gap: 12px;
+	justify-content: space-between;
+	margin-bottom: 10px;
+}
+
+.woocommerce-account .woocommerce-Address-title h2 {
+	font-size: 18px;
+	margin: 0;
+}
+
+.woocommerce-account .woocommerce-Address-title .edit {
+	float: none;
+	font-size: 14px;
+	font-weight: 600;
+}
+
+.woocommerce-account .woocommerce-Address address {
+	font-style: normal;
+	line-height: 1.7;
+}
+
+/* -------------------------------------------------------------------------
+ * Signed out: login and sign up
+ * ---------------------------------------------------------------------- */
+
+.woocommerce-account #customer_login {
+	display: grid;
+	gap: 24px;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	max-width: 980px;
+}
+
+.woocommerce-account #customer_login::before,
+.woocommerce-account #customer_login::after {
+	content: none;
+}
+
+.woocommerce-account #customer_login > div {
+	border: 1px solid var(--gueta-rule);
+	border-radius: var(--gueta-radius);
+	float: none;
+	padding: 28px;
+	width: auto;
+}
+
+.woocommerce-account #customer_login h2 {
+	font-size: 22px;
+	margin: 0 0 18px;
+}
+
+.woocommerce-account .woocommerce-form-login,
+.woocommerce-account .woocommerce-form-register,
+.woocommerce-account .woocommerce-ResetPassword {
+	border: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+.woocommerce-account .woocommerce-ResetPassword {
+	max-width: 520px;
+}
+
+.woocommerce-account .woocommerce-form-login .button,
+.woocommerce-account .woocommerce-form-register .button {
+	margin-top: 4px;
+	width: 100%;
+}
+
+.woocommerce-account .woocommerce-form-login__rememberme {
+	align-items: center;
+	display: inline-flex !important;
+	font-weight: 400 !important;
+	gap: 8px;
+}
+
+.woocommerce-account .lost_password {
+	font-size: 14px;
+	margin: 12px 0 0;
+}
+
+/* -------------------------------------------------------------------------
+ * Narrower screens
+ * ---------------------------------------------------------------------- */
+
+@media (max-width: 1024px) {
+	.gueta-account-cards {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (max-width: 900px) {
+	.woocommerce-account.logged-in .page-content > .woocommerce {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	/* The menu becomes a row to scroll, above the page. */
+	.woocommerce-MyAccount-navigation {
+		margin-inline: calc(-1 * var(--gueta-gutter));
+		position: static;
+	}
+
+	.woocommerce-MyAccount-navigation ul {
+		background: transparent;
+		border: 0;
+		border-radius: 0;
+		flex-direction: row;
+		gap: 8px;
+		overflow-x: auto;
+		padding: 0 var(--gueta-gutter) 4px;
+		scrollbar-width: none;
+	}
+
+	.woocommerce-MyAccount-navigation ul::-webkit-scrollbar {
+		display: none;
+	}
+
+	.woocommerce-MyAccount-navigation li {
+		flex: 0 0 auto;
+	}
+
+	.woocommerce-MyAccount-navigation a {
+		border: 1px solid var(--gueta-rule);
+		border-radius: 999px;
+		font-size: 14px;
+		gap: 8px;
+		padding: 9px 14px;
+		white-space: nowrap;
+	}
+
+	.woocommerce-MyAccount-navigation li.is-active a {
+		border-color: var(--gueta-ink);
+	}
+
+	.woocommerce-MyAccount-navigation-link--customer-logout {
+		border-top: 0;
+		margin-top: 0 !important;
+		padding-top: 0 !important;
+	}
+
+	.gueta-account-icon {
+		height: 18px;
+		width: 18px;
+	}
+
+	.woocommerce-account .woocommerce-Addresses,
+	.woocommerce-account #customer_login {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
+@media (max-width: 640px) {
+	.woocommerce-account .site-main {
+		padding-top: 20px;
+	}
+
+	.gueta-account-cards {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.woocommerce-account .woocommerce form .form-row-first,
+	.woocommerce-account .woocommerce form .form-row-last {
+		float: none;
+		width: 100%;
+	}
+
+	/* WooCommerce's stacked table: each cell a row with its column's name. */
+	.woocommerce-account .woocommerce table.shop_table_responsive thead {
+		display: none;
+	}
+
+	.woocommerce-account .woocommerce table.shop_table_responsive tr {
+		border-top: 1px solid var(--gueta-rule);
+		display: block;
+		padding: 8px 0;
+	}
+
+	.woocommerce-account .woocommerce table.shop_table_responsive tr:first-child {
+		border-top: 0;
+	}
+
+	.woocommerce-account .woocommerce table.shop_table_responsive td {
+		align-items: center;
+		border-top: 0;
+		display: flex;
+		justify-content: space-between;
+		padding: 6px 16px;
+		text-align: end !important;
+	}
+
+	.woocommerce-account .woocommerce table.shop_table_responsive td::before {
+		color: var(--gueta-muted);
+		content: attr(data-title);
+		font-size: 13px;
+		font-weight: 600;
+		float: none;
+	}
+
+	.woocommerce-account .woocommerce table.shop_table_responsive td.woocommerce-orders-table__cell-order-actions::before {
+		content: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.woocommerce-MyAccount-navigation a,
+	.woocommerce-account .woocommerce .button {
+		transition: none;
+	}
+}
