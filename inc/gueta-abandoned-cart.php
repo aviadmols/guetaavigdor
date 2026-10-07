@@ -5,7 +5,7 @@
  * A cart whose shopper we know by email, left for two hours without an
  * order, gets one email with what is in it. A cart worth 500 or more also
  * gets a 5% code that works only on those products, only on an order of 500
- * or more, only for that address, once, for seven days. A smaller cart gets
+ * or more, only for that address, once, for 24 hours. A smaller cart gets
  * the reminder alone. The
  * email's button brings the cart back as it was, lengths and cuts included,
  * with the code already applied, and opens the checkout with the address in
@@ -74,7 +74,8 @@ function gueta_ac_settings() {
 			'min_total' => 500,
 			'percent'   => 5,
 			'delay'     => 2,
-			'days'      => 7,
+			// How long a code stays good. In hours: a day pushes the shopper to finish now.
+			'hours'     => 24,
 			'subject'   => 'שכחתם משהו בעגלה? 5% הנחה מחכים לכם',
 			'subject_plain' => 'שכחתם משהו בעגלה?',
 		]
@@ -402,6 +403,16 @@ function gueta_ac_update( $id, $data ) {
 }
 
 /**
+ * How long a code stays good, in seconds.
+ *
+ * @param array $settings Settings.
+ * @return int
+ */
+function gueta_ac_code_seconds( $settings ) {
+	return (int) round( max( 1, min( 720, (float) $settings['hours'] ) ) * HOUR_IN_SECONDS );
+}
+
+/**
  * A code of its own for one cart: the percentage off the products that were
  * in it, for that address, once, until it expires.
  *
@@ -435,7 +446,7 @@ function gueta_ac_make_coupon( $row, $settings ) {
 	$coupon->set_usage_limit( 1 );
 	$coupon->set_usage_limit_per_user( 1 );
 	$coupon->set_individual_use( true );
-	$coupon->set_date_expires( time() + max( 1, (int) $settings['days'] ) * DAY_IN_SECONDS );
+	$coupon->set_date_expires( time() + gueta_ac_code_seconds( $settings ) );
 	// Only on an order of the same size or more: the discount pays for a large order, not a small one.
 	$coupon->set_minimum_amount( (float) $settings['min_total'] );
 
@@ -564,7 +575,7 @@ function gueta_ac_send( $row, $settings ) {
 function gueta_ac_email_html( $row, $code, $settings, $link, $stop ) {
 	$items   = (array) json_decode( (string) $row->items, true );
 	$percent = (float) $settings['percent'];
-	$expires = wp_date( 'j.n.Y', time() + max( 1, (int) $settings['days'] ) * DAY_IN_SECONDS );
+	$expires = wp_date( 'j.n.Y בשעה H:i', time() + gueta_ac_code_seconds( $settings ) );
 	$hello   = $row->name ? sprintf( 'שלום %s,', $row->name ) : 'שלום,';
 
 	ob_start();
@@ -968,7 +979,7 @@ function gueta_ac_save( $source ) {
 			'min_total' => $number( 'ac_min_total', 0, 1000000 ),
 			'percent'   => $number( 'ac_percent', 1, 50 ),
 			'delay'     => $number( 'ac_delay', 0.5, 72 ),
-			'days'      => (int) $number( 'ac_days', 1, 60 ),
+			'hours'     => $number( 'ac_hours', 1, 720 ),
 			'subject'   => isset( $source['ac_subject'] ) && '' !== trim( (string) $source['ac_subject'] ) ? sanitize_text_field( wp_unslash( $source['ac_subject'] ) ) : gueta_ac_settings()['subject'],
 			'subject_plain' => isset( $source['ac_subject_plain'] ) && '' !== trim( (string) $source['ac_subject_plain'] ) ? sanitize_text_field( wp_unslash( $source['ac_subject_plain'] ) ) : gueta_ac_settings()['subject_plain'],
 		],
@@ -1079,8 +1090,8 @@ function gueta_ac_page() {
 					<td><input type="number" class="small-text" min="0.5" max="72" step="0.5" id="ac_delay" name="ac_delay" value="<?php echo esc_attr( (string) $settings['delay'] ); ?>"> שעות בלי שינוי בעגלה ובלי הזמנה</td>
 				</tr>
 				<tr>
-					<th scope="row"><label for="ac_days">תוקף הקוד</label></th>
-					<td><input type="number" class="small-text" min="1" max="60" step="1" id="ac_days" name="ac_days" value="<?php echo esc_attr( (string) $settings['days'] ); ?>"> ימים</td>
+					<th scope="row"><label for="ac_hours">תוקף הקוד</label></th>
+					<td><input type="number" class="small-text" min="1" max="720" step="1" id="ac_hours" name="ac_hours" value="<?php echo esc_attr( (string) $settings['hours'] ); ?>"> שעות מרגע שליחת המייל</td>
 				</tr>
 				<tr>
 					<th scope="row"><label for="ac_subject">נושא המייל עם קוד</label></th>
