@@ -2,9 +2,11 @@
 /**
  * A discount for a cart left behind.
  *
- * A cart worth 500 or more whose shopper we know by email, left for two hours
- * without an order, gets one email: what is in it, and a 5% code that works
- * only on those products, only for that address, once, for seven days. The
+ * A cart whose shopper we know by email, left for two hours without an
+ * order, gets one email with what is in it. A cart worth 500 or more also
+ * gets a 5% code that works only on those products, only on an order of 500
+ * or more, only for that address, once, for seven days. A smaller cart gets
+ * the reminder alone. The
  * email's button brings the cart back as it was, lengths and cuts included,
  * with the code already applied, and opens the checkout with the address in
  * its email field.
@@ -74,6 +76,7 @@ function gueta_ac_settings() {
 			'delay'     => 2,
 			'days'      => 7,
 			'subject'   => 'שכחתם משהו בעגלה? 5% הנחה מחכים לכם',
+			'subject_plain' => 'שכחתם משהו בעגלה?',
 		]
 	);
 }
@@ -253,8 +256,8 @@ function gueta_ac_capture( $cart ) {
 	// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	$open = (int) $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$table} WHERE session_key = %s AND status = 'open' ORDER BY id DESC LIMIT 1", $session ) );
 
-	// Below the line: nothing to send for it.
-	if ( $total < (float) gueta_ac_settings()['min_total'] ) {
+	// An empty total, such as free samples only: nothing to remind of.
+	if ( $total <= 0 ) {
 		if ( $open ) {
 			$wpdb->delete( $table, [ 'id' => $open ] );
 		}
@@ -433,6 +436,8 @@ function gueta_ac_make_coupon( $row, $settings ) {
 	$coupon->set_usage_limit_per_user( 1 );
 	$coupon->set_individual_use( true );
 	$coupon->set_date_expires( time() + max( 1, (int) $settings['days'] ) * DAY_IN_SECONDS );
+	// Only on an order of the same size or more: the discount pays for a large order, not a small one.
+	$coupon->set_minimum_amount( (float) $settings['min_total'] );
 
 	return $coupon->save() ? $code : '';
 }
@@ -460,10 +465,9 @@ function gueta_ac_send_due() {
 	// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	$due = $wpdb->get_results(
 		$wpdb->prepare(
-			"SELECT * FROM {$table} WHERE status = 'open' AND updated_at <= %s AND updated_at >= %s AND total >= %f ORDER BY updated_at ASC LIMIT 20",
+			"SELECT * FROM {$table} WHERE status = 'open' AND updated_at <= %s AND updated_at >= %s ORDER BY updated_at ASC LIMIT 20",
 			$before,
-			$after,
-			(float) $settings['min_total']
+			$after
 		)
 	);
 
@@ -505,9 +509,10 @@ add_action( GUETA_AC_CRON, 'gueta_ac_send_due' );
  * @return bool
  */
 function gueta_ac_send( $row, $settings ) {
-	$code = gueta_ac_make_coupon( $row, $settings );
+	$deserves = (float) $row->total >= (float) $settings['min_total'];
+	$code     = $deserves ? gueta_ac_make_coupon( $row, $settings ) : '';
 
-	if ( ! $code ) {
+	if ( $deserves && ! $code ) {
 		gueta_ac_update( $row->id, [ 'status' => 'failed', 'note' => 'קוד ההנחה לא נוצר' ] );
 		return false;
 	}
@@ -527,7 +532,7 @@ function gueta_ac_send( $row, $settings ) {
 	};
 
 	add_action( 'wp_mail_failed', $catch );
-	$sent = wp_mail( $row->email, (string) $settings['subject'], $html, [ 'Content-Type: text/html; charset=UTF-8' ] );
+	$sent = wp_mail( $row->email, (string) ( $code ? $settings['subject'] : $settings['subject_plain'] ), $html, [ 'Content-Type: text/html; charset=UTF-8' ] );
 	remove_action( 'wp_mail_failed', $catch );
 
 	gueta_ac_update(
@@ -546,11 +551,11 @@ function gueta_ac_send( $row, $settings ) {
 }
 
 /**
- * The email: the products left, the code, and the button that brings the
- * cart back with the code on it.
+ * The email: the products left, the code when the cart earned one, and the
+ * button that brings the cart back, with the code on it.
  *
  * @param object $row      Cart row.
- * @param string $code     Discount code.
+ * @param string $code     Discount code, or an empty string for the reminder alone.
  * @param array  $settings Settings.
  * @param string $link     The way back.
  * @param string $stop     The way out.
@@ -565,7 +570,11 @@ function gueta_ac_email_html( $row, $code, $settings, $link, $stop ) {
 	ob_start();
 	?>
 	<p><?php echo esc_html( $hello ); ?></p>
-	<p>ראינו שהשארתם בעגלה כמה מוצרים ולא השלמתם את ההזמנה. שמרנו לכם אותם, ובשביל ההזמנה הזו בדיוק צירפנו הנחה של <?php echo esc_html( wc_format_localized_decimal( $percent ) ); ?>%.</p>
+	<?php if ( $code ) : ?>
+		<p>ראינו שהשארתם בעגלה כמה מוצרים ולא השלמתם את ההזמנה. שמרנו לכם אותם, ובשביל ההזמנה הזו בדיוק צירפנו הנחה של <?php echo esc_html( wc_format_localized_decimal( $percent ) ); ?>%.</p>
+	<?php else : ?>
+		<p>ראינו שהשארתם בעגלה כמה מוצרים ולא השלמתם את ההזמנה. שמרנו לכם אותם, והם מחכים לכם בדיוק כמו שהשארתם.</p>
+	<?php endif; ?>
 
 	<table class="td" cellspacing="0" cellpadding="0" border="0" width="100%" style="border-collapse:collapse;margin:18px 0 6px">
 		<?php foreach ( $items as $item ) : ?>
@@ -594,16 +603,18 @@ function gueta_ac_email_html( $row, $code, $settings, $link, $stop ) {
 		</tr>
 	</table>
 
-	<div style="border:1px dashed #f0591d;border-radius:10px;margin:18px 0;padding:16px;text-align:center">
-		<p style="margin:0 0 6px;color:#3d3a36">קוד ההנחה שלכם, <?php echo esc_html( wc_format_localized_decimal( $percent ) ); ?>% על המוצרים האלה:</p>
-		<p style="margin:0;color:#161616;font-size:22px;font-weight:700;letter-spacing:2px" dir="ltr"><?php echo esc_html( $code ); ?></p>
-		<p style="margin:6px 0 0;color:#6d6a65;font-size:13px">בתוקף עד <?php echo esc_html( $expires ); ?>, לשימוש אחד</p>
-	</div>
+	<?php if ( $code ) : ?>
+		<div style="border:1px dashed #f0591d;border-radius:10px;margin:18px 0;padding:16px;text-align:center">
+			<p style="margin:0 0 6px;color:#3d3a36">קוד ההנחה שלכם, <?php echo esc_html( wc_format_localized_decimal( $percent ) ); ?>% על המוצרים האלה:</p>
+			<p style="margin:0;color:#161616;font-size:22px;font-weight:700;letter-spacing:2px" dir="ltr"><?php echo esc_html( $code ); ?></p>
+			<p style="margin:6px 0 0;color:#6d6a65;font-size:13px">בתוקף עד <?php echo esc_html( $expires ); ?>, לשימוש אחד, בהזמנה של <?php echo wp_kses_post( wc_price( (float) $settings['min_total'], [ 'decimals' => 0 ] ) ); ?> ומעלה</p>
+		</div>
+	<?php endif; ?>
 
 	<p style="text-align:center;margin:22px 0">
-		<a href="<?php echo esc_url( $link ); ?>" style="background:#161616;border-radius:8px;color:#ffffff;display:inline-block;font-weight:700;padding:14px 28px;text-decoration:none">להשלמת ההזמנה עם ההנחה</a>
+		<a href="<?php echo esc_url( $link ); ?>" style="background:#161616;border-radius:8px;color:#ffffff;display:inline-block;font-weight:700;padding:14px 28px;text-decoration:none"><?php echo $code ? 'להשלמת ההזמנה עם ההנחה' : 'להשלמת ההזמנה'; ?></a>
 	</p>
-	<p style="text-align:center;color:#6d6a65;font-size:13px">הכפתור מחזיר את העגלה כמו שהשארתם אותה ומעביר לתשלום, עם ההנחה כבר מוזנת.</p>
+	<p style="text-align:center;color:#6d6a65;font-size:13px"><?php echo $code ? 'הכפתור מחזיר את העגלה כמו שהשארתם אותה ומעביר לתשלום, עם ההנחה כבר מוזנת.' : 'הכפתור מחזיר את העגלה כמו שהשארתם אותה ומעביר לתשלום.'; ?></p>
 
 	<p style="text-align:center;color:#8a8781;font-size:12px;margin-top:24px">
 		לא רוצים לקבל תזכורות כאלה? <a href="<?php echo esc_url( $stop ); ?>" style="color:#8a8781">להסרה</a>
@@ -888,7 +899,9 @@ function gueta_ac_view_email() {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$html = (string) $wpdb->get_var( $wpdb->prepare( "SELECT email_html FROM {$table} WHERE id = %d", $id ) );
 	} else {
-		$html = gueta_ac_email_html( gueta_ac_sample_row(), 'BACKSAMPLE', gueta_ac_settings(), home_url( '/' ), home_url( '/' ) );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- checked above.
+		$plain = ! empty( $_GET['plain'] );
+		$html  = gueta_ac_email_html( gueta_ac_sample_row(), $plain ? '' : 'BACKSAMPLE', gueta_ac_settings(), home_url( '/' ), home_url( '/' ) );
 	}
 
 	header( 'Content-Type: text/html; charset=UTF-8' );
@@ -957,6 +970,7 @@ function gueta_ac_save( $source ) {
 			'delay'     => $number( 'ac_delay', 0.5, 72 ),
 			'days'      => (int) $number( 'ac_days', 1, 60 ),
 			'subject'   => isset( $source['ac_subject'] ) && '' !== trim( (string) $source['ac_subject'] ) ? sanitize_text_field( wp_unslash( $source['ac_subject'] ) ) : gueta_ac_settings()['subject'],
+			'subject_plain' => isset( $source['ac_subject_plain'] ) && '' !== trim( (string) $source['ac_subject_plain'] ) ? sanitize_text_field( wp_unslash( $source['ac_subject_plain'] ) ) : gueta_ac_settings()['subject_plain'],
 		],
 		false
 	);
@@ -1028,8 +1042,9 @@ function gueta_ac_page() {
 	<div class="wrap gueta-ac">
 		<h1>עגלות נטושות</h1>
 		<p class="description">
-			עגלה בשווי <?php echo esc_html( number_format_i18n( (float) $settings['min_total'] ) ); ?> ₪ ומעלה, של לקוח שהכתובת שלו ידועה, שלא הפכה להזמנה תוך <?php echo esc_html( number_format_i18n( (float) $settings['delay'], 1 ) ); ?> שעות,
-			מקבלת מייל אחד עם קוד אישי של <?php echo esc_html( number_format_i18n( (float) $settings['percent'] ) ); ?>% הנחה על המוצרים שבה. הכפתור במייל מחזיר את העגלה עם הקוד כבר מוזן.
+			עגלה של לקוח שהכתובת שלו ידועה, שלא הפכה להזמנה תוך <?php echo esc_html( number_format_i18n( (float) $settings['delay'], 1 ) ); ?> שעות, מקבלת מייל תזכורת אחד.
+			עגלה בשווי <?php echo esc_html( number_format_i18n( (float) $settings['min_total'] ) ); ?> ₪ ומעלה מקבלת בו גם קוד אישי של <?php echo esc_html( number_format_i18n( (float) $settings['percent'] ) ); ?>% הנחה על המוצרים שבה, שעובד רק בהזמנה של <?php echo esc_html( number_format_i18n( (float) $settings['min_total'] ) ); ?> ₪ ומעלה.
+			הכפתור במייל מחזיר את העגלה ומעביר לתשלום, עם הקוד כבר מוזן.
 			לקוח לא יקבל יותר ממייל אחד כזה ב-14 יום, ולא יקבל בכלל אם הזמין בינתיים או ביקש להסיר.
 		</p>
 
@@ -1049,8 +1064,11 @@ function gueta_ac_page() {
 					<td><label><input type="checkbox" id="ac_enabled" name="ac_enabled" value="1" <?php checked( ! empty( $settings['enabled'] ) ); ?>> לשלוח מיילים לעגלות נטושות</label></td>
 				</tr>
 				<tr>
-					<th scope="row"><label for="ac_min_total">סכום עגלה מינימלי</label></th>
-					<td><input type="number" class="small-text" min="0" step="1" id="ac_min_total" name="ac_min_total" value="<?php echo esc_attr( (string) $settings['min_total'] ); ?>"> ₪, כולל מע״מ ולפני משלוח</td>
+					<th scope="row"><label for="ac_min_total">סכום מינימלי לקוד הנחה</label></th>
+					<td>
+						<input type="number" class="small-text" min="0" step="1" id="ac_min_total" name="ac_min_total" value="<?php echo esc_attr( (string) $settings['min_total'] ); ?>"> ₪, כולל מע״מ ולפני משלוח
+						<p class="description">עגלה מתחת לסכום מקבלת תזכורת בלי קוד. הקוד עצמו עובד רק בהזמנה מהסכום הזה ומעלה.</p>
+					</td>
 				</tr>
 				<tr>
 					<th scope="row"><label for="ac_percent">הנחה</label></th>
@@ -1065,13 +1083,18 @@ function gueta_ac_page() {
 					<td><input type="number" class="small-text" min="1" max="60" step="1" id="ac_days" name="ac_days" value="<?php echo esc_attr( (string) $settings['days'] ); ?>"> ימים</td>
 				</tr>
 				<tr>
-					<th scope="row"><label for="ac_subject">נושא המייל</label></th>
+					<th scope="row"><label for="ac_subject">נושא המייל עם קוד</label></th>
 					<td><input type="text" class="regular-text" id="ac_subject" name="ac_subject" value="<?php echo esc_attr( $settings['subject'] ); ?>"></td>
+				</tr>
+				<tr>
+					<th scope="row"><label for="ac_subject_plain">נושא המייל בלי קוד</label></th>
+					<td><input type="text" class="regular-text" id="ac_subject_plain" name="ac_subject_plain" value="<?php echo esc_attr( $settings['subject_plain'] ); ?>"></td>
 				</tr>
 			</table>
 			<p>
 				<?php submit_button( 'שמירה', 'primary', 'gueta_ac_save', false ); ?>
-				<a class="button" href="<?php echo esc_url( $view( 0 ) ); ?>" target="_blank" rel="noopener">איך המייל נראה</a>
+				<a class="button" href="<?php echo esc_url( $view( 0 ) ); ?>" target="_blank" rel="noopener">איך המייל עם הקוד נראה</a>
+				<a class="button" href="<?php echo esc_url( add_query_arg( 'plain', 1, $view( 0 ) ) ); ?>" target="_blank" rel="noopener">איך המייל בלי הקוד נראה</a>
 			</p>
 		</form>
 
@@ -1123,7 +1146,7 @@ function gueta_ac_page() {
 								<?php $order = wc_get_order( (int) $row->order_id ); ?>
 								<a href="<?php echo esc_url( $order ? $order->get_edit_order_url() : '' ); ?>">#<?php echo esc_html( $order ? $order->get_order_number() : (string) $row->order_id ); ?></a>
 								· <?php echo wp_kses_post( wc_price( $row->order_total ) ); ?>
-								<?php echo $row->used_coupon ? ' · עם הקוד' : ' · בלי הקוד'; ?>
+								<?php echo $row->coupon ? ( $row->used_coupon ? ' · עם הקוד' : ' · בלי הקוד' ) : ''; ?>
 							<?php else : ?>
 								—
 							<?php endif; ?>
