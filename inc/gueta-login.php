@@ -14,7 +14,9 @@
  * cannot be skipped by posting the form directly.
  *
  * Either way, a shopper may instead go on as a guest with just an address,
- * which fills the checkout's email field and goes on the order. The theme
+ * which fills the checkout's email field and goes on the order. The step
+ * asks for a mobile number beside the address, which fills the checkout's
+ * phone field and goes on the order, or on the account, the same way. The theme
  * settings choose whether the step sends a code at all: set to the address
  * alone, or with no SMTP to send a code through, it asks for the address and
  * goes on, as it did before codes.
@@ -335,7 +337,7 @@ function gueta_render_login_card( $in_popup = false ) {
 			<p class="gueta-login__lead">כדי שנוכל לעדכן אתכם על ההזמנה ולשמור את הפרטים לפעם הבאה. בלי סיסמה.</p>
 		<?php else : ?>
 			<h2 class="gueta-login__title" id="gueta-login-title">רגע לפני התשלום</h2>
-			<p class="gueta-login__lead">לאיזו כתובת מייל לשלוח את אישור ההזמנה והעדכונים עליה?</p>
+			<p class="gueta-login__lead">לאן לשלוח את אישור ההזמנה, ואיך להשיג אתכם לתיאום המשלוח?</p>
 		<?php endif; ?>
 
 		<?php if ( $google ) : ?>
@@ -346,6 +348,8 @@ function gueta_render_login_card( $in_popup = false ) {
 		<form class="gueta-login__step" data-login-step="email" data-login-mode="<?php echo $mail ? 'code' : 'guest'; ?>" novalidate>
 			<label class="gueta-login__label" for="gueta-login-email">כתובת מייל</label>
 			<input class="gueta-login__input" type="email" id="gueta-login-email" name="email" autocomplete="email" inputmode="email" dir="ltr" required>
+			<label class="gueta-login__label" for="gueta-login-phone">טלפון נייד</label>
+			<input class="gueta-login__input" type="tel" id="gueta-login-phone" name="phone" autocomplete="tel" inputmode="tel" dir="ltr" required>
 			<button type="submit" class="gueta-button gueta-button--solid"><?php echo $mail ? 'שליחת קוד אימות' : 'המשך'; ?></button>
 			<button type="button" class="gueta-login__guest" data-login-guest>המשך כאורח</button>
 		</form>
@@ -446,7 +450,8 @@ function gueta_login_assets() {
 			'popup'    => gueta_login_popup_applies(),
 			'strings'  => [
 				'email'      => 'נא להזין כתובת מייל תקינה',
-				'code'       => 'נא להזין את 6 הספרות שקיבלתם',
+				'phone'      => 'נא להזין מספר טלפון תקין',
+				'code'     => 'נא להזין את 6 הספרות שקיבלתם',
 				'sending'    => 'שולחים...',
 				'continuing' => 'ממשיכים לתשלום...',
 				'resent'     => 'שלחנו קוד חדש',
@@ -546,6 +551,82 @@ function gueta_login_posted_email() {
 }
 
 /**
+ * An Israeli phone number in its local digits, 0541234567 for +972 54-123-4567,
+ * or an empty string when it is not one.
+ *
+ * @param string $phone Number as typed.
+ * @return string
+ */
+function gueta_login_normalize_phone( $phone ) {
+	$digits = preg_replace( '/\D/', '', (string) $phone );
+
+	if ( 0 === strpos( $digits, '00972' ) ) {
+		$digits = '0' . substr( $digits, 5 );
+	} elseif ( 0 === strpos( $digits, '972' ) ) {
+		$digits = '0' . substr( $digits, 3 );
+	}
+
+	return preg_match( '/^0\d{8,9}$/', $digits ) ? $digits : '';
+}
+
+/**
+ * The posted phone number, an empty string when none was given, or an error
+ * back to the browser when one was given wrong or is needed and missing.
+ *
+ * @param bool $required Whether the step needs one.
+ * @return string
+ */
+function gueta_login_posted_phone( $required ) {
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing -- checked in gueta_login_check_request().
+	$typed = isset( $_POST['phone'] ) ? trim( sanitize_text_field( wp_unslash( $_POST['phone'] ) ) ) : '';
+
+	if ( '' === $typed && ! $required ) {
+		return '';
+	}
+
+	$phone = gueta_login_normalize_phone( $typed );
+
+	if ( '' === $phone ) {
+		wp_send_json_error( [ 'message' => 'נא להזין מספר טלפון תקין' ], 400 );
+	}
+
+	return $phone;
+}
+
+/**
+ * Keep the phone number given at the step for the checkout: in the session,
+ * where the checkout's field reads it, and on the cart's customer.
+ *
+ * @param string $phone Phone number.
+ * @return void
+ */
+function gueta_login_remember_phone( $phone ) {
+	if ( '' === $phone || ! WC()->session ) {
+		return;
+	}
+
+	WC()->session->set( 'gueta_guest_phone', $phone );
+
+	if ( WC()->customer ) {
+		WC()->customer->set_billing_phone( $phone );
+		WC()->customer->save();
+	}
+}
+
+/**
+ * The phone number given at the step, kept in the cart session.
+ *
+ * @return string
+ */
+function gueta_login_guest_phone() {
+	if ( ! function_exists( 'WC' ) || ! WC()->session ) {
+		return '';
+	}
+
+	return (string) WC()->session->get( 'gueta_guest_phone', '' );
+}
+
+/**
  * Email a fresh code.
  *
  * @return void
@@ -558,7 +639,9 @@ function gueta_ajax_login_send_code() {
 	}
 
 	$email = gueta_login_posted_email();
-	$user  = get_user_by( 'email', $email );
+	// Checked now, so nobody waits for a code only to be stopped at the number.
+	gueta_login_posted_phone( true );
+	$user = get_user_by( 'email', $email );
 
 	if ( $user && gueta_login_is_staff( $user ) ) {
 		gueta_login_staff_error();
@@ -615,8 +698,9 @@ function gueta_ajax_login_verify_code() {
 	gueta_login_check_request();
 
 	$email = gueta_login_posted_email();
+	$phone = gueta_login_posted_phone( false );
 	// phpcs:ignore WordPress.Security.NonceVerification.Missing -- checked in gueta_login_check_request().
-	$code    = isset( $_POST['code'] ) ? preg_replace( '/\D/', '', (string) wp_unslash( $_POST['code'] ) ) : '';
+	$code    =isset( $_POST['code'] ) ? preg_replace( '/\D/', '', (string) wp_unslash( $_POST['code'] ) ) : '';
 	$key     = gueta_login_code_key( $email );
 	$pending = get_transient( $key );
 
@@ -639,7 +723,7 @@ function gueta_ajax_login_verify_code() {
 
 	delete_transient( $key );
 
-	gueta_login_finish( $email );
+	gueta_login_finish( $email, [], $phone );
 }
 add_action( 'wc_ajax_gueta_login_verify_code', 'gueta_ajax_login_verify_code' );
 
@@ -665,6 +749,8 @@ function gueta_ajax_login_guest() {
 
 	// phpcs:ignore WordPress.Security.NonceVerification.Missing -- checked in gueta_login_check_request().
 	$email = isset( $_POST['email'] ) && '' !== trim( (string) wp_unslash( $_POST['email'] ) ) ? gueta_login_posted_email() : '';
+	// The step's script asks for the number with the address; going on as a guest, it comes if it was typed.
+	$phone = gueta_login_posted_phone( false );
 
 	if ( ! WC()->session ) {
 		wp_send_json_error( [ 'message' => 'משהו השתבש. נסו שוב בעוד רגע.' ], 500 );
@@ -674,6 +760,7 @@ function gueta_ajax_login_guest() {
 	WC()->session->set_customer_session_cookie( true );
 	WC()->session->set( 'gueta_guest', true );
 	gueta_login_remember_guest( $email );
+	gueta_login_remember_phone( $phone );
 
 	if ( $email ) {
 		WC()->session->set( 'gueta_guest_email', $email );
@@ -683,7 +770,7 @@ function gueta_ajax_login_guest() {
 			WC()->customer->save();
 		}
 
-		gueta_login_pending_order( $email );
+		gueta_login_pending_order( $email, $phone );
 	}
 
 	/*
@@ -763,18 +850,24 @@ function gueta_login_write_order( $data, $order = null ) {
 }
 
 /**
- * Open the session's order under the shopper's address, or bring the one
- * already open up to date with it.
+ * Open the session's order under the shopper's address and phone number, or
+ * bring the one already open up to date with them.
  *
  * @param string $email Address.
+ * @param string $phone Phone number, or an empty string to keep the order's own.
  * @return int Order ID, or 0.
  */
-function gueta_login_pending_order( $email ) {
+function gueta_login_pending_order( $email, $phone = '' ) {
 	$existing = gueta_login_session_order();
+
+	if ( '' === $phone && $existing ) {
+		$phone = $existing->get_billing_phone();
+	}
 
 	$order_id = gueta_login_write_order(
 		[
 			'billing_email'  => $email,
+			'billing_phone'  => $phone,
 			'payment_method' => $existing ? $existing->get_payment_method() : '',
 		],
 		$existing
@@ -835,6 +928,7 @@ function gueta_login_sync_order() {
 		gueta_login_write_order(
 			[
 				'billing_email'  => $order->get_billing_email(),
+				'billing_phone'  => $order->get_billing_phone(),
 				'payment_method' => $order->get_payment_method(),
 			],
 			$order
@@ -888,7 +982,8 @@ add_action( 'woocommerce_checkout_order_processed', 'gueta_login_drop_pending_or
 add_action( 'wc_ajax_gueta_login_guest', 'gueta_ajax_login_guest' );
 
 /**
- * The guest's address in the checkout's email field, if it is still empty.
+ * The guest's address in the checkout's email field, and the number given at
+ * the step in its phone field, if they are still empty.
  *
  * @param mixed  $value Field value.
  * @param string $input Field name.
@@ -901,12 +996,19 @@ function gueta_login_guest_checkout_value( $value, $input ) {
 		return $guest ? $guest : $value;
 	}
 
+	if ( 'billing_phone' === $input && ! $value ) {
+		$phone = gueta_login_guest_phone();
+
+		return $phone ? $phone : $value;
+	}
+
 	return $value;
 }
 add_filter( 'woocommerce_checkout_get_value', 'gueta_login_guest_checkout_value', 10, 2 );
 
 /**
- * The order goes out with the guest's address if the field came back empty.
+ * The order goes out with the guest's address and number if the fields came
+ * back empty.
  *
  * @param array $data Posted data.
  * @return array
@@ -914,6 +1016,10 @@ add_filter( 'woocommerce_checkout_get_value', 'gueta_login_guest_checkout_value'
 function gueta_login_guest_posted_email( $data ) {
 	if ( ! is_user_logged_in() && empty( $data['billing_email'] ) && gueta_login_guest_email() ) {
 		$data['billing_email'] = gueta_login_guest_email();
+	}
+
+	if ( empty( $data['billing_phone'] ) && gueta_login_guest_phone() ) {
+		$data['billing_phone'] = gueta_login_guest_phone();
 	}
 
 	return $data;
@@ -981,7 +1087,9 @@ function gueta_ajax_login_google() {
 		[
 			'first_name' => sanitize_text_field( $claims['given_name'] ?? '' ),
 			'last_name'  => sanitize_text_field( $claims['family_name'] ?? '' ),
-		]
+		],
+		// Google brings no number; one typed in the field before the button comes along.
+		gueta_login_normalize_phone( isset( $_POST['phone'] ) ? sanitize_text_field( wp_unslash( $_POST['phone'] ) ) : '' ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- checked in gueta_login_check_request().
 	);
 }
 add_action( 'wc_ajax_gueta_login_google', 'gueta_ajax_login_google' );
@@ -1025,11 +1133,15 @@ function gueta_login_staff_error() {
  * the cart the customer is about to pay for. WooCommerce moves the guest's
  * cart onto the account by itself on the next page.
  *
+ * The phone number given at the step goes on the account, where the
+ * checkout's phone field reads it, and in the session as well.
+ *
  * @param string $email Verified email address.
  * @param array  $names First and last name, when known.
+ * @param string $phone Phone number, when given.
  * @return void
  */
-function gueta_login_finish( $email, $names = [] ) {
+function gueta_login_finish( $email, $names = [], $phone = '' ) {
 	$user = get_user_by( 'email', $email );
 
 	if ( $user && gueta_login_is_staff( $user ) ) {
@@ -1049,6 +1161,14 @@ function gueta_login_finish( $email, $names = [] ) {
 		}
 
 		$user = get_user_by( 'id', $user_id );
+	}
+
+	if ( '' !== $phone ) {
+		update_user_meta( $user->ID, 'billing_phone', $phone );
+
+		if ( WC()->session ) {
+			WC()->session->set( 'gueta_guest_phone', $phone );
+		}
 	}
 
 	wc_set_customer_auth_cookie( $user->ID );
