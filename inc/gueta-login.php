@@ -15,8 +15,8 @@
  *
  * Either way, a shopper may instead go on as a guest with just an address,
  * which fills the checkout's email field and goes on the order. The step
- * asks for a mobile number beside the address, which fills the checkout's
- * phone field and goes on the order, or on the account, the same way. The theme
+ * asks for a name and a mobile number beside the address, which fill the
+ * checkout's fields and go on the order, or on the account, the same way. The theme
  * settings choose whether the step sends a code at all: set to the address
  * alone, or with no SMTP to send a code through, it asks for the address and
  * goes on, as it did before codes.
@@ -346,10 +346,15 @@ function gueta_render_login_card( $in_popup = false ) {
 		<?php endif; ?>
 
 		<form class="gueta-login__step" data-login-step="email" data-login-mode="<?php echo $mail ? 'code' : 'guest'; ?>" novalidate>
-			<label class="gueta-login__label" for="gueta-login-email">כתובת מייל</label>
-			<input class="gueta-login__input" type="email" id="gueta-login-email" name="email" autocomplete="email" inputmode="email" dir="ltr" required>
-			<label class="gueta-login__label" for="gueta-login-phone">טלפון נייד</label>
-			<input class="gueta-login__input" type="tel" id="gueta-login-phone" name="phone" autocomplete="tel" inputmode="tel" dir="ltr" required>
+			<?php // The placeholder is a space so the label can rise once there is an answer, as at the checkout. ?>
+			<div class="gueta-login__field">
+				<label class="gueta-login__float" for="gueta-login-email">כתובת מייל</label>
+				<input class="gueta-login__input" type="email" id="gueta-login-email" name="email" autocomplete="email" inputmode="email" dir="ltr" placeholder=" " required>
+			</div>
+			<div class="gueta-login__field">
+				<label class="gueta-login__float" for="gueta-login-phone">טלפון נייד</label>
+				<input class="gueta-login__input" type="tel" id="gueta-login-phone" name="phone" autocomplete="tel" inputmode="tel" dir="ltr" placeholder=" " required>
+			</div>
 			<button type="submit" class="gueta-button gueta-button--solid"><?php echo $mail ? 'שליחת קוד אימות' : 'המשך'; ?></button>
 			<button type="button" class="gueta-login__guest" data-login-guest>המשך כאורח</button>
 		</form>
@@ -450,6 +455,7 @@ function gueta_login_assets() {
 			'popup'    => gueta_login_popup_applies(),
 			'strings'  => [
 				'email'      => 'נא להזין כתובת מייל תקינה',
+				'name'       => 'נא להזין שם פרטי ושם משפחה',
 				'phone'      => 'נא להזין מספר טלפון תקין',
 				'code'     => 'נא להזין את 6 הספרות שקיבלתם',
 				'sending'    => 'שולחים...',
@@ -570,60 +576,79 @@ function gueta_login_normalize_phone( $phone ) {
 }
 
 /**
- * The posted phone number, an empty string when none was given, or an error
- * back to the browser when one was given wrong or is needed and missing.
+ * The details the step asks for beside the address, by their name in the
+ * posted form, which is also the billing field they fill.
  *
- * @param bool $required Whether the step needs one.
- * @return string
+ * @return string[]
  */
-function gueta_login_posted_phone( $required ) {
-	// phpcs:ignore WordPress.Security.NonceVerification.Missing -- checked in gueta_login_check_request().
-	$typed = isset( $_POST['phone'] ) ? trim( sanitize_text_field( wp_unslash( $_POST['phone'] ) ) ) : '';
-
-	if ( '' === $typed && ! $required ) {
-		return '';
-	}
-
-	$phone = gueta_login_normalize_phone( $typed );
-
-	if ( '' === $phone ) {
-		wp_send_json_error( [ 'message' => 'נא להזין מספר טלפון תקין' ], 400 );
-	}
-
-	return $phone;
+function gueta_login_detail_fields() {
+	return [ 'first_name', 'last_name', 'phone' ];
 }
 
 /**
- * Keep the phone number given at the step for the checkout: in the session,
- * where the checkout's field reads it, and on the cart's customer.
+ * The posted name and phone number, each an empty string when not given, or
+ * an error back to the browser when one is needed and missing, or a number
+ * was given wrong.
  *
- * @param string $phone Phone number.
+ * @param bool $required Whether the step needs them.
+ * @return array{first_name:string,last_name:string,phone:string}
+ */
+function gueta_login_posted_details( $required ) {
+	$details = [];
+
+	foreach ( gueta_login_detail_fields() as $field ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- checked in gueta_login_check_request().
+		$details[ $field ] = isset( $_POST[ $field ] ) ? mb_substr( trim( sanitize_text_field( wp_unslash( $_POST[ $field ] ) ) ), 0, 60 ) : '';
+	}
+
+	if ( '' !== $details['phone'] || $required ) {
+		$details['phone'] = gueta_login_normalize_phone( $details['phone'] );
+
+		if ( '' === $details['phone'] ) {
+			wp_send_json_error( [ 'message' => 'נא להזין מספר טלפון תקין' ], 400 );
+		}
+	}
+
+	return $details;
+}
+
+/**
+ * Keep the details given at the step for the checkout: in the session, where
+ * the checkout's fields read them, and on the cart's customer.
+ *
+ * @param array $details Name and phone number; empty ones are left alone.
  * @return void
  */
-function gueta_login_remember_phone( $phone ) {
-	if ( '' === $phone || ! WC()->session ) {
+function gueta_login_remember_details( $details ) {
+	if ( ! WC()->session ) {
 		return;
 	}
 
-	WC()->session->set( 'gueta_guest_phone', $phone );
+	foreach ( array_filter( $details, 'strlen' ) as $field => $value ) {
+		WC()->session->set( 'gueta_guest_' . $field, $value );
+
+		if ( WC()->customer ) {
+			WC()->customer->{"set_billing_{$field}"}( $value );
+		}
+	}
 
 	if ( WC()->customer ) {
-		WC()->customer->set_billing_phone( $phone );
 		WC()->customer->save();
 	}
 }
 
 /**
- * The phone number given at the step, kept in the cart session.
+ * One of the details given at the step, kept in the cart session.
  *
+ * @param string $field first_name, last_name or phone.
  * @return string
  */
-function gueta_login_guest_phone() {
+function gueta_login_guest_detail( $field ) {
 	if ( ! function_exists( 'WC' ) || ! WC()->session ) {
 		return '';
 	}
 
-	return (string) WC()->session->get( 'gueta_guest_phone', '' );
+	return (string) WC()->session->get( 'gueta_guest_' . $field, '' );
 }
 
 /**
@@ -639,8 +664,8 @@ function gueta_ajax_login_send_code() {
 	}
 
 	$email = gueta_login_posted_email();
-	// Checked now, so nobody waits for a code only to be stopped at the number.
-	gueta_login_posted_phone( true );
+	// Checked now, so nobody waits for a code only to be stopped at the name or number.
+	gueta_login_posted_details( true );
 	$user = get_user_by( 'email', $email );
 
 	if ( $user && gueta_login_is_staff( $user ) ) {
@@ -698,7 +723,7 @@ function gueta_ajax_login_verify_code() {
 	gueta_login_check_request();
 
 	$email = gueta_login_posted_email();
-	$phone = gueta_login_posted_phone( false );
+	$details = gueta_login_posted_details( false );
 	// phpcs:ignore WordPress.Security.NonceVerification.Missing -- checked in gueta_login_check_request().
 	$code    =isset( $_POST['code'] ) ? preg_replace( '/\D/', '', (string) wp_unslash( $_POST['code'] ) ) : '';
 	$key     = gueta_login_code_key( $email );
@@ -723,7 +748,7 @@ function gueta_ajax_login_verify_code() {
 
 	delete_transient( $key );
 
-	gueta_login_finish( $email, [], $phone );
+	gueta_login_finish( $email, $details );
 }
 add_action( 'wc_ajax_gueta_login_verify_code', 'gueta_ajax_login_verify_code' );
 
@@ -749,8 +774,8 @@ function gueta_ajax_login_guest() {
 
 	// phpcs:ignore WordPress.Security.NonceVerification.Missing -- checked in gueta_login_check_request().
 	$email = isset( $_POST['email'] ) && '' !== trim( (string) wp_unslash( $_POST['email'] ) ) ? gueta_login_posted_email() : '';
-	// The step's script asks for the number with the address; going on as a guest, it comes if it was typed.
-	$phone = gueta_login_posted_phone( false );
+	// The step's script asks for the name and number with the address; going on as a guest, they come if they were typed.
+	$details = gueta_login_posted_details( false );
 
 	if ( ! WC()->session ) {
 		wp_send_json_error( [ 'message' => 'משהו השתבש. נסו שוב בעוד רגע.' ], 500 );
@@ -760,7 +785,7 @@ function gueta_ajax_login_guest() {
 	WC()->session->set_customer_session_cookie( true );
 	WC()->session->set( 'gueta_guest', true );
 	gueta_login_remember_guest( $email );
-	gueta_login_remember_phone( $phone );
+	gueta_login_remember_details( $details );
 
 	if ( $email ) {
 		WC()->session->set( 'gueta_guest_email', $email );
@@ -770,7 +795,7 @@ function gueta_ajax_login_guest() {
 			WC()->customer->save();
 		}
 
-		gueta_login_pending_order( $email, $phone );
+		gueta_login_pending_order( $email, $details );
 	}
 
 	/*
@@ -850,28 +875,27 @@ function gueta_login_write_order( $data, $order = null ) {
 }
 
 /**
- * Open the session's order under the shopper's address and phone number, or
- * bring the one already open up to date with them.
+ * Open the session's order under the shopper's address, name and phone
+ * number, or bring the one already open up to date with them.
  *
- * @param string $email Address.
- * @param string $phone Phone number, or an empty string to keep the order's own.
+ * @param string $email   Address.
+ * @param array  $details Name and phone number; an empty one keeps the order's own.
  * @return int Order ID, or 0.
  */
-function gueta_login_pending_order( $email, $phone = '' ) {
+function gueta_login_pending_order( $email, $details = [] ) {
 	$existing = gueta_login_session_order();
+	$data     = [
+		'billing_email'  => $email,
+		'payment_method' => $existing ? $existing->get_payment_method() : '',
+	];
 
-	if ( '' === $phone && $existing ) {
-		$phone = $existing->get_billing_phone();
+	foreach ( gueta_login_detail_fields() as $field ) {
+		$value = (string) ( $details[ $field ] ?? '' );
+
+		$data[ 'billing_' . $field ] = '' === $value && $existing ? $existing->{"get_billing_{$field}"}() : $value;
 	}
 
-	$order_id = gueta_login_write_order(
-		[
-			'billing_email'  => $email,
-			'billing_phone'  => $phone,
-			'payment_method' => $existing ? $existing->get_payment_method() : '',
-		],
-		$existing
-	);
+	$order_id = gueta_login_write_order( $data, $existing );
 
 	$order = $order_id ? wc_get_order( $order_id ) : null;
 
@@ -927,9 +951,11 @@ function gueta_login_sync_order() {
 	if ( $order ) {
 		gueta_login_write_order(
 			[
-				'billing_email'  => $order->get_billing_email(),
-				'billing_phone'  => $order->get_billing_phone(),
-				'payment_method' => $order->get_payment_method(),
+				'billing_email'      => $order->get_billing_email(),
+				'billing_first_name' => $order->get_billing_first_name(),
+				'billing_last_name'  => $order->get_billing_last_name(),
+				'billing_phone'      => $order->get_billing_phone(),
+				'payment_method'     => $order->get_payment_method(),
 			],
 			$order
 		);
@@ -982,24 +1008,30 @@ add_action( 'woocommerce_checkout_order_processed', 'gueta_login_drop_pending_or
 add_action( 'wc_ajax_gueta_login_guest', 'gueta_ajax_login_guest' );
 
 /**
- * The guest's address in the checkout's email field, and the number given at
- * the step in its phone field, if they are still empty.
+ * The guest's address in the checkout's email field, and the name and number
+ * given at the step in theirs, if they are still empty.
  *
  * @param mixed  $value Field value.
  * @param string $input Field name.
  * @return mixed
  */
 function gueta_login_guest_checkout_value( $value, $input ) {
-	if ( 'billing_email' === $input && ! $value && ! is_user_logged_in() ) {
+	if ( $value ) {
+		return $value;
+	}
+
+	if ( 'billing_email' === $input && ! is_user_logged_in() ) {
 		$guest = gueta_login_guest_email();
 
 		return $guest ? $guest : $value;
 	}
 
-	if ( 'billing_phone' === $input && ! $value ) {
-		$phone = gueta_login_guest_phone();
+	$field = 0 === strpos( (string) $input, 'billing_' ) ? substr( $input, 8 ) : '';
 
-		return $phone ? $phone : $value;
+	if ( in_array( $field, gueta_login_detail_fields(), true ) ) {
+		$detail = gueta_login_guest_detail( $field );
+
+		return '' !== $detail ? $detail : $value;
 	}
 
 	return $value;
@@ -1007,8 +1039,8 @@ function gueta_login_guest_checkout_value( $value, $input ) {
 add_filter( 'woocommerce_checkout_get_value', 'gueta_login_guest_checkout_value', 10, 2 );
 
 /**
- * The order goes out with the guest's address and number if the fields came
- * back empty.
+ * The order goes out with the guest's address, name and number if the fields
+ * came back empty.
  *
  * @param array $data Posted data.
  * @return array
@@ -1018,8 +1050,10 @@ function gueta_login_guest_posted_email( $data ) {
 		$data['billing_email'] = gueta_login_guest_email();
 	}
 
-	if ( empty( $data['billing_phone'] ) && gueta_login_guest_phone() ) {
-		$data['billing_phone'] = gueta_login_guest_phone();
+	foreach ( gueta_login_detail_fields() as $field ) {
+		if ( empty( $data[ 'billing_' . $field ] ) && '' !== gueta_login_guest_detail( $field ) ) {
+			$data[ 'billing_' . $field ] = gueta_login_guest_detail( $field );
+		}
 	}
 
 	return $data;
@@ -1082,14 +1116,16 @@ function gueta_ajax_login_google() {
 		wp_send_json_error( [ 'message' => 'לא הצלחנו לאמת את החשבון ב-Google. נסו שוב או התחברו עם קוד במייל.' ], 400 );
 	}
 
+	// Google brings the name, not the number; whatever was typed at the step before the button comes first.
+	$details = gueta_login_posted_details( false );
+
 	gueta_login_finish(
 		sanitize_email( $claims['email'] ),
 		[
-			'first_name' => sanitize_text_field( $claims['given_name'] ?? '' ),
-			'last_name'  => sanitize_text_field( $claims['family_name'] ?? '' ),
-		],
-		// Google brings no number; one typed in the field before the button comes along.
-		gueta_login_normalize_phone( isset( $_POST['phone'] ) ? sanitize_text_field( wp_unslash( $_POST['phone'] ) ) : '' ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- checked in gueta_login_check_request().
+			'first_name' => '' !== $details['first_name'] ? $details['first_name'] : sanitize_text_field( $claims['given_name'] ?? '' ),
+			'last_name'  => '' !== $details['last_name'] ? $details['last_name'] : sanitize_text_field( $claims['family_name'] ?? '' ),
+			'phone'      => $details['phone'],
+		]
 	);
 }
 add_action( 'wc_ajax_gueta_login_google', 'gueta_ajax_login_google' );
@@ -1133,41 +1169,37 @@ function gueta_login_staff_error() {
  * the cart the customer is about to pay for. WooCommerce moves the guest's
  * cart onto the account by itself on the next page.
  *
- * The phone number given at the step goes on the account, where the
- * checkout's phone field reads it, and in the session as well.
+ * The name and phone number given at the step go on the account, where the
+ * checkout's fields read them, and in the session as well.
  *
- * @param string $email Verified email address.
- * @param array  $names First and last name, when known.
- * @param string $phone Phone number, when given.
+ * @param string $email   Verified email address.
+ * @param array  $details First and last name and phone number, when known.
  * @return void
  */
-function gueta_login_finish( $email, $names = [], $phone = '' ) {
-	$user = get_user_by( 'email', $email );
+function gueta_login_finish( $email, $details = [] ) {
+	$user    = get_user_by( 'email', $email );
+	$details = array_filter( array_intersect_key( $details, array_flip( gueta_login_detail_fields() ) ), 'strlen' );
 
 	if ( $user && gueta_login_is_staff( $user ) ) {
 		gueta_login_staff_error();
 	}
 
 	if ( ! $user ) {
-		$names   = array_filter( $names );
+		$names   = array_intersect_key( $details, array_flip( [ 'first_name', 'last_name' ] ) );
 		$user_id = wc_create_new_customer( $email, wc_create_new_customer_username( $email, $names ), wp_generate_password( 24 ), $names );
 
 		if ( is_wp_error( $user_id ) ) {
 			wp_send_json_error( [ 'message' => 'לא הצלחנו לפתוח חשבון. נסו שוב בעוד רגע.' ], 500 );
 		}
 
-		foreach ( $names as $field => $value ) {
-			update_user_meta( $user_id, 'billing_' . $field, $value );
-		}
-
 		$user = get_user_by( 'id', $user_id );
 	}
 
-	if ( '' !== $phone ) {
-		update_user_meta( $user->ID, 'billing_phone', $phone );
+	foreach ( $details as $field => $value ) {
+		update_user_meta( $user->ID, 'billing_' . $field, $value );
 
 		if ( WC()->session ) {
-			WC()->session->set( 'gueta_guest_phone', $phone );
+			WC()->session->set( 'gueta_guest_' . $field, $value );
 		}
 	}
 

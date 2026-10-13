@@ -103,6 +103,59 @@
 	outline: none;
 }
 
+/* -------------------------------------------------------------------------
+ * Labels that sit in the box, as at the checkout
+ *
+ * The label starts where the answer will go and rises to the top of the box
+ * once there is something to read. :placeholder-shown decides, which is why
+ * each of these fields has a placeholder of one space.
+ * ---------------------------------------------------------------------- */
+
+.gueta-login__step[data-login-step="email"] {
+	gap: 18px;
+}
+
+.gueta-login__row {
+	display: grid;
+	gap: 12px;
+	grid-template-columns: 1fr 1fr;
+}
+
+.gueta-login__field {
+	position: relative;
+}
+
+.gueta-login__field .gueta-login__input {
+	line-height: 1.4;
+	min-height: 58px;
+	padding: 16px;
+	text-align: right;
+}
+
+.gueta-login__float {
+	background: transparent;
+	color: var(--gueta-soft);
+	font-size: 16px;
+	font-weight: 400;
+	inset-inline-start: 11px;
+	line-height: 1.4;
+	margin: 0;
+	padding-inline: 6px;
+	pointer-events: none;
+	position: absolute;
+	top: 18px;
+	transition: background-color .15s ease, color .15s ease, font-size .15s ease, top .15s ease;
+	z-index: 1;
+}
+
+.gueta-login__field:has(.gueta-login__input:focus) .gueta-login__float,
+.gueta-login__field:has(.gueta-login__input:not(:placeholder-shown)) .gueta-login__float {
+	background: var(--gueta-paper);
+	color: var(--gueta-muted);
+	font-size: 12px;
+	top: -11px;
+}
+
 .gueta-login__input--code {
 	font-size: 24px;
 	font-variant-numeric: tabular-nums;

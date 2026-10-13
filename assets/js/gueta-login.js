@@ -29,7 +29,7 @@
 	var address = root.querySelector('[data-login-address]');
 	var message = root.querySelector('[data-login-message]');
 	var email = '';
-	var phone = '';
+	var details = {};
 	var busy = false;
 
 	/*
@@ -40,6 +40,32 @@
 		var digits = phoneInput.value.replace(/\D/g, '').replace(/^(00)?972/, '0');
 
 		return /^0\d{8,9}$/.test(digits) ? digits : '';
+	}
+
+	// The name and number as typed; a number typed wrong goes as none.
+	function readDetails() {
+		return {
+			phone: readPhone()
+		};
+	}
+
+	// Whether the name and number are all there, pointing at the first that is not.
+	function detailsComplete() {
+		if (!details.phone) {
+			say(settings.strings.phone, true);
+			phoneInput.focus();
+			return false;
+		}
+
+		return true;
+	}
+
+	function withDetails(data) {
+		Object.keys(details).forEach(function (key) {
+			data[key] = details[key];
+		});
+
+		return data;
 	}
 
 	function say(html, isError) {
@@ -89,7 +115,7 @@
 		setBusy(form, true);
 		say(settings.strings.sending);
 
-		post('gueta_login_send_code', { email: email, phone: phone })
+		post('gueta_login_send_code', withDetails({ email: email }))
 			.then(function (result) {
 				setBusy(form, false);
 
@@ -107,14 +133,14 @@
 	}
 
 	/*
-	 * On to the checkout unverified. "המשך" needs the address and the phone
-	 * number, which go on the order the server opens for the cart; "המשך
-	 * כאורח" goes on without them, though whatever was already typed in right
-	 * is sent along.
+	 * On to the checkout unverified. "המשך" needs the name, the address and
+	 * the phone number, which go on the order the server opens for the cart;
+	 * "המשך כאורח" goes on without them, though whatever was already typed
+	 * in right is sent along.
 	 */
 	function continueAsGuest(needEmail) {
 		email = emailInput.value.trim();
-		phone = readPhone();
+		details = readDetails();
 
 		var valid = !!email && emailInput.checkValidity();
 
@@ -124,9 +150,7 @@
 			return;
 		}
 
-		if (needEmail && !phone) {
-			say(settings.strings.phone, true);
-			phoneInput.focus();
+		if (needEmail && !detailsComplete()) {
 			return;
 		}
 
@@ -137,7 +161,7 @@
 		setBusy(emailStep, true);
 		say(settings.strings.continuing);
 
-		post('gueta_login_guest', { email: email, phone: phone })
+		post('gueta_login_guest', withDetails({ email: email }))
 			.then(function (result) {
 				if (!finish(result)) {
 					setBusy(emailStep, false);
@@ -171,7 +195,7 @@
 		}
 
 		email = emailInput.value.trim();
-		phone = readPhone();
+		details = readDetails();
 
 		if (!emailInput.checkValidity() || !email) {
 			say(settings.strings.email, true);
@@ -179,9 +203,7 @@
 			return;
 		}
 
-		if (!phone) {
-			say(settings.strings.phone, true);
-			phoneInput.focus();
+		if (!detailsComplete()) {
 			return;
 		}
 
@@ -205,7 +227,7 @@
 
 		setBusy(codeStep, true);
 
-		post('gueta_login_verify_code', { email: email, phone: phone, code: code })
+		post('gueta_login_verify_code', withDetails({ email: email, code: code }))
 			.then(function (result) {
 				if (!finish(result)) {
 					setBusy(codeStep, false);
@@ -281,7 +303,8 @@
 				say(settings.strings.sending);
 				root.classList.add('is-busy');
 
-				post('gueta_login_google', { credential: response.credential, phone: readPhone() })
+				details = readDetails();
+				post('gueta_login_google', withDetails({ credential: response.credential }))
 					.then(function (result) {
 						if (!finish(result)) {
 							root.classList.remove('is-busy');
