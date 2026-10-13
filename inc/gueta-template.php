@@ -321,6 +321,8 @@ function gueta_render_actions() {
 			<?php echo gueta_icon( 'search' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</button>
 
+		<span data-let-agents-wishlist></span>
+
 		<?php if ( gueta_has_woocommerce() ) : ?>
 			<a class="gueta-icon-button gueta-actions__account" href="<?php echo esc_url( (string) wc_get_page_permalink( 'myaccount' ) ); ?>" aria-label="<?php echo is_user_logged_in() ? 'החשבון שלי' : 'התחברות'; ?>">
 				<?php echo gueta_icon( 'user' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
