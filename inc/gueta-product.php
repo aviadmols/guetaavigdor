@@ -233,6 +233,21 @@ add_action( 'wp_footer', 'gueta_render_lightbox' );
  * ---------------------------------------------------------------------- */
 
 /**
+ * Drop the old shop's page builder tags from a description, keeping the text
+ * inside them.
+ *
+ * Some descriptions were written in WPBakery under WoodMart, neither of which
+ * runs here, so "[vc_row][vc_column]..." was printed on the page as it stood,
+ * and sent to Google in the feed.
+ *
+ * @param string $html Description.
+ * @return string
+ */
+function gueta_strip_builder_tags( $html ) {
+	return (string) preg_replace( '/\[\/?(?:vc|woodmart)_[a-z0-9_]*(?:\s[^\]]*)?\]/i', '', (string) $html );
+}
+
+/**
  * Split the product description into accordion sections on its own headings.
  *
  * Descriptions on this shop are written as an intro followed by headings such
@@ -376,7 +391,7 @@ function gueta_attribute_table( $product ) {
  * @return array
  */
 function gueta_product_panels( $product ) {
-	$panels = gueta_split_description( $product->get_description() );
+	$panels = gueta_split_description( gueta_strip_builder_tags( $product->get_description() ) );
 	$titles = wp_list_pluck( $panels, 'title' );
 	$specs  = gueta_attribute_table( $product );
 

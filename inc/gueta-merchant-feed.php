@@ -199,7 +199,8 @@ function gueta_merchant_feed_shipping( $product, $price, $prices ) {
  * @return string
  */
 function gueta_merchant_feed_text( $text, $limit ) {
-	$text = wp_strip_all_tags( strip_shortcodes( (string) $text ) );
+	$text = function_exists( 'gueta_strip_builder_tags' ) ? gueta_strip_builder_tags( $text ) : (string) $text;
+	$text = wp_strip_all_tags( strip_shortcodes( $text ) );
 	$text = html_entity_decode( $text, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
 	$text = trim( preg_replace( '/\s+/u', ' ', $text ) );
 
