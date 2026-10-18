@@ -78,6 +78,43 @@ function gueta_linked_variation_defaults( $defaults, $product ) {
 add_filter( 'woocommerce_product_get_default_attributes', 'gueta_linked_variation_defaults', 10, 2 );
 
 /**
+ * A page opened from a feed link leads with that variation's price, not the
+ * product's range.
+ *
+ * Google checks the price on the page it was sent to, and the range's first
+ * figure was the cheapest variation's: ₪4 on the page of one sent at ₪8. The
+ * variation's own line only came once the script had run. Built here as
+ * WooCommerce builds a price, so the filters after this one add what the
+ * price buys and the VAT once, for the product. A product sold by length
+ * already leads with its variation's in gueta_length_price_from().
+ *
+ * @param string     $html    Price HTML.
+ * @param WC_Product $product Product.
+ * @return string
+ */
+function gueta_linked_variation_price_html( $html, $product ) {
+	if ( '' === $html || ! $product instanceof WC_Product_Variable || ! function_exists( 'is_product' ) || ! is_product() || get_queried_object_id() !== $product->get_id() ) {
+		return $html;
+	}
+
+	if ( function_exists( 'gueta_length_field' ) && gueta_length_field( $product ) ) {
+		return $html;
+	}
+
+	$variation = gueta_linked_variation( $product );
+
+	if ( ! $variation || '' === (string) $variation->get_price() ) {
+		return $html;
+	}
+
+	$price = wc_get_price_to_display( $variation );
+	$lead  = $variation->is_on_sale() ? wc_format_sale_price( wc_get_price_to_display( $variation, [ 'price' => $variation->get_regular_price() ] ), $price ) : wc_price( $price );
+
+	return $lead . $variation->get_price_suffix();
+}
+add_filter( 'woocommerce_get_price_html', 'gueta_linked_variation_price_html', 5, 2 );
+
+/**
  * What a product is offered at, the one figure the page leads with, the
  * structured data carries and the Merchant feed sends: its cheapest length,
  * priced as the cart charges it, or its own price when it has no lengths.
@@ -159,6 +196,23 @@ function gueta_offer_variation( $product ) {
 }
 
 /**
+ * A product's availability as the structured data says it. A backorder is
+ * not "in stock": the feed sends it as backorder, and Google compares the two.
+ *
+ * @param WC_Product $product Product or variation.
+ * @return string
+ */
+function gueta_offer_availability( $product ) {
+	$status = $product->get_stock_status();
+
+	if ( 'onbackorder' === $status ) {
+		return 'http://schema.org/BackOrder';
+	}
+
+	return 'outofstock' === $status ? 'http://schema.org/OutOfStock' : 'http://schema.org/InStock';
+}
+
+/**
  * One offer, at the price that can be paid.
  *
  * @param array      $offer   Offer WooCommerce built.
@@ -189,7 +243,7 @@ function gueta_structured_data_offer( $offer, $product ) {
 		'@type'                 => 'Offer',
 		'price'                 => $prices['price'],
 		'priceCurrency'         => $currency,
-		'availability'          => $priced->is_in_stock() ? 'http://schema.org/InStock' : 'http://schema.org/OutOfStock',
+		'availability'          => gueta_offer_availability( $priced ),
 		'url'                   => $url,
 		'sku'                   => $priced->get_sku(),
 		'valueAddedTaxIncluded' => 'http://schema.org/True',

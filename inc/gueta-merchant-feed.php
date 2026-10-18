@@ -24,9 +24,13 @@
  *   price reaches the free shipping minimum. The prices come from the
  *   shipping methods themselves, so a change there reaches the feed.
  *
+ * - A backorder carries the date it should be there, a sale with an end its
+ *   dates, and a picture Google cannot read, AVIF, gives way to the next.
+ *
  * The file is written beside itself and moved into place, so Google never
- * fetches half of one. Merchant Center should fetch it on a schedule a while
- * after it is written, which is 03:30 every night.
+ * fetches half of one. It is written every night at 03:30, and again ten
+ * minutes after a product's price, stock or status changes, half an hour
+ * apart at most, so whenever Merchant Center fetches it, it is current.
  *
  * @package HelloElementorChild
  */
@@ -213,6 +217,35 @@ function gueta_merchant_feed_money( $amount ) {
 }
 
 /**
+ * A picture's address as the feed sends it, or '' for one Google cannot read.
+ *
+ * Google takes JPEG, PNG, GIF, WebP, BMP and TIFF, so an AVIF upload is left
+ * out. The Hebrew in a file's name is percent-encoded, as an address should be.
+ *
+ * @param int $id Attachment ID.
+ * @return string
+ */
+function gueta_merchant_feed_image( $id ) {
+	$url = $id ? (string) wp_get_attachment_image_url( $id, 'full' ) : '';
+
+	if ( '' === $url || 'image/avif' === get_post_mime_type( $id ) ) {
+		return '';
+	}
+
+	return preg_replace_callback( '/[^\x21-\x7E]/', static fn( $byte ) => rawurlencode( $byte[0] ), $url );
+}
+
+/**
+ * A moment as the feed writes it: "2026-10-31T23:59+0300".
+ *
+ * @param int $timestamp Unix time.
+ * @return string
+ */
+function gueta_merchant_feed_date( $timestamp ) {
+	return wp_date( 'Y-m-d\TH:iO', $timestamp );
+}
+
+/**
  * A variation's title: the product's name, then what sets the variation apart.
  *
  * @param WC_Product_Variation $variation Variation.
@@ -296,13 +329,20 @@ function gueta_merchant_feed_item( $item, $parent, $shipping ) {
 	$link      = $variation ? add_query_arg( 'variant_id', $item->get_id(), $link ) : $link;
 
 	$image_id = $item->get_image_id() ? $item->get_image_id() : $parent->get_image_id();
-	$image    = $image_id ? wp_get_attachment_image_url( $image_id, 'full' ) : '';
+	$image    = gueta_merchant_feed_image( $image_id );
 	$gallery  = [];
 
-	foreach ( array_slice( $parent->get_gallery_image_ids(), 0, 10 ) as $gallery_id ) {
-		$url = wp_get_attachment_image_url( $gallery_id, 'full' );
+	foreach ( $parent->get_gallery_image_ids() as $gallery_id ) {
+		$url = gueta_merchant_feed_image( $gallery_id );
 
-		if ( $url && $url !== $image ) {
+		if ( ! $url || $url === $image ) {
+			continue;
+		}
+
+		// A main picture Google cannot read gives way to the first one it can.
+		if ( '' === $image ) {
+			$image = $url;
+		} elseif ( count( $gallery ) < 10 ) {
 			$gallery[] = $url;
 		}
 	}
@@ -314,6 +354,21 @@ function gueta_merchant_feed_item( $item, $parent, $shipping ) {
 	$status       = $item->get_stock_status();
 	$availability = 'outofstock' === $status ? 'out_of_stock' : ( 'onbackorder' === $status ? 'backorder' : 'in_stock' );
 
+	/*
+	 * Google asks when a backorder will be there. The shop sets no date, so
+	 * it is the usual wait from today.
+	 */
+	$available = 'backorder' === $availability ? gueta_merchant_feed_date( time() + (int) apply_filters( 'gueta_merchant_feed_backorder_days', 14 ) * DAY_IN_SECONDS ) : '';
+
+	/*
+	 * A sale that ends says when, so Google drops it on time and not at the
+	 * next fetch, a day later, while the page is back at the regular price.
+	 */
+	$on_sale   = $prices['regular'] > $prices['price'];
+	$sale_from = $item->get_date_on_sale_from();
+	$sale_to   = $item->get_date_on_sale_to();
+	$sale_when = $on_sale && $sale_to ? gueta_merchant_feed_date( $sale_from ? $sale_from->getTimestamp() : time() - DAY_IN_SECONDS ) . '/' . gueta_merchant_feed_date( $sale_to->getTimestamp() ) : '';
+
 	$fields = [
 		'g:id'                        => (string) $item->get_id(),
 		'g:item_group_id'             => $variation ? (string) $parent->get_id() : '',
@@ -323,8 +378,10 @@ function gueta_merchant_feed_item( $item, $parent, $shipping ) {
 		'g:image_link'                => $image,
 		'g:additional_image_link'     => $gallery,
 		'g:availability'              => $availability,
+		'g:availability_date'         => $available,
 		'g:price'                     => gueta_merchant_feed_money( $prices['regular'] ),
-		'g:sale_price'                => $prices['regular'] > $prices['price'] ? gueta_merchant_feed_money( $prices['price'] ) : '',
+		'g:sale_price'                => $on_sale ? gueta_merchant_feed_money( $prices['price'] ) : '',
+		'g:sale_price_effective_date' => $sale_when,
 		'g:unit_pricing_measure'      => $prices['metres'] ? rtrim( rtrim( number_format( $prices['metres'], 2, '.', '' ), '0' ), '.' ) . ' m' : '',
 		'g:unit_pricing_base_measure' => $prices['metres'] ? '1 m' : '',
 		'g:condition'                 => 'new',
@@ -566,6 +623,52 @@ function gueta_merchant_feed_schedule() {
 add_action( 'init', 'gueta_merchant_feed_schedule' );
 
 /**
+ * A product's price or stock changed: build again ten minutes on, so the
+ * file Google fetches is never a day behind the page.
+ *
+ * Changes in those ten minutes go in the same build, and builds stay half an
+ * hour apart, so a run of edits or orders costs one build and not dozens.
+ *
+ * @return void
+ */
+function gueta_merchant_feed_changed() {
+	if ( wp_next_scheduled( GUETA_MERCHANT_FEED_SOON ) ) {
+		return;
+	}
+
+	$built = (int) ( gueta_merchant_feed_meta()['built'] ?? 0 );
+
+	wp_schedule_single_event( max( time() + 10 * MINUTE_IN_SECONDS, $built + 30 * MINUTE_IN_SECONDS ), GUETA_MERCHANT_FEED_SOON );
+}
+
+foreach ( [
+	'woocommerce_update_product',
+	'woocommerce_update_product_variation',
+	'woocommerce_product_set_stock_status',
+	'woocommerce_variation_set_stock_status',
+	'woocommerce_scheduled_sales',
+] as $gueta_merchant_feed_hook ) {
+	add_action( $gueta_merchant_feed_hook, 'gueta_merchant_feed_changed', 99, 0 );
+}
+unset( $gueta_merchant_feed_hook );
+
+/**
+ * A product published, or taken down, trashed or made a draft: its page
+ * comes or goes, and the feed should follow before Google finds it missing.
+ *
+ * @param string  $new  New status.
+ * @param string  $old  Old status.
+ * @param WP_Post $post Post.
+ * @return void
+ */
+function gueta_merchant_feed_product_status( $new, $old, $post ) {
+	if ( $post instanceof WP_Post && 'product' === $post->post_type && $new !== $old && ( 'publish' === $new || 'publish' === $old ) ) {
+		gueta_merchant_feed_changed();
+	}
+}
+add_action( 'transition_post_status', 'gueta_merchant_feed_product_status', 10, 3 );
+
+/**
  * Drop the schedule when the theme is switched away.
  *
  * @return void
@@ -602,8 +705,8 @@ function gueta_merchant_feed_admin_section() {
 
 	<h2>פיד Google Merchant</h2>
 	<p>
-		קובץ המוצרים ש-Merchant Center קורא. הוא נבנה מחדש כל לילה ב-03:30, עם המחיר שמופיע בדף המוצר ובנתונים המובנים,
-		ועלות המשלוח לפי אותם כללים של הקופה. כדאי להגדיר ב-Merchant Center אחזור מתוזמן של הכתובת הזו פעם ביום, אחרי 04:00.
+		קובץ המוצרים ש-Merchant Center קורא. הוא נבנה מחדש כל לילה ב-03:30, ושוב כעשר דקות אחרי שינוי במחיר, במלאי או בפרסום של מוצר,
+		עם המחיר שמופיע בדף המוצר ובנתונים המובנים, ועלות המשלוח לפי אותם כללים של הקופה. כדאי להגדיר ב-Merchant Center אחזור מתוזמן של הכתובת הזו פעם ביום, אחרי 04:00.
 	</p>
 
 	<?php if ( $notice ) : ?>

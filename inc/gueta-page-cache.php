@@ -94,12 +94,17 @@ function gueta_page_cache_excluded_paths() {
 
 /**
  * Query parameters a cached page may carry: paging, sorting and the archive's
- * filters. Filters on attributes, pa_*, are allowed by the engine itself.
+ * filters, and variant_id, the variation a Merchant feed link opens with.
+ * Filters on attributes, pa_*, are allowed by the engine itself.
+ *
+ * The feed holds over a thousand such links, and Google fetches each one to
+ * check its price. Built afresh, each took two seconds, and six when a few
+ * were asked for at once.
  *
  * @return string[]
  */
 function gueta_page_cache_query_keys() {
-	return (array) apply_filters( 'gueta_page_cache_query_keys', [ 'paged', 'page', 'product-page', 'orderby', 'sort', 'min_price', 'max_price', 'stock', 'cat', 'category' ] );
+	return (array) apply_filters( 'gueta_page_cache_query_keys', [ 'paged', 'page', 'product-page', 'orderby', 'sort', 'min_price', 'max_price', 'stock', 'cat', 'category', 'variant_id' ] );
 }
 
 /**
