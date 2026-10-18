@@ -54,8 +54,27 @@
 	grid-template-columns: 260px minmax(0, 1fr);
 }
 
-.woocommerce-account.logged-in .page-content > .woocommerce > .woocommerce-notices-wrapper {
+/*
+ * WooCommerce's clearfix gives the wrapper an empty ::before, which in a grid
+ * is an item: it took the cell beside the menu, pushing the menu into the
+ * page's column and the page under it, into the menu's.
+ */
+.woocommerce-account.logged-in .page-content > .woocommerce::before,
+.woocommerce-account.logged-in .page-content > .woocommerce::after {
+	content: none;
+}
+
+/* Each in its column, whatever else a plugin prints among them. */
+.woocommerce-account.logged-in .page-content > .woocommerce > * {
 	grid-column: 1 / -1;
+}
+
+.woocommerce-account.logged-in .page-content > .woocommerce > .woocommerce-MyAccount-navigation {
+	grid-column: 1;
+}
+
+.woocommerce-account.logged-in .page-content > .woocommerce > .woocommerce-MyAccount-content {
+	grid-column: 2;
 }
 
 .woocommerce-account .woocommerce-MyAccount-navigation,
@@ -204,6 +223,8 @@
 	display: flex;
 	flex-direction: column;
 	gap: 6px;
+	min-width: 0;
+	overflow-wrap: anywhere;
 	padding: 22px 24px;
 }
 
@@ -593,6 +614,11 @@
 @media (max-width: 900px) {
 	.woocommerce-account.logged-in .page-content > .woocommerce {
 		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.woocommerce-account.logged-in .page-content > .woocommerce > .woocommerce-MyAccount-navigation,
+	.woocommerce-account.logged-in .page-content > .woocommerce > .woocommerce-MyAccount-content {
+		grid-column: 1;
 	}
 
 	/* The menu becomes a row to scroll, above the page. */
