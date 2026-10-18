@@ -535,6 +535,22 @@ function gueta_variation_swatches( $html, $args ) {
 add_filter( 'woocommerce_dropdown_variation_attribute_options_html', 'gueta_variation_swatches', 20, 2 );
 
 /**
+ * Send every variation with the page, up to a hundred.
+ *
+ * Past thirty WooCommerce leaves them out and asks the server only once a
+ * value is picked in each attribute, so the swatches cannot know which
+ * combinations exist: on the Torpedo screw, choosing 4mm still offered every
+ * length, and only the click said "no products matched your selection". The
+ * shop's largest product has 66 variations.
+ *
+ * @return int
+ */
+function gueta_variation_threshold() {
+	return 100;
+}
+add_filter( 'woocommerce_ajax_variation_threshold', 'gueta_variation_threshold' );
+
+/**
  * Offer a sold out variation as unavailable rather than as a choice.
  *
  * WooCommerce lists a variation that is out of stock like any other, lets it
