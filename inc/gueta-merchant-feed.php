@@ -424,6 +424,24 @@ function gueta_merchant_feed_item( $item, $parent, $shipping ) {
 }
 
 /**
+ * Text XML can hold.
+ *
+ * XMLWriter escapes <, > and & but passes control characters through, and
+ * one of them makes the whole file invalid: Google's parser stops there and
+ * every item after it is gone. A "STANLEY\x1E FATMAX\x1E" pasted into a
+ * description cut the feed at its 894th item, so Merchant Center held some
+ * 900 products of 2,166.
+ *
+ * @param string $text Text.
+ * @return string
+ */
+function gueta_merchant_feed_xml_text( $text ) {
+	$text = wp_check_invalid_utf8( (string) $text, true );
+
+	return (string) preg_replace( '/[^\x{9}\x{A}\x{D}\x{20}-\x{D7FF}\x{E000}-\x{FFFD}\x{10000}-\x{10FFFF}]/u', '', $text );
+}
+
+/**
  * Write one item.
  *
  * @param XMLWriter $xml    Writer.
@@ -438,7 +456,7 @@ function gueta_merchant_feed_write_item( $xml, $fields ) {
 			$xml->startElement( $tag );
 
 			foreach ( $value as $sub => $text ) {
-				$xml->writeElement( $sub, (string) $text );
+				$xml->writeElement( $sub, gueta_merchant_feed_xml_text( $text ) );
 			}
 
 			$xml->endElement();
@@ -446,8 +464,10 @@ function gueta_merchant_feed_write_item( $xml, $fields ) {
 		}
 
 		foreach ( (array) $value as $text ) {
-			if ( '' !== (string) $text ) {
-				$xml->writeElement( $tag, (string) $text );
+			$text = gueta_merchant_feed_xml_text( $text );
+
+			if ( '' !== $text ) {
+				$xml->writeElement( $tag, $text );
 			}
 		}
 	}
