@@ -61,6 +61,7 @@ require_once get_stylesheet_directory() . '/inc/gueta-blog.php';
 require_once get_stylesheet_directory() . '/inc/gueta-notices.php';
 require_once get_stylesheet_directory() . '/inc/gueta-emails.php';
 require_once get_stylesheet_directory() . '/inc/gueta-order-breakdown.php';
+require_once get_stylesheet_directory() . '/inc/gueta-order-contacted.php';
 require_once get_stylesheet_directory() . '/inc/gueta-template.php';
 require_once get_stylesheet_directory() . '/inc/gueta-speed.php';
 

@@ -92,7 +92,8 @@ add_action( 'woocommerce_email_after_order_table', 'gueta_breakdown_email_ends',
 function gueta_breakdown_for_shop() {
 	$email = gueta_breakdown_email_to_shop();
 
-	return null === $email ? is_admin() : $email;
+	// is_admin() alone is also true for a visitor's admin-ajax request.
+	return null === $email ? is_admin() && current_user_can( 'edit_shop_orders' ) : $email;
 }
 
 /**
