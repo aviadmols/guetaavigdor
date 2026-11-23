@@ -6,9 +6,10 @@
  * together, "40.70" for a 3.90 metre board and twelve cuts, with only what the
  * cuts added shown under it. The office keys the two into the ERP apart, the
  * wood by the metre and the cuts by their number. So under each cut line the
- * shop sees both: "מחיר חומר: ₪22.70 (3.90 מ׳ × ₪5.82 למטר)" and
- * "מחיר חיתוכים: ₪18.00 (12 × ₪1.50)", which add up to the line's price. They
- * take the place of the plugin's "תוספת חיתוכים".
+ * shop sees both, before VAT as the ERP takes them:
+ * "מחיר חומר לפני מע״מ: ₪25.45 (3.90 מ׳ × ₪6.5246 למטר)" and
+ * "מחיר חיתוכים לפני מע״מ: ₪15.25 (12 × ₪1.2712)", which add up to the line's
+ * price. They take the place of the plugin's "תוספת חיתוכים".
  *
  * Both are worked out from the line's saved price, so orders placed before this
  * split too. They are shown on the admin order screen and in the emails sent to
@@ -117,7 +118,14 @@ function gueta_breakdown_split( $item, $gac ) {
 		$cut_price = isset( $gac['piece_price'] ) ? (float) $gac['piece_price'] : 25.0;
 	}
 
-	$unit = (float) $item->get_subtotal() / max( 1, (float) $item->get_quantity() );
+	$subtotal = (float) $item->get_subtotal();
+	$unit     = $subtotal / max( 1, (float) $item->get_quantity() );
+
+	// The cut price is set with VAT, and an order line is kept before VAT, so a
+	// cut is taken off at its price before VAT: 1.50 with 18% is 1.2712, as the
+	// ERP keeps it. The rate is the line's own, so a line without VAT keeps 1.50.
+	$rate      = $subtotal > 0 ? round( (float) $item->get_subtotal_tax() / $subtotal, 3 ) : 0;
+	$cut_price = $cut_price / ( 1 + $rate );
 
 	return [
 		'wood'      => max( 0, $unit - $cuts * $cut_price ),
@@ -149,8 +157,8 @@ function gueta_breakdown_item_meta( $formatted_meta, $item ) {
 	$order    = $item->get_order();
 	$currency = [ 'currency' => $order ? $order->get_currency() : get_woocommerce_currency() ];
 	$split    = gueta_breakdown_split( $item, $gac );
-	$money    = static function ( $amount ) use ( $currency ) {
-		return wp_strip_all_tags( wc_price( $amount, $currency ) );
+	$money    = static function ( $amount, $decimals = 2 ) use ( $currency ) {
+		return wp_strip_all_tags( wc_price( $amount, $currency + [ 'decimals' => $decimals ] ) );
 	};
 
 	foreach ( $formatted_meta as $meta_id => $meta ) {
@@ -162,20 +170,20 @@ function gueta_breakdown_item_meta( $formatted_meta, $item ) {
 	$wood = $money( $split['wood'] );
 
 	if ( $split['metres'] > 0 ) {
-		$wood .= sprintf( ' (%s מ׳ × %s למטר)', wc_format_decimal( $split['metres'], 2 ), $money( $split['wood'] / $split['metres'] ) );
+		$wood .= sprintf( ' (%s מ׳ × %s למטר)', wc_format_decimal( $split['metres'], 2 ), $money( $split['wood'] / $split['metres'], 4 ) );
 	}
 
-	$rows = [ 'gueta_wood_price' => [ 'מחיר חומר', $wood ] ];
+	$rows = [ 'gueta_wood_price' => [ 'מחיר חומר לפני מע״מ', $wood ] ];
 
 	if ( $split['cuts'] > 0 ) {
 		$rows['gueta_cuts_price'] = [
-			'מחיר חיתוכים',
+			'מחיר חיתוכים לפני מע״מ',
 			sprintf(
 				'%s (%s%s × %s)',
 				$money( $split['cuts'] * $split['cut_price'] ),
 				number_format_i18n( $split['cuts'] ),
 				$split['board'] ? '' : ' חתיכות',
-				$money( $split['cut_price'] )
+				$money( $split['cut_price'], 4 )
 			),
 		];
 	}
